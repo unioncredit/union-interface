@@ -1,13 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { HashRouter } from "react-router-dom";
+import { WagmiConfig, createClient, chain } from "wagmi";
+import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+
+import "./index.scss";
+
+const client = createClient(
+  getDefaultClient({
+    appName: "Union Credit",
+    infuraId: process.env.REACT_APP_INFURA_ID,
+    chains: [chain.mainnet, chain.optimism, chain.goerli],
+  })
+);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
 root.render(
   <React.StrictMode>
-    <App />
+    <HashRouter>
+      <WagmiConfig client={client}>
+        <ConnectKitProvider theme="auto" mode="light">
+          <App />
+        </ConnectKitProvider>
+      </WagmiConfig>
+    </HashRouter>
   </React.StrictMode>
 );
 

@@ -1,0 +1,20 @@
+.NetworkSelect__innerCard {
+  cursor: pointer;
+
+  button svg path {
+    fill: #d6d3d1;
+  }
+
+  &:hover {
+    //
+  }
+
+  &:hover button svg path,
+  &:active button svg path {
+    //
+  }
+
+  &:active {
+    //
+  }
+}
