@@ -1,20 +1,22 @@
+import "./Header.scss";
+
 import { useAccount } from "wagmi";
-import cn from "classnames";
 import { Link } from "react-router-dom";
 import { NavItem, Grid, Layout, Box, ContextMenu } from "@unioncredit/ui";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 
+import { useMember } from "providers/MemberData";
 import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 
-import "./Header.scss";
-
 export default function Header({ loading }) {
   const { isConnected } = useAccount();
+  const { data } = useMember();
 
-  const navItems = isConnected
-    ? [items.credit, items.contacts, items.governance]
-    : [items.getStarted, items.governance];
+  const navItems =
+    isConnected && data.checkIsMember
+      ? [items.credit, items.contacts, items.governance]
+      : [items.getStarted, items.governance];
 
   return (
     <Layout.Header align="center">

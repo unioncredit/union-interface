@@ -10,7 +10,7 @@ export const items = {
   credit: {
     id: "credit",
     label: "Credit",
-    pathname: "/credit",
+    pathname: "/",
   },
   contacts: {
     id: "contacts",
