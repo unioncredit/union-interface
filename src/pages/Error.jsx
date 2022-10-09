@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Grid, Box, Button, ButtonRow, Heading, Text } from "@unioncredit/ui";
+import { Box, Button, ButtonRow, Heading, Text } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
 import links from "config/links";

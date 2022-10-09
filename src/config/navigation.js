@@ -4,7 +4,7 @@ export const items = {
   getStarted: {
     id: "get-started",
     label: "Get Started",
-    pathname: "/get-started",
+    pathname: "/",
     active: true,
   },
   credit: {
