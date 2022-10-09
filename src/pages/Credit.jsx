@@ -1,3 +1,14 @@
+import { Box } from "@unioncredit/ui";
+
+import Header from "components/shared/Header";
+
 export default function CreditPage() {
-  return "Credit";
+  return (
+    <>
+      <Header />
+      <Box fluid justify="center">
+        Credit Page
+      </Box>
+    </>
+  );
 }
