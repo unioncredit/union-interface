@@ -16,9 +16,12 @@ import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg
 import { WAD } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
+import { STAKE_MODAL } from "components/modals/StakeModal";
+import { useModals } from "providers/ModalManager";
 
 export default function StakeStep() {
   const { data } = useMember();
+  const { open } = useModals();
 
   const percentage = data.unionBalance.gte(WAD)
     ? 100
@@ -82,7 +85,7 @@ export default function StakeStep() {
         </Box>
 
         <ButtonRow>
-          <Button fluid label="Stake DAI" />
+          <Button fluid label="Stake DAI" onClick={() => open(STAKE_MODAL)} />
           <Button fluid variant="secondary" label="Withdraw" />
         </ButtonRow>
       </Card.Body>
