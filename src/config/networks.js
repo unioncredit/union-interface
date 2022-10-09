@@ -5,8 +5,7 @@ export const networks = [
     imageSrc: "/networks/ethereum.png",
     value: "ethereum",
     label: "Ethereum",
-    description:
-      "Use Union on Ethereum’s main network. All Governance activity takes place here",
+    description: "Use Union on Ethereum’s main network",
     avatar: "/networks/ethereum-avatar.png",
     chainId: 1,
     networkData: {
@@ -20,8 +19,7 @@ export const networks = [
     imageSrc: "/networks/arbitrum.png",
     value: "arbitrum one",
     label: "Arbitrum",
-    description:
-      "Use Arbitrum’s L2 to manage your credit in a cheaper and faster way",
+    description: "Use Arbitrum’s L2 to manage your credit",
     avatar: "/networks/arbitrum-avatar.png",
     chainId: 42161,
     networkData: {
@@ -36,7 +34,7 @@ export const networks = [
     imageSrc: "/networks/gorli.png",
     value: "goerli",
     label: "Goerli",
-    description: "Use Union on Ethereum’s goerli network for testing",
+    description: "Use Union on goerli for testing",
     avatar: "/networks/gorli-avatar.png",
     chainId: 5,
     networkData: {

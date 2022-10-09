@@ -1,20 +1,20 @@
-.NetworkSelect__innerCard {
+.card.NetworkSelect__innerCard {
   cursor: pointer;
 
-  button svg path {
-    fill: #d6d3d1;
+  .NetworkSelect__contentBox {
+    border-left: 1px solid #e7e5e4;
   }
 
-  &:hover {
-    //
+  &--active {
+    background: #eff6ff;
+    border-color: #2563eb;
+
+    .NetworkSelect__contentBox {
+      border-color: #bfdbfe;
+    }
   }
 
-  &:hover button svg path,
-  &:active button svg path {
-    //
-  }
-
-  &:active {
-    //
+  &--disabled {
+    opacity: 0.4;
   }
 }

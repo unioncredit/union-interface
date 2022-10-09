@@ -6,6 +6,7 @@ import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import MemberData from "providers/MemberData";
 
 import "./index.scss";
 
@@ -13,7 +14,7 @@ const client = createClient(
   getDefaultClient({
     appName: "Union Credit",
     infuraId: process.env.REACT_APP_INFURA_ID,
-    chains: [chain.mainnet, chain.optimism, chain.goerli],
+    chains: [chain.mainnet],
   })
 );
 
@@ -23,8 +24,10 @@ root.render(
   <React.StrictMode>
     <HashRouter>
       <WagmiConfig client={client}>
-        <ConnectKitProvider theme="auto" mode="light">
-          <App />
+        <ConnectKitProvider theme="soft" mode="light">
+          <MemberData>
+            <App />
+          </MemberData>
         </ConnectKitProvider>
       </WagmiConfig>
     </HashRouter>

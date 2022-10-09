@@ -1,4 +1,4 @@
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { Layout } from "@unioncredit/ui";
 import { Routes, Route } from "react-router-dom";
 
@@ -6,22 +6,31 @@ import ErrorPage from "pages/Error";
 import CreditPage from "pages/Credit";
 import ConnectPage from "pages/Connect";
 import RegisterPage from "pages/Register";
+import LoadingPage from "pages/Loading";
 
+import { useMember } from "providers/MemberData";
 import ModalManager from "providers/ModalManager";
 
 export default function App() {
   const { isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const { data, isLoading } = useMember();
 
   return (
     <ModalManager>
       <Layout>
         <Layout.Main>
-          {!isConnected ? (
+          {!isConnected || chain.unsupported ? (
             <ConnectPage />
+          ) : isLoading ? (
+            <LoadingPage />
           ) : (
             <Routes>
-              <Route path="/" element={<RegisterPage />} />
-              <Route path="/credit" element={<CreditPage />} />
+              {data.checkIsMember ? (
+                <Route path="/" element={<RegisterPage />} />
+              ) : (
+                <Route path="/credit" element={<CreditPage />} />
+              )}
               <Route
                 path="*"
                 element={

@@ -4,39 +4,50 @@ import {
   Box,
   Avatar,
   Label,
-  Badge,
   Button,
   Text,
+  Control,
 } from "@unioncredit/ui";
-import { ReactComponent as Chevron } from "@unioncredit/ui/lib/icons/chevron.svg";
+import cn from "classnames";
+import { useState } from "react";
+import { useSwitchNetwork } from "wagmi";
 
 import { networks } from "config/networks";
 
 import "./NetworkSelect.scss";
 
-export default function NetworkSelect() {
-  const chainId = 1;
+export default function NetworkSelect({ disabled }) {
+  const { switchNetwork } = useSwitchNetwork();
+  const [selected, setSelected] = useState(networks[0]);
 
   return (
     <Grid>
       <Grid.Row justify="center">
         <Grid.Col>
-          <Box fluid align="center" direction="vertical">
-            {networks.map(({ label, value, avatar, description }) => {
-              const loading = false;
+          <Box fluid align="center" direction="vertical" mb="6px">
+            {networks.map((props) => {
+              const { label, value, avatar, description, chainId } = props;
+
+              const active = !disabled && selected.chainId === chainId;
 
               return (
                 <Card
                   my="6px"
                   packed
                   key={value}
-                  onClick={() => alert("card click")}
-                  className="NetworkSelect__innerCard"
+                  onClick={() => setSelected(props)}
+                  className={cn("NetworkSelect__innerCard", {
+                    "NetworkSelect__innerCard--active": active,
+                    "NetworkSelect__innerCard--disabled": disabled,
+                  })}
                 >
-                  <Card.Body>
-                    <Box align="center">
+                  <Box align="center">
+                    <Box p="0 12px" className="NetworkSelect__controlBox">
+                      <Control type="radio" checked={active} />
+                    </Box>
+                    <Box fluid p="12px" className="NetworkSelect__contentBox">
                       <Box justify="center" mr="16px">
-                        <Avatar size={48} src={avatar} />
+                        <Avatar size={40} src={avatar} />
                       </Box>
                       <Box direction="vertical">
                         <Text as="h3" m={0} grey={800}>
@@ -46,19 +57,20 @@ export default function NetworkSelect() {
                           {description}
                         </Label>
                       </Box>
-                      <Button
-                        loading={loading}
-                        variant="lite"
-                        icon={Chevron}
-                        ml="auto"
-                      />
                     </Box>
-                  </Card.Body>
+                  </Box>
                 </Card>
               );
             })}
           </Box>
-          <Button fluid label="Open Union Dashboard" />
+          <Button
+            fluid
+            disabled={disabled}
+            label="Open Union Dashboard"
+            onClick={() => {
+              switchNetwork(selected.chainId);
+            }}
+          />
         </Grid.Col>
       </Grid.Row>
     </Grid>

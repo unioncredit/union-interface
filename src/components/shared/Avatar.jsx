@@ -8,6 +8,7 @@ export default function Avatar({ address, size }) {
 
   const { data, isError, isLoading } = useEnsAvatar({
     addressOrName: address,
+    chainId: 1,
   });
 
   const blockie = makeBlockie(address);

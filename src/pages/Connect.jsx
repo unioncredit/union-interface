@@ -1,9 +1,12 @@
+import { useAccount } from "wagmi";
 import { Heading, Text, Grid } from "@unioncredit/ui";
 
 import Header from "components/connect/Header";
 import NetworkSelect from "components/connect/NetworkSelect";
 
 export default function ConnectPage() {
+  const { isConnected } = useAccount();
+
   return (
     <Grid>
       <Grid.Row justify="center">
@@ -15,7 +18,7 @@ export default function ConnectPage() {
           <Text mt="0" mb="16px">
             Select one of Union’s credit networks
           </Text>
-          <NetworkSelect />
+          <NetworkSelect disabled={!isConnected} />
         </Grid.Col>
       </Grid.Row>
     </Grid>

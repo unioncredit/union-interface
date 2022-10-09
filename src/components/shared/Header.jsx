@@ -1,20 +1,15 @@
-import {
-  NavItem,
-  Grid,
-  Layout,
-  Navigation,
-  Box,
-  ContextMenu,
-} from "@unioncredit/ui";
 import { useAccount } from "wagmi";
+import cn from "classnames";
 import { Link } from "react-router-dom";
-import { ConnectKitButton } from "connectkit";
+import { NavItem, Grid, Layout, Box, ContextMenu } from "@unioncredit/ui";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 
 import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 
-export default function Header() {
+import "./Header.scss";
+
+export default function Header({ loading }) {
   const { isConnected } = useAccount();
 
   const navItems = isConnected
@@ -32,10 +27,13 @@ export default function Header() {
             </Box>
           </Grid.Col>
           <Grid.Col align="center" className="hide-lt-850">
-            <Box fluid justify="center">
+            <Box
+              fluid
+              justify="center"
+              className={{ "Header__Box--loading": loading }}
+            >
               {navItems.map(({ label, ...item }) => (
                 <Link
-                  passHref
                   key={item.id}
                   to={item.pathname}
                   style={{ display: "block" }}

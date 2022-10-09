@@ -1,5 +1,4 @@
-import { ConnectKitButton } from "connectkit";
-import { Grid, Layout, Navigation } from "@unioncredit/ui";
+import { Grid, Layout } from "@unioncredit/ui";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 
 import ConnectButton from "components/shared/ConnectButton";
