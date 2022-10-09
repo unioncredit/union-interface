@@ -3,6 +3,7 @@ import { ConnectKitButton } from "connectkit";
 
 import Avatar from "components/shared/Avatar";
 import { useModals } from "providers/ModalManager";
+import { truncateAddress } from "utils/truncateAddress";
 import { ACCOUNT_MODAL } from "components/modals/AccountModal";
 
 export default function ConnectButton() {
@@ -15,7 +16,7 @@ export default function ConnectButton() {
           return (
             <Wallet
               avatar={<Avatar address={address} />}
-              name={ensName}
+              name={ensName || truncateAddress(address)}
               onClick={() => open(ACCOUNT_MODAL)}
             />
           );
