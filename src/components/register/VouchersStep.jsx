@@ -13,14 +13,16 @@ import {
 } from "@unioncredit/ui";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
+import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 
-import { useVouchers } from "providers/VouchersData";
-import Avatar from "components/shared/Avatar";
 import format from "utils/format";
+import Avatar from "components/shared/Avatar";
+import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
+import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export default function VouchersStep() {
-  const { data } = useVouchers();
+  const { data = {} } = useVouchers();
 
   const addresses = Object.keys(data);
 
@@ -41,26 +43,28 @@ export default function VouchersStep() {
                 <TableHead>Account</TableHead>
                 <TableHead align="right">Trust limit (DAI)</TableHead>
               </TableRow>
-              {addresses.slice(0, 3).map((key) => (
-                <TableRow>
+              {addresses.slice(0, 3).map((address) => (
+                <TableRow key={address}>
                   <TableCell fixedSize>
-                    <Avatar address={key} />
+                    <Avatar address={address} />
                   </TableCell>
                   <TableCell>
                     <Label as="p" grey={700} m={0}>
-                      Primary
+                      <PrimaryLabel address={address} />
                     </Label>
                     <Label as="p" size="small" grey={400} m={0}>
-                      {truncateAddress(key)}
+                      {truncateAddress(address)}
                     </Label>
                   </TableCell>
-                  <TableCell align="right">{format(data[key].trust)}</TableCell>
+                  <TableCell align="right">
+                    {format(data[address].trust)}
+                  </TableCell>
                 </TableRow>
               ))}
             </Table>
           </Card>
           <ButtonRow fluid mt="8px">
-            <Button fluid color="blue" label="Get vouch link" />
+            <Button fluid color="blue" icon={Link} label="Get vouch link" />
             <Button variant="secondary" icon={Twitter} />
             <Button variant="secondary" icon={Telegram} />
           </ButtonRow>

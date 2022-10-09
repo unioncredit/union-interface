@@ -9,9 +9,15 @@ import {
   Label,
   ButtonRow,
   Button,
+  ProgressBar,
 } from "@unioncredit/ui";
 
+import { useMember } from "providers/MemberData";
+import format from "utils/format";
+
 export default function StakeStep() {
+  const { data } = useMember();
+
   return (
     <Card size="fluid" mb="24px">
       <Card.Header
@@ -20,6 +26,7 @@ export default function StakeStep() {
       />
       <Card.Body>
         <Divider />
+        <ProgressBar percentage={60} />
         <Box fluid mt="24px" mb="14px">
           <Box fluid>
             <Stat
@@ -27,7 +34,7 @@ export default function StakeStep() {
               label="Total Staked"
               value={
                 <>
-                  666.66 <Dai />
+                  {format(data.stakedBalance)} <Dai />
                 </>
               }
             />
@@ -38,7 +45,7 @@ export default function StakeStep() {
               label="UNION Earned"
               value={
                 <>
-                  0.66 <Dai />
+                  {format(data.unionBalance)} <Dai />
                 </>
               }
             />

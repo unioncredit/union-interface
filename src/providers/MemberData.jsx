@@ -1,17 +1,18 @@
 import { createContext, useContext, useEffect } from "react";
 
-import { userManagerContract } from "config/contracts";
+import { userManagerContract, unionContract } from "config/contracts";
 import { useAccount, useContractReads } from "wagmi";
 
 const selectUserManager = (data) => ({
-  checkIsMember: data[0],
-  getCreditLimit: data[1],
-  getStakerBalance: data[2],
-  getTotalLockedStake: data[3],
-  getTotalFrozenAmount: data[4],
+  isMember: data[0],
+  creditLimit: data[1],
+  stakedBalance: data[2],
+  totalLockedStake: data[3],
+  totalFrozenAmount: data[4],
   memberFrozen: data[5],
-  getBorrowerAddresses: data[6],
-  getStakerAddresses: data[7],
+  borrowerAddresses: data[6],
+  stakerAddresses: data[7],
+  unionBalance: data[8],
 });
 
 const MemberContext = createContext({});
@@ -65,6 +66,11 @@ export default function MemberData({ children }) {
         functionName: "getStakerAddresses",
         args: [address],
       },
+      {
+        ...unionContract,
+        functionName: "balanceOf",
+        args: [address]
+      }
     ],
   });
 
