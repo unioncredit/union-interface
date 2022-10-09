@@ -26,7 +26,7 @@ export default function App() {
             <LoadingPage />
           ) : (
             <Routes>
-              {data.checkIsMember ? (
+              {!data.checkIsMember ? (
                 <Route path="/" element={<CreditPage />} />
               ) : (
                 <Route path="/" element={<RegisterPage />} />

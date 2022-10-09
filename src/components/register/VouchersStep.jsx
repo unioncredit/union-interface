@@ -9,13 +9,21 @@ import {
   Button,
   Text,
   TableCell,
-  Avatar,
   Label,
 } from "@unioncredit/ui";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
 
+import { useVouchers } from "providers/VouchersData";
+import Avatar from "components/shared/Avatar";
+import format from "utils/format";
+import { truncateAddress } from "utils/truncateAddress";
+
 export default function VouchersStep() {
+  const { data } = useVouchers();
+
+  const addresses = Object.keys(data);
+
   return (
     <Card size="fluid" mb="24px">
       <Card.Header
@@ -25,7 +33,7 @@ export default function VouchersStep() {
       <Card.Body>
         <Divider />
         <Box fluid mt="24px" mb="14px" direction="vertical">
-          <Text grey={700}>Vouchers</Text>
+          <Text grey={700}>Vouchers · {addresses.length}</Text>
           <Card size="fluid">
             <Table>
               <TableRow>
@@ -33,20 +41,22 @@ export default function VouchersStep() {
                 <TableHead>Account</TableHead>
                 <TableHead align="right">Trust limit (DAI)</TableHead>
               </TableRow>
-              <TableRow>
-                <TableCell fixedSize>
-                  <Avatar />
-                </TableCell>
-                <TableCell>
-                  <Label as="p" grey={700} m={0}>
-                    Primary
-                  </Label>
-                  <Label as="p" size="small" grey={400} m={0}>
-                    0x0000...0000
-                  </Label>
-                </TableCell>
-                <TableCell align="right">123.23</TableCell>
-              </TableRow>
+              {addresses.slice(0, 3).map((key) => (
+                <TableRow>
+                  <TableCell fixedSize>
+                    <Avatar address={key} />
+                  </TableCell>
+                  <TableCell>
+                    <Label as="p" grey={700} m={0}>
+                      Primary
+                    </Label>
+                    <Label as="p" size="small" grey={400} m={0}>
+                      {truncateAddress(key)}
+                    </Label>
+                  </TableCell>
+                  <TableCell align="right">{format(data[key].trust)}</TableCell>
+                </TableRow>
+              ))}
             </Table>
           </Card>
           <ButtonRow fluid mt="8px">

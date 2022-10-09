@@ -10,4 +10,3 @@ export const uTokenContract = {
   addressOrName: "0x954F20DF58347b71bbC10c94827bE9EbC8706887",
   contractInterface: uTokenAbi,
 };
-

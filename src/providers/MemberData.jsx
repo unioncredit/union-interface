@@ -10,6 +10,8 @@ const selectUserManager = (data) => ({
   getTotalLockedStake: data[3],
   getTotalFrozenAmount: data[4],
   memberFrozen: data[5],
+  getBorrowerAddresses: data[6],
+  getStakerAddresses: data[7],
 });
 
 const MemberContext = createContext({});
@@ -51,6 +53,16 @@ export default function MemberData({ children }) {
       {
         ...userManagerContract,
         functionName: "memberFrozen",
+        args: [address],
+      },
+      {
+        ...userManagerContract,
+        functionName: "getBorrowerAddresses",
+        args: [address],
+      },
+      {
+        ...userManagerContract,
+        functionName: "getStakerAddresses",
         args: [address],
       },
     ],

@@ -7,6 +7,7 @@ import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import MemberData from "providers/MemberData";
+import VouchersData from "providers/VouchersData";
 
 import "./index.scss";
 
@@ -26,7 +27,9 @@ root.render(
       <WagmiConfig client={client}>
         <ConnectKitProvider theme="soft" mode="light">
           <MemberData>
-            <App />
+            <VouchersData>
+              <App />
+            </VouchersData>
           </MemberData>
         </ConnectKitProvider>
       </WagmiConfig>
