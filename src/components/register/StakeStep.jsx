@@ -11,12 +11,18 @@ import {
   Button,
   ProgressBar,
 } from "@unioncredit/ui";
+import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg";
 
-import { useMember } from "providers/MemberData";
+import { WAD } from "constants";
 import format from "utils/format";
+import { useMember } from "providers/MemberData";
 
 export default function StakeStep() {
   const { data } = useMember();
+
+  const percentage = data.unionBalance.gte(WAD)
+    ? 100
+    : Number(data.unionBalance.div(WAD));
 
   return (
     <Card size="fluid" mb="24px">
@@ -26,7 +32,11 @@ export default function StakeStep() {
       />
       <Card.Body>
         <Divider />
-        <ProgressBar percentage={60} />
+        <ProgressBar
+          percentage={percentage}
+          completeText="Membership Fee Earned"
+          completeIcon={Check}
+        />
         <Box fluid mt="24px" mb="14px">
           <Box fluid>
             <Stat
