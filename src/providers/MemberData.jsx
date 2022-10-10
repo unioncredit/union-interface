@@ -22,56 +22,60 @@ export const useMember = () => useContext(MemberContext);
 export default function MemberData({ children }) {
   const { address } = useAccount();
 
+  const contracts = address
+    ? [
+        {
+          ...userManagerContract,
+          functionName: "checkIsMember",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getCreditLimit",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getStakerBalance",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getTotalLockedStake",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getTotalFrozenAmount",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "memberFrozen",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getBorrowerAddresses",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getStakerAddresses",
+          args: [address],
+        },
+        {
+          ...unionContract,
+          functionName: "balanceOf",
+          args: [address],
+        },
+      ]
+    : [];
+
   const { data: userManagerData, ...userManager } = useContractReads({
     enables: false,
     select: (data) => selectUserManager(data),
-    contracts: [
-      {
-        ...userManagerContract,
-        functionName: "checkIsMember",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getCreditLimit",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getStakerBalance",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getTotalLockedStake",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getTotalFrozenAmount",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "memberFrozen",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getBorrowerAddresses",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getStakerAddresses",
-        args: [address],
-      },
-      {
-        ...unionContract,
-        functionName: "balanceOf",
-        args: [address]
-      }
-    ],
+    contracts,
   });
 
   useEffect(() => {

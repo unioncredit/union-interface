@@ -9,6 +9,7 @@ import {
   Label,
   ButtonRow,
   Button,
+  Union,
   ProgressBar,
 } from "@unioncredit/ui";
 import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg";
@@ -45,22 +46,14 @@ export default function StakeStep() {
             <Stat
               size="medium"
               label="Total Staked"
-              value={
-                <>
-                  {format(data.stakedBalance)} <Dai />
-                </>
-              }
+              value={<Dai value={format(data.stakedBalance)} />}
             />
           </Box>
           <Box fluid>
             <Stat
               size="medium"
               label="UNION Earned"
-              value={
-                <>
-                  {format(data.unionBalance)} <Dai />
-                </>
-              }
+              value={<Union value={format(data.unionBalance)} />}
             />
           </Box>
         </Box>

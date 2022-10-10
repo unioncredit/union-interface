@@ -27,9 +27,9 @@ export default function VouchersData({ children }) {
   const { address } = useAccount();
   const { data = {} } = useMember();
 
-  const { stakerAddresses = [] } = data;
+  const { stakerAddresses } = data;
 
-  const contracts = stakerAddresses.reduce(
+  const contracts = (stakerAddresses || []).reduce(
     (acc, staker) => [...acc, ...buildVoucherQueries(address, staker)],
     []
   );
