@@ -1,6 +1,7 @@
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import useContract from "hooks/useContract";
+import { useCallback, useMemo } from "react";
 
 export default function useWrite({
   disabled,
@@ -8,7 +9,6 @@ export default function useWrite({
   args,
   enabled,
   contract,
-  ...props
 }) {
   const contractConfig = useContract(contract);
 
@@ -21,7 +21,7 @@ export default function useWrite({
 
   const { isLoading, writeAsync } = useContractWrite(config);
 
-  const handleTx = async () => {
+  const handleTx = useCallback(async () => {
     try {
       const resp = await writeAsync();
       console.log(resp);
@@ -33,14 +33,17 @@ export default function useWrite({
 
       if (error.code == "ACTION_REJECTED") {
         // User rejected the request
+        // TODO:
       }
     }
-  };
+  }, [writeAsync]);
 
-  return {
-    ...props,
-    disabled: disabled || !writeAsync,
-    loading: isLoading,
-    onClick: handleTx,
-  };
+  return useMemo(
+    () => ({
+      disabled: disabled || !writeAsync,
+      loading: isLoading,
+      onClick: handleTx,
+    }),
+    [handleTx, isLoading, disabled, writeAsync]
+  );
 }

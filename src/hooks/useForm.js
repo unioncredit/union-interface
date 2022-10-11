@@ -9,6 +9,8 @@ const empty = {
   raw: ZERO,
 };
 
+const formatValue = (value) => format(value).replace(/\,/g, "");
+
 export default function useForm({ validate }) {
   const [values, setValues] = useState();
   const [errors, setErrors] = useState();
@@ -19,7 +21,7 @@ export default function useForm({ validate }) {
     const parsed =
       type === "display"
         ? { raw: parseUnits(value), display: value }
-        : { raw: value, display: format(value) };
+        : { raw: value, display: formatValue(value) };
 
     const newValues = { ...values, [name]: parsed };
 

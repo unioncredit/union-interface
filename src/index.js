@@ -15,7 +15,7 @@ const client = createClient(
   getDefaultClient({
     appName: "Union Credit",
     infuraId: process.env.REACT_APP_INFURA_ID,
-    chains: [chain.mainnet],
+    chains: [chain.goerli],
   })
 );
 

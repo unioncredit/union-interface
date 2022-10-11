@@ -6,16 +6,17 @@ import {
   ToggleMenu,
   Box,
   Label,
-  Button,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import useForm from "hooks/useForm";
+import { useAccount } from "wagmi";
 
 import format from "utils/format";
-import useWrite from "hooks/useWrite";
+import useForm from "hooks/useForm";
 import { StakeType } from "constants";
 import { useModals } from "providers/ModalManager";
 import { useMember } from "providers/MemberData";
+import Approval from "components/shared/Approval";
+import useContract from "hooks/useContract";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -26,8 +27,11 @@ const toggleMenuOptions = [
 
 export default function StakeModal() {
   const { close } = useModals();
+  const { address } = useAccount();
   const { data: member } = useMember();
   const [type, setType] = useState(StakeType.STAKE);
+
+  const userManagerContract = useContract("userManager");
 
   const initialActiveIndex = toggleMenuOptions.findIndex(
     ({ id }) => id === type
@@ -37,6 +41,7 @@ export default function StakeModal() {
 
   const validate = (inputs) => {
     if (inputs.amount.raw.gt(maxUserStake)) {
+      // TODO: add to constants file
       return "Max stake exceeded";
     }
   };
@@ -45,19 +50,12 @@ export default function StakeModal() {
     register,
     values = {},
     errors = {},
-    isErrored,
     empty,
     setRawValue,
+    isErrored,
   } = useForm({ validate });
 
   const amount = values.amount || empty;
-
-  const txButtonProps = useWrite({
-    contract: "userManager",
-    method: "stake",
-    args: [amount.raw],
-    enabled: amount.raw.gt(0) && !isErrored,
-  });
 
   return (
     <ModalOverlay onClick={close}>
@@ -109,10 +107,18 @@ export default function StakeModal() {
           </Label>
         </Box>
 
-        <Button
-          fluid
-          label={`Stake ${amount.display} DAI`}
-          {...txButtonProps}
+        <Approval
+          owner={address}
+          amount={amount.raw}
+          spender={userManagerContract.addressOrName}
+          tokenContract="dai"
+          actionProps={{
+            label: `Stake ${amount.display} DAI`,
+            contract: "userManager",
+            method: "stake",
+            args: [amount.raw],
+            enabled: !isErrored,
+          }}
         />
       </Modal>
     </ModalOverlay>
