@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 
-import { userManagerContract, unionContract } from "config/contracts";
 import { useAccount, useContractReads } from "wagmi";
+import useContract from "hooks/useContract";
 
 const selectUserManager = (data) => ({
   isMember: data[0],
@@ -13,6 +13,7 @@ const selectUserManager = (data) => ({
   borrowerAddresses: data[6],
   stakerAddresses: data[7],
   unionBalance: data[8],
+  daiBalance: data[9],
 });
 
 const MemberContext = createContext({});
@@ -21,6 +22,10 @@ export const useMember = () => useContext(MemberContext);
 
 export default function MemberData({ children }) {
   const { address } = useAccount();
+
+  const daiContract = useContract("dai");
+  const unionContract = useContract("union");
+  const userManagerContract = useContract("userManager");
 
   const contracts = address
     ? [
@@ -66,6 +71,11 @@ export default function MemberData({ children }) {
         },
         {
           ...unionContract,
+          functionName: "balanceOf",
+          args: [address],
+        },
+        {
+          ...daiContract,
           functionName: "balanceOf",
           args: [address],
         },

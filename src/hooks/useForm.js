@@ -4,8 +4,8 @@ import { parseUnits } from "ethers/lib/utils";
 import { ZERO } from "constants";
 import format from "utils/format";
 
-const zero = {
-  display: format(ZERO),
+const empty = {
+  display: "",
   raw: ZERO,
 };
 
@@ -24,7 +24,8 @@ export default function useForm({ validate }) {
     const newValues = { ...values, [name]: parsed };
 
     const validationErrors = validate(newValues);
-    if (validationErrors) setErrors(validationErrors);
+    setErrors((err) => ({ ...err, [name]: validationErrors }));
+
     setValues(newValues);
   };
 
@@ -46,6 +47,7 @@ export default function useForm({ validate }) {
     setValue,
     setRawValue,
     register,
-    zero,
+    empty,
+    isErrored: Object.values(errors || {}).filter(Boolean).length > 0,
   };
 }

@@ -6,6 +6,7 @@ export default function useWrite({
   disabled,
   method,
   args,
+  enabled,
   contract,
   ...props
 }) {
@@ -15,6 +16,7 @@ export default function useWrite({
     ...contractConfig,
     functionName: method,
     args,
+    enabled,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
