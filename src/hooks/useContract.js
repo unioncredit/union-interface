@@ -3,6 +3,7 @@ import {
   uTokenContract,
   unionContract,
   daiContract,
+  comptrollerContract,
 } from "config/contracts";
 
 export default function useContract(name) {
@@ -11,5 +12,6 @@ export default function useContract(name) {
     uToken: uTokenContract,
     union: unionContract,
     dai: daiContract,
+    comptroller: comptrollerContract,
   }[name];
 }

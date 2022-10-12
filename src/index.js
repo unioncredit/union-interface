@@ -8,6 +8,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import MemberData from "providers/MemberData";
 import VouchersData from "providers/VouchersData";
+import ProtocolData from "providers/ProtocolData";
 
 import "./index.scss";
 
@@ -26,11 +27,13 @@ root.render(
     <HashRouter>
       <WagmiConfig client={client}>
         <ConnectKitProvider theme="soft" mode="light">
-          <MemberData>
-            <VouchersData>
-              <App />
-            </VouchersData>
-          </MemberData>
+          <ProtocolData>
+            <MemberData>
+              <VouchersData>
+                <App />
+              </VouchersData>
+            </MemberData>
+          </ProtocolData>
         </ConnectKitProvider>
       </WagmiConfig>
     </HashRouter>

@@ -11,12 +11,15 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import format from "utils/format";
+import { Errors } from "constants";
 import useForm from "hooks/useForm";
+import { min } from "utils/numbers";
 import { StakeType } from "constants";
-import { useModals } from "providers/ModalManager";
+import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import Approval from "components/shared/Approval";
-import useContract from "hooks/useContract";
+import { useModals } from "providers/ModalManager";
+import { useProtocol } from "providers/ProtocolData";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -29,6 +32,7 @@ export default function StakeModal() {
   const { close } = useModals();
   const { address } = useAccount();
   const { data: member } = useMember();
+  const { data: protocol } = useProtocol();
   const [type, setType] = useState(StakeType.STAKE);
 
   const userManagerContract = useContract("userManager");
@@ -37,12 +41,12 @@ export default function StakeModal() {
     ({ id }) => id === type
   );
 
-  const maxUserStake = member.daiBalance;
+  const userStakeLimit = protocol.maxStakeAmount.sub(member.stakedBalance);
+  const maxUserStake = min(userStakeLimit, member.daiBalance);
 
   const validate = (inputs) => {
     if (inputs.amount.raw.gt(maxUserStake)) {
-      // TODO: add to constants file
-      return "Max stake exceeded";
+      return Errors.MAX_USER_STAKE;
     }
   };
 
@@ -103,7 +107,7 @@ export default function StakeModal() {
             Staking Limit
           </Label>
           <Label as="p" grey={700}>
-            00
+            {format(protocol.maxStakeAmount)}
           </Label>
         </Box>
 

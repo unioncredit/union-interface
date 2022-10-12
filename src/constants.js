@@ -8,3 +8,7 @@ export const StakeType = {
   STAKE: "stake",
   UNSTAKE: "unstake",
 };
+
+export const Errors = {
+  MAX_USER_STAKE: "Max stake exceeded",
+};
