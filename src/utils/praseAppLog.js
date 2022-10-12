@@ -1,5 +1,5 @@
 export default function praseAppLog(status, method, args, tx) {
-  const sharedProps = { status, txHash: tx.transactionHash };
+  const sharedProps = { status, txHash: tx?.transactionHash };
 
   switch (method) {
     case "stake":

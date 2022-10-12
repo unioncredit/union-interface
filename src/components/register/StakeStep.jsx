@@ -16,14 +16,16 @@ import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg
 
 import { WAD } from "constants";
 import format from "utils/format";
+import { StakeType } from "constants";
 import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { useModals } from "providers/ModalManager";
-import { StakeType } from "constants";
+import { useProtocol } from "providers/ProtocolData";
 
 export default function StakeStep() {
   const { data } = useMember();
   const { open } = useModals();
+  const { data: protocol } = useProtocol();
 
   const percentage = data.unionBalance.gte(WAD)
     ? 100
@@ -66,7 +68,7 @@ export default function StakeStep() {
           mb="8px"
         >
           <Label m={0}>Membership Fee</Label>
-          <Label m={0}>1.00 UNION</Label>
+          <Label m={0}>{format(protocol.newMemberFee)} UNION</Label>
         </Box>
         <Box
           className="StakeStep__Box__details"

@@ -24,23 +24,21 @@ const client = createClient(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <HashRouter>
-      <WagmiConfig client={client}>
-        <ConnectKitProvider theme="soft" mode="light">
-          <AppLogs>
-            <ProtocolData>
-              <MemberData>
-                <VouchersData>
-                  <App />
-                </VouchersData>
-              </MemberData>
-            </ProtocolData>
-          </AppLogs>
-        </ConnectKitProvider>
-      </WagmiConfig>
-    </HashRouter>
-  </React.StrictMode>
+  <HashRouter>
+    <WagmiConfig client={client}>
+      <ConnectKitProvider theme="soft" mode="light">
+        <AppLogs>
+          <ProtocolData>
+            <MemberData>
+              <VouchersData>
+                <App />
+              </VouchersData>
+            </MemberData>
+          </ProtocolData>
+        </AppLogs>
+      </ConnectKitProvider>
+    </WagmiConfig>
+  </HashRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

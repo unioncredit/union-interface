@@ -13,6 +13,7 @@ import {
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect } from "wagmi";
 import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
+import { ReactComponent as Failed } from "@unioncredit/ui/lib/icons/failed.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { useModals } from "providers/ModalManager";
@@ -20,6 +21,7 @@ import Avatar from "components/shared/Avatar";
 import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
+import { Status } from "constants";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -65,19 +67,23 @@ export default function AccountModal() {
               No activity logs
             </Label>
           ) : (
-            logs.map(() => (
-              <Box align="center" justify="space-between" fluid>
+            logs.map(({ txHash, status, label, value }) => (
+              <Box key={txHash} align="center" justify="space-between" fluid>
                 <Box align="center">
                   <div className="AccountModal__Activity__statusIcon">
-                    <Success width="16px" />
+                    {status === Status.SUCCESS ? (
+                      <Success width="16px" />
+                    ) : (
+                      <Failed width="16px" />
+                    )}
                   </div>
                   <Label grey={600} m={0}>
-                    Repayment
+                    {label}
                   </Label>
                 </Box>
                 <Box align="center">
                   <Label m={0} grey={700}>
-                    {format(0)}
+                    {format(value)}
                   </Label>
                   <a href="#" target="_blank">
                     <External width="24px" />

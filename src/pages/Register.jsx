@@ -5,11 +5,14 @@ import {
   ProgressList,
   ProgressListItem,
   Text,
+  Box,
+  Divider,
 } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
 import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
+import RegisterButton from "components/register/RegisterButton";
 
 export default function RegisterPage() {
   return (
@@ -43,7 +46,14 @@ export default function RegisterPage() {
                       title="Complete Membership"
                       subTitle="Once you’ve got at least 1 vouch and have earned enough UNION for your membership fee; claim and pay 1 UNION to finalize your membership."
                     />
-                    <Card.Body>...</Card.Body>
+                    <Card.Body>
+                      <Divider mb="56px" />
+                      <Box justify="center" mb="6px">
+                        <Box w="380px">
+                          <RegisterButton />
+                        </Box>
+                      </Box>
+                    </Card.Body>
                   </Card>
                 </div>
               </ProgressListItem>

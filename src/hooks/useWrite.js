@@ -2,11 +2,12 @@ import { useCallback, useMemo, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import { Status } from "constants";
+import praseAppLog from "utils/praseAppLog";
 import useContract from "hooks/useContract";
 import { useAppLogs } from "providers/AppLogs";
 
 export default function useWrite({
-  disabled,
+  disabled: isDisabled,
   method,
   args,
   enabled,
@@ -26,13 +27,12 @@ export default function useWrite({
 
   const { writeAsync } = useContractWrite(config);
 
-  const handleTx = useCallback(async () => {
+  const onClick = useCallback(async () => {
     setLoading(true);
 
     try {
       const tx = await writeAsync();
-      const resp = await tx.wait();
-      console.log(tx, resp);
+      await tx.wait();
 
       onComplete && onComplete();
 
@@ -49,14 +49,14 @@ export default function useWrite({
     } finally {
       setLoading(false);
     }
-  }, [writeAsync]);
+  }, [writeAsync, method, JSON.stringify(args)]);
 
   return useMemo(
     () => ({
-      disabled: disabled || !writeAsync,
+      disabled: isDisabled || !writeAsync,
       loading,
-      onClick: handleTx,
+      onClick,
     }),
-    [handleTx, loading, disabled, writeAsync]
+    [onClick, loading, isDisabled]
   );
 }

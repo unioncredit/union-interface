@@ -22,7 +22,6 @@ import { useMember } from "providers/MemberData";
 import Approval from "components/shared/Approval";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
-import { ZERO } from "constants";
 
 export const STAKE_MODAL = "stake-modal";
 
