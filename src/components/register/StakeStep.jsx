@@ -19,6 +19,7 @@ import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { useModals } from "providers/ModalManager";
+import { StakeType } from "constants";
 
 export default function StakeStep() {
   const { data } = useMember();
@@ -78,8 +79,17 @@ export default function StakeStep() {
         </Box>
 
         <ButtonRow>
-          <Button fluid label="Stake DAI" onClick={() => open(STAKE_MODAL)} />
-          <Button fluid variant="secondary" label="Withdraw" />
+          <Button
+            fluid
+            label="Stake DAI"
+            onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
+          />
+          <Button
+            fluid
+            variant="secondary"
+            label="Withdraw"
+            onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
+          />
         </ButtonRow>
       </Card.Body>
     </Card>

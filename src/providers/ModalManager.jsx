@@ -13,11 +13,18 @@ const modals = {
 };
 
 export default function ModalManager({ children }) {
+  const [props, setProps] = useState(null);
   const [modal, setModal] = useState(null);
 
-  const close = () => setModal(null);
+  const close = () => {
+    setModal(null);
+    setProps(null);
+  };
 
-  const open = (key) => setModal(key);
+  const open = (key, props) => {
+    setModal(key);
+    if (props) setProps(props);
+  };
 
   const modalCtx = {
     close,
@@ -29,7 +36,7 @@ export default function ModalManager({ children }) {
   return (
     <ModalContext.Provider value={modalCtx}>
       {children}
-      {Modal && <Modal />}
+      {Modal && <Modal {...props} />}
     </ModalContext.Provider>
   );
 }

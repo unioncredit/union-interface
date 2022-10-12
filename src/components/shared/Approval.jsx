@@ -19,6 +19,7 @@ export default function Approval({
   actionProps,
   approvalLabel,
   approvalCompleteLabel,
+  requireApproval = true,
 }) {
   const { close } = useModals();
   const { refetch: refetchMember } = useMember();
@@ -40,7 +41,7 @@ export default function Approval({
     contract: actionProps.contract,
     method: actionProps.method,
     args: actionProps.args,
-    enabled: amount.gt(0) && allowance.gte(amount),
+    enabled: !requireApproval || (amount.gt(0) && allowance.gte(amount)),
     onComplete: () => {
       close();
       refetchMember();
@@ -61,7 +62,7 @@ export default function Approval({
    */
   useEffect(() => {
     if (amount.gt(0)) {
-      if (amount.gt(allowance)) {
+      if (amount.gt(allowance) && requireApproval) {
         // The amount is more than the allowance so we
         // need to prompt the user to approve this contract
         setAction({

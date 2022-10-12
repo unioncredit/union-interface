@@ -1,3 +1,5 @@
+import "./StakeModal.scss";
+
 import {
   Dai,
   Input,
@@ -20,6 +22,7 @@ import { useMember } from "providers/MemberData";
 import Approval from "components/shared/Approval";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
+import { ZERO } from "constants";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -28,12 +31,12 @@ const toggleMenuOptions = [
   { id: StakeType.UNSTAKE, label: "Unstake" },
 ];
 
-export default function StakeModal() {
+export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const { close } = useModals();
   const { address } = useAccount();
   const { data: member } = useMember();
   const { data: protocol } = useProtocol();
-  const [type, setType] = useState(StakeType.STAKE);
+  const [type, setType] = useState(initialType);
 
   const userManagerContract = useContract("userManager");
 
@@ -43,6 +46,7 @@ export default function StakeModal() {
 
   const userStakeLimit = protocol.maxStakeAmount.sub(member.stakedBalance);
   const maxUserStake = min(userStakeLimit, member.daiBalance);
+  const maxUserUnstake = member.stakedBalance.sub(member.totalLockedStake);
 
   const validate = (inputs) => {
     if (inputs.amount.raw.gt(maxUserStake)) {
@@ -61,9 +65,26 @@ export default function StakeModal() {
 
   const amount = values.amount || empty;
 
+  const inputProps =
+    type === StakeType.STAKE
+      ? {
+          label: "Amount to stake",
+          caption: `Balance: ${format(member.daiBalance)} DAI`,
+          onCaptionButtonClick: () => setRawValue("amount", maxUserStake),
+        }
+      : {
+          label: "Amount to unstake",
+          caption: `Withdrawable: ${format(maxUserUnstake)} DAI`,
+          onCaptionButtonClick: () => setRawValue("amount", maxUserUnstake),
+        };
+
   return (
     <ModalOverlay onClick={close}>
-      <Modal title="Stake or unstake DIA" onClose={close}>
+      <Modal
+        onClose={close}
+        className="StakeModal"
+        title="Stake or unstake DAI"
+      >
         <ToggleMenu
           fluid
           packed
@@ -79,14 +100,12 @@ export default function StakeModal() {
             suffix={<Dai />}
             error={errors.amount}
             value={amount.display}
-            label="Amount to stake"
             onChange={register("amount")}
-            caption={`Balance: ${format(member.daiBalance)} DAI`}
-            onCaptionButtonClick={() => setRawValue("amount", maxUserStake)}
+            {...inputProps}
           />
         </Box>
 
-        <Box justify="space-between" mt="8px" mb="4px">
+        <Box justify="space-between" mt="16px" mb="4px">
           <Label as="p" grey={400}>
             Currently Staked
           </Label>
@@ -102,26 +121,40 @@ export default function StakeModal() {
             {format(member.totalLockedStake)}
           </Label>
         </Box>
-        <Box justify="space-between" mb="18px">
-          <Label as="p" grey={400}>
-            Staking Limit
-          </Label>
-          <Label as="p" grey={700}>
-            {format(protocol.maxStakeAmount)}
-          </Label>
-        </Box>
+        {type === StakeType.STAKE ? (
+          <Box justify="space-between" mb="18px">
+            <Label as="p" grey={400}>
+              Staking Limit
+            </Label>
+            <Label as="p" grey={700}>
+              {format(protocol.maxStakeAmount)}
+            </Label>
+          </Box>
+        ) : (
+          <Box justify="space-between" mb="18px">
+            <Label as="p" grey={400}>
+              Available to Unstake
+            </Label>
+            <Label as="p" grey={700}>
+              {format(maxUserUnstake)}
+            </Label>
+          </Box>
+        )}
 
         <Approval
           owner={address}
           amount={amount.raw}
           spender={userManagerContract.addressOrName}
+          requireApproval={type === StakeType.STAKE}
           tokenContract="dai"
           actionProps={{
-            label: `Stake ${amount.display} DAI`,
-            contract: "userManager",
-            method: "stake",
             args: [amount.raw],
             enabled: !isErrored,
+            contract: "userManager",
+            method: type === StakeType.STAKE ? "stake" : "unstake",
+            label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${
+              amount.display
+            } DAI`,
           }}
           approvalLabel="Approve Union to spend your DAI"
           approvalCompleteLabel="You can now stake your DAI"
