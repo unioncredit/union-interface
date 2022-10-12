@@ -1,3 +1,5 @@
+import "./AccountModal.scss";
+
 import {
   Modal,
   ModalOverlay,
@@ -6,12 +8,17 @@ import {
   Heading,
   Badge,
   ButtonRow,
+  Divider,
+  Label,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect } from "wagmi";
+import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
+import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { useModals } from "providers/ModalManager";
 import Avatar from "components/shared/Avatar";
 import { Link } from "react-router-dom";
+import format from "utils/format";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -22,7 +29,7 @@ export default function AccountModal() {
 
   return (
     <ModalOverlay onClick={close}>
-      <Modal title="Wallet & Activity" onClose={close}>
+      <Modal title="Wallet & Activity" onClose={close} className="AccountModal">
         <Box align="center" justify="center" direction="vertical">
           <Link to={`/profile/${address}`}>
             <Avatar size={56} address={address} />
@@ -44,6 +51,32 @@ export default function AccountModal() {
             }}
           />
         </ButtonRow>
+        <Divider my="24px" />
+        <Box justify="space-between" align="center" mb="12px">
+          <Label grey={600}>Wallet Activity</Label>
+          <Button size="small" variant="pill" label="Clear activity" />
+        </Box>
+
+        <Box direction="vertical">
+          <Box align="center" justify="space-between" fluid>
+            <Box align="center">
+              <div className="AccountModal__Activity__statusIcon">
+                <Success width="16px" />
+              </div>
+              <Label grey={600} m={0}>
+                Repayment
+              </Label>
+            </Box>
+            <Box align="center">
+              <Label m={0} grey={700}>
+                {format(0)}
+              </Label>
+              <a href="#" target="_blank">
+                <External width="24px" />
+              </a>
+            </Box>
+          </Box>
+        </Box>
       </Modal>
     </ModalOverlay>
   );
