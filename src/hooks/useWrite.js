@@ -1,7 +1,7 @@
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import useContract from "hooks/useContract";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export default function useWrite({
   disabled,
@@ -9,7 +9,9 @@ export default function useWrite({
   args,
   enabled,
   contract,
+  onComplete,
 }) {
+  const [loading, setLoading] = useState(false);
   const contractConfig = useContract(contract);
 
   const { config } = usePrepareContractWrite({
@@ -19,13 +21,21 @@ export default function useWrite({
     enabled,
   });
 
-  const { isLoading, writeAsync } = useContractWrite(config);
+  const { writeAsync } = useContractWrite(config);
 
   const handleTx = useCallback(async () => {
+    setLoading(true);
+
     try {
-      const resp = await writeAsync();
-      console.log(resp);
-      debugger;
+      const tx = await writeAsync();
+      const resp = await tx.wait();
+      console.log(tx, resp);
+
+      onComplete && onComplete();
+
+      // We can probably do these two things together
+      // TODO: pop toasts
+      // TODO: add to activity
     } catch (error) {
       console.log("TxButton error:", error);
       console.log("TxButton error message:", error.message);
@@ -35,15 +45,17 @@ export default function useWrite({
         // User rejected the request
         // TODO:
       }
+    } finally {
+      setLoading(false);
     }
   }, [writeAsync]);
 
   return useMemo(
     () => ({
       disabled: disabled || !writeAsync,
-      loading: isLoading,
+      loading,
       onClick: handleTx,
     }),
-    [handleTx, isLoading, disabled, writeAsync]
+    [handleTx, loading, disabled, writeAsync]
   );
 }

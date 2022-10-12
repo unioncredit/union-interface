@@ -95,6 +95,7 @@ export default function MemberData({ children }) {
   return (
     <MemberContext.Provider
       value={{
+        refetch: () => userManager.refetch(),
         data: { ...userManagerData },
         isLoading: !userManagerData || userManagerData.isLoading,
       }}

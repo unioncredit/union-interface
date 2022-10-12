@@ -119,6 +119,8 @@ export default function StakeModal() {
             args: [amount.raw],
             enabled: !isErrored,
           }}
+          approvalLabel="Approve Union to spend your DAI"
+          approvalCompleteLabel="You can now stake your DAI"
         />
       </Modal>
     </ModalOverlay>

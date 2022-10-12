@@ -5,6 +5,8 @@ import { MultiStepButton } from "@unioncredit/ui";
 import { ZERO } from "constants";
 import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
+import { useModals } from "providers/ModalManager";
+import { useMember } from "providers/MemberData";
 
 const initialItems = [{ number: 1, status: "selected" }, { number: 2 }];
 const initialButtonProps = { label: "Enter an amount", disabled: true };
@@ -15,24 +17,34 @@ export default function Approval({
   spender,
   tokenContract,
   actionProps,
-  approvalLabel = "Approve",
+  approvalLabel,
+  approvalCompleteLabel,
 }) {
+  const { close } = useModals();
+  const { refetch: refetchMember } = useMember();
   const [items, setItems] = useState(initialItems);
   const [action, setAction] = useState(initialButtonProps);
+  const [showSteps, setShowSteps] = useState(false);
 
   const tokenConfig = useContract(tokenContract);
 
-  const { data: allowance = ZERO } = useContractRead({
-    ...tokenConfig,
-    functionName: "allowance",
-    args: [owner, spender],
-  });
+  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead(
+    {
+      ...tokenConfig,
+      functionName: "allowance",
+      args: [owner, spender],
+    }
+  );
 
   const txButtonProps = useWrite({
     contract: actionProps.contract,
     method: actionProps.method,
     args: actionProps.args,
     enabled: amount.gt(0) && allowance.gte(amount),
+    onComplete: () => {
+      close();
+      refetchMember();
+    },
   });
 
   const approveButtonProps = useWrite({
@@ -40,6 +52,7 @@ export default function Approval({
     method: "approve",
     args: [spender, amount],
     enabled: amount.gt(0) && allowance.lt(amount),
+    onComplete: refetchAllowance,
   });
 
   /**
@@ -52,9 +65,13 @@ export default function Approval({
         // The amount is more than the allowance so we
         // need to prompt the user to approve this contract
         setAction({
-          label: approvalLabel,
+          label: approveButtonProps.loading ? "Approving..." : "Approve",
           ...approveButtonProps,
+          loading: false,
+          disabled: approveButtonProps.loading,
         });
+
+        setShowSteps(true);
       } else {
         // The user has an allowance that covers this amount
         // so we can skip straight to the action
@@ -77,19 +94,25 @@ export default function Approval({
     } else if (txButtonProps.loading) {
       // Transaction is loading
       setItems([{ number: 1 }, { number: 2, status: "pending" }]);
+    } else if (allowance.gte(amount)) {
+      // Allowance has been complete
+      setItems([
+        { number: 1, status: "complete" },
+        { number: 2, status: "selected" },
+      ]);
     } else {
       // Return to normal state
       setItems(initialItems);
     }
-  }, [approveButtonProps.loading, txButtonProps.loading]);
+  }, [allowance, amount, approveButtonProps.loading, txButtonProps.loading]);
 
   return (
     <MultiStepButton
       id="approval-component"
       items={items}
       action={action}
-      showSteps={amount.gt(0) && amount.gt(allowance)}
+      showSteps={showSteps}
+      label={allowance.gte(amount) ? approvalCompleteLabel : approvalLabel}
     />
   );
 }
-
