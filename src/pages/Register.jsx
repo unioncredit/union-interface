@@ -7,14 +7,20 @@ import {
   Text,
   Box,
   Divider,
+  Label,
 } from "@unioncredit/ui";
+import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
+import format from "utils/format";
+import { useProtocol } from "providers/ProtocolData";
 import Header from "components/shared/Header";
 import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 
 export default function RegisterPage() {
+  const { data: protocol } = useProtocol();
+
   return (
     <>
       <Header />
@@ -48,8 +54,15 @@ export default function RegisterPage() {
                     />
                     <Card.Body>
                       <Divider mb="56px" />
-                      <Box justify="center" mb="6px">
-                        <Box w="380px">
+                      <Box justify="center" mb="32px">
+                        <Box w="380px" direction="vertical" align="center">
+                          <Logo width="32px" />
+                          <Heading size="large" grey={700} mb={0} mt="2px">
+                            {format(protocol.newMemberFee, 0)} UNION
+                          </Heading>
+                          <Label m={0} grey={500} mb="24px">
+                            Membership Fee
+                          </Label>
                           <RegisterButton />
                         </Box>
                       </Box>
