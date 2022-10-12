@@ -1,7 +1,9 @@
+import { useCallback, useMemo, useState } from "react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 
+import { Status } from "constants";
 import useContract from "hooks/useContract";
-import { useCallback, useMemo, useState } from "react";
+import { useAppLogs } from "providers/AppLogs";
 
 export default function useWrite({
   disabled,
@@ -11,8 +13,9 @@ export default function useWrite({
   contract,
   onComplete,
 }) {
-  const [loading, setLoading] = useState(false);
+  const { addLog } = useAppLogs();
   const contractConfig = useContract(contract);
+  const [loading, setLoading] = useState(false);
 
   const { config } = usePrepareContractWrite({
     ...contractConfig,
@@ -33,9 +36,7 @@ export default function useWrite({
 
       onComplete && onComplete();
 
-      // We can probably do these two things together
-      // TODO: pop toasts
-      // TODO: add to activity
+      addLog(praseAppLog(Status.SUCCESS, method, args, tx));
     } catch (error) {
       console.log("TxButton error:", error);
       console.log("TxButton error message:", error.message);
@@ -43,7 +44,7 @@ export default function useWrite({
 
       if (error.code == "ACTION_REJECTED") {
         // User rejected the request
-        // TODO:
+        addLog(praseAppLog(Status.FAILED, method, args, null));
       }
     } finally {
       setLoading(false);

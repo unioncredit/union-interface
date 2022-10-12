@@ -9,6 +9,11 @@ export const StakeType = {
   UNSTAKE: "unstake",
 };
 
+export const Status = {
+  SUCCESS: "success",
+  FAILED: "failed",
+};
+
 export const Errors = {
   MAX_USER_STAKE: "Max stake exceeded",
 };
