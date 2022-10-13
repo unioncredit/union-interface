@@ -14,8 +14,10 @@ export default function Toasts({ children }) {
   const [toasts, setToasts] = useState([]);
   const timers = useRef([]);
 
-  const addToast = ({ content, link, variant, title }, autoClear = true) => {
-    const id = toasts.length;
+  const addToast = (
+    { content, link, variant, title, id },
+    autoClear = true
+  ) => {
     setToasts((x) => [...x, { id, content, link, variant, title }]);
 
     if (autoClear) {
@@ -28,8 +30,8 @@ export default function Toasts({ children }) {
     return id;
   };
 
-  const closeToast = (index) => {
-    setToasts((x) => x.filter((_, i) => index !== i));
+  const closeToast = (id) => {
+    setToasts((x) => x.filter((toast) => toast.id !== id));
   };
 
   useEffect(
