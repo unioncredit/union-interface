@@ -24,11 +24,11 @@ import NetworkSelect from "components/shared/NetworkSelect";
 
 export default function Header({ loading }) {
   const { open } = useModals();
-  const { data } = useMember();
+  const { data: member } = useMember();
   const { isConnected } = useAccount();
 
   const navItems =
-    isConnected && data.checkIsMember
+    isConnected && member.checkIsMember
       ? [items.credit, items.contacts, items.governance]
       : [items.getStarted, items.governance];
 
@@ -69,7 +69,7 @@ export default function Header({ loading }) {
                 onClick={() => open(WALLET_MODAL)}
                 label={
                   <Text mb="0" ml="4px">
-                    {format(0)}
+                    {format(member.unclaimedRewards)}
                   </Text>
                 }
               />
