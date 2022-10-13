@@ -129,7 +129,7 @@ export default function RegisterButton() {
       items={items}
       action={action}
       showSteps={true}
-      label={`Unclaimed: ${format(member.unClaimedRewards)} UNION`}
+      label={`Unclaimed: ${format(member.unclaimedRewards)} UNION`}
     />
   );
 }

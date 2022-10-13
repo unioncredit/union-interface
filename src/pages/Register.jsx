@@ -12,14 +12,18 @@ import {
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
 import format from "utils/format";
-import { useProtocol } from "providers/ProtocolData";
 import Header from "components/shared/Header";
+import { useMember } from "providers/MemberData";
+import { useVouchers } from "providers/VouchersData";
+import { useProtocol } from "providers/ProtocolData";
 import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 
 export default function RegisterPage() {
   const { data: protocol } = useProtocol();
+  const { data: member } = useMember();
+  const { data: vouchers } = useVouchers();
 
   return (
     <>
@@ -35,17 +39,25 @@ export default function RegisterPage() {
             </Text>
 
             <ProgressList>
-              <ProgressListItem number={1} complete={true}>
+              <ProgressListItem
+                number={1}
+                complete={member.unionBalance
+                  .add(member.unclaimedRewards)
+                  .gt(0)}
+              >
                 <div ref={null}>
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={2} complete={false}>
+              <ProgressListItem
+                number={2}
+                complete={Object.keys(vouchers).length > 0}
+              >
                 <div ref={null}>
                   <VouchersStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={3} complete={false}>
+              <ProgressListItem number={3} complete={member.isMember}>
                 <div ref={null}>
                   <Card size="fluid" mb="24px">
                     <Card.Header

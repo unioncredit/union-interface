@@ -15,7 +15,7 @@ const selectUserManager = (data) => ({
   stakerAddresses: data[7],
   unionBalance: data[8],
   daiBalance: data[9],
-  unClaimedRewards: data[10],
+  unclaimedRewards: data[10],
 });
 
 const MemberContext = createContext({});
