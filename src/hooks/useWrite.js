@@ -52,7 +52,6 @@ export default function useWrite({
 
       if (error.code == "ACTION_REJECTED") {
         // User rejected the request
-        addLog(praseAppLog(Status.FAILED, method, args, null));
         addToast(parseToast(Status.FAILED, method, args, null));
       }
     } finally {
