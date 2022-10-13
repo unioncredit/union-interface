@@ -1,7 +1,5 @@
 import "./Header.scss";
 
-import { useAccount } from "wagmi";
-import { Link } from "react-router-dom";
 import {
   NavItem,
   Grid,
@@ -11,6 +9,8 @@ import {
   Text,
   Button,
 } from "@unioncredit/ui";
+import { useAccount } from "wagmi";
+import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
@@ -20,6 +20,7 @@ import { useModals } from "providers/ModalManager";
 import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
+import NetworkSelect from "components/shared/NetworkSelect";
 
 export default function Header({ loading }) {
   const { open } = useModals();
@@ -38,7 +39,7 @@ export default function Header({ loading }) {
           <Grid.Col>
             <Box align="center">
               <Logo width="32px" style={{ marginRight: "8px" }} />
-              {/* <NetworkSelect /> */}
+              <NetworkSelect />
             </Box>
           </Grid.Col>
           <Grid.Col align="center" className="hide-lt-850">
