@@ -37,59 +37,57 @@ export default function WalletModal() {
 
   return (
     <ModalOverlay onClick={close}>
-      <Modal
-        title="UNION Balance"
-        subTitle="Complete the three steps to become a member"
-        onClose={close}
-        className="WalletModal"
-      >
-        <Box align="center" justify="center" direction="vertical">
-          <Heading grey={800} size="xlarge" m={0}>
-            {format(member.unionBalance.add(member.unclaimedRewards))}
-            <Union />
-          </Heading>
-          <Label m={0} grey={400}>
-            Total Balance
-          </Label>
-        </Box>
+      <Modal className="WalletModal">
+        <Modal.Header title="UNION Balance" onClose={close} />
+        <Modal.Body>
+          <Box align="center" justify="center" direction="vertical">
+            <Heading grey={800} size="xlarge" m={0}>
+              {format(member.unionBalance.add(member.unclaimedRewards))}
+              <Union />
+            </Heading>
+            <Label m={0} grey={400}>
+              Total Balance
+            </Label>
+          </Box>
 
-        <Box justify="space-between" mt="8px">
-          <Label as="p" grey={400}>
-            Wallet
-          </Label>
-          <Label as="p" grey={700} m={0}>
-            <Union value={format(member.unionBalance)} />
-          </Label>
-        </Box>
-        <Divider mb="8px" />
-        <Box justify="space-between" mb="18px">
-          <Label as="p" grey={400}>
-            Unclaimed
-          </Label>
-          <Label as="p" grey={700} m={0}>
-            <Union value={format(member.unclaimedRewards)} />
-          </Label>
-        </Box>
+          <Box justify="space-between" mt="8px">
+            <Label as="p" grey={400}>
+              Wallet
+            </Label>
+            <Label as="p" grey={700} m={0}>
+              <Union value={format(member.unionBalance)} />
+            </Label>
+          </Box>
+          <Divider mb="8px" />
+          <Box justify="space-between" mb="18px">
+            <Label as="p" grey={400}>
+              Unclaimed
+            </Label>
+            <Label as="p" grey={700} m={0}>
+              <Union value={format(member.unclaimedRewards)} />
+            </Label>
+          </Box>
 
-        <Button
-          fluid
-          label={
-            buttonProps.disabled
-              ? "No tokens to claim"
-              : `Claim ${format(member.unclaimedRewards)} UNION`
-          }
-          {...buttonProps}
-        />
-        <Button
-          fluid
-          as="a"
-          mt="4px"
-          target="_blank"
-          variant="secondary"
-          label="Union Governance"
-          href="#"
-          icon={External}
-        />
+          <Button
+            fluid
+            label={
+              buttonProps.disabled
+                ? "No tokens to claim"
+                : `Claim ${format(member.unclaimedRewards)} UNION`
+            }
+            {...buttonProps}
+          />
+          <Button
+            fluid
+            as="a"
+            mt="4px"
+            target="_blank"
+            variant="secondary"
+            label="Union Governance"
+            href="#"
+            icon={External}
+          />
+        </Modal.Body>
       </Modal>
     </ModalOverlay>
   );

@@ -2880,10 +2880,10 @@
     "@typescript-eslint/types" "5.40.0"
     eslint-visitor-keys "^3.3.0"
 
-"@unioncredit/ui@0.3.0-beta.9":
-  version "0.3.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.3.0-beta.9.tgz#0c5aa20b2db8fadb9e6e1dca0ae2c17dbad9775a"
-  integrity sha512-p1lD7ZE8tAwcVabldhbevDWqqSxnZ/omAsD3Uw+y9rEX5vsxgM9lekblGmskFLsMbuLWczAvd6+4mtHRX1i1oA==
+"@unioncredit/ui@0.3.0-beta.10":
+  version "0.3.0-beta.10"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.3.0-beta.10.tgz#60e06e299dc9df7e0a050d43edae9b41a6b4a1a0"
+  integrity sha512-rx5+jBlG4sVznYyfKRmteotvp/+fm2A2EdG2cjkwuh3d/pqAluR4vqKu5n+i7jWqzCO/7f/VtJ4Y5bnkIP2jvw==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
@@ -7380,6 +7380,11 @@ jest@^27.4.3:
     "@jest/core" "^27.5.1"
     import-local "^3.0.2"
     jest-cli "^27.5.1"
+
+js-confetti@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/js-confetti/-/js-confetti-0.11.0.tgz#5eb56dc23cba54be98b71afdc69a28bec61880a2"
+  integrity sha512-Hc7I3VI4r4H0nq5q/oQK+JJwGoYRYVHK72fGk8E9Ay1dbh+aiZ9yl0yFp1K4oYeq7YFDQAndYChwqLPA3QWQuA==
 
 js-cookie@^2.2.1:
   version "2.2.1"

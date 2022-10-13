@@ -79,85 +79,84 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
 
   return (
     <ModalOverlay onClick={close}>
-      <Modal
-        onClose={close}
-        className="StakeModal"
-        title="Stake or unstake DAI"
-      >
-        <ToggleMenu
-          fluid
-          packed
-          items={toggleMenuOptions}
-          initialActive={initialActiveIndex}
-          onChange={(item) => setType(item.id)}
-        />
-
-        <Box mt="24px">
-          <Input
-            type="number"
-            placeholder="0"
-            suffix={<Dai />}
-            error={errors.amount}
-            value={amount.display}
-            onChange={register("amount")}
-            {...inputProps}
+      <Modal className="StakeModal">
+        <ModalHeader onClose={close} title="Stake or unstake DAI" />
+        <Modal.Body>
+          <ToggleMenu
+            fluid
+            packed
+            items={toggleMenuOptions}
+            initialActive={initialActiveIndex}
+            onChange={(item) => setType(item.id)}
           />
-        </Box>
 
-        <Box justify="space-between" mt="16px" mb="4px">
-          <Label as="p" grey={400}>
-            Currently Staked
-          </Label>
-          <Label as="p" grey={700} m={0}>
-            {format(member.stakedBalance)}
-          </Label>
-        </Box>
-        <Box justify="space-between" mb="4px">
-          <Label as="p" grey={400}>
-            Utilized Stake
-          </Label>
-          <Label as="p" grey={700} m={0}>
-            {format(member.totalLockedStake)}
-          </Label>
-        </Box>
-        {type === StakeType.STAKE ? (
-          <Box justify="space-between" mb="18px">
+          <Box mt="24px">
+            <Input
+              type="number"
+              placeholder="0"
+              suffix={<Dai />}
+              error={errors.amount}
+              value={amount.display}
+              onChange={register("amount")}
+              {...inputProps}
+            />
+          </Box>
+
+          <Box justify="space-between" mt="16px" mb="4px">
             <Label as="p" grey={400}>
-              Staking Limit
+              Currently Staked
             </Label>
-            <Label as="p" grey={700}>
-              {format(protocol.maxStakeAmount)}
+            <Label as="p" grey={700} m={0}>
+              {format(member.stakedBalance)}
             </Label>
           </Box>
-        ) : (
-          <Box justify="space-between" mb="18px">
+          <Box justify="space-between" mb="4px">
             <Label as="p" grey={400}>
-              Available to Unstake
+              Utilized Stake
             </Label>
-            <Label as="p" grey={700}>
-              {format(maxUserUnstake)}
+            <Label as="p" grey={700} m={0}>
+              {format(member.totalLockedStake)}
             </Label>
           </Box>
-        )}
+          {type === StakeType.STAKE ? (
+            <Box justify="space-between" mb="18px">
+              <Label as="p" grey={400}>
+                Staking Limit
+              </Label>
+              <Label as="p" grey={700}>
+                {format(protocol.maxStakeAmount)}
+              </Label>
+            </Box>
+          ) : (
+            <Box justify="space-between" mb="18px">
+              <Label as="p" grey={400}>
+                Available to Unstake
+              </Label>
+              <Label as="p" grey={700}>
+                {format(maxUserUnstake)}
+              </Label>
+            </Box>
+          )}
 
-        <Approval
-          owner={address}
-          amount={amount.raw}
-          spender={userManagerContract.addressOrName}
-          requireApproval={type === StakeType.STAKE}
-          tokenContract="dai"
-          actionProps={{
-            args: [amount.raw],
-            enabled: !isErrored,
-            contract: "userManager",
-            method: type === StakeType.STAKE ? "stake" : "unstake",
-            label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${
-              amount.display
-            } DAI`,
-          }}
-          approvalLabel="Approve Union to spend your DAI"
-          approvalCompleteLabel="You can now stake your DAI"
-        />
+          <Approval
+            owner={address}
+            amount={amount.raw}
+            spender={userManagerContract.addressOrName}
+            requireApproval={type === StakeType.STAKE}
+            tokenContract="dai"
+            actionProps={{
+              args: [amount.raw],
+              enabled: !isErrored,
+              contract: "userManager",
+              method: type === StakeType.STAKE ? "stake" : "unstake",
+              label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${
+                amount.display
+              } DAI`,
+            }}
+            approvalLabel="Approve Union to spend your DAI"
+            approvalCompleteLabel="You can now stake your DAI"
+          />
+        </Modal.Body>
       </Modal>
     </ModalOverlay>
   );

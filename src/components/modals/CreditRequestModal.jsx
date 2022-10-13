@@ -30,65 +30,68 @@ export default function CreditRequestModal() {
 
   return (
     <ModalOverlay onClick={close}>
-      <Modal onClose={close} title="Credit request">
-        <Box align="center" justify="center" direction="vertical">
-          <Select
-            options={networks}
-            onChange={() => alert()}
-            defaultValue={networks[0]}
-          />
+      <Modal>
+        <ModalHeader onClose={close} title="Credit request" />
+        <Modal.Body>
+          <Box align="center" justify="center" direction="vertical">
+            <Select
+              options={networks}
+              onChange={() => alert()}
+              defaultValue={networks[0]}
+            />
 
-          <Card packed mt="8px">
-            <Box my="16px" fluid justify="center">
-              <QRCode
-                value={url}
-                fgColor="#032437"
-                size={120}
-                renderAs="svg"
-                className="QRCode"
-              />
-            </Box>
-            <Box mb="16px" direction="vertical" align="center">
-              <Label
-                as="p"
-                m={0}
-                style={{
-                  wordBreak: "break-all",
-                  textAlign: "center",
-                  padding: "0 10px",
-                }}
-              >
-                {urlDisplay}
-              </Label>
+            <Card packed mt="8px">
+              <Box my="16px" fluid justify="center">
+                <QRCode
+                  value={url}
+                  fgColor="#032437"
+                  size={120}
+                  renderAs="svg"
+                  className="QRCode"
+                />
+              </Box>
+              <Box mb="16px" direction="vertical" align="center">
+                <Label
+                  as="p"
+                  m={0}
+                  style={{
+                    wordBreak: "break-all",
+                    textAlign: "center",
+                    padding: "0 10px",
+                  }}
+                >
+                  {urlDisplay}
+                </Label>
+                <Button
+                  mt="8px"
+                  variant="pill"
+                  onClick={() => alert(url)}
+                  label="Copy link"
+                />
+              </Box>
+            </Card>
+            <ButtonRow fluid mt="8px">
               <Button
-                mt="8px"
-                variant="pill"
-                onClick={() => alert(url)}
-                label="Copy link"
+                fluid
+                as="a"
+                color="blue"
+                variant="secondary"
+                icon={Twitter}
+                label="Twitter"
+                href="#"
               />
-            </Box>
-          </Card>
-          <ButtonRow fluid mt="8px">
-            <Button
-              fluid
-              as="a"
-              color="blue"
-              variant="secondary"
-              icon={Twitter}
-              label="Twitter"
-              href="#"
-            />
-            <Button
-              fluid
-              as="a"
-              color="blue"
-              variant="secondary"
-              icon={Telegram}
-              label="Telegram"
-              href="#"
-            />
-          </ButtonRow>
-        </Box>
+              <Button
+                fluid
+                as="a"
+                color="blue"
+                variant="secondary"
+                icon={Telegram}
+                label="Telegram"
+                href="#"
+              />
+            </ButtonRow>
+          </Box>
+        </Modal.Body>
       </Modal>
     </ModalOverlay>
   );
