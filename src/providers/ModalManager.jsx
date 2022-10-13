@@ -3,7 +3,9 @@ import { createContext, useContext, useState } from "react";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
-import CreditRequestModal, { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
+import CreditRequestModal, {
+  CREDIT_REQUEST_MODAL,
+} from "components/modals/CreditRequestModal";
 
 const ModalContext = createContext({});
 

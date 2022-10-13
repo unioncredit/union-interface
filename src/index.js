@@ -12,7 +12,6 @@ import VouchersData from "providers/VouchersData";
 import ProtocolData from "providers/ProtocolData";
 import reportWebVitals from "./reportWebVitals";
 
-
 import "./index.scss";
 
 const client = createClient(

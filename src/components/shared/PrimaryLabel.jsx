@@ -9,4 +9,3 @@ export default function PrimaryLabel({ address }) {
 
   return data || truncateAddress(address);
 }
-
