@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
+import CreditRequestModal, { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 
 const ModalContext = createContext({});
 
@@ -12,6 +13,7 @@ const modals = {
   [ACCOUNT_MODAL]: AccountModal,
   [STAKE_MODAL]: StakeModal,
   [WALLET_MODAL]: WalletModal,
+  [CREDIT_REQUEST_MODAL]: CreditRequestModal,
 };
 
 export default function ModalManager({ children }) {

@@ -17,12 +17,15 @@ import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 
 import format from "utils/format";
 import Avatar from "components/shared/Avatar";
+import { useModals } from "providers/ModalManager";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 
 export default function VouchersStep() {
   const { data = {} } = useVouchers();
+  const { open } = useModals();
 
   const addresses = Object.keys(data);
 
@@ -64,7 +67,13 @@ export default function VouchersStep() {
             </Table>
           </Card>
           <ButtonRow fluid mt="8px">
-            <Button fluid color="blue" icon={Link} label="Get vouch link" />
+            <Button
+              fluid
+              color="blue"
+              icon={Link}
+              label="Get vouch link"
+              onClick={() => open(CREDIT_REQUEST_MODAL)}
+            />
             <Button variant="secondary" icon={Twitter} />
             <Button variant="secondary" icon={Telegram} />
           </ButtonRow>
