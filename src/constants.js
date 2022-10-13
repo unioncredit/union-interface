@@ -11,7 +11,8 @@ export const StakeType = {
 
 export const Status = {
   SUCCESS: "success",
-  FAILED: "failed",
+  FAILED: "error",
+  PENDING: "pending"
 };
 
 export const Errors = {

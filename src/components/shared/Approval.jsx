@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useContractRead } from "wagmi";
+import { useEffect, useState } from "react";
 import { MultiStepButton } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
@@ -28,6 +28,10 @@ export default function Approval({
   const [showSteps, setShowSteps] = useState(false);
 
   const tokenConfig = useContract(tokenContract);
+
+  /*--------------------------------------------------------------
+    Contract Functions
+   --------------------------------------------------------------*/
 
   const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead(
     {
@@ -107,12 +111,16 @@ export default function Approval({
     }
   }, [allowance, amount, approveButtonProps.loading, txButtonProps.loading]);
 
+  /*--------------------------------------------------------------
+    Render Component 
+   --------------------------------------------------------------*/
+
   return (
     <MultiStepButton
       id="approval-component"
       items={items}
       action={action}
-      showSteps={showSteps}
+      showSteps={requireApproval && showSteps}
       label={allowance.gte(amount) ? approvalCompleteLabel : approvalLabel}
     />
   );

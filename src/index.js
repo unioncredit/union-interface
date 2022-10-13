@@ -5,11 +5,13 @@ import { WagmiConfig, createClient, chain } from "wagmi";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import Toasts from "providers/Toasts";
+import AppLogs from "providers/AppLogs";
 import MemberData from "providers/MemberData";
 import VouchersData from "providers/VouchersData";
 import ProtocolData from "providers/ProtocolData";
-import AppLogs from "providers/AppLogs";
+import reportWebVitals from "./reportWebVitals";
+
 
 import "./index.scss";
 
@@ -27,15 +29,17 @@ root.render(
   <HashRouter>
     <WagmiConfig client={client}>
       <ConnectKitProvider theme="soft" mode="light">
-        <AppLogs>
-          <ProtocolData>
-            <MemberData>
-              <VouchersData>
-                <App />
-              </VouchersData>
-            </MemberData>
-          </ProtocolData>
-        </AppLogs>
+        <Toasts>
+          <AppLogs>
+            <ProtocolData>
+              <MemberData>
+                <VouchersData>
+                  <App />
+                </VouchersData>
+              </MemberData>
+            </ProtocolData>
+          </AppLogs>
+        </Toasts>
       </ConnectKitProvider>
     </WagmiConfig>
   </HashRouter>

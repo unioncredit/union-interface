@@ -16,18 +16,23 @@ export default function useForm({ validate }) {
   const [errors, setErrors] = useState();
 
   const set = (name, value, type) => {
-    if (!value) value = "0";
+    let newValues;
 
-    const parsed =
-      type === "display"
-        ? { raw: parseUnits(value), display: value }
-        : { raw: value, display: formatValue(value) };
+    if (!value) {
+      // If the value is empty set the raw value to 0 and
+      // the display value to an empty string
+      newValues = { ...values, [name]: { raw: ZERO, display: "" } };
+    } else {
+      const parsed =
+        type === "display"
+          ? { raw: parseUnits(value), display: value }
+          : { raw: value, display: formatValue(value) };
 
-    const newValues = { ...values, [name]: parsed };
+      newValues = { ...values, [name]: parsed };
+    }
 
     const validationErrors = validate(newValues);
     setErrors((err) => ({ ...err, [name]: validationErrors }));
-
     setValues(newValues);
   };
 
