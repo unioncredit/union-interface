@@ -80,7 +80,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   return (
     <ModalOverlay onClick={close}>
       <Modal className="StakeModal">
-        <ModalHeader onClose={close} title="Stake or unstake DAI" />
+        <Modal.Header onClose={close} title="Stake or unstake DAI" />
         <Modal.Body>
           <ToggleMenu
             fluid

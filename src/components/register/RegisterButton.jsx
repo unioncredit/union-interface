@@ -43,6 +43,7 @@ export default function RegisterButton({ onComplete }) {
     contract: "userManager",
     method: "withdrawRewards",
     enabled: member.unionBalance.lt(protocol.newMemberFee),
+    onComplete: () => refetchMember(),
   });
 
   const { onClick: approve } = useWrite({
@@ -50,6 +51,7 @@ export default function RegisterButton({ onComplete }) {
     method: "approve",
     args: [userManagerConfig.addressOrName, protocol.newMemberFee],
     enabled: allowance.lt(protocol.newMemberFee),
+    onComplete: () => refetchAllowance(),
   });
 
   const { onClick: register } = useWrite({
@@ -59,6 +61,7 @@ export default function RegisterButton({ onComplete }) {
     enabled:
       allowance.gte(protocol.newMemberFee) &&
       member.unionBalance.gte(protocol.newMemberFee),
+    onComplete: () => refetchMember(),
   });
 
   /*--------------------------------------------------------------
@@ -68,23 +71,16 @@ export default function RegisterButton({ onComplete }) {
   const handleClaim = useCallback(async () => {
     setItems(createItems("pending"));
     await claim();
-    await refetchMember();
-    setItems(createItems("selected"));
   }, [claim, refetchMember]);
 
   const handleApprove = useCallback(async () => {
     setItems(createItems("complete", "pending"));
     await approve();
-    await refetchAllowance();
-    setItems(createItems("complete", "selected"));
   }, [approve, refetchAllowance]);
 
   const handleRegister = useCallback(async () => {
     setItems(createItems("complete", "complete", "pending"));
     await register();
-    await refetchMember();
-    setItems(createItems("complete", "complete", "selected"));
-    onComplete && onComplete();
   }, [register, refetchMember]);
 
   /**

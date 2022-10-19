@@ -26,10 +26,10 @@ import NetworkSelect from "components/shared/NetworkSelect";
 export default function Header({ loading }) {
   const { open } = useModals();
   const { isConnected } = useAccount();
-  const { data: { checkIsMember, unclaimedRewards = ZERO } = {} } = useMember();
+  const { data: { isMember, unclaimedRewards = ZERO } = {} } = useMember();
 
   const navItems =
-    isConnected && checkIsMember
+    isConnected && isMember
       ? [items.credit, items.contacts, items.governance]
       : [items.getStarted, items.governance];
 

@@ -3,20 +3,11 @@ import { createContext, useContext, useEffect } from "react";
 import { useAccount, useContractReads } from "wagmi";
 
 import { useMember } from "providers/MemberData";
-import { userManagerContract } from "config/contracts";
+import useContract from "hooks/useContract";
 
 const VouchersContext = createContext({});
 
 export const useVouchers = () => useContext(VouchersContext);
-
-const buildVoucherQueries = (borrower, staker) => [
-  { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
-  {
-    ...userManagerContract,
-    functionName: "getStakerAsset",
-    args: [borrower, staker],
-  },
-];
 
 const selectVoucher = (data) => ({
   checkIsMember: data[0],
@@ -26,8 +17,18 @@ const selectVoucher = (data) => ({
 export default function VouchersData({ children }) {
   const { address } = useAccount();
   const { data = {} } = useMember();
+  const userManagerContract = useContract("userManager");
 
   const { stakerAddresses } = data;
+
+  const buildVoucherQueries = (borrower, staker) => [
+    { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
+    {
+      ...userManagerContract,
+      functionName: "getStakerAsset",
+      args: [borrower, staker],
+    },
+  ];
 
   const contracts = (stakerAddresses || []).reduce(
     (acc, staker) => [...acc, ...buildVoucherQueries(address, staker)],

@@ -30,6 +30,11 @@ export default function useWrite({
 
   const { writeAsync } = useContractWrite(config);
 
+  /**
+   * onClick is just the name of the action function for this
+   * write. When fired the action defined by the hook inputs
+   * will be executed.
+   */
   const onClick = useCallback(async () => {
     setLoading(true);
     const toastId = addToast(
@@ -41,10 +46,12 @@ export default function useWrite({
       const tx = await writeAsync();
       await tx.wait();
 
-      onComplete && onComplete();
+      onComplete && (await onComplete());
 
       addLog(praseAppLog(Status.SUCCESS, method, args, tx));
       addToast(parseToast(Status.SUCCESS, method, args, tx));
+
+      return true;
     } catch (error) {
       console.log("TxButton error:", error);
       console.log("TxButton error message:", error.message);
@@ -54,11 +61,17 @@ export default function useWrite({
         // User rejected the request
         addToast(parseToast(Status.FAILED, method, args, null));
       }
+
+      return false;
     } finally {
       setLoading(false);
       closeToast(toastId);
     }
   }, [writeAsync, method, JSON.stringify(args)]);
+
+  /*--------------------------------------------------------------
+    Return  
+   --------------------------------------------------------------*/
 
   return useMemo(
     () => ({
