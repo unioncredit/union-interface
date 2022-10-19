@@ -16,12 +16,14 @@ import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.s
 import { useModals } from "providers/ModalManager";
 import { networks } from "config/networks";
 import { truncateAddress } from "utils/truncateAddress";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 
 export default function CreditRequestModal() {
   const { close } = useModals();
   const { address } = useAccount();
+  const [copied, copy] = useCopyToClipboard();
 
   const url = `http://app.union.finance/profile/eth:${address}`;
   const urlDisplay = `http://app.union.finance/profile/eth:${truncateAddress(
@@ -31,7 +33,7 @@ export default function CreditRequestModal() {
   return (
     <ModalOverlay onClick={close}>
       <Modal>
-        <ModalHeader onClose={close} title="Credit request" />
+        <Modal.Header onClose={close} title="Credit request" />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
             <Select
@@ -65,8 +67,8 @@ export default function CreditRequestModal() {
                 <Button
                   mt="8px"
                   variant="pill"
-                  onClick={() => alert(url)}
-                  label="Copy link"
+                  onClick={() => copy(url)}
+                  label={copied ? "Copied!" : "Copy link"}
                 />
               </Box>
             </Card>

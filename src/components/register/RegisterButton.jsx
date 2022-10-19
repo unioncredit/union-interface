@@ -15,7 +15,7 @@ const createItems = (s1, s2, s3) => [
   { number: 2, status: s3 },
 ];
 
-export default function RegisterButton() {
+export default function RegisterButton({ onComplete }) {
   const { address } = useAccount();
 
   const [action, setAction] = useState(null);
@@ -84,6 +84,7 @@ export default function RegisterButton() {
     await register();
     await refetchMember();
     setItems(createItems("complete", "complete", "selected"));
+    onComplete && onComplete();
   }, [register, refetchMember]);
 
   /**
