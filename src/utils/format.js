@@ -1,6 +1,7 @@
 import { formatUnits } from "ethers/lib/utils";
 
 export default function format(n, digits = 2) {
+  if (!n) n = "0";
   return commify(Number(formatUnits(n)), digits);
 }
 

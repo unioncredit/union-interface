@@ -5,17 +5,17 @@ import useContract from "hooks/useContract";
 import { ZERO } from "constants";
 
 const selectUserManager = (data) => ({
-  isMember: data[0],
-  creditLimit: data[1],
-  stakedBalance: data[2],
-  totalLockedStake: data[3],
-  totalFrozenAmount: data[4],
-  memberFrozen: data[5],
-  borrowerAddresses: data[6],
-  stakerAddresses: data[7],
-  unionBalance: data[8],
-  daiBalance: data[9],
-  unclaimedRewards: data[10],
+  isMember: data[0] || false,
+  creditLimit: data[1] || ZERO,
+  stakedBalance: data[2] || ZERO,
+  totalLockedStake: data[3] || ZERO,
+  totalFrozenAmount: data[4] || ZERO,
+  memberFrozen: data[5] || ZERO,
+  borrowerAddresses: data[6] || [],
+  stakerAddresses: data[7] || [],
+  unionBalance: data[8] || ZERO,
+  daiBalance: data[9] || ZERO,
+  unclaimedRewards: data[10] || ZERO,
 });
 
 const MemberContext = createContext({});

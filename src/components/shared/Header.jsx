@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
+import { ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
@@ -24,11 +25,11 @@ import NetworkSelect from "components/shared/NetworkSelect";
 
 export default function Header({ loading }) {
   const { open } = useModals();
-  const { data: member } = useMember();
   const { isConnected } = useAccount();
+  const { data: { checkIsMember, unclaimedRewards = ZERO } = {} } = useMember();
 
   const navItems =
-    isConnected && member.checkIsMember
+    isConnected && checkIsMember
       ? [items.credit, items.contacts, items.governance]
       : [items.getStarted, items.governance];
 
@@ -69,7 +70,7 @@ export default function Header({ loading }) {
                 onClick={() => open(WALLET_MODAL)}
                 label={
                   <Text mb="0" ml="4px">
-                    {format(member.unclaimedRewards)}
+                    {format(unclaimedRewards)}
                   </Text>
                 }
               />

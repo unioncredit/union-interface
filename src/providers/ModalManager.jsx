@@ -44,7 +44,6 @@ export default function ModalManager({ children }) {
   return (
     <ModalContext.Provider value={modalCtx}>
       {children}
-      <VouchModal />
       {Modal && <Modal {...props} />}
     </ModalContext.Provider>
   );

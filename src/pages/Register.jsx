@@ -11,6 +11,7 @@ import {
 } from "@unioncredit/ui";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
+import { ZERO } from "constants";
 import format from "utils/format";
 import Header from "components/shared/Header";
 import { useMember } from "providers/MemberData";
@@ -19,11 +20,24 @@ import { useProtocol } from "providers/ProtocolData";
 import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
+import { useModals } from "providers/ModalManager";
+import { useEffect } from "react";
+import { VOUCH_MODAL } from "components/modals/VouchModal";
 
 export default function RegisterPage() {
+  const { open } = useModals();
   const { data: protocol } = useProtocol();
+  const { data: vouchers = {} } = useVouchers();
   const { data: member } = useMember();
-  const { data: vouchers } = useVouchers();
+
+  const { unionBalance = ZERO, unclaimedRewards = ZERO, isMember } = member;
+
+  useEffect(() => {
+    open(VOUCH_MODAL, {
+      title: "Vouch for a friend",
+      subTitle: "Expand the web of trust with a vouch",
+    });
+  }, []);
 
   return (
     <>
@@ -41,9 +55,7 @@ export default function RegisterPage() {
             <ProgressList>
               <ProgressListItem
                 number={1}
-                complete={member.unionBalance
-                  .add(member.unclaimedRewards)
-                  .gt(0)}
+                complete={unionBalance?.add(unclaimedRewards).gt(0)}
               >
                 <div ref={null}>
                   <StakeStep />
@@ -57,7 +69,7 @@ export default function RegisterPage() {
                   <VouchersStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={3} complete={member.isMember}>
+              <ProgressListItem number={3} complete={isMember}>
                 <div ref={null}>
                   <Card size="fluid" mb="24px">
                     <Card.Header
