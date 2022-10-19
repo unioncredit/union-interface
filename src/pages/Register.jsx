@@ -21,7 +21,6 @@ import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
-import { useEffect } from "react";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 
 export default function RegisterPage() {
@@ -31,13 +30,6 @@ export default function RegisterPage() {
   const { data: member } = useMember();
 
   const { unionBalance = ZERO, unclaimedRewards = ZERO, isMember } = member;
-
-  useEffect(() => {
-    open(VOUCH_MODAL, {
-      title: "Vouch for a friend",
-      subTitle: "Expand the web of trust with a vouch",
-    });
-  }, []);
 
   return (
     <>
@@ -87,7 +79,15 @@ export default function RegisterPage() {
                           <Label m={0} grey={500} mb="24px">
                             Membership Fee
                           </Label>
-                          <RegisterButton />
+                          <RegisterButton
+                            onComplete={() =>
+                              open(VOUCH_MODAL, {
+                                title: "Vouch for a friend",
+                                subTitle:
+                                  "Expand the web of trust with a vouch",
+                              })
+                            }
+                          />
                         </Box>
                       </Box>
                     </Card.Body>
