@@ -19,3 +19,8 @@ export const Errors = {
   MAX_USER_STAKE: "Max stake exceeded",
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
 };
+
+export const ContactsType = {
+  VOUCHERS: "vouchers",
+  VOUCHEES: "vouchees",
+};

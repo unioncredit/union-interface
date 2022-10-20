@@ -8,27 +8,28 @@ import {
   Box,
 } from "@unioncredit/ui";
 
-export default function VouchersCard() {
-  const vouchers = [];
+export default function BorrowersCard() {
+  const borrowers = [];
 
   return (
     <Card mt="24px">
       <Card.Header
-        title={`Your Vouchers · ${vouchers.length}`}
-        subTitle="Accounts providing you with credit"
+        title={`Active borrowers · ${borrowers.length}`}
+        subTitle="Contacts actively borrowing against your stake"
       />
       {true ? (
         <Card.Body>
-          <EmptyState label="No vouchers" />
+          <EmptyState label="No borrowers" />
         </Card.Body>
       ) : (
         <Table>
           <TableRow>
             <TableHead></TableHead>
             <TableHead>Account</TableHead>
-            <TableHead align="right">Trust Amount (DAI)</TableHead>
+            <TableHead align="center">Status</TableHead>
+            <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {/* TODO: display vouchers */}
+          {/* TODO: display borrowers */}
         </Table>
       )}
       <Pagination pages={10} activePage={5} onClick={() => alert()} />

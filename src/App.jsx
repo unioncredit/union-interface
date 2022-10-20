@@ -4,9 +4,11 @@ import { Routes, Route } from "react-router-dom";
 
 import ErrorPage from "pages/Error";
 import CreditPage from "pages/Credit";
+import StakePage from "pages/Stake";
 import ConnectPage from "pages/Connect";
 import RegisterPage from "pages/Register";
 import LoadingPage from "pages/Loading";
+import ContactsPage from "pages/Contacts";
 
 import { useMember } from "providers/MemberData";
 import ModalManager from "providers/ModalManager";
@@ -27,7 +29,11 @@ export default function App() {
           ) : (
             <Routes>
               {data.isMember ? (
-                <Route path="/" element={<CreditPage />} />
+                <>
+                  <Route path="/" element={<CreditPage />} />
+                  <Route path="/stake" element={<StakePage />} />
+                  <Route path="/contacts" element={<ContactsPage />} />
+                </>
               ) : (
                 <Route path="/" element={<RegisterPage />} />
               )}
