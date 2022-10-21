@@ -14,11 +14,14 @@ const selectVouchee = (data) => ({
   locking: data[1].lockedStake,
   trust: data[1].trustAmount,
   vouch: data[1].vouchingAmount,
+  isOverdue: data[2],
 });
 
 export default function VoucheesData({ children }) {
   const { address } = useAccount();
   const { data = {} } = useMember();
+
+  const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
 
   const { borrowerAddresses } = data;
@@ -29,6 +32,11 @@ export default function VoucheesData({ children }) {
       ...userManagerContract,
       functionName: "getBorrowerAsset",
       args: [staker, borrower],
+    },
+    {
+      ...uTokenContract,
+      functionName: "checkIsOverdue",
+      args: [borrower],
     },
   ];
 

@@ -1,16 +1,27 @@
-import {
-  Stat,
-  Button,
-  Grid,
-  Card,
-  Label,
-  Tooltip,
-  Dai,
-  Bar,
-} from "@unioncredit/ui";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
+import { Stat, Button, Grid, Card, Dai, Bar } from "@unioncredit/ui";
+
+import format from "utils/format";
+import { WAD, ZERO } from "constants";
+import { reduceBnSum } from "utils/reduce";
+import { useVouchees } from "providers/VoucheesData";
+import { useMember } from "providers/MemberData";
 
 export default function StakeStats() {
+  const { data: member } = useMember();
+  const { data: vouchees = {} } = useVouchees();
+
+  const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
+
+  const lockedPercentageBps = totalLockedStake.mul(WAD).div(stakedBalance);
+  const lockedPercentage = Number(lockedPercentageBps.toString()) / 1e18;
+
+  const defaulted = Object.keys(vouchees)
+    .map((address) => {
+      const vouchee = vouchees[address];
+      return vouchee.isOverdue ? vouchee.locking : ZERO;
+    })
+    .reduce(reduceBnSum, ZERO);
+
   return (
     <Card>
       <Card.Header title="Staked Funds" align="center" />
@@ -22,7 +33,7 @@ export default function StakeStats() {
                 size="large"
                 align="center"
                 label="Staked"
-                value={<Dai value={0} />}
+                value={<Dai value={format(stakedBalance)} />}
               />
             </Grid.Col>
           </Grid.Row>
@@ -32,8 +43,13 @@ export default function StakeStats() {
                 mt="24px"
                 label="Utilized"
                 align="center"
-                value={<Dai value={0} />}
-                after={<Bar label="0%" percentage={0} />}
+                value={<Dai value={format(totalLockedStake)} />}
+                after={
+                  <Bar
+                    label={`${lockedPercentage}%`}
+                    percentage={lockedPercentage}
+                  />
+                }
               />
             </Grid.Col>
             <Grid.Col xs={4}>
@@ -41,7 +57,9 @@ export default function StakeStats() {
                 mt="24px"
                 align="center"
                 label="Withdrawable"
-                value={<Dai value={0} />}
+                value={
+                  <Dai value={format(stakedBalance.sub(totalLockedStake))} />
+                }
               />
             </Grid.Col>
             <Grid.Col xs={4}>
@@ -49,7 +67,7 @@ export default function StakeStats() {
                 mt="24px"
                 align="center"
                 label="Defaulted"
-                value={<Dai value={0} />}
+                value={<Dai value={format(defaulted)} />}
               />
             </Grid.Col>
           </Grid.Row>
