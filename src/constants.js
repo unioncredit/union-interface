@@ -1,4 +1,5 @@
 import { BigNumber } from "ethers";
+import { chain } from "wagmi";
 
 export const ZERO = BigNumber.from(0);
 
@@ -23,4 +24,9 @@ export const Errors = {
 export const ContactsType = {
   VOUCHERS: "vouchers",
   VOUCHEES: "vouchees",
+};
+
+export const BlockSpeed = {
+  [chain.mainnet.id]: 12e3,
+  [chain.goerli.id]: 12e3,
 };

@@ -1,7 +1,37 @@
+import { useBlockNumber, useNetwork } from "wagmi";
 import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
 
+import { ZERO } from "constants";
+import format from "utils/format";
+import { reduceBnSum } from "utils/reduce";
+import { useMember } from "providers/MemberData";
+import { useVouchers } from "providers/VouchersData";
+import { useProtocol } from "providers/ProtocolData";
+import dueDate from "utils/dueDate";
+
 export default function CreditStats() {
+  const { chain } = useNetwork();
+  const { data: member } = useMember();
+  const { data: vouchers = {} } = useVouchers();
+  const { data: blockNumber } = useBlockNumber();
+  const { data: protocol } = useProtocol();
+
+  const {
+    creditLimit = ZERO,
+    interest = ZERO,
+    owed = ZERO,
+    lastRepay = ZERO,
+  } = member;
+
+  const vouch = Object.keys(vouchers)
+    .map((addr) => vouchers[addr].vouch)
+    .reduce(reduceBnSum, ZERO);
+
+  const locked = Object.keys(vouchers)
+    .map((addr) => vouchers[addr].locked)
+    .reduce(reduceBnSum, ZERO);
+
   return (
     <Card>
       <Card.Header title="Borrow & Repay" align="center" />
@@ -13,16 +43,16 @@ export default function CreditStats() {
                 size="large"
                 align="center"
                 label="Available credit"
-                value={<Dai value={0} />}
+                value={<Dai value={format(creditLimit)} />}
               />
               <Stat
                 mt="24px"
                 align="center"
                 label="Vouch"
-                value={<Dai value={0} />}
+                value={<Dai value={format(vouch)} />}
                 after={
                   <Label m={0}>
-                    {0} DAI unavailable
+                    {format(locked)} DAI unavailable
                     <Tooltip content="These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time">
                       <TooltipIcon width="16px" />
                     </Tooltip>
@@ -35,7 +65,7 @@ export default function CreditStats() {
                 size="large"
                 align="center"
                 label="Balance owed"
-                value={<Dai value={0} />}
+                value={<Dai value={format(owed)} />}
               />
 
               <Stat
@@ -43,10 +73,15 @@ export default function CreditStats() {
                 label="Minimum due"
                 mt="24px"
                 mb="4.5px"
-                value={<Dai value={0} />}
+                value={<Dai value={format(interest)} />}
                 after={
                   <Label size="small" color="blue500" onClick={() => alert()}>
-                    Due dates
+                    {dueDate(
+                      lastRepay,
+                      protocol.overdueBlocks || ZERO,
+                      blockNumber,
+                      chain.id
+                    )}
                   </Label>
                 }
               />

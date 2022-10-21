@@ -16,6 +16,9 @@ const selectUserManager = (data) => ({
   unionBalance: data[8] || ZERO,
   daiBalance: data[9] || ZERO,
   unclaimedRewards: data[10] || ZERO,
+  owed: data[11] || ZERO,
+  interest: data[12] || ZERO,
+  lastRepay: data[13] || ZERO,
 });
 
 const MemberContext = createContext({});
@@ -27,6 +30,7 @@ export default function MemberData({ children }) {
 
   const daiContract = useContract("dai");
   const unionContract = useContract("union");
+  const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
   const comptrollerContract = useContract("comptroller");
 
@@ -86,6 +90,21 @@ export default function MemberData({ children }) {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
           args: [address, daiContract.addressOrName, ZERO],
+        },
+        {
+          ...uTokenContract,
+          functionName: "borrowBalanceView",
+          args: [address],
+        },
+        {
+          ...uTokenContract,
+          functionName: "calculatingInterest",
+          args: [address],
+        },
+        {
+          ...uTokenContract,
+          functionName: "getLastRepay",
+          args: [address],
         },
       ]
     : [];

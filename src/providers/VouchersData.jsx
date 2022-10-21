@@ -12,6 +12,8 @@ export const useVouchers = () => useContext(VouchersContext);
 const selectVoucher = (data) => ({
   checkIsMember: data[0],
   trust: data[1].trustAmount,
+  vouch: data[1].vouchingAmount,
+  locked: data[1].lockedStake,
 });
 
 export default function VouchersData({ children }) {
