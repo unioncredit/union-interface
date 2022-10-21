@@ -15,7 +15,7 @@ const createItems = (s1, s2, s3) => [
   { number: 2, status: s3 },
 ];
 
-export default function RegisterButton({ onComplete }) {
+export default function RegisterButton() {
   const { address } = useAccount();
 
   const [action, setAction] = useState(null);
@@ -23,6 +23,13 @@ export default function RegisterButton({ onComplete }) {
 
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
+
+  const {
+    unionBalance = ZERO,
+    unclaimedRewards = ZERO,
+    isMember = false,
+    newMemberFee = ZERO,
+  } = { ...member, ...protocol };
 
   const unionConfig = useContract("union");
   const userManagerConfig = useContract("userManager");
@@ -42,15 +49,15 @@ export default function RegisterButton({ onComplete }) {
   const { onClick: claim } = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
-    enabled: member.unionBalance.lt(protocol.newMemberFee),
+    enabled: unionBalance.lt(newMemberFee),
     onComplete: () => refetchMember(),
   });
 
   const { onClick: approve } = useWrite({
     contract: "union",
     method: "approve",
-    args: [userManagerConfig.addressOrName, protocol.newMemberFee],
-    enabled: allowance.lt(protocol.newMemberFee),
+    args: [userManagerConfig.addressOrName, newMemberFee],
+    enabled: allowance.lt(newMemberFee),
     onComplete: () => refetchAllowance(),
   });
 
@@ -58,9 +65,7 @@ export default function RegisterButton({ onComplete }) {
     contract: "userManager",
     method: "registerMember",
     args: [address],
-    enabled:
-      allowance.gte(protocol.newMemberFee) &&
-      member.unionBalance.gte(protocol.newMemberFee),
+    enabled: allowance.gte(newMemberFee) && unionBalance.gte(newMemberFee),
     onComplete: () => refetchMember(),
   });
 
@@ -88,12 +93,12 @@ export default function RegisterButton({ onComplete }) {
    * three states "Claim", "Approve" and "Register"
    */
   useEffect(() => {
-    if (member.unionBalance.lt(protocol.newMemberFee)) {
+    if (unionBalance.lt(newMemberFee)) {
       // Member UNION balance is not enough so needs to claim UNION
       // If there is any UNION available
       setAction({ label: "Claim UNION", onClick: handleClaim });
       setItems(createItems("selected"));
-    } else if (allowance.lt(protocol.newMemberFee)) {
+    } else if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
       setAction({ label: "Approve UNION", onClick: handleApprove });
@@ -104,9 +109,9 @@ export default function RegisterButton({ onComplete }) {
       setItems(createItems("complete", "complete", "selected"));
     }
   }, [
-    member.isMember,
-    protocol.newMemberFee,
-    member.unionBalance,
+    isMember,
+    newMemberFee,
+    unionBalance,
     allowance,
     handleRegister,
     handleApprove,
@@ -126,7 +131,7 @@ export default function RegisterButton({ onComplete }) {
       items={items}
       action={action}
       showSteps={true}
-      label={`Unclaimed: ${format(member.unclaimedRewards)} UNION`}
+      label={`Unclaimed: ${format(unclaimedRewards)} UNION`}
     />
   );
 }

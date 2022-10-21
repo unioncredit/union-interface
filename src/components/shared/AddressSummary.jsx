@@ -3,8 +3,9 @@ import { Heading, Badge, Box, BadgeRow } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import Avatar from "components/shared/Avatar";
+import PrimaryLabel from "components/shared/PrimaryLabel";
 
-export default function MiniProfileCard({ address }) {
+export default function AddressSummary({ address }) {
   const addressEtherscanLink = "";
 
   if (!address) {
@@ -23,10 +24,7 @@ export default function MiniProfileCard({ address }) {
           <Link to={`/profile/${address}`}>
             <Box>
               <Heading level={2} mb="4px">
-                Primary
-              </Heading>
-              <Heading level={2} ml="4px" mb="4px" grey={500}>
-                Secondary
+                <PrimaryLabel />
               </Heading>
             </Box>
           </Link>

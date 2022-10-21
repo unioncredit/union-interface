@@ -1,3 +1,5 @@
+import "./index.scss";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
@@ -8,11 +10,10 @@ import App from "./App";
 import Toasts from "providers/Toasts";
 import AppLogs from "providers/AppLogs";
 import MemberData from "providers/MemberData";
-import VouchersData from "providers/VouchersData";
-import ProtocolData from "providers/ProtocolData";
 import reportWebVitals from "./reportWebVitals";
-
-import "./index.scss";
+import VouchersData from "providers/VouchersData";
+import VoucheesData from "providers/VoucheesData";
+import ProtocolData from "providers/ProtocolData";
 
 const client = createClient(
   getDefaultClient({
@@ -33,8 +34,11 @@ root.render(
             <ProtocolData>
               <MemberData>
                 <VouchersData>
+                <VoucheesData>
                   <App />
+                </VoucheesData>
                 </VouchersData>
+                
               </MemberData>
             </ProtocolData>
           </AppLogs>

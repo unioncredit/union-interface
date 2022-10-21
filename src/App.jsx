@@ -10,6 +10,7 @@ import RegisterPage from "pages/Register";
 import LoadingPage from "pages/Loading";
 import ContactsPage from "pages/Contacts";
 
+import { ContactsType } from "constants";
 import { useMember } from "providers/MemberData";
 import ModalManager from "providers/ModalManager";
 
@@ -32,7 +33,14 @@ export default function App() {
                 <>
                   <Route path="/" element={<CreditPage />} />
                   <Route path="/stake" element={<StakePage />} />
-                  <Route path="/contacts" element={<ContactsPage />} />
+                  <Route
+                    path="/contacts"
+                    element={<ContactsPage type={ContactsType.VOUCHEES} />}
+                  />
+                  <Route
+                    path="/contacts/trusts-you"
+                    element={<ContactsPage type={ContactsType.VOUCHERS} />}
+                  />
                 </>
               ) : (
                 <Route path="/" element={<RegisterPage />} />
