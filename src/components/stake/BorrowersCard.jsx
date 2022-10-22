@@ -18,17 +18,15 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import StatusBadge from "components/shared/StatusBadge";
 
 export default function BorrowersCard() {
-  const { data: vouchee = {} } = useVouchees();
-
-  const borrowers = Object.keys(vouchee).map((address) => ({ address }));
+  const { data: vouchees = [] } = useVouchees();
 
   return (
     <Card mt="24px">
       <Card.Header
-        title={`Active borrowers · ${borrowers.length}`}
+        title={`Active borrowers · ${vouchees.length}`}
         subTitle="Contacts actively borrowing against your stake"
       />
-      {borrowers.length <= 0 ? (
+      {vouchees.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No borrowers" />
         </Card.Body>
@@ -40,7 +38,7 @@ export default function BorrowersCard() {
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {borrowers.map(({ address }) => (
+          {vouchees.map(({ address }) => (
             <TableRow key={address}>
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />

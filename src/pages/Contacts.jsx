@@ -1,12 +1,21 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Box, ToggleMenu, Grid } from "@unioncredit/ui";
 
 import { ContactsType } from "constants";
 import Header from "components/shared/Header";
 import ContactList from "components/contacts/ContactList";
 import ContactDetails from "components/contacts/ContactDetails";
-import { Link } from "react-router-dom";
 
 export default function ContactsPage({ type }) {
+  const [contact, setContact] = useState(null);
+
+  const contactComponentProps = {
+    contact,
+    setContact,
+    type,
+  };
+
   return (
     <>
       <Header />
@@ -33,10 +42,10 @@ export default function ContactsPage({ type }) {
       <Grid>
         <Grid.Row justify="center">
           <Grid.Col md={6}>
-            <ContactList type={type} />
+            <ContactList {...contactComponentProps} />
           </Grid.Col>
           <Grid.Col md={6}>
-            <ContactDetails />
+            <ContactDetails {...contactComponentProps} />
           </Grid.Col>
         </Grid.Row>
       </Grid>

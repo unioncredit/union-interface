@@ -24,10 +24,8 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 
 export default function VouchersStep() {
-  const { data = {} } = useVouchers();
+  const { data: vouchers = [] } = useVouchers();
   const { open } = useModals();
-
-  const addresses = Object.keys(data);
 
   return (
     <Card size="fluid" mb="24px">
@@ -38,7 +36,7 @@ export default function VouchersStep() {
       <Card.Body>
         <Divider />
         <Box fluid mt="24px" mb="14px" direction="vertical">
-          <Text grey={700}>Vouchers · {addresses.length}</Text>
+          <Text grey={700}>Vouchers · {vouchers.length}</Text>
           <Card size="fluid">
             <Table>
               <TableRow>
@@ -46,7 +44,7 @@ export default function VouchersStep() {
                 <TableHead>Account</TableHead>
                 <TableHead align="right">Trust limit (DAI)</TableHead>
               </TableRow>
-              {addresses.slice(0, 3).map((address) => (
+              {vouchers.slice(0, 3).map(({ address, trust }) => (
                 <TableRow key={address}>
                   <TableCell fixedSize>
                     <Avatar address={address} />
@@ -59,9 +57,7 @@ export default function VouchersStep() {
                       {truncateAddress(address)}
                     </Label>
                   </TableCell>
-                  <TableCell align="right">
-                    {format(data[address].trust)}
-                  </TableCell>
+                  <TableCell align="right">{format(trust)}</TableCell>
                 </TableRow>
               ))}
             </Table>

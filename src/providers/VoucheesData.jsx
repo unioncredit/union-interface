@@ -10,7 +10,7 @@ const VoucheesContext = createContext({});
 export const useVouchees = () => useContext(VoucheesContext);
 
 const selectVouchee = (data) => ({
-  checkIsMember: data[0],
+  isMember: data[0],
   locking: data[1].lockedStake,
   trust: data[1].trustAmount,
   vouch: data[1].vouchingAmount,
@@ -52,13 +52,10 @@ export default function VoucheesData({ children }) {
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
 
-      return chunked.reduce(
-        (acc, chunk, i) => ({
-          ...acc,
-          [borrowerAddresses[i]]: selectVouchee(chunk),
-        }),
-        {}
-      );
+      return chunked.map((chunk, i) => ({
+        ...selectVouchee(chunk),
+        address: borrowerAddresses[i],
+      }));
     },
     contracts: contracts,
   });

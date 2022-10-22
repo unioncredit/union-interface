@@ -19,7 +19,7 @@ const client = createClient(
   getDefaultClient({
     appName: "Union Credit",
     infuraId: process.env.REACT_APP_INFURA_ID,
-    chains: [chain.mainnet, chain.goerli],
+    chains: [chain.mainnet, chain.arbitrum, chain.goerli],
   })
 );
 
@@ -34,11 +34,10 @@ root.render(
             <ProtocolData>
               <MemberData>
                 <VouchersData>
-                <VoucheesData>
-                  <App />
-                </VoucheesData>
+                  <VoucheesData>
+                    <App />
+                  </VoucheesData>
                 </VouchersData>
-                
               </MemberData>
             </ProtocolData>
           </AppLogs>

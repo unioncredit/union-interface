@@ -16,6 +16,14 @@ import {
   comptrollerContract as MAINNET_comptrollerContract,
 } from "config/contracts/mainnet";
 
+import {
+  userManagerContract as ARBITRUM_userManagerContract,
+  uTokenContract as ARBITRUM_uTokenContract,
+  unionContract as ARBITRUM_unionContract,
+  daiContract as ARBITRUM_daiContract,
+  comptrollerContract as ARBITRUM_comptrollerContract,
+} from "config/contracts/arbitrum";
+
 export default function useContract(name) {
   const { chain: connectedChain } = useNetwork();
 
@@ -34,5 +42,12 @@ export default function useContract(name) {
       dai: MAINNET_daiContract,
       comptroller: MAINNET_comptrollerContract,
     },
-  }[connectedChain.id][name];
+    [chain.arbitrum.id]: {
+      userManager: ARBITRUM_userManagerContract,
+      uToken: ARBITRUM_uTokenContract,
+      union: ARBITRUM_unionContract,
+      dai: ARBITRUM_daiContract,
+      comptroller: ARBITRUM_comptrollerContract,
+    },
+  }[connectedChain?.id]?.[name];
 }

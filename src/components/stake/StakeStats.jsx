@@ -8,17 +8,16 @@ import { useMember } from "providers/MemberData";
 
 export default function StakeStats() {
   const { data: member } = useMember();
-  const { data: vouchees = {} } = useVouchees();
+  const { data: vouchees = [] } = useVouchees();
 
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
   const lockedPercentageBps = totalLockedStake.mul(WAD).div(stakedBalance);
   const lockedPercentage = Number(lockedPercentageBps.toString()) / 1e18;
 
-  const defaulted = Object.keys(vouchees)
-    .map((address) => {
-      const vouchee = vouchees[address];
-      return vouchee.isOverdue ? vouchee.locking : ZERO;
+  const defaulted = vouchees
+    .map(({ isOverdue, locking }) => {
+      return isOverdue ? locking : ZERO;
     })
     .reduce(reduceBnSum, ZERO);
 

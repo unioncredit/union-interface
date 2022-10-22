@@ -24,13 +24,8 @@ export default function CreditStats() {
     lastRepay = ZERO,
   } = member;
 
-  const vouch = Object.keys(vouchers)
-    .map((addr) => vouchers[addr].vouch)
-    .reduce(reduceBnSum, ZERO);
-
-  const locked = Object.keys(vouchers)
-    .map((addr) => vouchers[addr].locked)
-    .reduce(reduceBnSum, ZERO);
+  const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
+  const locked = vouchers.map(({ locked }) => locked).reduce(reduceBnSum, ZERO);
 
   return (
     <Card>

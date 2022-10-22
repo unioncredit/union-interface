@@ -18,7 +18,7 @@ import { truncateAddress } from "utils/truncateAddress";
 export default function VouchersCard() {
   const { data: vouchers = {} } = useVouchers();
 
-  const voucherCount = Object.keys(vouchers).length;
+  const voucherCount = vouchers.length;
 
   return (
     <Card mt="24px">
@@ -37,7 +37,7 @@ export default function VouchersCard() {
             <TableHead>Account</TableHead>
             <TableHead align="right">Trust Amount (DAI)</TableHead>
           </TableRow>
-          {Object.keys(vouchers).map((address) => (
+          {vouchers.map(({ address, trust }) => (
             <TableRow key={address}>
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />
@@ -52,9 +52,7 @@ export default function VouchersCard() {
                   </Label>
                 </Box>
               </TableCell>
-              <TableCell align="right">
-                {format(vouchers[address].trust)}
-              </TableCell>
+              <TableCell align="right">{format(trust)}</TableCell>
             </TableRow>
           ))}
         </Table>

@@ -26,7 +26,7 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol } = useProtocol();
-  const { data: vouchers = {} } = useVouchers();
+  const { data: vouchers = [] } = useVouchers();
   const { data: member } = useMember();
 
   const { unionBalance = ZERO, unclaimedRewards = ZERO, isMember } = member;
@@ -53,10 +53,7 @@ export default function RegisterPage() {
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem
-                number={2}
-                complete={Object.keys(vouchers).length > 0}
-              >
+              <ProgressListItem number={2} complete={vouchers.length > 0}>
                 <div ref={null}>
                   <VouchersStep />
                 </div>

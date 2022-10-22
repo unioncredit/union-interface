@@ -4,6 +4,8 @@ import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.s
 
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import { truncateAddress } from "utils/truncateAddress";
+import StatusBadge from "./StatusBadge";
 
 export default function AddressSummary({ address }) {
   const addressEtherscanLink = "";
@@ -24,14 +26,14 @@ export default function AddressSummary({ address }) {
           <Link to={`/profile/${address}`}>
             <Box>
               <Heading level={2} mb="4px">
-                <PrimaryLabel />
+                <PrimaryLabel address={address} />
               </Heading>
             </Box>
           </Link>
           <Box>
             <BadgeRow>
-              <Badge mr="4px" color="grey" label="0x0000" />
-              {/*<StatusBadge address={address} />*/}
+              <Badge mr="4px" color="grey" label={truncateAddress(address)} />
+              <StatusBadge address={address} />
             </BadgeRow>
 
             <a href={addressEtherscanLink} target="_blank" rel="noreferrer">

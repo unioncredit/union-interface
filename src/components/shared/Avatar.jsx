@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useEnsAvatar } from "wagmi";
+import { chain, useEnsAvatar } from "wagmi";
 import makeBlockie from "ethereum-blockies-base64";
 import { Avatar as UnionUiAvatar } from "@unioncredit/ui";
 
@@ -8,7 +8,7 @@ export default function Avatar({ address, size }) {
 
   const { data, isError, isLoading } = useEnsAvatar({
     addressOrName: address,
-    chainId: 1,
+    chainId: chain.mainnet.id,
   });
 
   const blockie = makeBlockie(address);

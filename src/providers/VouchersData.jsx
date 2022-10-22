@@ -43,13 +43,10 @@ export default function VouchersData({ children }) {
       const tmp = buildVoucherQueries(address, address);
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
-      return chunked.reduce(
-        (acc, chunk, i) => ({
-          ...acc,
-          [stakerAddresses[i]]: selectVoucher(chunk),
-        }),
-        {}
-      );
+      return chunked.map((x, i) => ({
+        ...selectVoucher(x),
+        address: stakerAddresses[i],
+      }));
     },
     contracts: contracts,
   });
