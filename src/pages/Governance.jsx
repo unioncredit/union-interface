@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
+import GovernaceStats from "components/governance/GovernanceStats";
+import ProposalsCard from "components/governance/ProposalsCard";
 
 export default function GovernancePage() {
   return (
@@ -23,7 +25,8 @@ export default function GovernancePage() {
         />
       </Box>
       <Box fluid justify="center" direction="vertical" mb="120px">
-        ...
+        <GovernaceStats />
+        <ProposalsCard />
       </Box>
     </>
   );
