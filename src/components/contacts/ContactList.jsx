@@ -20,6 +20,7 @@ import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
 import { useEffect } from "react";
 import { ZERO } from "constants";
+import usePagination from "hooks/usePagination";
 
 export default function ContactList({
   contact,
@@ -42,6 +43,13 @@ export default function ContactList({
     }
   }, [contact, contacts[0]]);
 
+  const {
+    data: contactsPage,
+    maxPages,
+    activePage,
+    onChange,
+  } = usePagination(vouchers);
+
   return (
     <Card>
       <Card.Header
@@ -60,7 +68,7 @@ export default function ContactList({
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {contacts.map((row) => {
+          {contactsPage.map((row) => {
             const { address, locking = ZERO } = row;
 
             return (
@@ -91,7 +99,7 @@ export default function ContactList({
           })}
         </Table>
       )}
-      <Pagination pages={10} activePage={5} onClick={() => alert()} />
+      <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
   );
 }

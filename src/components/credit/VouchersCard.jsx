@@ -11,12 +11,20 @@ import {
 } from "@unioncredit/ui";
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
 import format from "utils/format";
 import { truncateAddress } from "utils/truncateAddress";
 
 export default function VouchersCard() {
   const { data: vouchers = {} } = useVouchers();
+
+  const {
+    data: vouchersPage,
+    maxPages,
+    activePage,
+    onChange,
+  } = usePagination(vouchers);
 
   const voucherCount = vouchers.length;
 
@@ -37,7 +45,7 @@ export default function VouchersCard() {
             <TableHead>Account</TableHead>
             <TableHead align="right">Trust Amount (DAI)</TableHead>
           </TableRow>
-          {vouchers.map(({ address, trust }) => (
+          {vouchersPage.map(({ address, trust }) => (
             <TableRow key={address}>
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />
@@ -57,7 +65,7 @@ export default function VouchersCard() {
           ))}
         </Table>
       )}
-      <Pagination pages={10} activePage={5} onClick={() => alert()} />
+      <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
   );
 }

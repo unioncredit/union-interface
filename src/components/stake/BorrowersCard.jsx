@@ -16,9 +16,17 @@ import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import StatusBadge from "components/shared/StatusBadge";
+import usePagination from "hooks/usePagination";
 
 export default function BorrowersCard() {
   const { data: vouchees = [] } = useVouchees();
+
+  const {
+    data: voucheesPage,
+    maxPages,
+    activePage,
+    onChange,
+  } = usePagination(vouchees);
 
   return (
     <Card mt="24px">
@@ -38,7 +46,7 @@ export default function BorrowersCard() {
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {vouchees.map(({ address }) => (
+          {voucheesPage.map(({ address }) => (
             <TableRow key={address}>
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />
@@ -61,7 +69,7 @@ export default function BorrowersCard() {
           ))}
         </Table>
       )}
-      <Pagination pages={10} activePage={5} onClick={() => alert()} />
+      <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
   );
 }
