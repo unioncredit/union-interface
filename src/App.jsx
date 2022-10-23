@@ -9,6 +9,7 @@ import ConnectPage from "pages/Connect";
 import RegisterPage from "pages/Register";
 import LoadingPage from "pages/Loading";
 import ContactsPage from "pages/Contacts";
+import GovernancePage from "pages/Governance";
 
 import { ContactsType } from "constants";
 import { useMember } from "providers/MemberData";
@@ -33,6 +34,7 @@ export default function App() {
                 <>
                   <Route path="/" element={<CreditPage />} />
                   <Route path="/stake" element={<StakePage />} />
+                  <Route path="/governance" element={<GovernancePage />} />
                   <Route
                     path="/contacts"
                     element={<ContactsPage type={ContactsType.VOUCHEES} />}
