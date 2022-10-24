@@ -2,12 +2,9 @@ import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
-import GovernaceStats from "components/governance/GovernanceStats";
 import ProposalsCard from "components/governance/ProposalsCard";
 
-const filterActiveProposals = (proposal) => proposal.state <= 1;
-
-export default function GovernancePage() {
+export default function ProposalsPage() {
   return (
     <>
       <Header />
@@ -23,15 +20,11 @@ export default function GovernancePage() {
               as: Link,
             },
           ]}
-          initialActive={0}
+          initialActive={1}
         />
       </Box>
       <Box fluid justify="center" direction="vertical" mb="120px">
-        <GovernaceStats />
-        <ProposalsCard
-          filter={filterActiveProposals}
-          emptyLabel="There are no live proposals"
-        />
+        <ProposalsCard showAction={false} title="All Proposals" subTitle={false} />
       </Box>
     </>
   );

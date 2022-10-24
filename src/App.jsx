@@ -10,6 +10,8 @@ import RegisterPage from "pages/Register";
 import LoadingPage from "pages/Loading";
 import ContactsPage from "pages/Contacts";
 import GovernancePage from "pages/Governance";
+import ProposalsPage from "pages/Proposals";
+import ProposalPage from "pages/Proposal";
 
 import { ContactsType } from "constants";
 import { useMember } from "providers/MemberData";
@@ -47,6 +49,11 @@ export default function App() {
                 <Route path="/" element={<RegisterPage />} />
               )}
               <Route path="/governance" element={<GovernancePage />} />
+              <Route path="/governance/proposals" element={<ProposalsPage />} />
+              <Route
+                path="/governance/proposals/:id"
+                element={<ProposalPage />}
+              />
               <Route
                 path="*"
                 element={

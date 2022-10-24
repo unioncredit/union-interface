@@ -51,3 +51,10 @@ export const ProposalState = [
   "expired",
   "executed",
 ];
+
+export const StatusColorMap = {
+  executed: "green",
+  active: "purple",
+  canceled: "blue",
+  defeated: "red",
+};

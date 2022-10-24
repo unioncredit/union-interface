@@ -11,38 +11,41 @@ import {
   TableRow,
   Text,
 } from "@unioncredit/ui";
-import { useGovernance } from "providers/GovernanceData";
 import { percent } from "utils/numbers";
+import { StatusColorMap } from "constants";
+import { useGovernance } from "providers/GovernanceData";
 import BlockRelativeTime from "components/shared/BlockRelativeTime";
-
-// TODO:
-const statusColorMap = {
-  executed: "green",
-  active: "purple",
-  canceled: "blue",
-  defeated: "red",
-};
 
 const maxStrLength = 46;
 
-export default function ProposalsCard() {
-  const { proposals } = useGovernance();
+export default function ProposalsCard({
+  filter,
+  title = "Recent Proposals",
+  subTitle = "Most recent proposals",
+  emptyLabel = "There are no proposals",
+  showAction = true,
+}) {
+  const { proposals: allProposals } = useGovernance();
+
+  const proposals = filter ? allProposals.filter(filter) : allProposals;
 
   return (
     <Card mt="24px">
       <Card.Header
-        title="Recent Proposals"
-        subTitle="Most recent proposals"
+        title={title}
+        subTitle={subTitle}
         action={
-          <Link to="/governance/proposals">
-            <Button variant="secondary" label="View all" inline />
-          </Link>
+          showAction && (
+            <Link to="/governance/proposals">
+              <Button variant="secondary" label="View all" inline />
+            </Link>
+          )
         }
       />
       {proposals.length <= 0 ? (
         <Card.Body>
           <Box fluid>
-            <EmptyState fluid label="There are no live proposals" />
+            <EmptyState fluid label={emptyLabel} />
           </Box>
         </Card.Body>
       ) : (
@@ -65,7 +68,7 @@ export default function ProposalsCard() {
                       </Text>
                       <Label>
                         <Badge
-                          color={statusColorMap[status] || "blue"}
+                          color={StatusColorMap[status] || "blue"}
                           label={status}
                           mr="8px"
                         />
