@@ -24,7 +24,11 @@ export default function ProposalsPage() {
         />
       </Box>
       <Box fluid justify="center" direction="vertical" mb="120px">
-        <ProposalsCard showAction={false} title="All Proposals" subTitle={false} />
+        <ProposalsCard
+          showAction={false}
+          title="All Proposals"
+          subTitle={false}
+        />
       </Box>
     </>
   );

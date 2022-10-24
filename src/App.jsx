@@ -51,7 +51,7 @@ export default function App() {
               <Route path="/governance" element={<GovernancePage />} />
               <Route path="/governance/proposals" element={<ProposalsPage />} />
               <Route
-                path="/governance/proposals/:id"
+                path="/governance/proposals/:hash"
                 element={<ProposalPage />}
               />
               <Route
