@@ -13,7 +13,7 @@ import dueDate from "utils/dueDate";
 export default function CreditStats() {
   const { chain } = useNetwork();
   const { data: member } = useMember();
-  const { data: vouchers = {} } = useVouchers();
+  const { data: vouchers = [] } = useVouchers();
   const { data: blockNumber } = useBlockNumber();
   const { data: protocol } = useProtocol();
 
