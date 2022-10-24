@@ -43,7 +43,7 @@ export default function ProtcolData({ children }) {
     "exchangeRateStored",
   ];
 
-  const comptrollerFunctioNames = [
+  const comptrollerFunctionNames = [
     "halfDecayPoint",
     "gInflationIndex",
     "gLastUpdatedBlock",
@@ -52,14 +52,14 @@ export default function ProtcolData({ children }) {
   const contracts = [
     ...buildContractConfigs(userManagerContract, userManagerFunctionNames),
     ...buildContractConfigs(uTokenContract, uTokenFunctionNames),
-    ...buildContractConfigs(comptrollerContract, comptrollerFunctioNames),
+    ...buildContractConfigs(comptrollerContract, comptrollerFunctionNames),
   ];
 
   const selectData = (data) =>
     [
       ...userManagerFunctionNames,
       ...uTokenFunctionNames,
-      ...comptrollerFunctioNames,
+      ...comptrollerFunctionNames,
     ].reduce(
       (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
       {}

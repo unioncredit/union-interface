@@ -39,7 +39,7 @@ const selectProposals = (data) => {
   return chunk(data, 2).map(([proposal, state]) => {
     return {
       // proposal(uint256 pid)
-      id: proposal.id,
+      pid: proposal.id,
       proposer: proposal.proposer,
       eta: proposal.eta,
       startBlock: proposal.startBlock,
@@ -110,6 +110,7 @@ function useProposals() {
   const data = proposals.map((proposal, i) => ({
     ...proposal,
     ...proposalsMetadata?.[i],
+    hash: proposal.id.split("-")[0],
   }));
 
   return { data, refetch: getProposals };

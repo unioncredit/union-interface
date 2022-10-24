@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   Card,
   Button,
@@ -11,6 +10,8 @@ import {
   TableRow,
   Text,
 } from "@unioncredit/ui";
+import { Link, useNavigate } from "react-router-dom";
+
 import { percent } from "utils/numbers";
 import { StatusColorMap } from "constants";
 import { useGovernance } from "providers/GovernanceData";
@@ -25,6 +26,7 @@ export default function ProposalsCard({
   emptyLabel = "There are no proposals",
   showAction = true,
 }) {
+  const navigate = useNavigate();
   const { proposals: allProposals } = useGovernance();
 
   const proposals = filter ? allProposals.filter(filter) : allProposals;
@@ -52,7 +54,7 @@ export default function ProposalsCard({
         <Box mt="24px">
           <Table>
             {proposals.map(
-              ({ status, description, percentageFor, startBlock }) => {
+              ({ hash, status, description, percentageFor, startBlock }) => {
                 const title =
                   String(description)
                     ?.replace(/\\{1,2}n/g, "\n")
@@ -60,7 +62,9 @@ export default function ProposalsCard({
                     ?.filter(Boolean)[0] || "Untitled";
 
                 return (
-                  <TableRow onClick={() => alert()}>
+                  <TableRow
+                    onClick={() => navigate(`/governance/proposals/${hash}`)}
+                  >
                     <TableCell>
                       <Text mb="4px">
                         {title.slice(0, maxStrLength)}

@@ -8,7 +8,7 @@ import format from "utils/format";
 export default function GovernaceStats() {
   const { data: protocol } = useProtocol();
 
-  const { totalStaked = ZERO } = protocol;
+  const { totalStaked = ZERO, totalBorrows = ZERO } = protocol;
 
   return (
     <Card>
@@ -37,7 +37,7 @@ export default function GovernaceStats() {
                 mt="32px"
                 align="center"
                 label="Outstanding loans"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(totalBorrows)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
