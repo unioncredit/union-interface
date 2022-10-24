@@ -10,7 +10,7 @@ import {
   Button,
 } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
@@ -25,13 +25,24 @@ import NetworkSelect from "components/shared/NetworkSelect";
 
 export default function Header({ loading }) {
   const { open } = useModals();
+  const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: { isMember, unclaimedRewards = ZERO } = {} } = useMember();
 
-  const navItems =
+  const navItems0 =
     isConnected && isMember
       ? [items.credit, items.contacts, items.governance]
       : [items.getStarted, items.governance];
+
+  const navItems = navItems0.map((item) => ({
+    ...item,
+    active:
+      item.pathname === "/"
+        ? item.pathname === pathname
+        : item.id === "credit"
+        ? pathname.match(/\/(stake|credit)/)
+        : pathname.startsWith(item.pathname),
+  }));
 
   return (
     <Layout.Header align="center">

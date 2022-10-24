@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
 import { Status } from "constants";
+import { truncateAddress } from "utils/truncateAddress";
+import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -40,10 +42,10 @@ export default function AccountModal() {
             <Link to={`/profile/${address}`}>
               <Avatar size={56} address={address} />
             </Link>
-            <Heading level={2} mb="4px">
-              Primary
+            <Heading level={2} my="4px">
+              <PrimaryLabel address={address} />
             </Heading>
-            <Badge label="0x0000...0000" color="grey" />
+            <Badge label={truncateAddress(address)} color="grey" />
           </Box>
           <ButtonRow mt="24px">
             <Button size="small" fluid label="View Profile" />
