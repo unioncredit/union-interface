@@ -7,14 +7,26 @@ import {
   Label,
   Badge,
   EmptyState,
+  TableCell,
+  TableRow,
+  Text,
 } from "@unioncredit/ui";
+import { useGovernance } from "providers/GovernanceData";
+import { percent } from "utils/numbers";
+import BlockRelativeTime from "components/shared/BlockRelativeTime";
 
 // TODO:
-const statusColorMap = {};
+const statusColorMap = {
+  executed: "green",
+  active: "purple",
+  canceled: "blue",
+  defeated: "red",
+};
 
-export default function ProposalsCard({ count }) {
-  // TODO:
-  const proposals = [];
+const maxStrLength = 46;
+
+export default function ProposalsCard() {
+  const { proposals } = useGovernance();
 
   return (
     <Card mt="24px">
@@ -36,24 +48,35 @@ export default function ProposalsCard({ count }) {
       ) : (
         <Box mt="24px">
           <Table>
-            {proposals.map(({ status, title, percentageFor, start }) => (
-              <TableRow onClick={() => alert()}>
-                <TableCell>
-                  <Text mb="4px">
-                    {title.slice(0, maxStrLength)}
-                    {title.length > maxStrLength && "..."}
-                  </Text>
-                  <Label>
-                    <Badge
-                      color={statusColorMap[status] || "blue"}
-                      label={status.slice(0, 1).toUpperCase() + status.slice(1)}
-                      mr="8px"
-                    />
-                    0% yes &bull; start date
-                  </Label>
-                </TableCell>
-              </TableRow>
-            ))}
+            {proposals.map(
+              ({ status, description, percentageFor, startBlock }) => {
+                const title =
+                  String(description)
+                    ?.replace(/\\{1,2}n/g, "\n")
+                    ?.split("\n")
+                    ?.filter(Boolean)[0] || "Untitled";
+
+                return (
+                  <TableRow onClick={() => alert()}>
+                    <TableCell>
+                      <Text mb="4px">
+                        {title.slice(0, maxStrLength)}
+                        {title.length > maxStrLength && "..."}
+                      </Text>
+                      <Label>
+                        <Badge
+                          color={statusColorMap[status] || "blue"}
+                          label={status}
+                          mr="8px"
+                        />
+                        {percent(percentageFor)} yes &bull;{" "}
+                        <BlockRelativeTime block={startBlock} />
+                      </Label>
+                    </TableCell>
+                  </TableRow>
+                );
+              }
+            )}
           </Table>
         </Box>
       )}

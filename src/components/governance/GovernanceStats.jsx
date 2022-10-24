@@ -2,6 +2,7 @@ import { Stat, Button, Grid, Card, Dai, Bar } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 import { useProtocol } from "providers/ProtocolData";
 
+import { ZERO } from "constants";
 import format from "utils/format";
 
 export default function GovernaceStats() {

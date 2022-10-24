@@ -28,5 +28,26 @@ export const ContactsType = {
 
 export const BlockSpeed = {
   [chain.mainnet.id]: 12e3,
+  [chain.arbitrum.id]: 12e3,
   [chain.goerli.id]: 12e3,
 };
+
+export const TheGraphUrls = {
+  [chain.mainnet.id]:
+    "https://api.thegraph.com/subgraphs/name/geraldhost/union",
+  [chain.arbitrum.id]:
+    "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
+  [chain.goerli.id]:
+    "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+};
+
+export const ProposalState = [
+  "pending",
+  "active",
+  "canceled",
+  "defeated",
+  "succeeded",
+  "queued",
+  "expired",
+  "executed",
+];

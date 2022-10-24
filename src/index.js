@@ -14,6 +14,7 @@ import reportWebVitals from "./reportWebVitals";
 import VouchersData from "providers/VouchersData";
 import VoucheesData from "providers/VoucheesData";
 import ProtocolData from "providers/ProtocolData";
+import GovernanceData from "providers/GovernanceData";
 
 const client = createClient(
   getDefaultClient({
@@ -32,13 +33,15 @@ root.render(
         <Toasts>
           <AppLogs>
             <ProtocolData>
-              <MemberData>
-                <VouchersData>
-                  <VoucheesData>
-                    <App />
-                  </VoucheesData>
-                </VouchersData>
-              </MemberData>
+              <GovernanceData>
+                <MemberData>
+                  <VouchersData>
+                    <VoucheesData>
+                      <App />
+                    </VoucheesData>
+                  </VouchersData>
+                </MemberData>
+              </GovernanceData>
             </ProtocolData>
           </AppLogs>
         </Toasts>

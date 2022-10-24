@@ -14,6 +14,7 @@ import {
   unionContract as MAINNET_unionContract,
   daiContract as MAINNET_daiContract,
   comptrollerContract as MAINNET_comptrollerContract,
+  governorContract,
 } from "config/contracts/mainnet";
 
 import {
@@ -36,6 +37,7 @@ export default function useContract(name) {
       comptroller: GOERLI_comptrollerContract,
     },
     [chain.mainnet.id]: {
+      governor: governorContract,
       userManager: MAINNET_userManagerContract,
       uToken: MAINNET_uTokenContract,
       union: MAINNET_unionContract,

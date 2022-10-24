@@ -34,7 +34,6 @@ export default function App() {
                 <>
                   <Route path="/" element={<CreditPage />} />
                   <Route path="/stake" element={<StakePage />} />
-                  <Route path="/governance" element={<GovernancePage />} />
                   <Route
                     path="/contacts"
                     element={<ContactsPage type={ContactsType.VOUCHEES} />}
@@ -47,6 +46,7 @@ export default function App() {
               ) : (
                 <Route path="/" element={<RegisterPage />} />
               )}
+              <Route path="/governance" element={<GovernancePage />} />
               <Route
                 path="*"
                 element={
