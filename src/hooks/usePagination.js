@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo } from "react";
 export default function usePagination(data = [], pageSize = 8) {
   const [activePage, setActivePage] = useState(1);
 
-  const maxPages = Math.ceil(data.length / pageSize);
+  const maxPages = Math.ceil(data?.length / pageSize);
 
   const next = () => {
     setActivePage((n) => (n + 1 >= maxPages ? maxPages : n + 1));
@@ -14,6 +14,8 @@ export default function usePagination(data = [], pageSize = 8) {
   };
 
   const pageData = useMemo(() => {
+    if (!data) return [];
+
     const start = (activePage - 1) * pageSize;
     return data.slice(start, start + pageSize);
     // react be like this data is the same so stringified it
@@ -21,10 +23,10 @@ export default function usePagination(data = [], pageSize = 8) {
   }, [pageSize, activePage, JSON.stringify(data)]);
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setActivePage(1);
     }
-  }, [data.length]);
+  }, [data?.length]);
 
   return {
     activePage,
