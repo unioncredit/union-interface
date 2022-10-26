@@ -1,7 +1,9 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { chain } from "wagmi";
 
 export const ZERO = BigNumber.from(0);
+
+export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
 export const WAD = BigNumber.from("1000000000000000000");
 

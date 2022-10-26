@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 
 import { useAccount, useContractReads } from "wagmi";
 import useContract from "hooks/useContract";
-import { ZERO } from "constants";
+import { ZERO, ZERO_ADDRESS } from "constants";
 
 const selectUserManager = (data) => ({
   isMember: data[0] || false,
@@ -19,6 +19,8 @@ const selectUserManager = (data) => ({
   owed: data[11] || ZERO,
   interest: data[12] || ZERO,
   lastRepay: data[13] || ZERO,
+  votes: data[14] || ZERO,
+  delegate: data[15] || ZERO_ADDRESS,
 });
 
 const MemberContext = createContext({});
@@ -104,6 +106,16 @@ export default function MemberData({ children }) {
         {
           ...uTokenContract,
           functionName: "getLastRepay",
+          args: [address],
+        },
+        {
+          ...unionContract,
+          functionName: "getCurrentVotes",
+          args: [address],
+        },
+        {
+          ...unionContract,
+          functionName: "delegates",
           args: [address],
         },
       ]

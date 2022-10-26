@@ -11,7 +11,7 @@ export default function GovernaceStats() {
   const { totalStaked = ZERO, totalBorrows = ZERO } = protocol;
 
   return (
-    <Card>
+    <Card mb="24px">
       <Card.Header title="Protocol Stats" align="center" />
       <Card.Body>
         <Grid>
