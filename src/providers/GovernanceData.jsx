@@ -102,7 +102,7 @@ const selectProposals = (data) => {
 function useProposals() {
   const [proposals, setProposals] = useState([]);
 
-  const governorContract = useContract("governor");
+  const governorContract = useContract("governor", chain.mainnet.id);
 
   const getProposals = useCallback(async () => {
     const resp = await request(TheGraphUrls[chain.mainnet.id], proposalsQuery);

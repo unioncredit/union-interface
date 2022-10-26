@@ -25,7 +25,7 @@ import {
   comptrollerContract as ARBITRUM_comptrollerContract,
 } from "config/contracts/arbitrum";
 
-export default function useContract(name) {
+export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
 
   return {
@@ -51,5 +51,5 @@ export default function useContract(name) {
       dai: ARBITRUM_daiContract,
       comptroller: ARBITRUM_comptrollerContract,
     },
-  }[connectedChain?.id]?.[name];
+  }[chainId || connectedChain?.id]?.[name];
 }
