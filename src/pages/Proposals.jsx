@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
@@ -7,6 +8,9 @@ import ProposalsCard from "components/governance/ProposalsCard";
 export default function ProposalsPage() {
   return (
     <>
+      <Helmet>
+        <title>Proposals | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu

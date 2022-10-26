@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
@@ -10,6 +11,9 @@ import MyTransactionHistory from "components/credit/MyTransactionHistory";
 export default function CreditPage() {
   return (
     <>
+      <Helmet>
+        <title>Credit | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu

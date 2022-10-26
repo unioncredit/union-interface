@@ -9,6 +9,7 @@ import {
   Stat,
   Text,
 } from "@unioncredit/ui";
+import { Helmet } from "react-helmet";
 import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
@@ -33,6 +34,9 @@ function ProfileInner({ address }) {
 
   return (
     <>
+      <Helmet>
+        <title>Profile {address} | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Box fluid justify="center" direction="vertical" mb="120px">
         <Card mb="24px">

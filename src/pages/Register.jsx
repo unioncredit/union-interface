@@ -9,6 +9,7 @@ import {
   Divider,
   Label,
 } from "@unioncredit/ui";
+import { Helmet } from "react-helmet";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
 import { ZERO } from "constants";
@@ -33,6 +34,9 @@ export default function RegisterPage() {
 
   return (
     <>
+      <Helmet>
+        <title>Register | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Grid>
         <Grid.Row justify="center">

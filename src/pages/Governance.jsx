@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
@@ -11,6 +12,9 @@ const filterActiveProposals = (proposal) => proposal.state <= 1;
 export default function GovernancePage() {
   return (
     <>
+      <Helmet>
+        <title>Governance | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu

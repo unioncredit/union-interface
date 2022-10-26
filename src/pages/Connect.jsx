@@ -1,4 +1,5 @@
 import { useAccount } from "wagmi";
+import { Helmet } from "react-helmet";
 import { Heading, Text, Grid } from "@unioncredit/ui";
 
 import Header from "components/connect/Header";
@@ -9,6 +10,9 @@ export default function ConnectPage() {
 
   return (
     <Grid>
+      <Helmet>
+        <title>Connect | Union Credit Protocol</title>
+      </Helmet>
       <Grid.Row justify="center">
         <Grid.Col xs={6}>
           <Header />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, ToggleMenu, Grid } from "@unioncredit/ui";
 
@@ -18,6 +19,9 @@ export default function ContactsPage({ type }) {
 
   return (
     <>
+      <Helmet>
+        <title>Contacts | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu

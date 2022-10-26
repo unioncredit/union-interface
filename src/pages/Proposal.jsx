@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
 import { Box, Button, Grid, Label, Heading, Text } from "@unioncredit/ui";
@@ -40,6 +41,9 @@ export default function ProposalPage() {
 
   return (
     <>
+      <Helmet>
+        <title>{title} | Union Credit Protocol</title>
+      </Helmet>
       <Header />
       <Grid>
         {/* ----------------------------------------------
