@@ -12,6 +12,7 @@ import ContactsPage from "pages/Contacts";
 import GovernancePage from "pages/Governance";
 import ProposalsPage from "pages/Proposals";
 import ProposalPage from "pages/Proposal";
+import ProfilePage from "pages/Profile";
 
 import { ContactsType } from "constants";
 import { useMember } from "providers/MemberData";
@@ -48,6 +49,7 @@ export default function App() {
               ) : (
                 <Route path="/" element={<RegisterPage />} />
               )}
+              <Route path="/profile/:addressOrEns" element={<ProfilePage />} />
               <Route path="/governance" element={<GovernancePage />} />
               <Route path="/governance/proposals" element={<ProposalsPage />} />
               <Route

@@ -27,8 +27,10 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export default function MemberData({ children }) {
-  const { address } = useAccount();
+export default function MemberData({ children, address: addressProp }) {
+  const { address: connectedAddress } = useAccount();
+
+  const address = addressProp || connectedAddress;
 
   const daiContract = useContract("dai");
   const unionContract = useContract("union");
