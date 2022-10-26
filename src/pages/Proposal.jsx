@@ -8,6 +8,8 @@ import Avatar from "components/shared/Avatar";
 import Header from "components/shared/Header";
 import { useGovernance } from "providers/GovernanceData";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
+import VotingCard from "components/governance/VotingCard";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -146,7 +148,10 @@ export default function ProposalPage() {
               })}
             </Box>
           </Grid.Col>
-          <Grid.Col md={4}>...</Grid.Col>
+          <Grid.Col md={4}>
+            <VotingCard />
+            <ProposalHistoryCard />
+          </Grid.Col>
         </Grid.Row>
       </Grid>
     </>
