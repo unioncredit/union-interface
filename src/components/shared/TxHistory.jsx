@@ -13,6 +13,7 @@ import {
   TableHead,
   Card,
 } from "@unioncredit/ui";
+import { useAccount } from "wagmi";
 
 import { ReactComponent as Borrow } from "@unioncredit/ui/lib/icons/borrow.svg";
 import { ReactComponent as Repayment } from "@unioncredit/ui/lib/icons/repayment.svg";
@@ -31,6 +32,7 @@ import usePagination from "hooks/usePagination";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { RelativeTime } from "./BlockRelativeTime";
+import { compareAddresses } from "utils/compare";
 
 const icons = {
   [TransactionTypes.CANCEL]: CancelledVouch,
@@ -41,18 +43,41 @@ const icons = {
   [TransactionTypes.REGISTER]: NewMember,
 };
 
-const texts = {
-  [TransactionTypes.CANCEL]: "Cancelled Vouch",
-  [TransactionTypes.BORROW]: "Borrow",
-  [TransactionTypes.REPAY]: "Repayment",
-  [TransactionTypes.TRUST]: "Trusted",
-  [TransactionTypes.TRUSTED]: "Trusted by",
-  [TransactionTypes.REGISTER]: "Became a member",
+const Address = ({ address }) => {
+  const { address: connectedAddress } = useAccount();
+  return (
+    <Label as="span" grey={400} m={0}>
+      <Link to={`/profile/${address}`}>
+        {compareAddresses(connectedAddress, address) ? (
+          "You"
+        ) : (
+          <PrimaryLabel address={address} />
+        )}
+      </Link>
+    </Label>
+  );
 };
 
-function TransactionHistoryRow({ amount, type, address, timestamp }) {
+// prettier-ignore
+const texts = {
+  [TransactionTypes.CANCEL]:    (x) => <>Cancelled Vouch for <Address address={x.borrower} /></>,
+  [TransactionTypes.BORROW]:    (x) => <>Borrow {format(x.amount)}</>,
+  [TransactionTypes.REPAY]:     (x) => <>Repayment {format(x.amount)}</>,
+  [TransactionTypes.TRUST]:     (x) => <>Trusted <Address address={x.borrower} /></>,
+  [TransactionTypes.TRUSTED]:   (x) => <>Trusted by <Address address={x.staker} /></>,
+  [TransactionTypes.REGISTER]:  (_) => <>Became a member</>,
+};
+
+function TransactionHistoryRow({
+  amount,
+  type,
+  address,
+  staker,
+  borrower,
+  timestamp,
+}) {
   const Icon = icons[type];
-  const text = texts[type];
+  const text = texts[type]({ amount, staker, borrower });
 
   if (!Icon || !text) return null;
 
@@ -71,14 +96,7 @@ function TransactionHistoryRow({ amount, type, address, timestamp }) {
       <TableCell>
         <Box direction="vertical">
           <Label as="p" grey={700} m={0}>
-            {text}{" "}
-            {address && (
-              <Label as="span" grey={400} m={0}>
-                <Link to={`/profile/${address}`}>
-                  <PrimaryLabel address={address} />
-                </Link>
-              </Label>
-            )}
+            {text}
           </Label>
           <Label as="p" size="small" grey={400} m={0}>
             <a href="#" target="_blank">

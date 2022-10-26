@@ -15,6 +15,8 @@ export default function useTxHistory({
 
   useEffect(() => {
     async function loadData() {
+      setData([]);
+
       const registerTransactions = await fetchRegisterTransactions(
         chain.id,
         staker

@@ -36,6 +36,7 @@ export default function ContactsPage({ type }) {
               to: "/contacts/trusts-you",
             },
           ]}
+          onChange={() => setContact(null)}
           initialActive={0}
         />
       </Box>
@@ -49,6 +50,7 @@ export default function ContactsPage({ type }) {
           </Grid.Col>
         </Grid.Row>
       </Grid>
+      <Box mb="120px" />
     </>
   );
 }

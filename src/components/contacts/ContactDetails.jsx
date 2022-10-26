@@ -2,6 +2,7 @@ import { Card, Grid, Box, Dai, Stat, Label, Button } from "@unioncredit/ui";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 
 import AddressSummary from "components/shared/AddressSummary";
+import { TransactionHistory } from "components/shared/TxHistory";
 import { ContactsType } from "constants";
 import format from "utils/format";
 
@@ -98,6 +99,7 @@ export default function ContactDetails({ contact = {}, type }) {
           )}
         </Grid>
       </Card.Body>
+      <TransactionHistory staker={address} />
     </Card>
   );
 }
