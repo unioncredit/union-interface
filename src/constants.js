@@ -60,3 +60,12 @@ export const StatusColorMap = {
   canceled: "blue",
   defeated: "red",
 };
+
+export const TransactionTypes = {
+  BORROW: "borrow",
+  REPAY: "repay",
+  REGISTER: "register",
+  CANCEL: "cancel",
+  TRUST: "trust",
+  TRUSTED: "trusted",
+};

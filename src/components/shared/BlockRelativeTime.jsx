@@ -17,5 +17,9 @@ export default function BlockRelativeTime({ block: blockNumber }) {
     provider && load();
   }, [provider]);
 
+  return <RelativeTime timestamp={timestamp} />;
+}
+
+export function RelativeTime({ timestamp }) {
   return timestamp ? dayjs(timestamp * 1000).fromNow() : "N/A";
 }

@@ -39,31 +39,34 @@ export default function VouchersCard() {
           <EmptyState label="No vouchers" />
         </Card.Body>
       ) : (
-        <Table>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead align="right">Trust Amount (DAI)</TableHead>
-          </TableRow>
-          {vouchersPage.map(({ address, trust }) => (
-            <TableRow key={address}>
-              <TableCell fixedSize>
-                <Avatar size={24} address={address} />
-              </TableCell>
-              <TableCell>
-                <Box direction="vertical">
-                  <Label grey={700} m={0}>
-                    <PrimaryLabel address={address} />
-                  </Label>
-                  <Label size="small" grey={400} m={0}>
-                    {truncateAddress(address)}
-                  </Label>
-                </Box>
-              </TableCell>
-              <TableCell align="right">{format(trust)}</TableCell>
+        <>
+          <Box mt="24px" />
+          <Table>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Account</TableHead>
+              <TableHead align="right">Trust Amount (DAI)</TableHead>
             </TableRow>
-          ))}
-        </Table>
+            {vouchersPage.map(({ address, trust }) => (
+              <TableRow key={address}>
+                <TableCell fixedSize>
+                  <Avatar size={24} address={address} />
+                </TableCell>
+                <TableCell>
+                  <Box direction="vertical">
+                    <Label grey={700} m={0}>
+                      <PrimaryLabel address={address} />
+                    </Label>
+                    <Label size="small" grey={400} m={0}>
+                      {truncateAddress(address)}
+                    </Label>
+                  </Box>
+                </TableCell>
+                <TableCell align="right">{format(trust)}</TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
