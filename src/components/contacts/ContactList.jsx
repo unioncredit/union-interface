@@ -36,15 +36,10 @@ export default function ContactList({
 
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
-  const contactsCount = contacts.length;
-
   useEffect(() => {
-    if (
-      !contact &&
-      !contacts.find(({ address }) => address === contact?.address)
-    ) {
+    !contact &&
+      !contacts.find(({ address }) => address === contact?.address) &&
       setContact(contacts[0]);
-    }
   }, [contact, contacts[0]]);
 
   const {
@@ -57,7 +52,7 @@ export default function ContactList({
   return (
     <Card>
       <Card.Header
-        title={`Accounts you trust · ${contactsCount}`}
+        title={`Accounts you trust · ${contacts.length}`}
         subTitle="Addresses you’re currently vouching for"
       />
       <Box fluid p="12px">
@@ -79,7 +74,7 @@ export default function ContactList({
           />
         )}
       </Box>
-      {contactsCount <= 0 ? (
+      {contacts.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No contacts" />
         </Card.Body>
@@ -88,11 +83,17 @@ export default function ContactList({
           <TableRow>
             <TableHead></TableHead>
             <TableHead>Account</TableHead>
-            <TableHead align="center">Status</TableHead>
-            <TableHead align="right">Balance owed (DAI)</TableHead>
+            {type === ContactsType.VOUCHEES ? (
+              <>
+                <TableHead align="center">Status</TableHead>
+                <TableHead align="right">Balance owed (DAI)</TableHead>
+              </>
+            ) : (
+              <TableHead align="right">Trust Limit (DAI)</TableHead>
+            )}
           </TableRow>
           {contactsPage.map((row) => {
-            const { address, locking = ZERO } = row;
+            const { address, locking = ZERO, trust = ZERO } = row;
 
             return (
               <TableRow
@@ -113,10 +114,16 @@ export default function ContactList({
                     </Label>
                   </Box>
                 </TableCell>
-                <TableCell align="center">
-                  <StatusBadge address={address} />
-                </TableCell>
-                <TableCell align="right">{format(locking)}</TableCell>
+                {type === ContactsType.VOUCHEES ? (
+                  <>
+                    <TableCell align="center">
+                      <StatusBadge address={address} />
+                    </TableCell>
+                    <TableCell align="right">{format(locking)}</TableCell>
+                  </>
+                ) : (
+                  <TableCell align="right">{format(trust)}</TableCell>
+                )}
               </TableRow>
             );
           })}
