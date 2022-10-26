@@ -15,7 +15,7 @@ export default function CreditStats() {
   const { data: member } = useMember();
   const { data: vouchers = [] } = useVouchers();
   const { data: blockNumber } = useBlockNumber();
-  const { data: protocol } = useProtocol();
+  const { data: protocol = {} } = useProtocol();
 
   const {
     creditLimit = ZERO,
@@ -23,6 +23,8 @@ export default function CreditStats() {
     owed = ZERO,
     lastRepay = ZERO,
   } = member;
+
+  const { overdueBlocks = ZERO } = protocol;
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
   const locked = vouchers.map(({ locked }) => locked).reduce(reduceBnSum, ZERO);
@@ -71,12 +73,7 @@ export default function CreditStats() {
                 value={<Dai value={format(interest)} />}
                 after={
                   <Label size="small" color="blue500" onClick={() => alert()}>
-                    {dueDate(
-                      lastRepay,
-                      protocol.overdueBlocks || ZERO,
-                      blockNumber,
-                      chain.id
-                    )}
+                    {dueDate(lastRepay, overdueBlocks, blockNumber, chain.id)}
                   </Label>
                 }
               />
