@@ -17,6 +17,8 @@ export default function ProtcolData({ children }) {
   const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
   const comptrollerContract = useContract("comptroller");
+  const governorContract = useContract("governor");
+  const unionTokenContract = useContract("union");
 
   const userManagerFunctionNames = [
     "maxStakeAmount",
@@ -49,10 +51,16 @@ export default function ProtcolData({ children }) {
     "gLastUpdatedBlock",
   ];
 
+  const governorFunctionsNames = ["quorumVotes"];
+
+  const unionTokenFunctionNames = ["totalSupply"];
+
   const contracts = [
     ...buildContractConfigs(userManagerContract, userManagerFunctionNames),
     ...buildContractConfigs(uTokenContract, uTokenFunctionNames),
     ...buildContractConfigs(comptrollerContract, comptrollerFunctionNames),
+    ...buildContractConfigs(governorContract, governorFunctionsNames),
+    ...buildContractConfigs(unionTokenContract, unionTokenFunctionNames),
   ];
 
   const selectData = (data) =>
@@ -60,6 +68,8 @@ export default function ProtcolData({ children }) {
       ...userManagerFunctionNames,
       ...uTokenFunctionNames,
       ...comptrollerFunctionNames,
+      ...governorFunctionsNames,
+      ...unionTokenFunctionNames,
     ].reduce(
       (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
       {}

@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { Box, Button, Grid, Label, Heading, Text } from "@unioncredit/ui";
 import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
 
+import { ZERO_ADDRESS } from "constants";
 import Avatar from "components/shared/Avatar";
 import Header from "components/shared/Header";
 import { useGovernance } from "providers/GovernanceData";
@@ -15,15 +16,16 @@ export default function ProposalPage() {
   const { hash } = useParams();
   const { proposals } = useGovernance();
 
-  const proposal = proposals.find((p) => p.hash === hash);
+  const proposal = proposals.find((p) => p.hash === hash) || {};
 
   const {
     description,
-    proposer,
+    proposer = ZERO_ADDRESS,
     targets = [],
     signatures = [],
     calldatas = [],
-  } = proposal || {};
+    history = [],
+  } = proposal;
 
   const title =
     String(description)
@@ -149,8 +151,8 @@ export default function ProposalPage() {
             </Box>
           </Grid.Col>
           <Grid.Col md={4}>
-            <VotingCard />
-            <ProposalHistoryCard />
+            <VotingCard data={proposal} />
+            <ProposalHistoryCard data={history} />
           </Grid.Col>
         </Grid.Row>
       </Grid>

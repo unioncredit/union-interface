@@ -1,5 +1,7 @@
-import { Card } from "@unioncredit/ui";
+import { Card, Steps } from "@unioncredit/ui";
 import { chain } from "wagmi";
+
+import { blockExplorerTx } from "utils/blockExplorer";
 
 function getStepItems(data) {
   if (!data) return [];
@@ -8,8 +10,7 @@ function getStepItems(data) {
     const date = new Date(Number(item.timestamp * 1000));
     const subTitle = `${date.toDateString()} ${date.getHours()}:${date.getMinutes()}`;
     const hash = item.id ? item.id.split("-")?.[0] : false;
-    const href =
-      hash && getEtherScanLink(chain.mainnet.id, hash, "TRANSACTION");
+    const href = hash && blockExplorerTx(chain.mainnet.id, hash);
 
     if (item.action === "queued") {
       return { title: "Queued for Execution", subTitle, color: "blue", href };
@@ -25,8 +26,7 @@ function getStepItems(data) {
   });
 }
 
-export default function ProposalHistoryCard() {
-  const data = [];
+export default function ProposalHistoryCard({ data = [] }) {
   return (
     <Card>
       <Card.Header title="History" />

@@ -10,22 +10,36 @@ import {
   Label,
   Stat,
 } from "@unioncredit/ui";
+import { StatusColorMap } from "constants";
+import { ZERO } from "constants";
+import { useProtocol } from "providers/ProtocolData";
 
 import format from "utils/format";
+import { bnPercent, percent } from "utils/numbers";
 
-export default function VotingCard() {
-  const statusLabel = "Label";
+export default function VotingCard({ data }) {
+  const { data: protocol } = useProtocol();
 
-  const forVotes = 0;
-  const againstVotes = 0;
-  const percentageFor = 0;
-  const percentageAgainst = 0;
+  const {
+    status,
+    forVotes = ZERO,
+    againstVotes = ZERO,
+    totalSupply = ZERO,
+    quorumVotes = ZERO,
+  } = { ...data, ...protocol };
+
+  const totalVotes = forVotes.add(againstVotes);
+
+  const percentageFor = bnPercent(forVotes, totalVotes);
+  const percentageAgainst = bnPercent(againstVotes, totalVotes);
+  const quorumPercent = bnPercent(quorumVotes, totalSupply);
+  const quorumProgress = bnPercent(totalVotes, quorumVotes);
 
   return (
     <Card mb="24px">
       <Card.Header
         title="Voting"
-        action={<Badge label={statusLabel} color="blue" />}
+        action={<Badge label={status} color={StatusColorMap[status]} />}
       />
       <Card.Body>
         <Box justify="space-between" mb="4px">
@@ -33,29 +47,29 @@ export default function VotingCard() {
             For
           </Label>
           <Label as="p" m={0}>
-            {format(forVotes)} Votes
+            {format(forVotes, 0)} Votes
           </Label>
         </Box>
-        <Bar percentage={percentageFor} size="large" color="green" />
+        <Bar percentage={percentageFor * 100} size="large" color="green" />
         <Box justify="space-between" mt="18px" mb="4px">
           <Label as="p" m={0}>
             Against
           </Label>
           <Label as="p" m={0}>
-            {format(againstVotes)} Votes
+            {format(againstVotes, 0)} Votes
           </Label>
         </Box>
-        <Bar percentage={percentageAgainst} size="large" />
+        <Bar percentage={percentageAgainst * 100} size="large" />
         <Box mt="22px">
-          <Stat fluid label="Votes cast" value={0} />
+          <Stat fluid label="Votes cast" value={format(totalVotes, 0)} />
           <Stat
             fluid
             label={
               <Label as="p" m={0} weight="medium" size="small">
-                {0} Quorum {0 >= 1 && <WireCheck />}
+                {percent(quorumPercent)} Quorum {0 >= 1 && <WireCheck />}
               </Label>
             }
-            value={<Bar size="large" percentage={0} />}
+            value={<Bar size="large" percentage={quorumProgress * 100} />}
           />
         </Box>
         {false && (

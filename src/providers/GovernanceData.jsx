@@ -18,6 +18,37 @@ const GovernanceContext = createContext({});
 export const useGovernance = () => useContext(GovernanceContext);
 
 /* --------------------------------------------------------
+  Governance Proposals History
+-------------------------------------------------------- */
+
+const proposalHistoryQuery = gql`
+  query ProposalUpdates($where: ProposalUpdate_filter) {
+    proposalUpdates(where: $where) {
+      id
+      proposer
+      action
+      timestamp
+    }
+  }
+`;
+
+async function getProposalHistory(pid) {
+  const variables = {
+    where: {
+      pid: pid.toString(),
+    },
+  };
+
+  const resp = await request(
+    TheGraphUrls[chain.mainnet.id],
+    proposalHistoryQuery,
+    variables
+  );
+
+  return resp.proposalUpdates;
+}
+
+/* --------------------------------------------------------
   Governance Proposals
 -------------------------------------------------------- */
 
@@ -75,7 +106,14 @@ function useProposals() {
 
   const getProposals = useCallback(async () => {
     const resp = await request(TheGraphUrls[chain.mainnet.id], proposalsQuery);
-    return resp.proposals;
+    const proposals = resp.proposals;
+
+    return Promise.all(
+      proposals.map(async (proposal) => {
+        const history = await getProposalHistory(proposal.pid);
+        return { ...proposal, history };
+      })
+    );
   }, []);
 
   const contracts = flatten(
