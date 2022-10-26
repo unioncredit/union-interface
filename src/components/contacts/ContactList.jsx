@@ -8,19 +8,23 @@ import {
   TableHead,
   Box,
   Label,
+  Input,
+  Button,
 } from "@unioncredit/ui";
+import { useEffect } from "react";
+import { ReactComponent as Search } from "@unioncredit/ui/lib/icons/search.svg";
+import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
+import { ReactComponent as Filter } from "@unioncredit/ui/lib/icons/filter.svg";
+
+import format from "utils/format";
+import { ZERO, ContactsType } from "constants";
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import StatusBadge from "components/shared/StatusBadge";
-import { ContactsType } from "constants";
-
-import format from "utils/format";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
-import { truncateAddress } from "utils/truncateAddress";
-import { useEffect } from "react";
-import { ZERO } from "constants";
 import usePagination from "hooks/usePagination";
+import { truncateAddress } from "utils/truncateAddress";
 
 export default function ContactList({
   contact,
@@ -48,7 +52,7 @@ export default function ContactList({
     maxPages,
     activePage,
     onChange,
-  } = usePagination(vouchers);
+  } = usePagination(contacts);
 
   return (
     <Card>
@@ -56,6 +60,25 @@ export default function ContactList({
         title={`Accounts you trust · ${contactsCount}`}
         subTitle="Addresses you’re currently vouching for"
       />
+      <Box fluid p="12px">
+        <Input prefix={<Search />} placeholder="Search" />
+        <Button
+          ml="8px"
+          fluid
+          icon={Filter}
+          variant="secondary"
+          onClick={() => alert()}
+        />
+        {type === ContactsType.VOUCHEES && (
+          <Button
+            fluid
+            ml="8px"
+            label="New vouch"
+            icon={Vouch}
+            onClick={() => alert()}
+          />
+        )}
+      </Box>
       {contactsCount <= 0 ? (
         <Card.Body>
           <EmptyState label="No contacts" />
