@@ -21,6 +21,7 @@ export const Status = {
 export const Errors = {
   MAX_USER_STAKE: "Max stake exceeded",
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
+  INSUFFICIENT_BALANCE: "Insufficient balance",
 };
 
 export const ContactsType = {

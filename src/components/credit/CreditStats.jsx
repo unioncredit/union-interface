@@ -4,15 +4,19 @@ import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip
 
 import { ZERO } from "constants";
 import format from "utils/format";
+import dueDate from "utils/dueDate";
 import { reduceBnSum } from "utils/reduce";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
 import { useProtocol } from "providers/ProtocolData";
-import dueDate from "utils/dueDate";
+import { REPAY_MODAL } from "components/modals/RepayModal";
+import { useModals } from "providers/ModalManager";
 
 export default function CreditStats() {
+  const { open } = useModals();
   const { chain } = useNetwork();
-  const { data: member } = useMember();
+
+  const { data: member = {} } = useMember();
   const { data: vouchers = [] } = useVouchers();
   const { data: blockNumber } = useBlockNumber();
   const { data: protocol = {} } = useProtocol();
@@ -22,9 +26,8 @@ export default function CreditStats() {
     interest = ZERO,
     owed = ZERO,
     lastRepay = ZERO,
-  } = member;
-
-  const { overdueBlocks = ZERO } = protocol;
+    overdueBlocks = ZERO,
+  } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
   const locked = vouchers.map(({ locked }) => locked).reduce(reduceBnSum, ZERO);
@@ -64,7 +67,6 @@ export default function CreditStats() {
                 label="Balance owed"
                 value={<Dai value={format(owed)} />}
               />
-
               <Stat
                 align="center"
                 label="Minimum due"
@@ -81,16 +83,16 @@ export default function CreditStats() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Col xs={6}>
-              <Button
-                label="Make a payment"
-                onClick={() => alert()}
-                variant="secondary"
-                mt="28px"
-                disabled={false}
-              />
+              <Button mt="28px" label="Borrow funds" onClick={() => alert()} />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Button mt="28px" label="Borrow funds" onClick={() => alert()} />
+              <Button
+                mt="28px"
+                variant="secondary"
+                label="Make a payment"
+                disabled={owed.lte(ZERO)}
+                onClick={() => open(REPAY_MODAL)}
+              />
             </Grid.Col>
           </Grid.Row>
         </Grid>
