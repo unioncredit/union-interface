@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect } from "react";
 
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, chain } from "wagmi";
 import useContract from "hooks/useContract";
 import { ZERO, ZERO_ADDRESS } from "constants";
 

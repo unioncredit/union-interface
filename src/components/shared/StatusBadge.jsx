@@ -3,18 +3,19 @@ import { ZERO } from "constants";
 
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
+import { compareAddresses } from "utils/compare";
 
 export default function StatusBadge({ address }) {
   const { data: vouchees } = useVouchees();
   const { data: vouchers } = useVouchers();
 
   const contact =
-    vouchees.find((vouchee) => vouchee.address === address) ||
-    vouchers.find((voucher) => voucher.address === address);
+    vouchees.find((vouchee) => compareAddresses(vouchee.address, address)) ||
+    vouchers.find((voucher) => compareAddresses(voucher.address, address));
 
-  const isOverdue = contact.isOverdue;
-  const isMember = contact.isMember;
-  const borrowed = contact.locking || ZERO;
+  const isOverdue = contact?.isOverdue;
+  const isMember = contact?.isMember;
+  const borrowed = contact?.locking || ZERO;
 
   return (
     <>

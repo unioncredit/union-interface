@@ -86,6 +86,7 @@ export default function RegisterPage() {
                                 title: "Vouch for a friend",
                                 subTitle:
                                   "Expand the web of trust with a vouch",
+                                showNewMemberHeader: true,
                               })
                             }
                           />

@@ -1,7 +1,7 @@
 import { ZERO } from "constants";
 
 export const min = (a, b) => {
-  return a.gt(b) ? a : b;
+  return a.gt(b) ? b : a;
 };
 
 export const percent = (n) => {

@@ -31,10 +31,12 @@ export default function AddressInput(props) {
       // it is a valid ETH address
       setValue(value);
       setError(null);
+      props.onChange && props.onChange(value);
     } else if (value === "") {
       // Input valus is an empty string
       setValue("");
       setError(null);
+      props.onChange && props.onChange(null);
     } else {
       // Input value is not an address OR ENS so set an error
       setError(Errors.INVALID_ADDRESS_OR_ENS);

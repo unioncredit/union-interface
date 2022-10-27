@@ -122,11 +122,13 @@ function useProposals() {
         ...governorContract,
         functionName: "proposals",
         args: [proposal.pid],
+        chainId: chain.mainnet.id,
       },
       {
         ...governorContract,
         functionName: "state",
         args: [proposal.pid],
+        chainId: chain.mainnet.id,
       },
     ])
   );
@@ -135,7 +137,6 @@ function useProposals() {
     enables: proposals?.length > 0,
     select: selectProposals,
     contracts,
-    chainId: chain.mainnet.id,
   });
 
   useEffect(() => {

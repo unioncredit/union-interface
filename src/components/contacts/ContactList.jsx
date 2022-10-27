@@ -25,12 +25,15 @@ import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import usePagination from "hooks/usePagination";
 import { truncateAddress } from "utils/truncateAddress";
+import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { useModals } from "providers/ModalManager";
 
 export default function ContactList({
   contact,
   setContact,
   type = ContactsType.VOUCHEES,
 }) {
+  const { open } = useModals();
   const { data: vouchees } = useVouchees();
   const { data: vouchers } = useVouchers();
 
@@ -70,7 +73,7 @@ export default function ContactList({
             ml="8px"
             label="New vouch"
             icon={Vouch}
-            onClick={() => alert()}
+            onClick={() => open(VOUCH_MODAL)}
           />
         )}
       </Box>

@@ -1,12 +1,13 @@
 import "./VouchModal.scss";
 
-import React from "react";
+import React, { useState } from "react";
 import cn from "classnames";
 import { Modal, ModalOverlay, Input, Dai, Button } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
 import NewMemberModalHeader from "components/modals/NewMemberModalHeader";
+import AddressSummary from "components/shared/AddressSummary";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -26,22 +27,25 @@ const Canvas = React.memo(() => (
 export default function VouchModal({
   title = "New Vouch",
   subTitle = "",
-  isNewMemberModal = true,
+  showNewMemberHeader = false,
+  showAddressSummary = true,
 }) {
   const { close } = useModals();
+  const [address, setAddress] = useState(null);
 
   return (
     <ModalOverlay onClick={close}>
       <Canvas />
       <Modal
         className={cn("VouchModal", {
-          "VouchModal--newMember": isNewMemberModal,
+          "VouchModal--newMember": showNewMemberHeader,
         })}
       >
-        {isNewMemberModal && <NewMemberModalHeader onClose={close} />}
+        {showNewMemberHeader && <NewMemberModalHeader onClose={close} />}
         <Modal.Header onClose={close} title={title} subTitle={subTitle} />
         <Modal.Body>
-          <AddressInput label="Address or ENS" />
+          {showAddressSummary && <AddressSummary address={address} />}
+          <AddressInput label="Address or ENS" onChange={setAddress} />
           <Input label="Contact name" />
           <Input label="Trust amount" suffix={<Dai />} />
           <Button fluid mt="16px" label="Submit Vouch" />

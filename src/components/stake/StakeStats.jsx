@@ -5,8 +5,12 @@ import { WAD, ZERO } from "constants";
 import { reduceBnSum } from "utils/reduce";
 import { useVouchees } from "providers/VoucheesData";
 import { useMember } from "providers/MemberData";
+import { useModals } from "providers/ModalManager";
+import { STAKE_MODAL } from "components/modals/StakeModal";
+import { StakeType } from "constants";
 
 export default function StakeStats() {
+  const { open } = useModals();
   const { data: member } = useMember();
   const { data: vouchees = [] } = useVouchees();
 
@@ -72,14 +76,18 @@ export default function StakeStats() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Col xs={6}>
-              <Button mt="24px" label="Deposit DAI" onClick={() => alert()} />
+              <Button
+                mt="24px"
+                label="Deposit DAI"
+                onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
+              />
             </Grid.Col>
             <Grid.Col xs={6}>
               <Button
                 mt="24px"
                 label="Withdraw DAI"
                 variant="secondary"
-                onClick={() => alert()}
+                onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
               />
             </Grid.Col>
           </Grid.Row>

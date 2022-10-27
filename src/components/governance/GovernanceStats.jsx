@@ -6,7 +6,7 @@ import { ZERO } from "constants";
 import format from "utils/format";
 
 export default function GovernaceStats() {
-  const { data: protocol } = useProtocol();
+  const { data: protocol = {} } = useProtocol();
 
   const { totalStaked = ZERO, totalBorrows = ZERO } = protocol;
 

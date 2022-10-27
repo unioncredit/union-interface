@@ -1,4 +1,4 @@
-import { useContractReads } from "wagmi";
+import { useContractReads, chain, useNetwork } from "wagmi";
 import { createContext, useContext } from "react";
 
 import useContract from "hooks/useContract";
@@ -14,11 +14,15 @@ const buildContractConfigs = (contract, functionNames) =>
   }));
 
 export default function ProtcolData({ children }) {
+  const { chain: connectedChain } = useNetwork();
+
   const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
   const comptrollerContract = useContract("comptroller");
-  const governorContract = useContract("governor");
+  const governorContract = useContract("governor", chain.mainnet.id);
   const unionTokenContract = useContract("union");
+
+  const isMainnet = connectedChain === chain.mainnet.id;
 
   const userManagerFunctionNames = [
     "maxStakeAmount",
@@ -59,7 +63,9 @@ export default function ProtcolData({ children }) {
     ...buildContractConfigs(userManagerContract, userManagerFunctionNames),
     ...buildContractConfigs(uTokenContract, uTokenFunctionNames),
     ...buildContractConfigs(comptrollerContract, comptrollerFunctionNames),
-    ...buildContractConfigs(governorContract, governorFunctionsNames),
+    ...(isMainnet
+      ? buildContractConfigs(governorContract, governorFunctionsNames)
+      : []),
     ...buildContractConfigs(unionTokenContract, unionTokenFunctionNames),
   ];
 
@@ -68,7 +74,7 @@ export default function ProtcolData({ children }) {
       ...userManagerFunctionNames,
       ...uTokenFunctionNames,
       ...comptrollerFunctionNames,
-      ...governorFunctionsNames,
+      ...(isMainnet ? governorFunctionsNames : []),
       ...unionTokenFunctionNames,
     ].reduce(
       (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
