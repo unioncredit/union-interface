@@ -22,7 +22,7 @@ import useContract from "hooks/useContract";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { useState } from "react";
-import {Errors} from "constants";
+import { Errors } from "constants";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -192,7 +192,7 @@ export default function RepayModal() {
                         suffix={<Dai />}
                         placeholder="0.0"
                         error={errors.amount}
-                        onChange={register("amount", { validate })}
+                        onChange={register("amount")}
                       />
                     </Box>
                   </Collapse>

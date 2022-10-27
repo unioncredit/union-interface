@@ -11,6 +11,7 @@ import { useVouchers } from "providers/VouchersData";
 import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
+import { BORROW_MODAL } from "components/modals/BorrowModal";
 
 export default function CreditStats() {
   const { open } = useModals();
@@ -83,7 +84,12 @@ export default function CreditStats() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Col xs={6}>
-              <Button mt="28px" label="Borrow funds" onClick={() => alert()} />
+              <Button
+                mt="28px"
+                label="Borrow funds"
+                disabled={creditLimit.lte(ZERO)}
+                onClick={() => open(BORROW_MODAL)}
+              />
             </Grid.Col>
             <Grid.Col xs={6}>
               <Button

@@ -8,6 +8,7 @@ import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
 import VouchModal, { VOUCH_MODAL } from "components/modals/VouchModal";
 import RepayModal, { REPAY_MODAL } from "components/modals/RepayModal";
+import BorrowModal, { BORROW_MODAL } from "components/modals/BorrowModal";
 
 const ModalContext = createContext({});
 
@@ -20,6 +21,7 @@ const modals = {
   [CREDIT_REQUEST_MODAL]: CreditRequestModal,
   [VOUCH_MODAL]: VouchModal,
   [REPAY_MODAL]: RepayModal,
+  [BORROW_MODAL]: BorrowModal,
 };
 
 export default function ModalManager({ children }) {
