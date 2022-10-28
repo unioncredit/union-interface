@@ -1,12 +1,16 @@
 import { Card, Grid, Box, Dai, Stat, Label, Button } from "@unioncredit/ui";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
+import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
 import AddressSummary from "components/shared/AddressSummary";
 import { TransactionHistory } from "components/shared/TxHistory";
 import { ContactsType } from "constants";
+import { useModals } from "providers/ModalManager";
 import format from "utils/format";
 
 export default function ContactDetails({ contact = {}, type }) {
+  const { open } = useModals();
+
   if (!contact) {
     return "loading";
   }
@@ -86,12 +90,12 @@ export default function ContactDetails({ contact = {}, type }) {
               <Grid.Row>
                 <Grid.Col xs={12}>
                   <Button
-                    mt="12px"
                     fluid
+                    mt="12px"
+                    icon={Manage}
                     variant="secondary"
                     label="Manage Contact"
-                    icon={Manage}
-                    onClick={() => alert()}
+                    onClick={() => open(MANAGE_CONTACT_MODAL, { contact })}
                   />
                 </Grid.Col>
               </Grid.Row>

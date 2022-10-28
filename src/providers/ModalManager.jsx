@@ -3,6 +3,9 @@ import { createContext, useContext, useState } from "react";
 import CreditRequestModal, {
   CREDIT_REQUEST_MODAL,
 } from "components/modals/CreditRequestModal";
+import ManageContactModal, {
+  MANAGE_CONTACT_MODAL,
+} from "components/modals/ManageContactModal";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
@@ -22,6 +25,7 @@ const modals = {
   [VOUCH_MODAL]: VouchModal,
   [REPAY_MODAL]: RepayModal,
   [BORROW_MODAL]: BorrowModal,
+  [MANAGE_CONTACT_MODAL]: ManageContactModal,
 };
 
 export default function ModalManager({ children }) {
