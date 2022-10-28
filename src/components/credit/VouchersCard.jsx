@@ -17,7 +17,7 @@ import format from "utils/format";
 import { truncateAddress } from "utils/truncateAddress";
 
 export default function VouchersCard() {
-  const { data: vouchers = {} } = useVouchers();
+  const { data: vouchers = [] } = useVouchers();
 
   const {
     data: vouchersPage,
