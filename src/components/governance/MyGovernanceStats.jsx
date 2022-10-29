@@ -21,8 +21,11 @@ import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
 import { ZERO_ADDRESS } from "constants";
+import { useModals } from "providers/ModalManager";
+import { DELEGATE_MODAL } from "components/modals/DelegateModal";
 
 export default function MyGovernanceStats() {
+  const { open } = useModals();
   const { address } = useAccount();
   const { data: member = {} } = useMember();
 
@@ -95,10 +98,10 @@ export default function MyGovernanceStats() {
                 <Button
                   mt="28px"
                   variant="secondary"
+                  onClick={() => open(DELEGATE_MODAL)}
                   label={
                     isVotingConfigured ? "Delegate votes" : "Set up voting"
                   }
-                  onClick={() => alert()}
                 />
               </Box>
             </Grid.Col>

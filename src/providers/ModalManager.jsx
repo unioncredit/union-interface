@@ -12,6 +12,7 @@ import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
 import VouchModal, { VOUCH_MODAL } from "components/modals/VouchModal";
 import RepayModal, { REPAY_MODAL } from "components/modals/RepayModal";
 import BorrowModal, { BORROW_MODAL } from "components/modals/BorrowModal";
+import DelegateModal, { DELEGATE_MODAL } from "components/modals/DelegateModal";
 
 const ModalContext = createContext({});
 
@@ -26,6 +27,7 @@ const modals = {
   [REPAY_MODAL]: RepayModal,
   [BORROW_MODAL]: BorrowModal,
   [MANAGE_CONTACT_MODAL]: ManageContactModal,
+  [DELEGATE_MODAL]: DelegateModal,
 };
 
 export default function ModalManager({ children }) {

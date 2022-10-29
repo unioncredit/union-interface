@@ -55,11 +55,11 @@ export default function BorrowModal() {
 
   const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
-  const newOwed = owed.add(amount.raw);
-
   const fee = amount.raw.mul(originationFee).div(WAD);
 
   const borrow = amount.raw.add(fee);
+
+  const newOwed = borrow.add(owed);
 
   const buttonProps = useWrite({
     contract: "uToken",

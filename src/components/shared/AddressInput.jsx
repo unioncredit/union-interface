@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { isAddress } from "ethers/lib/utils";
 import { useEnsName, useEnsAddress } from "wagmi";
 import { Input, Label, Box, LoadingSpinner } from "@unioncredit/ui";
 import { ReactComponent as EnsIcon } from "@unioncredit/ui/lib/icons/ens.svg";
 
 import { Errors } from "constants";
-import { isAddress } from "ethers/lib/utils";
 import Avatar from "components/shared/Avatar";
 
 export default function AddressInput(props) {
@@ -46,12 +46,12 @@ export default function AddressInput(props) {
   return (
     <Input
       {...props}
-      error={error}
+      error={error || props.error}
       onChange={handleChange}
       caption={
         <Box direction="horizontal" align="center" mt="4px">
           {isAddress(address) && <Avatar size={16} address={address} />}
-          <Label mb={0} mt={0} ml="4px" size="small">
+          <Label m={0} ml="4px" size="small">
             {ens || address || "-"}
           </Label>
         </Box>
