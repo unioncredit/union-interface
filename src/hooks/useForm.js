@@ -11,11 +11,13 @@ const empty = {
 
 const formatValue = (value) => format(value).replace(/\,/g, "");
 
-export default function useForm({ validate }) {
+export default function useForm(props = {}) {
+  const { validate } = props;
+
   const [values, setValues] = useState();
   const [errors, setErrors] = useState();
 
-  const set = (name, value, type) => {
+  const setNumber = (name, value, type) => {
     let newValues;
 
     if (!value) {
@@ -31,21 +33,37 @@ export default function useForm({ validate }) {
       newValues = { ...values, [name]: parsed };
     }
 
-    const validationErrors = validate(newValues);
+    const validationErrors = validate && validate(newValues);
     setErrors((err) => ({ ...err, [name]: validationErrors }));
     setValues(newValues);
   };
 
-  const setValue = (name, display) => {
-    set(name, display, "display");
+  const setSimple = (name, value) => {
+    const newValues = { ...values, [name]: value };
+    const validationErrors = validate && validate(newValues);
+
+    setErrors((err) => ({ ...err, [name]: validationErrors }));
+    setValues(newValues);
   };
 
-  const setRawValue = (name, raw) => {
-    set(name, raw, "raw");
+  const setValue = (name, display, type) => {
+    if (type === "number") {
+      setNumber(name, display, "display");
+    } else {
+      setSimple(name, display);
+    }
+  };
+
+  const setRawValue = (name, raw, type) => {
+    if (type === "number") {
+      setNumber(name, raw, "raw");
+    } else {
+      setSimple(name, raw);
+    }
   };
 
   const register = (name) => (event) => {
-    setValue(name, event.target.value);
+    setValue(name, event.target.value, event.target.type);
   };
 
   return {

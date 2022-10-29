@@ -8,6 +8,9 @@ import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
 import NewMemberModalHeader from "components/modals/NewMemberModalHeader";
 import AddressSummary from "components/shared/AddressSummary";
+import { useMember } from "providers/MemberData";
+import useWrite from "hooks/useWrite";
+import useForm from "hooks/useForm";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -32,6 +35,20 @@ export default function VouchModal({
 }) {
   const { close } = useModals();
   const [address, setAddress] = useState(null);
+  const { refetch: refetchMember } = useMember();
+
+  const { values, errors = {}, register } = useForm();
+
+  const buttonProps = useWrite({
+    contract: "userManager",
+    method: "updateTrust",
+    args: [address, values?.trust?.raw],
+    enabled: values?.name.length > 0 && values?.trust?.raw.gt(0) && address,
+    onComplete: async () => {
+      await refetchMember();
+      close();
+    },
+  });
 
   return (
     <ModalOverlay onClick={close}>
@@ -46,9 +63,19 @@ export default function VouchModal({
         <Modal.Body>
           {showAddressSummary && <AddressSummary address={address} />}
           <AddressInput label="Address or ENS" onChange={setAddress} />
-          <Input label="Contact name" />
-          <Input label="Trust amount" suffix={<Dai />} />
-          <Button fluid mt="16px" label="Submit Vouch" />
+          <Input
+            error={errors.name}
+            label="Contact name"
+            onChange={register("name")}
+          />
+          <Input
+            type="number"
+            suffix={<Dai />}
+            error={errors.trust}
+            label="Trust amount"
+            onChange={register("trust")}
+          />
+          <Button fluid mt="16px" label="Submit Vouch" {...buttonProps} />
         </Modal.Body>
       </Modal>
     </ModalOverlay>
