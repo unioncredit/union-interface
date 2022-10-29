@@ -22,6 +22,7 @@ import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
+import OverdueAlert from "./OverdueAlert";
 
 export default function Header({ loading }) {
   const { open } = useModals();
@@ -45,52 +46,55 @@ export default function Header({ loading }) {
   }));
 
   return (
-    <Layout.Header align="center">
-      <Grid>
-        <Grid.Row align="center">
-          <Grid.Col>
-            <Box align="center">
-              <Logo width="32px" style={{ marginRight: "8px" }} />
-              <NetworkSelect />
-            </Box>
-          </Grid.Col>
-          <Grid.Col align="center" className="hide-lt-850">
-            <Box
-              fluid
-              justify="center"
-              className={{ "Header__Box--loading": loading }}
-            >
-              {navItems.map(({ label, ...item }) => (
-                <Link
-                  key={item.id}
-                  to={item.pathname}
-                  style={{ display: "block" }}
-                >
-                  <NavItem as="div" label={label} {...item} />
-                </Link>
-              ))}
-            </Box>
-          </Grid.Col>
-          <Grid.Col align="right">
-            <Box justify="flex-end">
-              <Button
-                mr="4px"
-                icon={Union}
-                variant="secondary"
-                className="UnionWallet"
-                onClick={() => open(WALLET_MODAL)}
-                label={
-                  <Text mb="0" ml="4px">
-                    {format(unclaimedRewards)}
-                  </Text>
-                }
-              />
-              <ConnectButton />
-              <ContextMenu position="left" items={contextMenuItems} />
-            </Box>
-          </Grid.Col>
-        </Grid.Row>
-      </Grid>
-    </Layout.Header>
+    <>
+      <Layout.Header align="center">
+        <Grid>
+          <Grid.Row align="center">
+            <Grid.Col>
+              <Box align="center">
+                <Logo width="32px" style={{ marginRight: "8px" }} />
+                <NetworkSelect />
+              </Box>
+            </Grid.Col>
+            <Grid.Col align="center" className="hide-lt-850">
+              <Box
+                fluid
+                justify="center"
+                className={{ "Header__Box--loading": loading }}
+              >
+                {navItems.map(({ label, ...item }) => (
+                  <Link
+                    key={item.id}
+                    to={item.pathname}
+                    style={{ display: "block" }}
+                  >
+                    <NavItem as="div" label={label} {...item} />
+                  </Link>
+                ))}
+              </Box>
+            </Grid.Col>
+            <Grid.Col align="right">
+              <Box justify="flex-end">
+                <Button
+                  mr="4px"
+                  icon={Union}
+                  variant="secondary"
+                  className="UnionWallet"
+                  onClick={() => open(WALLET_MODAL)}
+                  label={
+                    <Text mb="0" ml="4px">
+                      {format(unclaimedRewards)}
+                    </Text>
+                  }
+                />
+                <ConnectButton />
+                <ContextMenu position="left" items={contextMenuItems} />
+              </Box>
+            </Grid.Col>
+          </Grid.Row>
+        </Grid>
+      </Layout.Header>
+      <OverdueAlert />
+    </>
   );
 }

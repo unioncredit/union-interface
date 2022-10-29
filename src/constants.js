@@ -25,6 +25,7 @@ export const Errors = {
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   MIN_BORROW: "Amount less than minimum borrow",
   ALREADY_DELEGATING: "You are already delegating to this address",
+  TRUST_LT_LOCKING: "Trust cannot be less than locking",
 };
 
 export const ContactsType = {

@@ -1,5 +1,5 @@
 import chunk from "lodash/chunk";
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
 
 import { useMember } from "providers/MemberData";

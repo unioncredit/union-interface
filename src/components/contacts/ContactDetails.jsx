@@ -13,6 +13,7 @@ import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
 import AddressSummary from "components/shared/AddressSummary";
 import { TransactionHistory } from "components/shared/TxHistory";
+import { ZERO } from "constants";
 import { ContactsType } from "constants";
 import { useModals } from "providers/ModalManager";
 import format from "utils/format";
@@ -60,7 +61,19 @@ export default function ContactDetails({ contact = {}, type }) {
     );
   }
 
-  const { address } = contact;
+  const {
+    address,
+    trust = ZERO,
+    vouch = ZERO,
+    locking = ZERO,
+    locked = ZERO,
+  } = contact;
+
+  // vouchers have a locked amount while vouchees have a locking
+  // amount. If therefore either locking or locked is going to be zero
+  // so we can just subtract them both to handle both vouchee and voucher
+  // cases here
+  const available = trust.sub(locking).sub(locked);
 
   return (
     <Card>
@@ -76,7 +89,7 @@ export default function ContactDetails({ contact = {}, type }) {
                 size="extra-small"
                 label="Trust"
                 tooltip="The DAI amount this address trusts you with"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(trust)} />}
               />
             </Grid.Col>
             <Grid.Col xs={4}>
@@ -84,7 +97,7 @@ export default function ContactDetails({ contact = {}, type }) {
                 size="extra-small"
                 label="Vouch"
                 tooltip="The DAI amount this address can underwrite based on their total staked DAI"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(vouch)} />}
               />
             </Grid.Col>
             <Grid.Col xs={4}>
@@ -92,7 +105,7 @@ export default function ContactDetails({ contact = {}, type }) {
                 size="extra-small"
                 label="Available"
                 tooltip="The DAI amount you can borrow from this address"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(available)} />}
               />
             </Grid.Col>
           </Grid.Row>

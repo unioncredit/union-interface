@@ -17,11 +17,12 @@ import EditLabel from "components/shared/EditLabel";
 import { ContactsType } from "constants";
 import useWrite from "hooks/useWrite";
 import { useMember } from "providers/MemberData";
+import { EDIT_VOUCH_MODAL } from "./EditVouch";
 
 export const MANAGE_CONTACT_MODAL = "manager-contact-modal";
 
 export default function ManageContactModal({ contact, type }) {
-  const { close } = useModals();
+  const { close, open } = useModals();
   const { refetch: refetchMember } = useMember();
   const { address: connectedAddress } = useAccount();
 
@@ -32,7 +33,7 @@ export default function ManageContactModal({ contact, type }) {
       ? [
           {
             label: "Trust",
-            onClick: () => alert(),
+            onClick: () => open(EDIT_VOUCH_MODAL, { address }),
             buttonProps: { label: "Change amount" },
             value: <Dai value={format(trust)} />,
           },
@@ -55,7 +56,7 @@ export default function ManageContactModal({ contact, type }) {
       type === ContactsType.VOUCHEES
         ? [connectedAddress, address]
         : [address, connectedAddress],
-    enabled: true,
+    enabled: locking.lte(ZERO),
     onComplete: () => refetchMember(),
   });
 
