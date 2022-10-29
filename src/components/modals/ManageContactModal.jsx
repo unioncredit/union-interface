@@ -13,31 +13,35 @@ import format from "utils/format";
 import { useModals } from "providers/ModalManager";
 import AddressSummary from "components/shared/AddressSummary";
 import EditLabel from "components/shared/EditLabel";
+import {ContactsType} from "constants";
 
 export const MANAGE_CONTACT_MODAL = "manager-contact-modal";
 
-export default function ManageContactModal({ contact }) {
+export default function ManageContactModal({ contact, type }) {
   const { close } = useModals();
 
-  const { address, locking, trust } = contact;
+  const { address, locking = ZERO, trust = ZERO } = contact;
 
-  const options = [
-    {
-      label: "Trust",
-      onClick: () => alert(),
-      buttonProps: { label: "Change amount" },
-      value: <Dai value={format(trust)} />,
-    },
-    {
-      label: "Outstanding debt",
-      onClick: () => alert(),
-      value: <Dai value={format(locking)} />,
-      buttonProps: {
-        label: "Write-off debt",
-        disabled: locking.lte(ZERO),
-      },
-    },
-  ];
+  const options =
+    type === ContactsType.VOUCHEES
+      ? [
+          {
+            label: "Trust",
+            onClick: () => alert(),
+            buttonProps: { label: "Change amount" },
+            value: <Dai value={format(trust)} />,
+          },
+          {
+            label: "Outstanding debt",
+            onClick: () => alert(),
+            value: <Dai value={format(locking)} />,
+            buttonProps: {
+              label: "Write-off debt",
+              disabled: locking.lte(ZERO),
+            },
+          },
+        ]
+      : [];
 
   return (
     <ModalOverlay onClick={close}>

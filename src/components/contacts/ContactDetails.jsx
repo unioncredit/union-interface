@@ -84,23 +84,23 @@ export default function ContactDetails({ contact = {}, type }) {
                   </Box>
                 </Grid.Col>
               </Grid.Row>
-              {/*----------------------------------------------------
-                * Buttons (you trust only)
-              -------------------------------------------------------*/}
-              <Grid.Row>
-                <Grid.Col xs={12}>
-                  <Button
-                    fluid
-                    mt="12px"
-                    icon={Manage}
-                    variant="secondary"
-                    label="Manage Contact"
-                    onClick={() => open(MANAGE_CONTACT_MODAL, { contact })}
-                  />
-                </Grid.Col>
-              </Grid.Row>
             </>
           )}
+          {/*----------------------------------------------------
+            * Buttons (you trust only)
+          -------------------------------------------------------*/}
+          <Grid.Row>
+            <Grid.Col xs={12}>
+              <Button
+                fluid
+                mt="12px"
+                icon={Manage}
+                variant="secondary"
+                label="Manage Contact"
+                onClick={() => open(MANAGE_CONTACT_MODAL, { contact, type })}
+              />
+            </Grid.Col>
+          </Grid.Row>
         </Grid>
       </Card.Body>
       <TransactionHistory staker={address} />
