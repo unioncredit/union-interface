@@ -30,8 +30,6 @@ export default function EditLabel({ address }) {
 
   const label = getLabel(address);
 
-  console.log(label);
-
   /**
    * Handle saving new label
    */

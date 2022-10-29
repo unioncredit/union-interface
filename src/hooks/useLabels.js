@@ -13,7 +13,7 @@ export default function useLabels() {
   };
 
   const getLabel = (key) => {
-    window.localStorage.getItem(getKey(key));
+    return window.localStorage.getItem(getKey(key));
   };
 
   return { getLabel, setLabel };

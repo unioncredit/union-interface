@@ -9,3 +9,7 @@ a {
   color: unset;
   text-decoration: unset;
 }
+
+*[contenteditable="true"] {
+  outline: none;
+}
