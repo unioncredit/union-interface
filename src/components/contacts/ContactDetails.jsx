@@ -1,4 +1,13 @@
-import { Card, Grid, Box, Dai, Stat, Label, Button } from "@unioncredit/ui";
+import {
+  Card,
+  Grid,
+  Box,
+  Dai,
+  Stat,
+  Label,
+  Button,
+  Skeleton,
+} from "@unioncredit/ui";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
@@ -12,7 +21,43 @@ export default function ContactDetails({ contact = {}, type }) {
   const { open } = useModals();
 
   if (!contact) {
-    return "loading";
+    return (
+      <Card>
+        <Card.Body>
+          <AddressSummary address={null} />
+          <Box mt="32px">
+            <Grid>
+              <Grid.Row>
+                <Grid.Col>
+                  <Skeleton shimmer width={160} height={24} />
+                </Grid.Col>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Col>
+                  <Skeleton shimmer w="100%" height={8} mt="24px" />
+                  <Skeleton shimmer w="100%" height={24} mt="8px" />
+                </Grid.Col>
+                <Grid.Col>
+                  <Skeleton shimmer w="100%" height={8} mt="24px" />
+                  <Skeleton shimmer w="100%" height={24} mt="8px" />
+                </Grid.Col>
+                <Grid.Col>
+                  <Skeleton shimmer w="100%" height={8} mt="24px" />
+                  <Skeleton shimmer w="100%" height={24} mt="8px" />
+                </Grid.Col>
+              </Grid.Row>
+            </Grid>
+          </Box>
+          <Box mt="24px" direction="vertical">
+            <Skeleton shimmer width={160} height={16} mt="32px" />
+            <Skeleton shimmer w="100%" height={24} mt="24px" />
+            <Skeleton shimmer w="100%" height={24} mt="8px" />
+            <Skeleton shimmer w="100%" height={24} mt="8px" />
+            <Skeleton shimmer w="100%" height={24} mt="8px" />
+          </Box>
+        </Card.Body>
+      </Card>
+    );
   }
 
   const { address } = contact;
