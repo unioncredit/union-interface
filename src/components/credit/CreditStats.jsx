@@ -24,7 +24,7 @@ export default function CreditStats() {
 
   const {
     creditLimit = ZERO,
-    interest = ZERO,
+    minPayment = ZERO,
     owed = ZERO,
     lastRepay = ZERO,
     overdueBlocks = ZERO,
@@ -73,7 +73,7 @@ export default function CreditStats() {
                 label="Minimum due"
                 mt="24px"
                 mb="4.5px"
-                value={<Dai value={format(interest)} />}
+                value={<Dai value={format(minPayment)} />}
                 after={
                   <Label size="small" color="blue500" onClick={() => alert()}>
                     {dueDate(lastRepay, overdueBlocks, blockNumber, chain.id)}

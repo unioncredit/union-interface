@@ -23,6 +23,7 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import { useState } from "react";
 import { Errors } from "constants";
+import { ethers } from "ethers";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -40,7 +41,7 @@ export default function RepayModal() {
 
   const uTokenContract = useContract("uToken");
 
-  const { owed = ZERO, daiBalance = ZERO, interest = ZERO } = member;
+  const { owed = ZERO, daiBalance = ZERO, minPayment = ZERO } = member;
 
   const validate = (inputs) => {
     if (inputs.amount.raw.gt(daiBalance)) {
@@ -59,7 +60,7 @@ export default function RepayModal() {
 
   const handleSelectOption = (option) => () => {
     setPaymentType(option.paymentType);
-    setRawValue(option.value);
+    setRawValue("amount", option.value);
   };
 
   const maxRepay = daiBalance.gte(owed) ? owed : daiBalance;
@@ -68,16 +69,25 @@ export default function RepayModal() {
 
   const isCustomSelected = paymentType === PaymentType.CUSTOM;
 
+  let newOwed = owed.sub(amount.raw);
+  newOwed = newOwed.lt(ZERO) ? ZERO : newOwed;
+
+  const displayAmount = amount.raw.eq(ethers.constants.MaxUint256)
+    ? format(maxRepay)
+    : amount.display;
+
   const options = [
     {
-      value: interest,
+      value: minPayment,
+      display: format(minPayment),
       paymentType: PaymentType.MIN,
       title: "Pay minimum due",
       content:
         "Make the payment required to cover the interest due on your loan",
     },
     {
-      value: maxRepay,
+      display: format(owed),
+      value: ethers.constants.MaxUint256,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
         ? "Pay-off entire loan"
@@ -155,7 +165,7 @@ export default function RepayModal() {
                       <Badge
                         ml="8px"
                         color={selected ? "blue" : "grey"}
-                        label={<Dai value={format(option.value)} />}
+                        label={<Dai value={option.display} />}
                       />
                     )}
                   </Box>
@@ -208,7 +218,7 @@ export default function RepayModal() {
               New balance owed
             </Label>
             <Label as="p" grey={400} m={0}>
-              {format(0)} DAI
+              {format(newOwed)} DAI
             </Label>
           </Box>
           {/*--------------------------------------------------------------
@@ -224,8 +234,8 @@ export default function RepayModal() {
               args: [amount.raw],
               enabled: !isErrored,
               contract: "uToken",
-              method: "repay",
-              label: `Repay ${amount.display} DAI`,
+              method: "repayBorrow",
+              label: `Repay ${displayAmount} DAI`,
             }}
             approvalLabel="Approve Union to spend your DAI"
             approvalCompleteLabel="You can now stake your DAI"

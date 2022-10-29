@@ -1,5 +1,6 @@
 import { ZERO } from "constants";
 import { BigNumber } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 
 export const min = (a, b) => {
   return a.gt(b) ? b : a;
@@ -38,4 +39,10 @@ export const calculateMaxBorrow = (creditLimit, originationFee) => {
   const cl = Number(creditLimit.toString());
   const ofe = Number(originationFee.toString()) / 1e18;
   return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
+};
+
+export const calculateMinPayment = (interest) => {
+  const floor = parseEther("0.1");
+  const interestWithMargin = interest.mul(10010).div(10000);
+  return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };

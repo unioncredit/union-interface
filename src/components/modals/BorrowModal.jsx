@@ -25,7 +25,7 @@ export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
   const { close } = useModals();
-  const { data: member } = useMember();
+  const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
 
   const {
@@ -66,7 +66,10 @@ export default function BorrowModal() {
     method: "borrow",
     args: [amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
-    onComplete: () => refetchMember(),
+    onComplete: async () => {
+      await refetchMember();
+      close();
+    },
   });
 
   /*--------------------------------------------------------------

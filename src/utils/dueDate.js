@@ -35,6 +35,10 @@ export default function dueDate(
   blockNumber,
   chainId
 ) {
+  if (!lastRepay || !overdueBlocks || !blockNumber || !chainId) {
+    return NoPaymentLabel;
+  }
+
   if (lastRepay.lte(ZERO)) return NoPaymentLabel;
 
   const milliseconds = lastRepay

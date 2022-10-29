@@ -3,25 +3,32 @@ import { createContext, useContext, useEffect } from "react";
 
 import useContract from "hooks/useContract";
 import { ZERO, ZERO_ADDRESS } from "constants";
+import { calculateMinPayment } from "utils/numbers";
 
-const selectUserManager = (data) => ({
-  isMember: data[0] || false,
-  creditLimit: data[1] || ZERO,
-  stakedBalance: data[2] || ZERO,
-  totalLockedStake: data[3] || ZERO,
-  totalFrozenAmount: data[4] || ZERO,
-  memberFrozen: data[5] || ZERO,
-  borrowerAddresses: data[6] || [],
-  stakerAddresses: data[7] || [],
-  unionBalance: data[8] || ZERO,
-  daiBalance: data[9] || ZERO,
-  unclaimedRewards: data[10] || ZERO,
-  owed: data[11] || ZERO,
-  interest: data[12] || ZERO,
-  lastRepay: data[13] || ZERO,
-  votes: data[14] || ZERO,
-  delegate: data[15] || ZERO_ADDRESS,
-});
+const selectUserManager = (data) => {
+  const interest = data[12] || ZERO;
+
+  return {
+    isMember: data[0] || false,
+    creditLimit: data[1] || ZERO,
+    stakedBalance: data[2] || ZERO,
+    totalLockedStake: data[3] || ZERO,
+    totalFrozenAmount: data[4] || ZERO,
+    memberFrozen: data[5] || ZERO,
+    borrowerAddresses: data[6] || [],
+    stakerAddresses: data[7] || [],
+    unionBalance: data[8] || ZERO,
+    daiBalance: data[9] || ZERO,
+    unclaimedRewards: data[10] || ZERO,
+    owed: data[11] || ZERO,
+    interest,
+    lastRepay: data[13] || ZERO,
+    votes: data[14] || ZERO,
+    delegate: data[15] || ZERO_ADDRESS,
+    // calculated values
+    minPayment: calculateMinPayment(interest || ZERO),
+  };
+};
 
 const MemberContext = createContext({});
 
@@ -137,7 +144,9 @@ export default function MemberData({ children, address: addressProp }) {
     <MemberContext.Provider
       value={{
         refetch: () => userManager.refetch(),
-        data: { ...userManagerData },
+        data: {
+          ...userManagerData,
+        },
         isLoading: !userManagerData || userManagerData.isLoading,
       }}
     >
