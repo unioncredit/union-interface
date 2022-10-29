@@ -7,8 +7,12 @@ import CreditStats from "components/credit/CreditStats";
 import ShareCard from "components/credit/ShareCard";
 import VouchersCard from "components/credit/VouchersCard";
 import MyTransactionHistory from "components/credit/MyTransactionHistory";
+import { useModals } from "providers/ModalManager";
+import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 
 export default function CreditPage() {
+  const { open } = useModals();
+
   return (
     <>
       <Helmet>
@@ -29,7 +33,10 @@ export default function CreditPage() {
         <CreditStats />
         <ShareCard
           content="Get more Union vouches to increase your total available credit."
-          buttonProps={{ label: "Get vouch link" }}
+          buttonProps={{
+            label: "Get vouch link",
+            onClick: () => open(CREDIT_REQUEST_MODAL),
+          }}
         />
         <VouchersCard />
         <MyTransactionHistory />

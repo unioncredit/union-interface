@@ -7,18 +7,23 @@ import {
   ModalOverlay,
   Text,
 } from "@unioncredit/ui";
+import { useAccount } from "wagmi";
 
 import { ZERO } from "constants";
 import format from "utils/format";
 import { useModals } from "providers/ModalManager";
 import AddressSummary from "components/shared/AddressSummary";
 import EditLabel from "components/shared/EditLabel";
-import {ContactsType} from "constants";
+import { ContactsType } from "constants";
+import useWrite from "hooks/useWrite";
+import { useMember } from "providers/MemberData";
 
 export const MANAGE_CONTACT_MODAL = "manager-contact-modal";
 
 export default function ManageContactModal({ contact, type }) {
   const { close } = useModals();
+  const { refetch: refetchMember } = useMember();
+  const { address: connectedAddress } = useAccount();
 
   const { address, locking = ZERO, trust = ZERO } = contact;
 
@@ -42,6 +47,17 @@ export default function ManageContactModal({ contact, type }) {
           },
         ]
       : [];
+
+  const cancelVouchButtonProps = useWrite({
+    contract: "userManager",
+    method: "cancelVouch",
+    args:
+      type === ContactsType.VOUCHEES
+        ? [connectedAddress, address]
+        : [address, connectedAddress],
+    enabled: true,
+    onComplete: () => refetchMember(),
+  });
 
   return (
     <ModalOverlay onClick={close}>
@@ -95,8 +111,8 @@ export default function ManageContactModal({ contact, type }) {
             fontSize="large"
             variant="secondary"
             label="Remove from contacts"
-            onClick={() => alert()}
             disabled={locking.gt(ZERO)}
+            {...cancelVouchButtonProps}
           />
         </Modal.Body>
       </Modal>
