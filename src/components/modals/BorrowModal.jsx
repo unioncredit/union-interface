@@ -19,6 +19,7 @@ import { Errors } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 import { calculateMaxBorrow } from "utils/numbers";
 import { WAD } from "constants";
+import useWrite from "hooks/useWrite";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -28,14 +29,17 @@ export default function BorrowModal() {
   const { data: protocol } = useProtocol();
 
   const {
-    creditLimit = ZERO,
     owed = ZERO,
+    minBorrow = ZERO,
+    creditLimit = ZERO,
     originationFee = ZERO,
   } = { ...member, ...protocol };
 
   const validate = (inputs) => {
     if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
+    } else if (inputs.amount.raw.lt(minBorrow)) {
+      return Errors.MIN_BORROW;
     }
   };
 
@@ -56,6 +60,14 @@ export default function BorrowModal() {
   const fee = amount.raw.mul(originationFee).div(WAD);
 
   const borrow = amount.raw.add(fee);
+
+  const buttonProps = useWrite({
+    contract: "uToken",
+    method: "borrow",
+    args: [amount.raw],
+    enabled: amount.raw.gt(ZERO) && !errors.amount,
+    onComplete: () => refetchMember(),
+  });
 
   /*--------------------------------------------------------------
     Render Component 
@@ -141,6 +153,7 @@ export default function BorrowModal() {
             mt="18px"
             label={`Borrow ${amount.display} DAI`}
             disabled={amount.raw.lte(ZERO)}
+            {...buttonProps}
           />
         </Modal.Body>
       </Modal>

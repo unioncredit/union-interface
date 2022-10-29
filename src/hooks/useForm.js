@@ -54,12 +54,8 @@ export default function useForm(props = {}) {
     }
   };
 
-  const setRawValue = (name, raw, type) => {
-    if (type === "number") {
-      setNumber(name, raw, "raw");
-    } else {
-      setSimple(name, raw);
-    }
+  const setRawValue = (name, raw) => {
+    setNumber(name, raw, "raw");
   };
 
   const register = (name) => (event) => {
@@ -71,6 +67,7 @@ export default function useForm(props = {}) {
     errors: errors,
     setValue,
     setRawValue,
+    setSimple,
     register,
     empty,
     isErrored: Object.values(errors || {}).filter(Boolean).length > 0,

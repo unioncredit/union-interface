@@ -23,6 +23,7 @@ export const Errors = {
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
+  MIN_BORROW: "Amount less than minimum borrow",
 };
 
 export const ContactsType = {
