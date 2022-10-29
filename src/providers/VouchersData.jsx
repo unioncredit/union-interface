@@ -1,9 +1,10 @@
 import chunk from "lodash/chunk";
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
 
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
+import usePopulateEns from "hooks/usePopulateEns";
 
 const VouchersContext = createContext({});
 
@@ -18,10 +19,10 @@ const selectVoucher = (data) => ({
 
 export default function VouchersData({ children }) {
   const { address } = useAccount();
-  const { data = {} } = useMember();
+  const { data: member = {} } = useMember();
   const userManagerContract = useContract("userManager");
 
-  const { stakerAddresses } = data;
+  const { stakerAddresses } = member;
 
   const buildVoucherQueries = (borrower, staker) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
@@ -38,7 +39,7 @@ export default function VouchersData({ children }) {
   );
 
   const resp = useContractReads({
-    enables: false,
+    enables: !!address,
     select: (data) => {
       const tmp = buildVoucherQueries(address, address);
       const chunkSize = tmp.length;
@@ -51,11 +52,11 @@ export default function VouchersData({ children }) {
     contracts: contracts,
   });
 
-  useEffect(() => {
-    address && resp.refetch();
-  }, [address]);
+  const data = usePopulateEns(resp.data);
 
   return (
-    <VouchersContext.Provider value={resp}>{children}</VouchersContext.Provider>
+    <VouchersContext.Provider value={{ ...resp, data }}>
+      {children}
+    </VouchersContext.Provider>
   );
 }

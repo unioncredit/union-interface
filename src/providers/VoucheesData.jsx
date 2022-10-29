@@ -4,6 +4,7 @@ import { useAccount, useContractReads } from "wagmi";
 
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
+import usePopulateEns from "hooks/usePopulateEns";
 
 const VoucheesContext = createContext({});
 
@@ -19,12 +20,12 @@ const selectVouchee = (data) => ({
 
 export default function VoucheesData({ children }) {
   const { address } = useAccount();
-  const { data = {} } = useMember();
+  const { data: member = {} } = useMember();
 
   const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
 
-  const { borrowerAddresses } = data;
+  const { borrowerAddresses } = member;
 
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
@@ -46,7 +47,7 @@ export default function VoucheesData({ children }) {
   );
 
   const resp = useContractReads({
-    enables: false,
+    enables: !!address,
     select: (data) => {
       const tmp = buildVoucheeQueries(address, address);
       const chunkSize = tmp.length;
@@ -60,11 +61,11 @@ export default function VoucheesData({ children }) {
     contracts: contracts,
   });
 
-  useEffect(() => {
-    address && resp.refetch();
-  }, [address]);
+  const data = usePopulateEns(resp.data);
 
   return (
-    <VoucheesContext.Provider value={resp}>{children}</VoucheesContext.Provider>
+    <VoucheesContext.Provider value={{ ...resp, data }}>
+      {children}
+    </VoucheesContext.Provider>
   );
 }

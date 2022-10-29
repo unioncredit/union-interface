@@ -11,7 +11,7 @@ import {
   Input,
   Button,
 } from "@unioncredit/ui";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ReactComponent as Search } from "@unioncredit/ui/lib/icons/search.svg";
 import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
 import { ReactComponent as Filter } from "@unioncredit/ui/lib/icons/filter.svg";
@@ -27,6 +27,7 @@ import usePagination from "hooks/usePagination";
 import { truncateAddress } from "utils/truncateAddress";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
+import useContactSearch from "hooks/useContactSearch";
 
 export default function ContactList({
   contact,
@@ -37,6 +38,8 @@ export default function ContactList({
   const { data: vouchees } = useVouchees();
   const { data: vouchers } = useVouchers();
 
+  const [query, setQuery] = useState(null);
+
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
   useEffect(() => {
@@ -45,12 +48,14 @@ export default function ContactList({
       setContact(contacts[0]);
   }, [contact, contacts[0]]);
 
+  const searched = useContactSearch(contacts, query);
+
   const {
     data: contactsPage,
     maxPages,
     activePage,
     onChange,
-  } = usePagination(contacts);
+  } = usePagination(searched);
 
   return (
     <Card>
@@ -59,7 +64,13 @@ export default function ContactList({
         subTitle="Addresses you’re currently vouching for"
       />
       <Box fluid p="12px">
-        <Input prefix={<Search />} placeholder="Search" />
+        <Input
+          prefix={<Search />}
+          placeholder="Search"
+          onChange={(event) => {
+            setQuery(event.target.value);
+          }}
+        />
         <Button
           ml="8px"
           fluid
