@@ -1,6 +1,6 @@
 import { useBlockNumber, useNetwork } from "wagmi";
 import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
+import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
 
 import { ZERO } from "constants";
 import format from "utils/format";
