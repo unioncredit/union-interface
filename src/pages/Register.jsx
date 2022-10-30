@@ -40,7 +40,7 @@ export default function RegisterPage() {
       <Header />
       <Grid>
         <Grid.Row justify="center">
-          <Grid.Col xs={8}>
+          <Grid.Col xs={11} md={8}>
             <Heading mt="48px" mb="0">
               Become a Union member
             </Heading>
