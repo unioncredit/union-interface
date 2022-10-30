@@ -14,7 +14,7 @@ export default function AppLogs({ children }) {
   const [logs, setLogs] = useState(null);
 
   useEffect(() => {
-    if (logs !== null || !!chain?.id) return;
+    if (logs !== null || !chain?.id) return;
 
     const initialValue = JSON.parse(
       window.localStorage.getItem(getKey(chain.id)) || "[]"
