@@ -1,7 +1,13 @@
+const urls = {
+  1: "https://etherscan.io",
+  5: "https://goerli.etherscan.io",
+  42161: "https://arbiscan.io",
+};
+
 export function blockExplorerTx(chainId, hash) {
-  return "";
+  return `${urls[chainId]}/tx/${hash}`;
 }
 
 export function blockExplorerAddress(chainId, address) {
-  return "";
+  return `${urls[chainId]}/address/${address}`;
 }

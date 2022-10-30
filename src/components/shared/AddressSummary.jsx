@@ -9,12 +9,13 @@ import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { blockExplorerAddress } from "utils/blockExplorer";
 
 export default function AddressSummary({ address }) {
   const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 
-  const addressEtherscanLink = "";
+  const blockExplorerLink = blockExplorerAddress(chain.id, address);
 
   if (!address) {
     return (
@@ -59,7 +60,7 @@ export default function AddressSummary({ address }) {
               <StatusBadge address={address} />
             </BadgeRow>
 
-            <a href={addressEtherscanLink} target="_blank" rel="noreferrer">
+            <a href={blockExplorerLink} target="_blank" rel="noreferrer">
               <External width="24px" />
             </a>
           </Box>
