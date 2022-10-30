@@ -39,6 +39,12 @@ export const BlockSpeed = {
   [chain.goerli.id]: 12e3,
 };
 
+export const EIP3770 = {
+  [chain.mainnet.id]: "eth",
+  [chain.arbitrum.id]: "arb1",
+  [chain.goerli.id]: "goe",
+};
+
 export const TheGraphUrls = {
   [chain.mainnet.id]:
     "https://api.thegraph.com/subgraphs/name/geraldhost/union",

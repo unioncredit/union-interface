@@ -8,13 +8,15 @@ import {
   Label,
   Select,
 } from "@unioncredit/ui";
+import { useState } from "react";
 import QRCode from "qrcode.react";
-import { useAccount } from "wagmi";
+import { useAccount, chain } from "wagmi";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
 
-import { useModals } from "providers/ModalManager";
+import { EIP3770 } from "constants";
 import { networks } from "config/networks";
+import { useModals } from "providers/ModalManager";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 
@@ -23,12 +25,17 @@ export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 export default function CreditRequestModal() {
   const { close } = useModals();
   const { address } = useAccount();
-  const [copied, copy] = useCopyToClipboard();
 
-  const url = `http://app.union.finance/profile/eth:${address}`;
-  const urlDisplay = `http://app.union.finance/profile/eth:${truncateAddress(
+  const [copied, copy] = useCopyToClipboard();
+  const [network, setNetwork] = useState(chain.mainnet.id);
+
+  const eip3770 = EIP3770[network] || "eth";
+
+  const url = `http://app.union.finance/profile/${eip3770}:${address}`;
+
+  const urlDisplay = `http://app.union.finance/profile/${eip3770}:${truncateAddress(
     address
-  )}...`;
+  )}`;
 
   return (
     <ModalOverlay onClick={close}>
@@ -38,8 +45,8 @@ export default function CreditRequestModal() {
           <Box align="center" justify="center" direction="vertical">
             <Select
               options={networks}
-              onChange={() => alert()}
               defaultValue={networks[0]}
+              onChange={(option) => setNetwork(option.chainId)}
             />
 
             <Card packed mt="8px">
