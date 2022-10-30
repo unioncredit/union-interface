@@ -32,12 +32,13 @@ export default function VouchModal({
   subTitle = "",
   showNewMemberHeader = false,
   showAddressSummary = true,
+  address: initialAddress = null,
 }) {
   const { close } = useModals();
-  const [address, setAddress] = useState(null);
   const { refetch: refetchMember } = useMember();
-
   const { values, errors = {}, register } = useForm();
+
+  const [address, setAddress] = useState(initialAddress);
 
   const buttonProps = useWrite({
     contract: "userManager",
@@ -62,7 +63,11 @@ export default function VouchModal({
         <Modal.Header onClose={close} title={title} subTitle={subTitle} />
         <Modal.Body>
           {showAddressSummary && <AddressSummary address={address} />}
-          <AddressInput label="Address or ENS" onChange={setAddress} />
+          <AddressInput
+            defaultValue={initialAddress}
+            label="Address or ENS"
+            onChange={setAddress}
+          />
           <Input
             error={errors.name}
             label="Contact name"

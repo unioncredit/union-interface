@@ -34,15 +34,7 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export default function MemberData({
-  chainId,
-  children,
-  address: addressProp,
-}) {
-  const { address: connectedAddress } = useAccount();
-
-  const address = addressProp || connectedAddress;
-
+export function useMemberData(address, chainId) {
   const daiContract = useContract("dai", chainId);
   const unionContract = useContract("union", chainId);
   const uTokenContract = useContract("uToken", chainId);
@@ -134,7 +126,7 @@ export default function MemberData({
       ]
     : [];
 
-  const { data: userManagerData, ...userManager } = useContractReads({
+  const { data, ...resp } = useContractReads({
     enabled: !!address,
     select: (data) => selectUserManager(data),
     contracts: contracts.map((contract) => ({
@@ -143,15 +135,24 @@ export default function MemberData({
     })),
   });
 
+  return {
+    data: { ...data, address },
+    ...resp,
+  };
+}
+
+export default function MemberData({
+  chainId,
+  children,
+  address: addressProp,
+}) {
+  const { address: connectedAddress } = useAccount();
+
+  const address = addressProp || connectedAddress;
+
+  const resp = useMemberData(address, chainId);
+
   return (
-    <MemberContext.Provider
-      value={{
-        refetch: userManager,
-        isLoading: !userManagerData || userManagerData.isLoading,
-        data: userManagerData,
-      }}
-    >
-      {children}
-    </MemberContext.Provider>
+    <MemberContext.Provider value={resp}>{children}</MemberContext.Provider>
   );
 }

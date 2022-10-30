@@ -19,19 +19,37 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { isAddress } from "ethers/lib/utils";
 import { useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-import { chain, useEnsAddress } from "wagmi";
-import MemberData, { useMember } from "providers/MemberData";
+import { chain, useAccount, useEnsAddress, useSwitchNetwork } from "wagmi";
+import { useMemberData } from "providers/MemberData";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
-import { EIP3770 } from "constants";
+import { EIP3770, ZERO_ADDRESS } from "constants";
+import { compareAddresses } from "utils/compare";
+import useWrite from "hooks/useWrite";
+import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { useModals } from "providers/ModalManager";
 
-function ProfileInner({ address }) {
-  const { data: member = {} } = useMember();
+function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
+  const { open } = useModals();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const {
+    address = ZERO_ADDRESS,
     isMember = false,
     stakerAddresses = [],
     borrowerAddresses = [],
-  } = member;
+  } = profileMember;
+
+  const { borrowerAddresses: connectedMemberBorrowerAddresses = [] } =
+    connectedMember;
+
+  const alreadyVouching = connectedMemberBorrowerAddresses.some((borrower) =>
+    compareAddresses(borrower, address)
+  );
+
+  const handleVouch = async () => {
+    await switchNetworkAsync(Number(chainId));
+    open(VOUCH_MODAL, { address });
+  };
 
   return (
     <Box fluid justify="center" direction="vertical" mb="120px">
@@ -58,6 +76,18 @@ function ProfileInner({ address }) {
             <Button
               fluid
               mt="20px"
+              onClick={handleVouch}
+              disabled={alreadyVouching}
+              label={
+                <>
+                  {alreadyVouching ? "Already vouching for" : "Vouch for"}{" "}
+                  <PrimaryLabel address={address} />
+                </>
+              }
+            />
+            <Button
+              fluid
+              mt="8px"
               icon={Link}
               variant="secondary"
               label="Copy profile link"
@@ -95,6 +125,7 @@ function ProfileInner({ address }) {
 }
 
 export default function Profile() {
+  const { address: connectedAddress } = useAccount();
   const { addressOrEns: addressOrEnsParam } = useParams();
 
   // Profile pages support EIP3770 addresses so we need to check if
@@ -113,15 +144,21 @@ export default function Profile() {
 
   const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
 
+  const { data: profileMember } = useMemberData(address, chainId);
+
+  const { data: connectedMember } = useMemberData(connectedAddress, chainId);
+
   return (
     <>
       <Helmet>
         <title>Profile {address} | Union Credit Protocol</title>
       </Helmet>
       <Header />
-      <MemberData address={address} chainId={chainId}>
-        <ProfileInner address={address} />
-      </MemberData>
+      <ProfileInner
+        chainId={chainId}
+        profileMember={profileMember}
+        connectedMember={connectedMember}
+      />
     </>
   );
 }
