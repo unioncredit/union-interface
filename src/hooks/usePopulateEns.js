@@ -28,7 +28,7 @@ export default function usePopulateEns(inputData) {
       setData(populated);
     }
 
-    const hasEns = data.some((row) => row.ens || row.ens === null);
+    const hasEns = data?.some((row) => row.ens || row.ens === null);
     !hasEns && populateData();
   }, [JSON.stringify(data)]);
 

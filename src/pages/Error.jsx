@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Box, Button, ButtonRow, Heading, Text } from "@unioncredit/ui";
 
-import Header from "components/shared/Header";
+import Header from "components/connect/Header";
 import links from "config/links";
 
 export default function ErrorPage({

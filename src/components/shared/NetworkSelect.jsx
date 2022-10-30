@@ -7,7 +7,7 @@ export default function NetworkSelect() {
   const { chain, chains } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
 
-  const defaultValue = networks.find((option) => option.chainId === chain.id);
+  const defaultValue = networks.find((option) => option.chainId === chain?.id);
 
   const handleChangeNetwork = async (value) => {
     await switchNetworkAsync(value.chainId);
@@ -19,7 +19,7 @@ export default function NetworkSelect() {
 
   return (
     <NetworkSwitcher
-      selected={defaultValue}
+      selected={defaultValue || networkOptions[0]}
       options={networkOptions}
       onChange={handleChangeNetwork}
     />

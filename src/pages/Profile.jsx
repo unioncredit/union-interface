@@ -24,9 +24,9 @@ import { useMemberData } from "providers/MemberData";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
 import { compareAddresses } from "utils/compare";
-import useWrite from "hooks/useWrite";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
+import ConnectButton from "components/shared/ConnectButton";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const { open } = useModals();
@@ -46,6 +46,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
     compareAddresses(borrower, address)
   );
 
+  const isSelf = compareAddresses(
+    profileMember.address,
+    connectedMember.address
+  );
+
   const handleVouch = async () => {
     await switchNetworkAsync(Number(chainId));
     open(VOUCH_MODAL, { address });
@@ -53,6 +58,9 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   return (
     <Box fluid justify="center" direction="vertical" mb="120px">
+      {/*--------------------------------------------------------------
+        Profile Header 
+      *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body>
           <Box direction="vertical" align="center">
@@ -73,16 +81,32 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 <External width="24px" />
               </a>
             </Box>
-            <Button
-              fluid
-              mt="20px"
-              onClick={handleVouch}
-              disabled={alreadyVouching}
-              label={
-                <>
-                  {alreadyVouching ? "Already vouching for" : "Vouch for"}{" "}
-                  <PrimaryLabel address={address} />
-                </>
+            {/*--------------------------------------------------------------
+              Vouch/Connect Button 
+            *--------------------------------------------------------------*/}
+            <ConnectButton
+              buttonProps={{
+                fluid: true,
+                mt: "20px",
+                label: (
+                  <>
+                    Connect to vouch for <PrimaryLabel address={address} />
+                  </>
+                ),
+              }}
+              connectedElement={
+                <Button
+                  fluid
+                  mt="20px"
+                  onClick={handleVouch}
+                  disabled={alreadyVouching || isSelf}
+                  label={
+                    <>
+                      {alreadyVouching ? "Already vouching for" : "Vouch for"}{" "}
+                      <PrimaryLabel address={address} />
+                    </>
+                  }
+                />
               }
             />
             <Button
@@ -95,6 +119,9 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
           </Box>
         </Card.Body>
       </Card>
+      {/*--------------------------------------------------------------
+        Profile details 
+      *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body>
           <Heading mb="24px">Reputation</Heading>

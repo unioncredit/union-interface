@@ -3,32 +3,25 @@ import "./index.scss";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
-import { WagmiConfig, createClient, chain } from "wagmi";
-import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { ConnectKitProvider } from "connectkit";
 
 import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+
 import Toasts from "providers/Toasts";
+import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
 import MemberData from "providers/MemberData";
-import reportWebVitals from "./reportWebVitals";
 import VouchersData from "providers/VouchersData";
 import VoucheesData from "providers/VoucheesData";
 import ProtocolData from "providers/ProtocolData";
 import GovernanceData from "providers/GovernanceData";
 
-const client = createClient(
-  getDefaultClient({
-    appName: "Union Credit",
-    infuraId: process.env.REACT_APP_INFURA_ID,
-    chains: [chain.mainnet, chain.arbitrum, chain.goerli],
-  })
-);
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <HashRouter>
-    <WagmiConfig client={client}>
+    <Network>
       <ConnectKitProvider theme="soft" mode="light">
         <Toasts>
           <AppLogs>
@@ -46,7 +39,7 @@ root.render(
           </AppLogs>
         </Toasts>
       </ConnectKitProvider>
-    </WagmiConfig>
+    </Network>
   </HashRouter>
 );
 

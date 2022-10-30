@@ -87,7 +87,7 @@ export default function Header({ loading }) {
                     </Text>
                   }
                 />
-                <ConnectButton />
+                <ConnectButton buttonProps={{ packed: true }} />
                 <ContextMenu position="left" items={contextMenuItems} />
               </Box>
             </Grid.Col>

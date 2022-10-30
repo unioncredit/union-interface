@@ -6,7 +6,7 @@ import { useModals } from "providers/ModalManager";
 import { truncateAddress } from "utils/truncateAddress";
 import { ACCOUNT_MODAL } from "components/modals/AccountModal";
 
-export default function ConnectButton() {
+export default function ConnectButton({ connectedElement, buttonProps }) {
   const { open } = useModals();
 
   return (
@@ -14,15 +14,24 @@ export default function ConnectButton() {
       {({ isConnected, show, address, ensName }) => {
         if (isConnected) {
           return (
-            <Wallet
-              avatar={<Avatar address={address} />}
-              name={ensName || truncateAddress(address)}
-              onClick={() => open(ACCOUNT_MODAL)}
-            />
+            connectedElement || (
+              <Wallet
+                avatar={<Avatar address={address} />}
+                name={ensName || truncateAddress(address)}
+                onClick={() => open(ACCOUNT_MODAL)}
+              />
+            )
           );
         }
 
-        return <Button onClick={show} label="Connect" />;
+        return (
+          <Button
+            onClick={show}
+            label="Connect"
+            className="ConnectButton"
+            {...buttonProps}
+          />
+        );
       }}
     </ConnectKitButton.Custom>
   );
