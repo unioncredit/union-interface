@@ -45,6 +45,16 @@ export default function Header({ loading }) {
         : pathname.startsWith(item.pathname),
   }));
 
+  const navigation = (
+    <Box fluid justify="center">
+      {navItems.map(({ label, ...item }) => (
+        <Link key={item.id} to={item.pathname}>
+          <NavItem as="div" label={label} {...item} />
+        </Link>
+      ))}
+    </Box>
+  );
+
   return (
     <>
       <Layout.Header align="center">
@@ -57,20 +67,15 @@ export default function Header({ loading }) {
               </Box>
             </Grid.Col>
             <Grid.Col align="center" className="hide-lt-850">
+              {/*--------------------------------------------------------------
+                Desktop Navigation 
+              *--------------------------------------------------------------*/}
               <Box
                 fluid
                 justify="center"
                 className={{ "Header__Box--loading": loading }}
               >
-                {navItems.map(({ label, ...item }) => (
-                  <Link
-                    key={item.id}
-                    to={item.pathname}
-                    style={{ display: "block" }}
-                  >
-                    <NavItem as="div" label={label} {...item} />
-                  </Link>
-                ))}
+                {navigation}
               </Box>
             </Grid.Col>
             <Grid.Col align="right">
@@ -91,6 +96,14 @@ export default function Header({ loading }) {
                 <ContextMenu position="left" items={contextMenuItems} />
               </Box>
             </Grid.Col>
+          </Grid.Row>
+          <Grid.Row>
+            {/*--------------------------------------------------------------
+              Mobile Navigation 
+            *--------------------------------------------------------------*/}
+            <Box my="16px" className="hide-gt-850" fluid>
+              <Grid.Col align="center">{navigation}</Grid.Col>
+            </Box>
           </Grid.Row>
         </Grid>
       </Layout.Header>
