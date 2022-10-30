@@ -14,7 +14,7 @@ const client = createClient(
 
 export default function Network({ children }) {
   return (
-    <NetworkContext.Provider>
+    <NetworkContext.Provider value={{}}>
       <WagmiConfig client={client}>{children}</WagmiConfig>
     </NetworkContext.Provider>
   );

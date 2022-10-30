@@ -1,6 +1,6 @@
 import chunk from "lodash/chunk";
-import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
+import { createContext, useContext, useEffect } from "react";
 
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
@@ -39,7 +39,7 @@ export default function VouchersData({ children }) {
   );
 
   const resp = useContractReads({
-    enables: !!address,
+    enabled: false,
     select: (data) => {
       const tmp = buildVoucherQueries(address, address);
       const chunkSize = tmp.length;
@@ -51,6 +51,10 @@ export default function VouchersData({ children }) {
     },
     contracts: contracts,
   });
+
+  useEffect(() => {
+    if (address) resp.refetch();
+  }, [address, resp.refetch]);
 
   const data = usePopulateEns(resp.data);
 

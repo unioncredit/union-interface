@@ -10,7 +10,7 @@ import useLabels from "./useLabels";
  */
 export default function usePopulateEns(inputData) {
   const { getLabel } = useLabels();
-  const [data, setData] = useState(inputData);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     async function populateData() {
@@ -28,9 +28,8 @@ export default function usePopulateEns(inputData) {
       setData(populated);
     }
 
-    const hasEns = data?.some((row) => row.ens || row.ens === null);
-    !hasEns && data && populateData();
-  }, [JSON.stringify(data)]);
+    inputData && populateData();
+  }, [JSON.stringify(inputData)]);
 
-  return data;
+  return data || inputData;
 }

@@ -1,6 +1,6 @@
 import chunk from "lodash/chunk";
-import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
+import { createContext, useContext, useEffect } from "react";
 
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
@@ -19,7 +19,7 @@ const selectVouchee = (data) => ({
 });
 
 export default function VoucheesData({ children }) {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { data: member = {} } = useMember();
 
   const uTokenContract = useContract("uToken");
@@ -47,7 +47,7 @@ export default function VoucheesData({ children }) {
   );
 
   const resp = useContractReads({
-    enables: !!address,
+    enabled: false,
     select: (data) => {
       const tmp = buildVoucheeQueries(address, address);
       const chunkSize = tmp.length;
@@ -61,7 +61,13 @@ export default function VoucheesData({ children }) {
     contracts: contracts,
   });
 
+  useEffect(() => {
+    if (address && isConnected) resp.refetch();
+  }, [address, resp.refetch, isConnected]);
+
   const data = usePopulateEns(resp.data);
+
+  console.log(resp.data, data);
 
   return (
     <VoucheesContext.Provider value={{ ...resp, data }}>

@@ -10,7 +10,7 @@ export default function Header() {
         <Grid.Col>
           <Layout.Header align="center">
             <Logo width="32px" />
-            <ConnectButton />
+            <ConnectButton buttonProps={{ packed: true }} />
           </Layout.Header>
         </Grid.Col>
       </Grid.Row>
