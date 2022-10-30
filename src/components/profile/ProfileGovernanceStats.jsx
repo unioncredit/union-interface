@@ -19,7 +19,7 @@ export default function ProfileGovernanceStats() {
           <Stat label="Total Votes" value={format(votes, 0)} />
         </Grid.Col>
         <Grid.Col>
-          <Stat label="Union Balance" value={format(unionBalance)} />
+          <Stat label="Union Balance" value={format(unionBalance, 0)} />
         </Grid.Col>
         <Grid.Col>
           <Stat

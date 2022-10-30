@@ -9,7 +9,7 @@ function commify(num, digits) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 
-  if (!num) return `0.${"".padEnd(digits, "0")}`;
+  if (!num) return `0${digits > 0 ? "." : ""}${"".padEnd(digits, "0")}`;
 
   const numStr = Number(num).toLocaleString("en", {
     useGrouping: false,
