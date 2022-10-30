@@ -14,7 +14,7 @@ export default function ConnectPage() {
         <title>Connect | Union Credit Protocol</title>
       </Helmet>
       <Grid.Row justify="center">
-        <Grid.Col xs={6}>
+        <Grid.Col xs={11} md={6}>
           <Header />
           <Heading mt="120px" mb="0">
             Connect to a Credit Network
