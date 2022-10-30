@@ -12,6 +12,7 @@ import { useGovernance } from "providers/GovernanceData";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
 import VotingCard from "components/governance/VotingCard";
+import NetworkNotice from "components/governance/NetworkNotice";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -156,6 +157,7 @@ export default function ProposalPage() {
           </Grid.Col>
           <Grid.Col md={4}>
             <VotingCard data={proposal} />
+            <NetworkNotice lite />
             <ProposalHistoryCard data={history} />
           </Grid.Col>
         </Grid.Row>

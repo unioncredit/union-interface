@@ -4,6 +4,7 @@ import { Box, ToggleMenu } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
 import ProposalsCard from "components/governance/ProposalsCard";
+import NetworkNotice from "components/governance/NetworkNotice";
 
 export default function ProposalsPage() {
   return (
@@ -28,6 +29,7 @@ export default function ProposalsPage() {
         />
       </Box>
       <Box fluid justify="center" direction="vertical" mb="120px">
+        <NetworkNotice />
         <ProposalsCard
           showAction={false}
           title="All Proposals"
