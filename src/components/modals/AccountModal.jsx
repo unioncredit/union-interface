@@ -11,7 +11,7 @@ import {
   Divider,
   Label,
 } from "@unioncredit/ui";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect, useNetwork } from "wagmi";
 import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
 import { ReactComponent as Failed } from "@unioncredit/ui/lib/icons/failed.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
@@ -24,14 +24,16 @@ import { useAppLogs } from "providers/AppLogs";
 import { Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import { EIP3770 } from "constants";
 
 export const ACCOUNT_MODAL = "account-modal";
 
 export default function AccountModal() {
   const { close } = useModals();
+  const { chain } = useNetwork();
   const { address } = useAccount();
-  const { disconnect } = useDisconnect();
   const { logs = [] } = useAppLogs();
+  const { disconnect } = useDisconnect();
 
   return (
     <ModalOverlay onClick={close}>
@@ -39,7 +41,7 @@ export default function AccountModal() {
         <Modal.Header title="Wallet & Activity" onClose={close} />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
-            <Link to={`/profile/${address}`}>
+            <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
               <Avatar size={56} address={address} />
             </Link>
             <Heading level={2} my="4px">

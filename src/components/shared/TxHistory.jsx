@@ -13,7 +13,8 @@ import {
   TableHead,
   Card,
 } from "@unioncredit/ui";
-import { useAccount } from "wagmi";
+import { Link } from "react-router-dom";
+import { useAccount, useNetwork } from "wagmi";
 
 import { ReactComponent as Borrow } from "@unioncredit/ui/lib/icons/borrow.svg";
 import { ReactComponent as Repayment } from "@unioncredit/ui/lib/icons/repayment.svg";
@@ -23,16 +24,14 @@ import { ReactComponent as NewVouchRecieved } from "@unioncredit/ui/lib/icons/ne
 import { ReactComponent as CancelledVouch } from "@unioncredit/ui/lib/icons/cancelVouch.svg";
 import { ReactComponent as InlineExternal } from "@unioncredit/ui/lib/icons/externalinline.svg";
 
-import format from "utils/format";
-import { ZERO_ADDRESS } from "constants";
-import { TransactionTypes } from "constants";
-import useTxHistory from "hooks/useTxHistory";
-import PrimaryLabel from "components/shared/PrimaryLabel";
-import usePagination from "hooks/usePagination";
 import Avatar from "./Avatar";
-import { Link } from "react-router-dom";
-import { RelativeTime } from "./BlockRelativeTime";
+import format from "utils/format";
+import useTxHistory from "hooks/useTxHistory";
+import usePagination from "hooks/usePagination";
 import { compareAddresses } from "utils/compare";
+import { RelativeTime } from "./BlockRelativeTime";
+import PrimaryLabel from "components/shared/PrimaryLabel";
+import { TransactionTypes, EIP3770, ZERO_ADDRESS } from "constants";
 
 const icons = {
   [TransactionTypes.CANCEL]: CancelledVouch,
@@ -44,10 +43,12 @@ const icons = {
 };
 
 const Address = ({ address }) => {
+  const { chain } = useNetwork();
   const { address: connectedAddress } = useAccount();
+
   return (
     <Label as="span" grey={400} m={0}>
-      <Link to={`/profile/${address}`}>
+      <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
         {compareAddresses(connectedAddress, address) ? (
           "You"
         ) : (

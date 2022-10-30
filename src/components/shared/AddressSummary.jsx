@@ -1,14 +1,17 @@
+import { useNetwork } from "wagmi";
 import { Link } from "react-router-dom";
 import { Heading, Badge, Box, BadgeRow, Skeleton } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
+import { EIP3770 } from "constants";
+import StatusBadge from "./StatusBadge";
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { truncateAddress } from "utils/truncateAddress";
-import StatusBadge from "./StatusBadge";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 export default function AddressSummary({ address }) {
+  const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 
   const addressEtherscanLink = "";
@@ -33,12 +36,12 @@ export default function AddressSummary({ address }) {
   return (
     <Box mb="24px" align="center">
       <Box align="center">
-        <Link to={`/profile/${address}`}>
+        <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
           <Avatar size={54} address={address} />
         </Link>
 
         <Box direction="vertical" mx="12px">
-          <Link to={`/profile/${address}`}>
+          <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
             <Box>
               <Heading level={2} mb="4px">
                 <PrimaryLabel address={address} />
