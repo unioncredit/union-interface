@@ -10,8 +10,9 @@ import {
   Label,
   Input,
   Button,
+  Collapse,
 } from "@unioncredit/ui";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as Search } from "@unioncredit/ui/lib/icons/search.svg";
 import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
 import { ReactComponent as Filter } from "@unioncredit/ui/lib/icons/filter.svg";
@@ -28,6 +29,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import useContactSearch from "hooks/useContactSearch";
+import Filters, { filterFns, sortFns } from "./Filters";
 
 export default function ContactList({
   contact,
@@ -39,6 +41,8 @@ export default function ContactList({
   const { data: vouchers } = useVouchers();
 
   const [query, setQuery] = useState(null);
+  const [filters, setFilters] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
@@ -48,14 +52,27 @@ export default function ContactList({
       setContact(contacts[0]);
   }, [contact, contacts[0]]);
 
+  /*--------------------------------------------------------------
+    Search, Filter, Paginate 
+  *--------------------------------------------------------------*/
+
   const searched = useContactSearch(contacts, query);
+
+  const filtered = useMemo(() => {
+    const filterFn = filterFns[filters?.status];
+    const sortFn = sortFns[filters?.sort];
+
+    // Filter then sort
+    const d1 = filterFn ? searched.filter(filterFn) : searched;
+    return sortFn ? d1.sort(sortFn) : d1;
+  }, [filters?.sort, filters?.status, JSON.stringify(searched)]);
 
   const {
     data: contactsPage,
     maxPages,
     activePage,
     onChange,
-  } = usePagination(searched);
+  } = usePagination(filtered);
 
   return (
     <Card>
@@ -63,6 +80,9 @@ export default function ContactList({
         title={`Accounts you trust · ${contacts.length}`}
         subTitle="Addresses you’re currently vouching for"
       />
+      {/*--------------------------------------------------------------
+        Search and Filters 
+      *--------------------------------------------------------------*/}
       <Box fluid p="12px">
         <Input
           prefix={<Search />}
@@ -76,7 +96,7 @@ export default function ContactList({
           fluid
           icon={Filter}
           variant="secondary"
-          onClick={() => alert()}
+          onClick={() => setShowFilters((x) => !x)}
         />
         {type === ContactsType.VOUCHEES && (
           <Button
@@ -88,6 +108,12 @@ export default function ContactList({
           />
         )}
       </Box>
+      <Collapse active={showFilters}>
+        <Filters type={type} onChange={setFilters} />
+      </Collapse>
+      {/*--------------------------------------------------------------
+        Contacts Table 
+      *--------------------------------------------------------------*/}
       {contacts.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No contacts" />
