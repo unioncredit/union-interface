@@ -114,7 +114,7 @@ export default function ContactList({
       {/*--------------------------------------------------------------
         Contacts Table 
       *--------------------------------------------------------------*/}
-      {contacts.length <= 0 ? (
+      {filtered.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No contacts" />
         </Card.Body>

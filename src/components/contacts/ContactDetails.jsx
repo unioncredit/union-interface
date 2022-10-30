@@ -76,7 +76,7 @@ export default function ContactDetails({ contact = {}, type }) {
   const available = trust.sub(locking).sub(locked);
 
   return (
-    <Card>
+    <Card overflow>
       <Card.Body>
         <AddressSummary address={address} />
         <Grid>
