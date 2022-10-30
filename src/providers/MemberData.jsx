@@ -1,5 +1,5 @@
 import { useAccount, useContractReads } from "wagmi";
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext } from "react";
 
 import useContract from "hooks/useContract";
 import { ZERO, ZERO_ADDRESS } from "constants";
@@ -34,16 +34,20 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export default function MemberData({ children, address: addressProp }) {
+export default function MemberData({
+  chainId,
+  children,
+  address: addressProp,
+}) {
   const { address: connectedAddress } = useAccount();
 
   const address = addressProp || connectedAddress;
 
-  const daiContract = useContract("dai");
-  const unionContract = useContract("union");
-  const uTokenContract = useContract("uToken");
-  const userManagerContract = useContract("userManager");
-  const comptrollerContract = useContract("comptroller");
+  const daiContract = useContract("dai", chainId);
+  const unionContract = useContract("union", chainId);
+  const uTokenContract = useContract("uToken", chainId);
+  const userManagerContract = useContract("userManager", chainId);
+  const comptrollerContract = useContract("comptroller", chainId);
 
   const contracts = address
     ? [
@@ -131,23 +135,20 @@ export default function MemberData({ children, address: addressProp }) {
     : [];
 
   const { data: userManagerData, ...userManager } = useContractReads({
-    enables: false,
+    enabled: !!address,
     select: (data) => selectUserManager(data),
-    contracts,
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
   });
-
-  useEffect(() => {
-    address && userManager.refetch();
-  }, [address]);
 
   return (
     <MemberContext.Provider
       value={{
-        refetch: () => userManager.refetch(),
-        data: {
-          ...userManagerData,
-        },
+        refetch: userManager,
         isLoading: !userManagerData || userManagerData.isLoading,
+        data: userManagerData,
       }}
     >
       {children}
