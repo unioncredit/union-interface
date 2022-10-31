@@ -9,14 +9,17 @@ import {
   TableCell,
   Box,
 } from "@unioncredit/ui";
+import { useNavigate } from "react-router-dom";
+
+import format from "utils/format";
 import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
-import format from "utils/format";
 import { truncateAddress } from "utils/truncateAddress";
+import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export default function VouchersCard() {
+  const navigate = useNavigate();
   const { data: vouchers = [] } = useVouchers();
 
   const {
@@ -48,7 +51,12 @@ export default function VouchersCard() {
               <TableHead align="right">Trust Amount (DAI)</TableHead>
             </TableRow>
             {vouchersPage.map(({ address, trust }) => (
-              <TableRow key={address}>
+              <TableRow
+                key={address}
+                onClick={() =>
+                  navigate(`/contacts/trusts-you?address=${address}`)
+                }
+              >
                 <TableCell fixedSize>
                   <Avatar size={24} address={address} />
                 </TableCell>

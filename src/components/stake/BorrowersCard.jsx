@@ -9,16 +9,18 @@ import {
   Box,
   Label,
 } from "@unioncredit/ui";
+import { useNavigate } from "react-router-dom";
 
 import format from "utils/format";
 import Avatar from "components/shared/Avatar";
+import usePagination from "hooks/usePagination";
 import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 import StatusBadge from "components/shared/StatusBadge";
-import usePagination from "hooks/usePagination";
+import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export default function BorrowersCard() {
+  const navigate = useNavigate();
   const { data: vouchees = [] } = useVouchees();
 
   const {
@@ -47,7 +49,10 @@ export default function BorrowersCard() {
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
           {voucheesPage.map(({ address }) => (
-            <TableRow key={address}>
+            <TableRow
+              key={address}
+              onClick={() => navigate(`/contacts?address=${address}`)}
+            >
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />
               </TableCell>

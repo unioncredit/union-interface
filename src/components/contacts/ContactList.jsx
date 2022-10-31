@@ -47,6 +47,30 @@ export default function ContactList({
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
   useEffect(() => {
+    // Get the fake search params from the end of the hash fragment
+    const urlSearchParams = new URLSearchParams(
+      window.location.hash.split("?")[1]
+    );
+
+    // If a search param has been provided in the hash URL
+    // #/contacts?address=ADDRESS then we try and find that
+    // address in our contacts array. If we find it we set
+    // it as the active address in the list
+    if (!contact && urlSearchParams.has("address")) {
+      const searchAddress = urlSearchParams.get("address");
+      const searchContact = contacts.find(
+        ({ address }) => address === searchAddress
+      );
+
+      if (searchContact) {
+        setContact(searchContact);
+        return;
+      }
+    }
+
+    // If there are no contacts or the current contact does not exist
+    // in the current list of contact (we switched from trust you to you
+    // trust) then we need to reset the contact to the first one on the list
     !contact &&
       !contacts.find(({ address }) => address === contact?.address) &&
       setContact(contacts[0]);
