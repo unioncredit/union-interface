@@ -1,4 +1,4 @@
-import { useBlockNumber, useNetwork } from "wagmi";
+import { useBlockNumber, useNetwork, chain } from "wagmi";
 import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
 
@@ -15,12 +15,14 @@ import { BORROW_MODAL } from "components/modals/BorrowModal";
 
 export default function CreditStats() {
   const { open } = useModals();
-  const { chain } = useNetwork();
+  const { chain: connectedChain } = useNetwork();
 
   const { data: member = {} } = useMember();
   const { data: vouchers = [] } = useVouchers();
-  const { data: blockNumber } = useBlockNumber();
   const { data: protocol = {} } = useProtocol();
+  const { data: blockNumber } = useBlockNumber({
+    chainId: chain.mainnet.id,
+  });
 
   const {
     creditLimit = ZERO,
@@ -76,7 +78,12 @@ export default function CreditStats() {
                 value={<Dai value={format(minPayment)} />}
                 after={
                   <Label size="small" color="blue500" onClick={() => alert()}>
-                    {dueDate(lastRepay, overdueBlocks, blockNumber, chain.id)}
+                    {dueDate(
+                      lastRepay,
+                      overdueBlocks,
+                      blockNumber,
+                      connectedChain.id
+                    )}
                   </Label>
                 }
               />
