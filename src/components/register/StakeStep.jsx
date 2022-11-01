@@ -12,6 +12,7 @@ import {
   Union,
   ProgressBar,
 } from "@unioncredit/ui";
+import { useNetwork } from "wagmi";
 import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg";
 
 import { WAD } from "constants";
@@ -21,15 +22,37 @@ import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
+import { ZERO } from "constants";
+import { BlocksPerYear } from "constants";
 
 export default function StakeStep() {
-  const { data } = useMember();
   const { open } = useModals();
+  const { chain } = useNetwork();
+  const { data: member = {} } = useMember();
   const { data: protocol } = useProtocol();
 
-  const percentage = data.unionBalance.gte(WAD)
+  const {
+    unionBalance = ZERO,
+    stakedBalance = ZERO,
+    totalStaked = ZERO,
+    totalFrozen = ZERO,
+    newMemberFee = ZERO,
+    inflationPerBlock = ZERO,
+  } = { ...protocol, ...member };
+
+  const percentage = unionBalance.gte(WAD)
     ? 100
-    : Number(data.unionBalance.div(WAD));
+    : Number(unionBalance.div(WAD));
+
+  const effectiveTotalStake = totalStaked.sub(totalFrozen);
+
+  const dailyEarnings = inflationPerBlock
+    .mul(WAD)
+    .div(effectiveTotalStake)
+    .mul(stakedBalance)
+    .div(WAD)
+    .mul(BlocksPerYear[chain.id])
+    .div(365);
 
   return (
     <Card size="fluid" mb="24px">
@@ -49,14 +72,14 @@ export default function StakeStep() {
             <Stat
               size="medium"
               label="Total Staked"
-              value={<Dai value={format(data.stakedBalance)} />}
+              value={<Dai value={format(stakedBalance)} />}
             />
           </Box>
           <Box fluid>
             <Stat
               size="medium"
               label="UNION Earned"
-              value={<Union value={format(data.unionBalance, 3)} />}
+              value={<Union value={format(unionBalance, 3)} />}
             />
           </Box>
         </Box>
@@ -68,7 +91,7 @@ export default function StakeStep() {
           mb="8px"
         >
           <Label m={0}>Membership Fee</Label>
-          <Label m={0}>{format(protocol.newMemberFee)} UNION</Label>
+          <Label m={0}>{format(newMemberFee)} UNION</Label>
         </Box>
         <Box
           className="StakeStep__Box__details"
@@ -77,7 +100,7 @@ export default function StakeStep() {
           mb="12px"
         >
           <Label m={0}>Estimated daily earnings</Label>
-          <Label m={0}>16.23 UNION</Label>
+          <Label m={0}>{format(dailyEarnings)} UNION</Label>
         </Box>
 
         <ButtonRow>

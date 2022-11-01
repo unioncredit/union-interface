@@ -39,6 +39,12 @@ export const BlockSpeed = {
   [chain.goerli.id]: 12e3,
 };
 
+export const BlocksPerYear = {
+  [chain.mainnet.id]: 2407328,
+  [chain.arbitrum.id]: 2407328,
+  [chain.goerli.id]: 2407328,
+};
+
 export const EIP3770 = {
   [chain.mainnet.id]: "eth",
   [chain.arbitrum.id]: "arb1",
