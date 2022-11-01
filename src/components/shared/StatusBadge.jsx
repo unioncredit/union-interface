@@ -6,8 +6,8 @@ import { useVouchers } from "providers/VouchersData";
 import { compareAddresses } from "utils/compare";
 
 export default function StatusBadge({ address }) {
-  const { data: vouchees } = useVouchees();
-  const { data: vouchers } = useVouchers();
+  const { data: vouchees = [] } = useVouchees();
+  const { data: vouchers = [] } = useVouchers();
 
   const contact =
     vouchees.find((vouchee) => compareAddresses(vouchee.address, address)) ||
