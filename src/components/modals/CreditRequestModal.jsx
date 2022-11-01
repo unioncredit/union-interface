@@ -8,9 +8,9 @@ import {
   Label,
   Select,
 } from "@unioncredit/ui";
-import { useState } from "react";
 import QRCode from "qrcode.react";
-import { useAccount, chain } from "wagmi";
+import { useState } from "react";
+import { useAccount, useNetwork } from "wagmi";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
 
@@ -25,11 +25,16 @@ export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 export default function CreditRequestModal() {
   const { close } = useModals();
   const { address } = useAccount();
+  const { chain: connectedChain } = useNetwork();
 
   const [copied, copy] = useCopyToClipboard();
-  const [network, setNetwork] = useState(chain.mainnet.id);
+  const [network, setNetwork] = useState(null);
 
-  const eip3770 = EIP3770[network] || "eth";
+  const defaultValue = networks.find(
+    (network) => network.chainId === connectedChain.id
+  );
+
+  const eip3770 = EIP3770[network] || EIP3770[defaultValue.chainId] || "eth";
 
   const url = `http://app.union.finance/profile/${eip3770}:${address}`;
 
@@ -45,7 +50,7 @@ export default function CreditRequestModal() {
           <Box align="center" justify="center" direction="vertical">
             <Select
               options={networks}
-              defaultValue={networks[0]}
+              defaultValue={defaultValue}
               onChange={(option) => setNetwork(option.chainId)}
             />
 
