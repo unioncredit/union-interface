@@ -85,8 +85,20 @@ export default function VouchersStep() {
               label="Get vouch link"
               onClick={() => open(CREDIT_REQUEST_MODAL)}
             />
-            <Button variant="secondary" icon={Twitter} />
-            <Button variant="secondary" icon={Telegram} />
+            <Button
+              variant="secondary"
+              icon={Twitter}
+              as="a"
+              href={links.twitter}
+              target="_blank"
+            />
+            <Button
+              variant="secondary"
+              icon={Telegram}
+              as="a"
+              href={links.discord}
+              target="_blank"
+            />
           </ButtonRow>
         </Box>
       </Card.Body>

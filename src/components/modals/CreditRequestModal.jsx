@@ -19,6 +19,7 @@ import { networks } from "config/networks";
 import { useModals } from "providers/ModalManager";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import links from "config/links";
 
 export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 
@@ -87,21 +88,21 @@ export default function CreditRequestModal() {
             <ButtonRow fluid mt="8px">
               <Button
                 fluid
-                as="a"
                 color="blue"
                 variant="secondary"
                 icon={Twitter}
                 label="Twitter"
-                href="#"
+                href={links.twitter}
+                as="a"
               />
               <Button
                 fluid
-                as="a"
                 color="blue"
                 variant="secondary"
                 icon={Telegram}
                 label="Telegram"
-                href="#"
+                href={links.discord}
+                as="a"
               />
             </ButtonRow>
           </Box>
