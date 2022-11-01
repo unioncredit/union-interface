@@ -15,7 +15,7 @@ export default function usePopulateEns(inputData) {
   useEffect(() => {
     async function populateData() {
       const populated = await Promise.all(
-        data.map(async (row) => ({
+        inputData.map(async (row) => ({
           ...row,
           label: getLabel(row.address),
           ens: await fetchEnsName({
