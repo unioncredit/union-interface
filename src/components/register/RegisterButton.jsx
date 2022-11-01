@@ -15,7 +15,7 @@ const createItems = (s1, s2, s3) => [
   { number: 3, status: s3 },
 ];
 
-export default function RegisterButton() {
+export default function RegisterButton({ onComplete }) {
   const { address } = useAccount();
 
   const [action, setAction] = useState(null);
@@ -66,7 +66,7 @@ export default function RegisterButton() {
     method: "registerMember",
     args: [address],
     enabled: allowance.gte(newMemberFee) && unionBalance.gte(newMemberFee),
-    onComplete: () => refetchMember(),
+    onComplete: () => onComplete(),
   });
 
   /*--------------------------------------------------------------

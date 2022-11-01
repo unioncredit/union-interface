@@ -26,11 +26,15 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 
 export default function RegisterPage() {
   const { open } = useModals();
-  const { data: protocol } = useProtocol();
+  const { data: protocol = {} } = useProtocol();
   const { data: vouchers = [] } = useVouchers();
-  const { data: member } = useMember();
+  const { data: member = {}, refetch: refetchMember } = useMember();
 
-  const { unionBalance = ZERO, unclaimedRewards = ZERO, isMember } = member;
+  const {
+    isMember = false,
+    unionBalance = ZERO,
+    unclaimedRewards = ZERO,
+  } = member;
 
   return (
     <>
@@ -87,6 +91,7 @@ export default function RegisterPage() {
                                 subTitle:
                                   "Expand the web of trust with a vouch",
                                 showNewMemberHeader: true,
+                                onClose: () => refetchMember(),
                               })
                             }
                           />
