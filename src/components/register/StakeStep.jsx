@@ -56,7 +56,7 @@ export default function StakeStep() {
             <Stat
               size="medium"
               label="UNION Earned"
-              value={<Union value={format(data.unionBalance)} />}
+              value={<Union value={format(data.unionBalance, 3)} />}
             />
           </Box>
         </Box>
