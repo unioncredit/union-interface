@@ -12,7 +12,7 @@ import { useProtocol } from "providers/ProtocolData";
 const createItems = (s1, s2, s3) => [
   { number: 1, status: s1 },
   { number: 2, status: s2 },
-  { number: 2, status: s3 },
+  { number: 3, status: s3 },
 ];
 
 export default function RegisterButton() {

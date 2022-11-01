@@ -38,6 +38,7 @@ export default function StakeStep() {
     totalFrozen = ZERO,
     newMemberFee = ZERO,
     inflationPerBlock = ZERO,
+    unclaimedRewards = ZERO,
   } = { ...protocol, ...member };
 
   const percentage = unionBalance.gte(WAD)
