@@ -28,7 +28,9 @@ export default function Header({ loading }) {
   const { open } = useModals();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
-  const { data: { isMember, unclaimedRewards = ZERO } = {} } = useMember();
+  const {
+    data: { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = {},
+  } = useMember();
 
   const navItems0 =
     isConnected && isMember
@@ -88,7 +90,7 @@ export default function Header({ loading }) {
                   onClick={() => open(WALLET_MODAL)}
                   label={
                     <Text mb="0" ml="4px">
-                      {format(unclaimedRewards)}
+                      {format(unclaimedRewards.add(unionBalance))}
                     </Text>
                   }
                 />
