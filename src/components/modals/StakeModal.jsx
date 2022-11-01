@@ -47,9 +47,15 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const maxUserStake = min(userStakeLimit, member.daiBalance);
   const maxUserUnstake = member.stakedBalance.sub(member.totalLockedStake);
 
-  const validate = (inputs) => {
+  const validateStake = (inputs) => {
     if (inputs.amount.raw.gt(maxUserStake)) {
       return Errors.MAX_USER_STAKE;
+    }
+  };
+
+  const validateUnstake = (inputs) => {
+    if (inputs.amount.raw.gt(maxUserUnstake)) {
+      return Errors.MAX_USER_UNSTAKE;
     }
   };
 
@@ -60,7 +66,9 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     empty,
     setRawValue,
     isErrored,
-  } = useForm({ validate });
+  } = useForm({
+    validate: type === StakeType.STAKE ? validateStake : validateUnstake,
+  });
 
   const amount = values.amount || empty;
 
