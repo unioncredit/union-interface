@@ -44,7 +44,7 @@ export default function VouchModal({
     contract: "userManager",
     method: "updateTrust",
     args: [address, values?.trust?.raw],
-    enabled: values?.name.length > 0 && values?.trust?.raw.gt(0) && address,
+    enabled: values?.name?.length > 0 && values?.trust?.raw.gt(0) && address,
     onComplete: async () => {
       await refetchMember();
       close();
