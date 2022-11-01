@@ -1,5 +1,6 @@
 import { Status } from "constants";
 import format from "./format";
+import { truncateAddress } from "./truncateAddress";
 
 // TODO:
 const chainId = null;
@@ -30,6 +31,38 @@ export default function praseToast(status, method, args, tx) {
           content: `Unstaked ${format(args[0])} DAI successfully`,
           title: "Unstaked DAI",
         };
+      case "updateTrust":
+        return {
+          ...sharedProps,
+          content: `Vouched ${format(args[1])} for ${truncateAddress(
+            args[0]
+          )} successfully`,
+          title: "Vouched",
+        };
+      case "approve":
+        return {
+          ...sharedProps,
+          content: `Approved ${format(args[2])} successfully`,
+          title: "Approved",
+        };
+      case "borrow":
+        return {
+          ...sharedProps,
+          content: `Borrowed ${format(args[0])} DAI successfully`,
+          title: "Borrowed",
+        };
+      case "repayBorrow":
+        return {
+          ...sharedProps,
+          content: `Repaid ${format(args[0])} DAI successfully`,
+          title: "Repaid borrow",
+        };
+      case "delegate":
+        return {
+          ...sharedProps,
+          content: `Delegated to ${truncateAddress(args[0])} successfully`,
+          title: "Delegated",
+        };
       default:
         return {
           ...sharedProps,
@@ -55,6 +88,38 @@ export default function praseToast(status, method, args, tx) {
           content: `Unstaking ${format(args[0])} DAI failed`,
           title: "Unstake DAI",
         };
+      case "updateTrust":
+        return {
+          ...sharedProps,
+          content: `Vouching ${format(args[1])} DAI for ${truncateAddress(
+            args[0]
+          )} failed`,
+          title: "Vouching",
+        };
+      case "approve":
+        return {
+          ...sharedProps,
+          content: "Approving failed",
+          title: "Approving",
+        };
+      case "borrow":
+        return {
+          ...sharedProps,
+          content: `Borrowing ${format(args[0])} failed`,
+          title: "Borrowing",
+        };
+      case "repayBorrow":
+        return {
+          ...sharedProps,
+          content: `Repaying ${format(args[0])} DAI failed`,
+          title: "Repaying",
+        };
+      case "delegate":
+        return {
+          ...sharedProps,
+          content: `Delegating to ${truncateAddress(args[0])} failed`,
+          title: "Delegating",
+        };
       default:
         return {
           ...sharedProps,
@@ -79,6 +144,38 @@ export default function praseToast(status, method, args, tx) {
           ...sharedProps,
           content: `Unstaking ${format(args[0])} DAI`,
           title: "Unstake DAI",
+        };
+      case "updateTrust":
+        return {
+          ...sharedProps,
+          content: `Vouching ${format(args[1])} DAI for ${truncateAddress(
+            args[0]
+          )}`,
+          title: "Vouching",
+        };
+      case "approve":
+        return {
+          ...sharedProps,
+          content: "Approving",
+          title: "Approving",
+        };
+      case "borrow":
+        return {
+          ...sharedProps,
+          content: `Borrowing ${format(args[0])}`,
+          title: "Borrowing",
+        };
+      case "repayBorrow":
+        return {
+          ...sharedProps,
+          content: `Repaying ${format(args[0])} DAI`,
+          title: "Repaying",
+        };
+      case "delegate":
+        return {
+          ...sharedProps,
+          content: `Delegating to ${truncateAddress(args[0])}`,
+          title: "Delegating",
         };
       default:
         return {
