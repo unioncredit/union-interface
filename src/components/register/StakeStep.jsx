@@ -79,7 +79,9 @@ export default function StakeStep() {
             <Stat
               size="medium"
               label="UNION Earned"
-              value={<Union value={format(unionBalance, 3)} />}
+              value={
+                <Union value={format(unionBalance.add(unclaimedRewards), 3)} />
+              }
             />
           </Box>
         </Box>
