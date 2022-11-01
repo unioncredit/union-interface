@@ -10,6 +10,7 @@ import {
   Text,
   TableCell,
   Label,
+  EmptyState,
 } from "@unioncredit/ui";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
@@ -22,6 +23,7 @@ import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
+import links from "config/links";
 
 export default function VouchersStep() {
   const { data: vouchers = [] } = useVouchers();
@@ -38,29 +40,42 @@ export default function VouchersStep() {
         <Box fluid mt="24px" mb="14px" direction="vertical">
           <Text grey={700}>Vouchers · {vouchers.length}</Text>
           <Card size="fluid">
-            <Table>
-              <TableRow>
-                <TableHead></TableHead>
-                <TableHead>Account</TableHead>
-                <TableHead align="right">Trust limit (DAI)</TableHead>
-              </TableRow>
-              {vouchers.slice(0, 3).map(({ address, trust }) => (
-                <TableRow key={address}>
-                  <TableCell fixedSize>
-                    <Avatar address={address} />
-                  </TableCell>
-                  <TableCell>
-                    <Label as="p" grey={700} m={0}>
-                      <PrimaryLabel address={address} />
-                    </Label>
-                    <Label as="p" size="small" grey={400} m={0}>
-                      {truncateAddress(address)}
-                    </Label>
-                  </TableCell>
-                  <TableCell align="right">{format(trust)}</TableCell>
+            {vouchers.length <= 0 ? (
+              <EmptyState
+                label={
+                  <>
+                    No frens?{" "}
+                    <a href={links.discord} target="_blank">
+                      Try Discord
+                    </a>
+                  </>
+                }
+              />
+            ) : (
+              <Table>
+                <TableRow>
+                  <TableHead></TableHead>
+                  <TableHead>Account</TableHead>
+                  <TableHead align="right">Trust limit (DAI)</TableHead>
                 </TableRow>
-              ))}
-            </Table>
+                {vouchers.slice(0, 3).map(({ address, trust }) => (
+                  <TableRow key={address}>
+                    <TableCell fixedSize>
+                      <Avatar address={address} />
+                    </TableCell>
+                    <TableCell>
+                      <Label as="p" grey={700} m={0}>
+                        <PrimaryLabel address={address} />
+                      </Label>
+                      <Label as="p" size="small" grey={400} m={0}>
+                        {truncateAddress(address)}
+                      </Label>
+                    </TableCell>
+                    <TableCell align="right">{format(trust)}</TableCell>
+                  </TableRow>
+                ))}
+              </Table>
+            )}
           </Card>
           <ButtonRow fluid mt="8px">
             <Button
