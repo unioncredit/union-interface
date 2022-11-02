@@ -20,6 +20,7 @@ export default function RegisterButton({ onComplete }) {
 
   const [action, setAction] = useState(null);
   const [items, setItems] = useState(null);
+  const [label, setLabel] = useState(null);
 
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
@@ -97,15 +98,18 @@ export default function RegisterButton({ onComplete }) {
       // Member UNION balance is not enough so needs to claim UNION
       // If there is any UNION available
       setAction({ label: "Claim UNION", onClick: handleClaim });
+      setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
       setItems(createItems("selected"));
     } else if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
       setAction({ label: "Approve UNION", onClick: handleApprove });
+      setLabel("Approving 1.00 UNION");
       setItems(createItems("complete", "selected"));
     } else {
       // The member satisfies all the prerequisite and can register
-      setAction({ label: "Register", onClick: handleRegister });
+      setAction({ label: "Pay Membership Fee", onClick: handleRegister });
+      setLabel("Paying 1.00 UNION");
       setItems(createItems("complete", "complete", "selected"));
     }
   }, [
@@ -131,7 +135,7 @@ export default function RegisterButton({ onComplete }) {
       items={items}
       action={action}
       showSteps={true}
-      label={`Unclaimed: ${format(unclaimedRewards)} UNION`}
+      label={label}
     />
   );
 }
