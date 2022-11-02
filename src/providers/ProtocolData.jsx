@@ -86,7 +86,7 @@ export default function ProtcolData({ children }) {
     contracts: contracts,
   });
 
-  const { totalStaked = ZERO, totalFrozen = ZERO } = resp.data;
+  const { totalStaked = ZERO, totalFrozen = ZERO } = resp.data || {};
 
   const resp0 = useContractReads({
     enabled: totalStaked.gt(ZERO),
