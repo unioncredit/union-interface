@@ -28,7 +28,10 @@ export default function usePopulateEns(inputData) {
       setData(populated);
     }
 
-    inputData && populateData();
+    inputData &&
+      Array.isArray(inputData) &&
+      inputData.length > 0 &&
+      populateData();
   }, [JSON.stringify(inputData)]);
 
   return data || inputData;
