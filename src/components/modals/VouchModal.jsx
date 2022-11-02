@@ -11,6 +11,7 @@ import AddressSummary from "components/shared/AddressSummary";
 import { useMember } from "providers/MemberData";
 import useWrite from "hooks/useWrite";
 import useForm from "hooks/useForm";
+import useLabels from "hooks/useLabels";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -37,6 +38,7 @@ export default function VouchModal({
   const { close } = useModals();
   const { refetch: refetchMember } = useMember();
   const { values, errors = {}, register } = useForm();
+  const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);
 
@@ -44,9 +46,12 @@ export default function VouchModal({
     contract: "userManager",
     method: "updateTrust",
     args: [address, values?.trust?.raw],
-    enabled: values?.name?.length > 0 && values?.trust?.raw.gt(0) && address,
+    enabled: values?.trust?.raw.gt(0) && address,
     onComplete: async () => {
       await refetchMember();
+      if (values.name) {
+        setLabel(address, values.name);
+      }
       close();
     },
   });

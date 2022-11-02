@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isAddress } from "ethers/lib/utils";
 import { useEnsName, useEnsAddress } from "wagmi";
 import { Input, Label, Box, LoadingSpinner } from "@unioncredit/ui";
@@ -31,17 +31,27 @@ export default function AddressInput(props) {
       // it is a valid ETH address
       setValue(value);
       setError(null);
-      props.onChange && props.onChange(value);
     } else if (value === "") {
       // Input valus is an empty string
       setValue("");
       setError(null);
-      props.onChange && props.onChange(null);
+      props.onChange(null);
     } else {
       // Input value is not an address OR ENS so set an error
       setError(Errors.INVALID_ADDRESS_OR_ENS);
     }
   };
+
+  /**
+   * Fire the onchange event when the address is updated
+   * either by resolving a new ENS or the user entering
+   * in an address into the input
+   */
+  useEffect(() => {
+    if (address && props.onChange) {
+      props.onChange(address);
+    }
+  }, [address, props.onChange]);
 
   return (
     <Input
