@@ -11,11 +11,6 @@ import reportWebVitals from "./reportWebVitals";
 import Toasts from "providers/Toasts";
 import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
-import MemberData from "providers/MemberData";
-import VouchersData from "providers/VouchersData";
-import VoucheesData from "providers/VoucheesData";
-import ProtocolData from "providers/ProtocolData";
-import GovernanceData from "providers/GovernanceData";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -25,17 +20,7 @@ root.render(
       <ConnectKitProvider theme="soft" mode="light">
         <Toasts>
           <AppLogs>
-            <ProtocolData>
-              <GovernanceData>
-                <MemberData>
-                  <VouchersData>
-                    <VoucheesData>
-                      <App />
-                    </VoucheesData>
-                  </VouchersData>
-                </MemberData>
-              </GovernanceData>
-            </ProtocolData>
+            <App />
           </AppLogs>
         </Toasts>
       </ConnectKitProvider>
