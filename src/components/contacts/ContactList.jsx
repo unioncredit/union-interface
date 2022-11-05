@@ -30,12 +30,15 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import useContactSearch from "hooks/useContactSearch";
 import Filters, { filterFns, sortFns } from "./Filters";
+import useIsMobile from "hooks/useIsMobile";
 
 export default function ContactList({
   contact,
   setContact,
   type = ContactsType.VOUCHEES,
 }) {
+  const isMobile = useIsMobile();
+
   const { open } = useModals();
   const { data: vouchees } = useVouchees();
   const { data: vouchers } = useVouchers();
@@ -68,13 +71,17 @@ export default function ContactList({
       }
     }
 
+    // On mobile we don't want to select the first item as default
+    // so we just early return to prevent that
+    if (isMobile) return;
+
     // If there are no contacts or the current contact does not exist
     // in the current list of contact (we switched from trust you to you
     // trust) then we need to reset the contact to the first one on the list
     !contact &&
       !contacts.find(({ address }) => address === contact?.address) &&
       setContact(contacts[0]);
-  }, [contact, contacts[0]]);
+  }, [contact, contacts[0], isMobile]);
 
   /*--------------------------------------------------------------
     Search, Filter, Paginate 

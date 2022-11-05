@@ -7,6 +7,8 @@ import {
   Label,
   Button,
   Skeleton,
+  ModalOverlay,
+  Modal,
 } from "@unioncredit/ui";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
@@ -15,12 +17,25 @@ import AddressSummary from "components/shared/AddressSummary";
 import { TransactionHistory } from "components/shared/TxHistory";
 import { ZERO } from "constants";
 import { ContactsType } from "constants";
+import useIsMobile from "hooks/useIsMobile";
 import { useModals } from "providers/ModalManager";
 import format from "utils/format";
 
-export default function ContactDetails({ contact = {}, type }) {
+export default function ContactDetails({ contact, setContact, type }) {
   const { open } = useModals();
 
+  const isMobile = useIsMobile();
+
+  /*----------------------------------------------------
+   * Hide on mobile when no contact
+  -------------------------------------------------------*/
+  if (!contact && isMobile) {
+    return null;
+  }
+
+  /*----------------------------------------------------
+   * Skeleton State 
+  -------------------------------------------------------*/
   if (!contact) {
     return (
       <Card>
@@ -67,7 +82,7 @@ export default function ContactDetails({ contact = {}, type }) {
     vouch = ZERO,
     locking = ZERO,
     locked = ZERO,
-  } = contact;
+  } = contact || {};
 
   // vouchers have a locked amount while vouchees have a locking
   // amount. If therefore either locking or locked is going to be zero
@@ -75,91 +90,113 @@ export default function ContactDetails({ contact = {}, type }) {
   // cases here
   const available = trust.sub(locking).sub(locked);
 
+  const content = (
+    <>
+      <AddressSummary address={address} />
+      <Grid>
+        {/*----------------------------------------------------
+          * Main stats
+        -------------------------------------------------------*/}
+        <Grid.Row>
+          <Grid.Col xs={4}>
+            <Stat
+              size="extra-small"
+              label="Trust"
+              tooltip="The DAI amount this address trusts you with"
+              value={<Dai value={format(trust)} />}
+            />
+          </Grid.Col>
+          <Grid.Col xs={4}>
+            <Stat
+              size="extra-small"
+              label="Vouch"
+              tooltip="The DAI amount this address can underwrite based on their total staked DAI"
+              value={<Dai value={format(vouch)} />}
+            />
+          </Grid.Col>
+          <Grid.Col xs={4}>
+            <Stat
+              size="extra-small"
+              label="Available"
+              tooltip="The DAI amount you can borrow from this address"
+              value={<Dai value={format(available)} />}
+            />
+          </Grid.Col>
+        </Grid.Row>
+        {type === ContactsType.VOUCHEES && (
+          <>
+            {/*----------------------------------------------------
+                * Borrower Stats (you trust only) 
+              -------------------------------------------------------*/}
+            <Grid.Row>
+              <Grid.Col xs={12}>
+                <Box justify="space-between" mt="8px">
+                  <Label as="p" grey={400}>
+                    Balance Owed
+                  </Label>
+                  <Label as="p" grey={700} m={0}>
+                    {format(0)}
+                  </Label>
+                </Box>
+                <Box justify="space-between">
+                  <Label as="p" grey={400}>
+                    Min. Payment
+                  </Label>
+                  <Label as="p" grey={700} m={0}>
+                    {format(0)}
+                  </Label>
+                </Box>
+                <Box justify="space-between">
+                  <Label as="p" grey={400}>
+                    Payment Due
+                  </Label>
+                  <Label as="p" grey={700} m={0}>
+                    No Payment Due
+                  </Label>
+                </Box>
+              </Grid.Col>
+            </Grid.Row>
+          </>
+        )}
+        {/*----------------------------------------------------
+            * Buttons (you trust only)
+          -------------------------------------------------------*/}
+        <Grid.Row>
+          <Grid.Col xs={12}>
+            <Button
+              fluid
+              mt="12px"
+              icon={Manage}
+              variant="secondary"
+              label="Manage Contact"
+              onClick={() => open(MANAGE_CONTACT_MODAL, { contact, type })}
+            />
+          </Grid.Col>
+        </Grid.Row>
+      </Grid>
+    </>
+  );
+
+  /*----------------------------------------------------
+   * Render 
+  -------------------------------------------------------*/
   return (
     <Card overflow>
       <Card.Body>
-        <AddressSummary address={address} />
-        <Grid>
-          {/*----------------------------------------------------
-            * Main stats
-          -------------------------------------------------------*/}
-          <Grid.Row>
-            <Grid.Col xs={4}>
-              <Stat
-                size="extra-small"
-                label="Trust"
-                tooltip="The DAI amount this address trusts you with"
-                value={<Dai value={format(trust)} />}
+        {isMobile ? (
+          <ModalOverlay onClick={() => setContact(null)}>
+            <Modal size="large">
+              <Modal.Header
+                title="Contact details"
+                className="contactDetailsModal"
+                onClose={() => setContact(null)}
               />
-            </Grid.Col>
-            <Grid.Col xs={4}>
-              <Stat
-                size="extra-small"
-                label="Vouch"
-                tooltip="The DAI amount this address can underwrite based on their total staked DAI"
-                value={<Dai value={format(vouch)} />}
-              />
-            </Grid.Col>
-            <Grid.Col xs={4}>
-              <Stat
-                size="extra-small"
-                label="Available"
-                tooltip="The DAI amount you can borrow from this address"
-                value={<Dai value={format(available)} />}
-              />
-            </Grid.Col>
-          </Grid.Row>
-          {type === ContactsType.VOUCHEES && (
-            <>
-              {/*----------------------------------------------------
-                * Borrower Stats (you trust only) 
-              -------------------------------------------------------*/}
-              <Grid.Row>
-                <Grid.Col xs={12}>
-                  <Box justify="space-between" mt="8px">
-                    <Label as="p" grey={400}>
-                      Balance Owed
-                    </Label>
-                    <Label as="p" grey={700} m={0}>
-                      {format(0)}
-                    </Label>
-                  </Box>
-                  <Box justify="space-between">
-                    <Label as="p" grey={400}>
-                      Min. Payment
-                    </Label>
-                    <Label as="p" grey={700} m={0}>
-                      {format(0)}
-                    </Label>
-                  </Box>
-                  <Box justify="space-between">
-                    <Label as="p" grey={400}>
-                      Payment Due
-                    </Label>
-                    <Label as="p" grey={700} m={0}>
-                      No Payment Due
-                    </Label>
-                  </Box>
-                </Grid.Col>
-              </Grid.Row>
-            </>
-          )}
-          {/*----------------------------------------------------
-            * Buttons (you trust only)
-          -------------------------------------------------------*/}
-          <Grid.Row>
-            <Grid.Col xs={12}>
-              <Button
-                fluid
-                mt="12px"
-                icon={Manage}
-                variant="secondary"
-                label="Manage Contact"
-                onClick={() => open(MANAGE_CONTACT_MODAL, { contact, type })}
-              />
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+              <Modal.Body>{content}</Modal.Body>
+            </Modal>
+          </ModalOverlay>
+        ) : (
+          content
+        )}
       </Card.Body>
       <TransactionHistory staker={address} />
     </Card>

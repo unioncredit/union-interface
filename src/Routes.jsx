@@ -9,7 +9,7 @@ import ConnectPage from "pages/Connect";
 import LoadingPage from "pages/Loading";
 
 export default function Routes() {
-  const { data, isLoading } = useMember();
+  const { data = {}, isLoading } = useMember();
 
   const { isConnected } = useAccount();
 
