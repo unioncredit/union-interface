@@ -38,7 +38,7 @@ export default function GovernancePage() {
       <Box fluid justify="center" direction="vertical" mb="120px">
         <NetworkNotice />
         <GovernaceStats />
-        {connectedChain.id === chain.mainnet.id && <MyGovernanceStats />}
+        {connectedChain?.id === chain.mainnet.id && <MyGovernanceStats />}
         <ProposalsCard
           filter={filterActiveProposals}
           emptyLabel="There are no live proposals"

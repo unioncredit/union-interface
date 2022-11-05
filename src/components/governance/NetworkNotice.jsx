@@ -1,12 +1,13 @@
-import { chain, useNetwork, useSwitchNetwork } from "wagmi";
+import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { Heading, Card, Text, Button, Label } from "@unioncredit/ui";
 import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
 export default function NetworkNotice({ lite }) {
-  const { chain: connectedChain } = useNetwork();
+  const { isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
+  const { chain: connectedChain } = useNetwork();
 
-  if (connectedChain.id == chain.mainnet.id) {
+  if (!isConnected || connectedChain?.id == chain.mainnet.id) {
     return null;
   }
 

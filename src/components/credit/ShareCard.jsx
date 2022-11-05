@@ -1,5 +1,4 @@
-import { Card, Button, Text, Box, Label } from "@unioncredit/ui";
-import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
+import { Card, Button, Box, Label } from "@unioncredit/ui";
 
 export default function ShareCard({
   content,

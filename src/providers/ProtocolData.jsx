@@ -8,22 +8,25 @@ const ProtocolContext = createContext({});
 
 export const useProtocol = () => useContext(ProtocolContext);
 
-const buildContractConfigs = (contract, functionNames) =>
+const buildContractConfigs = (contract, functionNames, chainId) =>
   functionNames.map((functionName) => ({
     ...contract,
     functionName,
+    chainId,
   }));
 
 export default function ProtcolData({ children }) {
   const { chain: connectedChain } = useNetwork();
 
-  const uTokenContract = useContract("uToken");
-  const userManagerContract = useContract("userManager");
-  const comptrollerContract = useContract("comptroller");
-  const governorContract = useContract("governor", chain.mainnet.id);
-  const unionTokenContract = useContract("union");
+  const chainId = connectedChain?.id || chain.mainnet.id;
 
   const isMainnet = connectedChain === chain.mainnet.id;
+
+  const uTokenContract = useContract("uToken", chainId);
+  const userManagerContract = useContract("userManager", chainId);
+  const comptrollerContract = useContract("comptroller", chainId);
+  const governorContract = useContract("governor", chain.mainnet.id);
+  const unionTokenContract = useContract("union", chainId);
 
   const userManagerFunctionNames = [
     "maxStakeAmount",
@@ -61,13 +64,25 @@ export default function ProtcolData({ children }) {
   const unionTokenFunctionNames = ["totalSupply"];
 
   const contracts = [
-    ...buildContractConfigs(userManagerContract, userManagerFunctionNames),
-    ...buildContractConfigs(uTokenContract, uTokenFunctionNames),
-    ...buildContractConfigs(comptrollerContract, comptrollerFunctionNames),
+    ...buildContractConfigs(
+      userManagerContract,
+      userManagerFunctionNames,
+      chainId
+    ),
+    ...buildContractConfigs(uTokenContract, uTokenFunctionNames, chainId),
+    ...buildContractConfigs(
+      comptrollerContract,
+      comptrollerFunctionNames,
+      chainId
+    ),
     ...(isMainnet
-      ? buildContractConfigs(governorContract, governorFunctionsNames)
+      ? buildContractConfigs(governorContract, governorFunctionsNames, chainId)
       : []),
-    ...buildContractConfigs(unionTokenContract, unionTokenFunctionNames),
+    ...buildContractConfigs(
+      unionTokenContract,
+      unionTokenFunctionNames,
+      chainId
+    ),
   ];
 
   const resp = useContractReads({

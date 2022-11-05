@@ -65,7 +65,7 @@ export default function Header({ loading }) {
             <Grid.Col>
               <Box align="center">
                 <Logo width="32px" style={{ marginRight: "8px" }} />
-                <NetworkSelect />
+                {isConnected && <NetworkSelect />}
               </Box>
             </Grid.Col>
             <Grid.Col align="center" className="hide-lt-850">
@@ -82,18 +82,20 @@ export default function Header({ loading }) {
             </Grid.Col>
             <Grid.Col align="right">
               <Box justify="flex-end">
-                <Button
-                  mr="4px"
-                  icon={Union}
-                  variant="secondary"
-                  className="UnionWallet"
-                  onClick={() => open(WALLET_MODAL)}
-                  label={
-                    <Text mb="0" ml="4px">
-                      {format(unclaimedRewards.add(unionBalance))}
-                    </Text>
-                  }
-                />
+                {isConnected && (
+                  <Button
+                    mr="4px"
+                    icon={Union}
+                    variant="secondary"
+                    className="UnionWallet"
+                    onClick={() => open(WALLET_MODAL)}
+                    label={
+                      <Text mb="0" ml="4px">
+                        {format(unclaimedRewards.add(unionBalance))}
+                      </Text>
+                    }
+                  />
+                )}
                 <ConnectButton buttonProps={{ packed: true }} />
                 <ContextMenu position="left" items={contextMenuItems} />
               </Box>
