@@ -1,5 +1,5 @@
 import { useAccount, useContractReads } from "wagmi";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useRef } from "react";
 
 import useContract from "hooks/useContract";
 import { ZERO, ZERO_ADDRESS } from "constants";
@@ -33,6 +33,61 @@ const selectUserManager = (data) => {
 const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
+
+function usePollMemberData(address, chainId) {
+  const timer = useRef(null);
+
+  const daiContract = useContract("dai", chainId);
+  const uTokenContract = useContract("uToken", chainId);
+  const comptrollerContract = useContract("comptroller", chainId);
+
+  const contracts = address
+    ? [
+        {
+          ...comptrollerContract,
+          functionName: "calculateRewardsByBlocks",
+          args: [address, daiContract.addressOrName, ZERO],
+        },
+        {
+          ...uTokenContract,
+          functionName: "borrowBalanceView",
+          args: [address],
+        },
+        {
+          ...uTokenContract,
+          functionName: "calculatingInterest",
+          args: [address],
+        },
+      ]
+    : [];
+
+  const resp = useContractReads({
+    enabled: false,
+    select: (data) => ({
+      unclaimedRewards: data[0] || ZERO,
+      owed: data[1] || ZERO,
+      interest: data[2] || ZERO,
+    }),
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
+  });
+
+  const { refetch } = resp;
+
+  useEffect(() => {
+    if (!address) return;
+
+    timer.current = setInterval(refetch, 5000);
+
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, [address]);
+
+  return resp;
+}
 
 export function useMemberData(address, chainId) {
   const daiContract = useContract("dai", chainId);
@@ -152,7 +207,13 @@ export default function MemberData({
 
   const resp = useMemberData(address, chainId);
 
+  const pollResp = usePollMemberData(address, chainId);
+
   return (
-    <MemberContext.Provider value={resp}>{children}</MemberContext.Provider>
+    <MemberContext.Provider
+      value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}
+    >
+      {children}
+    </MemberContext.Provider>
   );
 }

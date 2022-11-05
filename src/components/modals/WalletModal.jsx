@@ -45,7 +45,7 @@ export default function WalletModal() {
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
             <Heading grey={800} size="xlarge" m={0}>
-              {format(unionBalance.add(unclaimedRewards))}
+              {format(unionBalance.add(unclaimedRewards), 4)}
               <Union />
             </Heading>
             <Label m={0} grey={400}>
