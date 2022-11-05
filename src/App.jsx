@@ -19,22 +19,22 @@ export default function App() {
   }
 
   return (
-    <ModalManager>
-      <Layout>
-        <Layout.Main>
-          <ProtocolData>
-            <GovernanceData>
-              <MemberData>
-                <VouchersData>
-                  <VoucheesData>
+    <Layout>
+      <Layout.Main>
+        <ProtocolData>
+          <GovernanceData>
+            <MemberData>
+              <VouchersData>
+                <VoucheesData>
+                  <ModalManager>
                     <Routes />
-                  </VoucheesData>
-                </VouchersData>
-              </MemberData>
-            </GovernanceData>
-          </ProtocolData>
-        </Layout.Main>
-      </Layout>
-    </ModalManager>
+                  </ModalManager>
+                </VoucheesData>
+              </VouchersData>
+            </MemberData>
+          </GovernanceData>
+        </ProtocolData>
+      </Layout.Main>
+    </Layout>
   );
 }

@@ -14,12 +14,15 @@ import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useWrite from "hooks/useWrite";
+import { ZERO } from "constants";
 
 export const WALLET_MODAL = "wallet-modal";
 
 export default function WalletModal() {
   const { close } = useModals();
-  const { data: member } = useMember();
+  const { data: member = {} } = useMember();
+
+  const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
   /*--------------------------------------------------------------
     Contract Functions
@@ -28,7 +31,7 @@ export default function WalletModal() {
   const buttonProps = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
-    enabled: member.unclaimedRewards.gt(0),
+    enabled: unclaimedRewards.gt(0),
   });
 
   /*--------------------------------------------------------------
@@ -42,7 +45,7 @@ export default function WalletModal() {
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
             <Heading grey={800} size="xlarge" m={0}>
-              {format(member.unionBalance.add(member.unclaimedRewards))}
+              {format(unionBalance.add(unclaimedRewards))}
               <Union />
             </Heading>
             <Label m={0} grey={400}>
@@ -55,7 +58,7 @@ export default function WalletModal() {
               Wallet
             </Label>
             <Label as="p" grey={700} m={0}>
-              <Union value={format(member.unionBalance)} />
+              <Union value={format(unionBalance)} />
             </Label>
           </Box>
           <Divider mb="8px" />
@@ -64,7 +67,7 @@ export default function WalletModal() {
               Unclaimed
             </Label>
             <Label as="p" grey={700} m={0}>
-              <Union value={format(member.unclaimedRewards)} />
+              <Union value={format(unclaimedRewards)} />
             </Label>
           </Box>
 
@@ -73,7 +76,7 @@ export default function WalletModal() {
             label={
               buttonProps.disabled
                 ? "No tokens to claim"
-                : `Claim ${format(member.unclaimedRewards)} UNION`
+                : `Claim ${format(unclaimedRewards)} UNION`
             }
             {...buttonProps}
           />
