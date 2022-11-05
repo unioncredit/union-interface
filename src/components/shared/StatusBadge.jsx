@@ -1,17 +1,21 @@
 import { Badge } from "@unioncredit/ui";
 import { ZERO } from "constants";
+import { useMemberData } from "providers/MemberData";
 
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import { compareAddresses } from "utils/compare";
 
 export default function StatusBadge({ address }) {
+  const { data: member } = useMemberData(address);
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
-  const contact =
+  const voucherOrVouchee =
     vouchees.find((vouchee) => compareAddresses(vouchee.address, address)) ||
     vouchers.find((voucher) => compareAddresses(voucher.address, address));
+
+  const contact = voucherOrVouchee || member;
 
   const isOverdue = contact?.isOverdue;
   const isMember = contact?.isMember;
