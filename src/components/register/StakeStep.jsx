@@ -47,13 +47,15 @@ export default function StakeStep() {
 
   const effectiveTotalStake = totalStaked.sub(totalFrozen);
 
-  const dailyEarnings = inflationPerBlock
-    .mul(WAD)
-    .div(effectiveTotalStake)
-    .mul(stakedBalance)
-    .div(WAD)
-    .mul(BlocksPerYear[chain.id])
-    .div(365);
+  const dailyEarnings = effectiveTotalStake.gt(ZERO)
+    ? inflationPerBlock
+        .mul(WAD)
+        .div(effectiveTotalStake)
+        .mul(stakedBalance)
+        .div(WAD)
+        .mul(BlocksPerYear[chain.id])
+        .div(365)
+    : ZERO;
 
   return (
     <Card size="fluid" mb="24px">
