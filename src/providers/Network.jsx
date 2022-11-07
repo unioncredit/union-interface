@@ -1,23 +1,15 @@
 import {
-  walletConnectWallet,
-  metaMaskWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { createContext, useContext, useEffect, useState } from "react";
-import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import {
   RainbowKitProvider,
   connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import {
-  chain,
-  WagmiConfig,
-  createClient,
-  configureChains,
-  useNetwork,
-  useAccount,
-} from "wagmi";
-import { switchNetwork } from "@wagmi/core";
+  walletConnectWallet,
+  metaMaskWallet,
+} from "@rainbow-me/rainbowkit/wallets";
+import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { createContext, useContext, useState } from "react";
+import { chain, WagmiConfig, createClient, configureChains } from "wagmi";
 
 const NetworkContext = createContext({});
 
@@ -34,7 +26,10 @@ const { chains, provider } = configureChains(
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
-    wallets: [metaMaskWallet({ chains }), walletConnectWallet({ chains })],
+    wallets: [
+      metaMaskWallet({ chains, shimDisconnect: true }),
+      walletConnectWallet({ chains }),
+    ],
   },
 ]);
 
