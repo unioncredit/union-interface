@@ -67,8 +67,6 @@ export default function VoucheesData({ children }) {
 
   const data = usePopulateEns(resp.data);
 
-  console.log(resp.data, data);
-
   return (
     <VoucheesContext.Provider value={{ ...resp, data }}>
       {children}

@@ -14,18 +14,22 @@ export default function usePopulateEns(inputData) {
 
   useEffect(() => {
     async function populateData() {
-      const populated = await Promise.all(
-        inputData.map(async (row) => ({
-          ...row,
-          label: getLabel(row.address),
-          ens: await fetchEnsName({
-            address: row.address,
-            chainId: chain.mainnet.id,
-          }),
-        }))
-      );
+      try {
+        const populated = await Promise.all(
+          inputData.map(async (row) => ({
+            ...row,
+            label: getLabel(row.address),
+            ens: await fetchEnsName({
+              address: row.address,
+              chainId: chain.mainnet.id,
+            }),
+          }))
+        );
 
-      setData(populated);
+        setData(populated);
+      } catch (e) {
+        console.log("populated ENS error:", error.message);
+      }
     }
 
     inputData &&
