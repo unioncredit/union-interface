@@ -3,7 +3,6 @@ import "./index.scss";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom";
-import { ConnectKitProvider } from "connectkit";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -17,13 +16,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <HashRouter>
     <Network>
-      <ConnectKitProvider theme="soft" mode="light">
-        <Toasts>
-          <AppLogs>
-            <App />
-          </AppLogs>
-        </Toasts>
-      </ConnectKitProvider>
+      <Toasts>
+        <AppLogs>
+          <App />
+        </AppLogs>
+      </Toasts>
     </Network>
   </HashRouter>
 );

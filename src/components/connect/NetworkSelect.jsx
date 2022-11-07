@@ -10,14 +10,20 @@ import {
 } from "@unioncredit/ui";
 import cn from "classnames";
 import { useState } from "react";
-import { useSwitchNetwork } from "wagmi";
+import { useAccount, useSwitchNetwork } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { networks } from "config/networks";
+import { useAppNetwork } from "providers/Network";
 
 import "./NetworkSelect.scss";
 
-export default function NetworkSelect({ disabled }) {
+export default function NetworkSelect() {
+  const { isConnected } = useAccount();
+  const { initialChain, setInitialChain } = useAppNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  const { openConnectModal } = useConnectModal();
+
   const [selected, setSelected] = useState(networks[0]);
 
   return (
@@ -28,17 +34,17 @@ export default function NetworkSelect({ disabled }) {
             {networks.map((props) => {
               const { label, value, avatar, description, chainId } = props;
 
-              const active = !disabled && selected.chainId === chainId;
+              const active = selected.chainId === chainId;
 
               return (
                 <Card
                   my="6px"
                   packed
+                  maxw="100%"
                   key={value}
                   onClick={() => setSelected(props)}
                   className={cn("NetworkSelect__innerCard", {
                     "NetworkSelect__innerCard--active": active,
-                    "NetworkSelect__innerCard--disabled": disabled,
                   })}
                 >
                   <Box align="center">
@@ -65,10 +71,15 @@ export default function NetworkSelect({ disabled }) {
           </Box>
           <Button
             fluid
-            disabled={disabled}
             label="Open Union Dashboard"
+            disabled={!!initialChain}
             onClick={() => {
-              switchNetwork(selected.chainId);
+              if (isConnected) {
+                switchNetwork(selected.chainId);
+              } else {
+                setInitialChain(selected.chainId);
+                openConnectModal();
+              }
             }}
           />
         </Grid.Col>

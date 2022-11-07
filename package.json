@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^0.7.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@unioncredit/ui": "0.3.0-beta.13",
     "classnames": "^2.3.2",
-    "connectkit": "^0.0.2",
     "dayjs": "^1.11.6",
     "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.7.1",

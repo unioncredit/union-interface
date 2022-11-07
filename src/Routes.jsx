@@ -5,7 +5,6 @@ import * as routes from "./App.routes";
 import { useMember } from "providers/MemberData";
 
 import ErrorPage from "pages/Error";
-import ConnectPage from "pages/Connect";
 import LoadingPage from "pages/Loading";
 
 export default function Routes() {
@@ -16,13 +15,7 @@ export default function Routes() {
   const needsToConnect = !isConnected;
 
   const getElement = (Component, props) =>
-    needsToConnect ? (
-      <ConnectPage />
-    ) : isLoading ? (
-      <LoadingPage />
-    ) : (
-      <Component {...props} />
-    );
+    isLoading ? <LoadingPage /> : <Component {...props} />;
 
   /*--------------------------------------------------------------
     App Routes Setup 
