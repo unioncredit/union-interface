@@ -62,8 +62,8 @@ export default function VoucheesData({ children }) {
   });
 
   useEffect(() => {
-    if (address && isConnected) resp.refetch();
-  }, [address, resp.refetch, isConnected]);
+    if (address && isConnected && borrowerAddresses?.length > 0) resp.refetch();
+  }, [address, resp.refetch, borrowerAddresses?.length, isConnected]);
 
   const data = usePopulateEns(resp.data);
 

@@ -53,8 +53,8 @@ export default function VouchersData({ children }) {
   });
 
   useEffect(() => {
-    if (address) resp.refetch();
-  }, [address, resp.refetch]);
+    if (address && stakerAddresses?.length > 0) resp.refetch();
+  }, [address, stakerAddresses?.length, resp.refetch]);
 
   const data = usePopulateEns(resp.data);
 
