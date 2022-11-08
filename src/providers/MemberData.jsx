@@ -25,6 +25,7 @@ const selectUserManager = (data) => {
     lastRepay: data[13] || ZERO,
     votes: data[14] || ZERO,
     delegate: data[15] || ZERO_ADDRESS,
+    isOverdue: data[16] || false,
     // calculated values
     minPayment: calculateMinPayment(interest || ZERO),
   };
@@ -176,6 +177,11 @@ export function useMemberData(address, chainId) {
         {
           ...unionContract,
           functionName: "delegates",
+          args: [address],
+        },
+        {
+          ...uTokenContract,
+          functionName: "checkIsOverdue",
           args: [address],
         },
       ]
