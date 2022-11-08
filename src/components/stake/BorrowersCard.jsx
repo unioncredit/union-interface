@@ -18,24 +18,28 @@ import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
 import StatusBadge from "components/shared/StatusBadge";
 import PrimaryLabel from "components/shared/PrimaryLabel";
+import { ZERO } from "constants";
 
 export default function BorrowersCard() {
   const navigate = useNavigate();
   const { data: vouchees = [] } = useVouchees();
 
+  const borrowers = vouchees.filter((vouchee) => vouchee.locking.gt(ZERO));
+
   const {
-    data: voucheesPage,
+    data: borrowersPage,
     maxPages,
     activePage,
     onChange,
-  } = usePagination(vouchees);
+  } = usePagination(borrowers);
 
   return (
     <Card mt="24px">
       <Card.Header
-        title={`Active borrowers · ${vouchees.length}`}
+        title={`Active borrowers · ${borrowers.length}`}
         subTitle="Contacts actively borrowing against your stake"
       />
+      <Box mt="16px" />
       {vouchees.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No borrowers" />
@@ -48,7 +52,7 @@ export default function BorrowersCard() {
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {voucheesPage.map(({ address }) => (
+          {borrowersPage.map(({ address }) => (
             <TableRow
               key={address}
               onClick={() => navigate(`/contacts?address=${address}`)}
