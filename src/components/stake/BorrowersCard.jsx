@@ -52,7 +52,7 @@ export default function BorrowersCard() {
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">Balance owed (DAI)</TableHead>
           </TableRow>
-          {borrowersPage.map(({ address }) => (
+          {borrowersPage.map(({ address, locking }) => (
             <TableRow
               key={address}
               onClick={() => navigate(`/contacts?address=${address}`)}
@@ -73,7 +73,7 @@ export default function BorrowersCard() {
               <TableCell align="center">
                 <StatusBadge address={address} />
               </TableCell>
-              <TableCell align="right">{format(0)}</TableCell>
+              <TableCell align="right">{format(locking)}</TableCell>
             </TableRow>
           ))}
         </Table>
