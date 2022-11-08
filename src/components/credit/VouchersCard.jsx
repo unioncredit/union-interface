@@ -22,12 +22,16 @@ export default function VouchersCard() {
   const navigate = useNavigate();
   const { data: vouchers = [] } = useVouchers();
 
+  const vouchersOrdered = vouchers.sort((a, b) =>
+    a.trust.gt(b.trust) ? -1 : 1
+  );
+
   const {
     data: vouchersPage,
     maxPages,
     activePage,
     onChange,
-  } = usePagination(vouchers);
+  } = usePagination(vouchersOrdered);
 
   const voucherCount = vouchers.length;
 
