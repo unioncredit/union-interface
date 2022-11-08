@@ -19,7 +19,13 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { isAddress } from "ethers/lib/utils";
 import { useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-import { chain, useAccount, useEnsAddress, useSwitchNetwork } from "wagmi";
+import {
+  chain,
+  useAccount,
+  useEnsAddress,
+  useNetwork,
+  useSwitchNetwork,
+} from "wagmi";
 import { useMemberData } from "providers/MemberData";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
@@ -27,10 +33,15 @@ import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import ConnectButton from "components/shared/ConnectButton";
+import { blockExplorerAddress } from "utils/blockExplorer";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const { open } = useModals();
+  const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
+
+  const [copied, copy] = useCopyToClipboard();
 
   const {
     address = ZERO_ADDRESS,
@@ -77,7 +88,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             </Box>
             <Box mt="8px">
               <Badge label={truncateAddress(address)} color="grey" mr="4px" />
-              <a href="#" target="_blank" rel="noreferrer">
+              <a
+                href={blockExplorerAddress(chain.id, address)}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <External width="24px" />
               </a>
             </Box>
@@ -114,7 +129,8 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               mt="8px"
               icon={Link}
               variant="secondary"
-              label="Copy profile link"
+              label={copied ? "Copied" : "Copy profile link"}
+              onClick={() => copy(window.location.host + window.location.hash)}
             />
           </Box>
         </Card.Body>
