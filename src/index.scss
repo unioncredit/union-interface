@@ -20,3 +20,9 @@ a {
     color: #3b82f6;
   }
 }
+
+.backButton ~ .modal__title {
+  width: 100%;
+  position: absolute;
+  left: 0;
+}
