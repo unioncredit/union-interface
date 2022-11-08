@@ -32,6 +32,7 @@ import { compareAddresses } from "utils/compare";
 import { RelativeTime } from "./BlockRelativeTime";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { TransactionTypes, EIP3770, ZERO_ADDRESS } from "constants";
+import { blockExplorerTx } from "utils/blockExplorer";
 
 const icons = {
   [TransactionTypes.CANCEL]: CancelledVouch,
@@ -74,13 +75,18 @@ function TransactionHistoryRow({
   type,
   address,
   staker,
+  id,
   borrower,
   timestamp,
 }) {
+  const { chain } = useNetwork();
+
   const Icon = icons[type];
   const text = texts[type]({ amount, staker, borrower });
 
   if (!Icon || !text) return null;
+
+  const hash = id.split("-")[0];
 
   return (
     <TableRow>
@@ -100,7 +106,7 @@ function TransactionHistoryRow({
             {text}
           </Label>
           <Label as="p" size="small" grey={400} m={0}>
-            <a href="#" target="_blank">
+            <a href={blockExplorerTx(chain.id, hash)} target="_blank">
               <RelativeTime timestamp={timestamp} />{" "}
               <InlineExternal width="12px" />
             </a>
