@@ -26,7 +26,7 @@ export default function BorrowersCard() {
 
   const borrowers = vouchees
     .filter((vouchee) => vouchee.locking.gt(ZERO))
-    .sort((a) => (a.isOverdue ? 1 : -1));
+    .sort((a) => (a.isOverdue ? -1 : 1));
 
   const {
     data: borrowersPage,
