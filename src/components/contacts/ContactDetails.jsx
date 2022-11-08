@@ -103,7 +103,11 @@ export default function ContactDetails({ contact, setContact, type }) {
             <Stat
               size="extra-small"
               label="Trust"
-              tooltip="The DAI amount this address trusts you with"
+              tooltip={
+                type === ContactsType.VOUCHERS
+                  ? "The DAI amount this address trusts you with"
+                  : "The DAI amount you trust this address with"
+              }
               value={<Dai value={format(trust)} />}
             />
           </Grid.Col>
@@ -111,7 +115,11 @@ export default function ContactDetails({ contact, setContact, type }) {
             <Stat
               size="extra-small"
               label="Vouch"
-              tooltip="The DAI amount this address can underwrite based on their total staked DAI"
+              tooltip={
+                type === ContactsType.VOUCHERS
+                  ? "The DAI amount this address can underwrite based on their total staked DAI"
+                  : "The DAI amount you can underwrite for this address"
+              }
               value={<Dai value={format(vouch)} />}
             />
           </Grid.Col>
@@ -119,7 +127,11 @@ export default function ContactDetails({ contact, setContact, type }) {
             <Stat
               size="extra-small"
               label="Available"
-              tooltip="The DAI amount you can borrow from this address"
+              tooltip={
+                type === ContactsType.VOUCHERS
+                  ? "The DAI amount you can borrow from this address"
+                  : "The DAI amount this address can lock of yours"
+              }
               value={<Dai value={format(available)} />}
             />
           </Grid.Col>
