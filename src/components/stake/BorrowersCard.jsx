@@ -24,7 +24,9 @@ export default function BorrowersCard() {
   const navigate = useNavigate();
   const { data: vouchees = [] } = useVouchees();
 
-  const borrowers = vouchees.filter((vouchee) => vouchee.locking.gt(ZERO));
+  const borrowers = vouchees
+    .filter((vouchee) => vouchee.locking.gt(ZERO))
+    .sort((a) => (a.isOverdue ? 1 : -1));
 
   const {
     data: borrowersPage,
