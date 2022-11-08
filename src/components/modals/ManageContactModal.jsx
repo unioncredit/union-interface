@@ -18,6 +18,7 @@ import { ContactsType } from "constants";
 import useWrite from "hooks/useWrite";
 import { useMember } from "providers/MemberData";
 import { EDIT_VOUCH_MODAL } from "./EditVouch";
+import { WRITE_OFF_DEBT_MODAL } from "./WriteOffDebtModal";
 
 export const MANAGE_CONTACT_MODAL = "manager-contact-modal";
 
@@ -39,7 +40,7 @@ export default function ManageContactModal({ contact, type }) {
           },
           {
             label: "Outstanding debt",
-            onClick: () => alert(),
+            onClick: () => open(WRITE_OFF_DEBT_MODAL, { address }),
             value: <Dai value={format(locking)} />,
             buttonProps: {
               label: "Write-off debt",

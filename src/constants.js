@@ -27,6 +27,7 @@ export const Errors = {
   MIN_BORROW: "Amount less than minimum borrow",
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than locking",
+  EXCEEDED_LOCK: "Amount exceeded locked value",
 };
 
 export const ContactsType = {
