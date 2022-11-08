@@ -16,21 +16,21 @@ import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
 import { ZERO } from "constants";
 import format from "utils/format";
+import OverdueAlert from "./OverdueAlert";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
-import OverdueAlert from "./OverdueAlert";
 
 export default function Header({ loading }) {
   const { open } = useModals();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
-  const {
-    data: { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = {},
-  } = useMember();
+  const { data: member = {} } = useMember();
+
+  const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
   const navItems0 =
     isConnected && isMember
