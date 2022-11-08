@@ -2,7 +2,7 @@ import "./VouchModal.scss";
 
 import React, { useState } from "react";
 import cn from "classnames";
-import { Modal, ModalOverlay, Input, Dai, Button } from "@unioncredit/ui";
+import { Modal, ModalOverlay, Input, Dai, Button, Box } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
@@ -73,11 +73,13 @@ export default function VouchModal({
             label="Address or ENS"
             onChange={setAddress}
           />
-          <Input
-            error={errors.name}
-            label="Contact name"
-            onChange={register("name")}
-          />
+          <Box fluid mt="16px">
+            <Input
+              error={errors.name}
+              label="Contact name"
+              onChange={register("name")}
+            />
+          </Box>
           <Input
             type="number"
             suffix={<Dai />}
