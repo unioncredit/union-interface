@@ -29,7 +29,7 @@ export default function WriteOffDebtModal({ address }) {
 
   const vouchee = vouchees.find((v) => compareAddresses(v.address, address));
 
-  const { locked = ZERO, vouch = ZERO } = vouchee || {};
+  const { locking = ZERO, vouch = ZERO, isOverdue } = vouchee || {};
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
@@ -38,7 +38,7 @@ export default function WriteOffDebtModal({ address }) {
     });
 
   const validate = (inputs) => {
-    if (inputs.amount?.raw.gt(locked)) {
+    if (inputs.amount?.raw.gt(locking)) {
       return Errors.EXCEEDED_LOCK;
     }
   };
@@ -57,7 +57,7 @@ export default function WriteOffDebtModal({ address }) {
     contract: "userManager",
     method: "debtWriteOff",
     args: [vouchee.address, amount.raw],
-    enabled: vouchee?.address && amount.raw.gt(ZERO),
+    enabled: isOverdue && vouchee?.address && amount.raw.gt(ZERO),
     onComplete: async () => {
       await refetchVouchees();
       back();
@@ -91,7 +91,7 @@ export default function WriteOffDebtModal({ address }) {
                   size="medium"
                   align="center"
                   label="Unpaid debt"
-                  value={<Dai value={format(locked)} />}
+                  value={<Dai value={format(locking)} />}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -105,15 +105,15 @@ export default function WriteOffDebtModal({ address }) {
             suffix={<Dai />}
             error={errors.amount}
             onChange={register("amount")}
-            onCaptionButtonClick={() => setRawValue("amount", locked)}
-            caption={`Write off max. ${format(locked)} DAI`}
+            onCaptionButtonClick={() => setRawValue("amount", locking)}
+            caption={`Write off max. ${format(locking)} DAI`}
           />
           <Box justify="space-between" mt="16px">
             <Label as="p" size="small" m={0}>
               New balance owed
             </Label>
             <Label as="p" size="small" m={0}>
-              {format(locked.sub(amount.raw))}
+              {format(locking.sub(amount.raw))}
             </Label>
           </Box>
           <Label align="center" as="p" size="small" color="red500" mt="16px">

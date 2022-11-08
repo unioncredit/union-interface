@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
+import { ZERO } from "constants";
 
 const VoucheesContext = createContext({});
 
@@ -16,6 +17,7 @@ const selectVouchee = (data) => ({
   trust: data[1].trustAmount,
   vouch: data[1].vouchingAmount,
   isOverdue: data[2],
+  interest: data[3] || ZERO,
 });
 
 export default function VoucheesData({ children }) {
@@ -37,6 +39,11 @@ export default function VoucheesData({ children }) {
     {
       ...uTokenContract,
       functionName: "checkIsOverdue",
+      args: [borrower],
+    },
+    {
+      ...uTokenContract,
+      functionName: "calculatingInterest",
       args: [borrower],
     },
   ];

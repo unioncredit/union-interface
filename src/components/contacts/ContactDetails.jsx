@@ -82,6 +82,7 @@ export default function ContactDetails({ contact, setContact, type }) {
     vouch = ZERO,
     locking = ZERO,
     locked = ZERO,
+    interest = ZERO,
   } = contact || {};
 
   // vouchers have a locked amount while vouchees have a locking
@@ -135,7 +136,7 @@ export default function ContactDetails({ contact, setContact, type }) {
                     Balance Owed
                   </Label>
                   <Label as="p" grey={700} m={0}>
-                    {format(0)}
+                    {format(locking)}
                   </Label>
                 </Box>
                 <Box justify="space-between">
@@ -143,7 +144,7 @@ export default function ContactDetails({ contact, setContact, type }) {
                     Min. Payment
                   </Label>
                   <Label as="p" grey={700} m={0}>
-                    {format(0)}
+                    {format(interest)}
                   </Label>
                 </Box>
                 <Box justify="space-between">

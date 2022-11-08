@@ -27,7 +27,7 @@ export default function ManageContactModal({ contact, type }) {
   const { refetch: refetchMember } = useMember();
   const { address: connectedAddress } = useAccount();
 
-  const { address, locking = ZERO, trust = ZERO } = contact;
+  const { address, locking = ZERO, trust = ZERO, isOverdue } = contact;
 
   const options =
     type === ContactsType.VOUCHEES
@@ -44,7 +44,7 @@ export default function ManageContactModal({ contact, type }) {
             value: <Dai value={format(locking)} />,
             buttonProps: {
               label: "Write-off debt",
-              disabled: locking.lte(ZERO),
+              disabled: locking.lte(ZERO) || !isOverdue,
             },
           },
         ]
