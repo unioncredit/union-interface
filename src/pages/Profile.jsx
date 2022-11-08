@@ -42,6 +42,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const { switchNetworkAsync } = useSwitchNetwork();
 
   const [copied, copy] = useCopyToClipboard();
+  const [copiedAddress, copyAddress] = useCopyToClipboard();
 
   const {
     address = ZERO_ADDRESS,
@@ -87,7 +88,12 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               )}
             </Box>
             <Box mt="8px">
-              <Badge label={truncateAddress(address)} color="grey" mr="4px" />
+              <Badge
+                mr="4px"
+                color="grey"
+                onClick={() => copyAddress(address)}
+                label={copiedAddress ? "Copied!" : truncateAddress(address)}
+              />
               <a
                 href={blockExplorerAddress(chain.id, address)}
                 target="_blank"
