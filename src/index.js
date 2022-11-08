@@ -11,6 +11,8 @@ import Toasts from "providers/Toasts";
 import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
 
+window.Buffer = window.Buffer || require("buffer").Buffer;
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
