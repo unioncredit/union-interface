@@ -49,7 +49,7 @@ export default function StakeStats() {
                 value={<Dai value={format(totalLockedStake)} />}
                 after={
                   <Bar
-                    label={`${lockedPercentage}%`}
+                    label={`${lockedPercentage.toFixed(2)}%`}
                     percentage={lockedPercentage}
                   />
                 }
