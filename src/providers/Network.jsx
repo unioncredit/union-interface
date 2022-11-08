@@ -1,57 +1,33 @@
-import {
-  RainbowKitProvider,
-  connectorsForWallets,
-} from "@rainbow-me/rainbowkit";
-import {
-  walletConnectWallet,
-  metaMaskWallet,
-} from "@rainbow-me/rainbowkit/wallets";
-import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from "wagmi/providers/alchemy";
+import { chain, WagmiConfig, createClient } from "wagmi";
+import { ConnectKitProvider, getDefaultClient } from "connectkit";
+
 import { createContext, useContext, useState } from "react";
-import { chain, WagmiConfig, createClient, configureChains } from "wagmi";
 
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
-const { chains, provider } = configureChains(
-  [chain.mainnet, chain.arbitrum, chain.goerli],
-  [
-    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
-    publicProvider(),
-  ]
+const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
+
+const chains = [chain.mainnet, chain.arbitrum, chain.goerli];
+
+const wagmiClient = createClient(
+  getDefaultClient({
+    appName: "Union Credit",
+    alchemyId,
+    chains,
+  })
 );
 
-const connectors = connectorsForWallets([
-  {
-    groupName: "Recommended",
-    wallets: [
-      metaMaskWallet({ chains, shimDisconnect: true }),
-      walletConnectWallet({ chains }),
-    ],
-  },
-]);
-
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
-
 export default function Network({ children }) {
-  const [initialChain, setInitialChain] = useState(null);
+  const [initialChain, setInitialChain] = useState(chain.goerli.id);
 
   return (
     <NetworkContext.Provider value={{ initialChain, setInitialChain }}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider
-          chains={chains}
-          autoConnect={false}
-          modalSize="compact"
-        >
+        <ConnectKitProvider initialChainId={initialChain}>
           {children}
-        </RainbowKitProvider>
+        </ConnectKitProvider>
       </WagmiConfig>
     </NetworkContext.Provider>
   );

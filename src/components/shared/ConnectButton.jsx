@@ -1,5 +1,5 @@
 import { Button, Wallet } from "@unioncredit/ui";
-import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectKitButton } from "connectkit";
 
 import Avatar from "components/shared/Avatar";
 import { useModals } from "providers/ModalManager";
@@ -10,18 +10,14 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
   const { open } = useModals();
 
   return (
-    <RainbowKitConnectButton.Custom>
-      {({ account, chain, openConnectModal, mounted }) => {
-        const { displayName, address } = account || {};
-
-        const isConnected = mounted && account && chain;
-
+    <ConnectKitButton.Custom>
+      {({ isConnected, show, address, ensName }) => {
         if (isConnected) {
           return (
             connectedElement || (
               <Wallet
                 avatar={<Avatar address={address} />}
-                name={displayName || truncateAddress(address)}
+                name={ensName || truncateAddress(address)}
                 onClick={() => open(ACCOUNT_MODAL)}
               />
             )
@@ -30,13 +26,13 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
 
         return (
           <Button
+            onClick={show}
             label="Connect"
             className="ConnectButton"
-            onClick={openConnectModal}
             {...buttonProps}
           />
         );
       }}
-    </RainbowKitConnectButton.Custom>
+    </ConnectKitButton.Custom>
   );
 }

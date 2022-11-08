@@ -10,8 +10,8 @@ import {
 } from "@unioncredit/ui";
 import cn from "classnames";
 import { useState } from "react";
+import { useModal } from "connectkit";
 import { useAccount, useSwitchNetwork } from "wagmi";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { networks } from "config/networks";
 import { useAppNetwork } from "providers/Network";
@@ -19,10 +19,10 @@ import { useAppNetwork } from "providers/Network";
 import "./NetworkSelect.scss";
 
 export default function NetworkSelect() {
+  const { setOpen } = useModal();
   const { isConnected } = useAccount();
   const { initialChain, setInitialChain } = useAppNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  const { openConnectModal } = useConnectModal();
 
   const [selected, setSelected] = useState(networks[0]);
 
@@ -72,13 +72,12 @@ export default function NetworkSelect() {
           <Button
             fluid
             label="Open Union Dashboard"
-            disabled={!!initialChain}
             onClick={() => {
               if (isConnected) {
                 switchNetwork(selected.chainId);
               } else {
                 setInitialChain(selected.chainId);
-                openConnectModal();
+                setOpen(true);
               }
             }}
           />
