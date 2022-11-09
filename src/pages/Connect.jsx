@@ -1,10 +1,13 @@
 import { Helmet } from "react-helmet";
-import { Heading, Text, Grid, Box } from "@unioncredit/ui";
+import { Heading, Text, Grid, Box, Alert } from "@unioncredit/ui";
 
 import Header from "components/connect/Header";
 import NetworkSelect from "components/connect/NetworkSelect";
+import { useNetwork } from "wagmi";
 
 export default function ConnectPage() {
+  const { chain } = useNetwork();
+
   return (
     <Grid className="ConnectPage">
       <Helmet>
@@ -15,7 +18,14 @@ export default function ConnectPage() {
           <Header />
           <Box justify="center" fluid>
             <Box maxw="420px" direction="vertical">
-              <Heading mt="120px" mb="0">
+              {chain?.unsupported && (
+                <Alert
+                  m={0}
+                  align="center"
+                  label="Unsupported network selected in wallet"
+                />
+              )}
+              <Heading mt={chain?.unsupported ? "72px" : "120px"} mb="0">
                 Connect to a Credit Network
               </Heading>
               <Text mt="0" mb="16px">

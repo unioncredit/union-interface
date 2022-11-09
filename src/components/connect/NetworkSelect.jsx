@@ -9,8 +9,8 @@ import {
   Control,
 } from "@unioncredit/ui";
 import cn from "classnames";
-import { useState } from "react";
-import { useAccount, useSwitchNetwork } from "wagmi";
+import { useEffect, useState } from "react";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { networks } from "config/networks";
@@ -19,12 +19,22 @@ import { useAppNetwork } from "providers/Network";
 import "./NetworkSelect.scss";
 
 export default function NetworkSelect() {
+  const { chain } = useNetwork();
   const { isConnected } = useAccount();
-  const { initialChain, setInitialChain } = useAppNetwork();
-  const { switchNetwork } = useSwitchNetwork();
+  const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
-  const [selected, setSelected] = useState(networks[0]);
+  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    if (isConnected && chain?.id && !chain?.unsupported) {
+      const toSelect = networks.find((network) => network.chainId === chain.id);
+      if (toSelect.chainId !== selected?.chainId) {
+        setSelected(toSelect);
+      }
+    }
+  }, [isConnected, chain?.id]);
 
   return (
     <Grid>
@@ -34,7 +44,7 @@ export default function NetworkSelect() {
             {networks.map((props) => {
               const { label, value, avatar, description, chainId } = props;
 
-              const active = selected.chainId === chainId;
+              const active = isConnected && selected?.chainId === chainId;
 
               return (
                 <Card
@@ -42,9 +52,22 @@ export default function NetworkSelect() {
                   packed
                   maxw="100%"
                   key={value}
-                  onClick={() => setSelected(props)}
+                  onClick={async () => {
+                    if (!isConnected) return;
+
+                    const oldSelection = selected;
+                    setSelected(props);
+
+                    try {
+                      await switchNetworkAsync(chainId);
+                    } catch (e) {
+                      console.log("Network select error:", e.message);
+                      setSelected(oldSelection);
+                    }
+                  }}
                   className={cn("NetworkSelect__innerCard", {
                     "NetworkSelect__innerCard--active": active,
+                    "NetworkSelect__innerCard--disabled": !isConnected,
                   })}
                 >
                   <Box align="center">
@@ -71,16 +94,15 @@ export default function NetworkSelect() {
           </Box>
           <Button
             fluid
-            label="Open Union Dashboard"
-            disabled={!!initialChain}
-            onClick={() => {
-              if (isConnected) {
-                switchNetwork(selected.chainId);
-              } else {
-                setInitialChain(selected.chainId);
-                openConnectModal();
-              }
-            }}
+            disabled={chain?.unsupported}
+            label={
+              isConnected
+                ? chain?.unsupported
+                  ? "Select a Supported Network"
+                  : "Open Union Dashboard"
+                : "Connect Wallet"
+            }
+            onClick={isConnected ? () => setAppReady(true) : openConnectModal}
           />
         </Grid.Col>
       </Grid.Row>

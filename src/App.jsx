@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { Layout } from "@unioncredit/ui";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 import Routes from "./Routes";
 
@@ -12,28 +11,27 @@ import ProtocolData from "providers/ProtocolData";
 import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
+import { useEffect } from "react";
 
 export default function App() {
   const { chain } = useNetwork();
-  const { isConnected } = useAccount();
-  const { switchNetworkAsync } = useSwitchNetwork();
-  const { initialChain, setInitialChain } = useAppNetwork();
+  const { isConnected, isDisconnected } = useAccount();
+  const { appReady, setAppReady } = useAppNetwork();
 
   useEffect(() => {
-    if (isConnected && initialChain && chain.id) {
-      if (initialChain !== chain.id) {
-        (async () => {
-          await switchNetworkAsync(initialChain);
-          setInitialChain(null);
-        })();
-      } else {
-        setInitialChain(null);
-      }
+    if (appReady && (isDisconnected || chain?.unsupported)) {
+      setAppReady(false);
     }
-  }, [initialChain, chain?.id, isConnected, switchNetworkAsync]);
+  }, [appReady, chain?.unsupported, isDisconnected]);
 
-  if (chain?.unsupported || !isConnected || initialChain) {
-    return <ConnectPage />;
+  if (chain?.unsupported || !isConnected) {
+    return (
+      <Layout>
+        <Layout.Main>
+          <ConnectPage />
+        </Layout.Main>
+      </Layout>
+    );
   }
 
   return (
@@ -45,7 +43,7 @@ export default function App() {
               <VouchersData>
                 <VoucheesData>
                   <ModalManager>
-                    <Routes />
+                    {appReady ? <Routes /> : <ConnectPage />}
                   </ModalManager>
                 </VoucheesData>
               </VouchersData>

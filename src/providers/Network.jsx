@@ -42,14 +42,14 @@ const wagmiClient = createClient({
 });
 
 export default function Network({ children }) {
-  const [initialChain, setInitialChain] = useState(null);
+  const [appReady, setAppReady] = useState(false);
 
   return (
-    <NetworkContext.Provider value={{ initialChain, setInitialChain }}>
+    <NetworkContext.Provider value={{ appReady, setAppReady }}>
       <WagmiConfig client={wagmiClient}>
         <RainbowKitProvider
           chains={chains}
-          autoConnect={false}
+          autoConnect={true}
           modalSize="compact"
         >
           {children}

@@ -30,7 +30,7 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
 
         return (
           <Button
-            label="Connect"
+            label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}
             {...buttonProps}
