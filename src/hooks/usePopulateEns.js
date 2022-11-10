@@ -22,7 +22,6 @@ export default function usePopulateEns(inputData) {
             ens: await fetchEnsName({
               address: row.address,
               chainId: chain.mainnet.id,
-
             }),
           }))
         );

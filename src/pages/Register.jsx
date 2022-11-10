@@ -14,7 +14,6 @@ import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
 import { ZERO } from "constants";
 import format from "utils/format";
-import Header from "components/shared/Header";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
 import { useProtocol } from "providers/ProtocolData";
@@ -41,7 +40,6 @@ export default function RegisterPage() {
       <Helmet>
         <title>Register | Union Credit Protocol</title>
       </Helmet>
-      <Header />
       <Grid>
         <Grid.Row justify="center">
           <Grid.Col xs={11} md={8}>

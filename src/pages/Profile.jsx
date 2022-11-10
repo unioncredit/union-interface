@@ -14,7 +14,6 @@ import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import Avatar from "components/shared/Avatar";
-import Header from "components/shared/Header";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { isAddress } from "ethers/lib/utils";
 import { useParams } from "react-router-dom";
@@ -202,7 +201,6 @@ export default function Profile() {
       <Helmet>
         <title>Profile {address} | Union Credit Protocol</title>
       </Helmet>
-      <Header />
       <ProfileInner
         chainId={chainId}
         profileMember={profileMember}

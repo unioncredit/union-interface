@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useNetwork, chain } from "wagmi";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
-import Header from "components/shared/Header";
 import GovernaceStats from "components/governance/GovernanceStats";
 import ProposalsCard from "components/governance/ProposalsCard";
 import MyGovernanceStats from "components/governance/MyGovernanceStats";
@@ -19,7 +18,6 @@ export default function GovernancePage() {
       <Helmet>
         <title>Governance | Union Credit Protocol</title>
       </Helmet>
-      <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu
           className="ToggleMenu"

@@ -2,7 +2,6 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, ToggleMenu } from "@unioncredit/ui";
 
-import Header from "components/shared/Header";
 import CreditStats from "components/credit/CreditStats";
 import ShareCard from "components/credit/ShareCard";
 import VouchersCard from "components/credit/VouchersCard";
@@ -18,7 +17,6 @@ export default function CreditPage() {
       <Helmet>
         <title>Credit | Union Credit Protocol</title>
       </Helmet>
-      <Header />
       <Box justify="center" fluid mb="24px">
         <ToggleMenu
           className="ToggleMenu"

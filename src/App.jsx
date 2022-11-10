@@ -12,6 +12,7 @@ import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
 import { useEffect } from "react";
+import Header from "components/shared/Header";
 
 export default function App() {
   const { chain } = useNetwork();
@@ -43,7 +44,14 @@ export default function App() {
               <VouchersData>
                 <VoucheesData>
                   <ModalManager>
-                    {appReady ? <Routes /> : <ConnectPage />}
+                    {appReady ? (
+                      <>
+                        <Header />
+                        <Routes />
+                      </>
+                    ) : (
+                      <ConnectPage />
+                    )}
                   </ModalManager>
                 </VoucheesData>
               </VouchersData>

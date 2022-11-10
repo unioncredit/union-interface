@@ -7,7 +7,6 @@ import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRig
 
 import { ZERO_ADDRESS } from "constants";
 import Avatar from "components/shared/Avatar";
-import Header from "components/shared/Header";
 import { useGovernance } from "providers/GovernanceData";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
@@ -45,7 +44,6 @@ export default function ProposalPage() {
       <Helmet>
         <title>{title} | Union Credit Protocol</title>
       </Helmet>
-      <Header />
       <Grid>
         {/* ----------------------------------------------
          * Breadcrumbs
