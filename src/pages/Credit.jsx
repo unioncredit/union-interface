@@ -29,7 +29,7 @@ export default function CreditPage() {
           initialActive={0}
         />
       </Box>
-      <Box fluid justify="center" direction="vertical" mb="120px">
+      <Box fluid justify="center" direction="vertical">
         <CreditStats />
         <ShareCard
           content="Get more Union vouches to increase your total available credit."

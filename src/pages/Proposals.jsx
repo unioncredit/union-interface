@@ -28,7 +28,7 @@ export default function ProposalsPage() {
           initialActive={1}
         />
       </Box>
-      <Box fluid justify="center" direction="vertical" mb="120px">
+      <Box fluid justify="center" direction="vertical">
         <NetworkNotice />
         <ProposalsCard
           showAction={false}

@@ -7,7 +7,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@unioncredit/ui": "0.3.0-beta.13",
+    "@unioncredit/ui": "0.3.0-beta.14",
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.6",
@@ -32,6 +32,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts start",
+    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\""

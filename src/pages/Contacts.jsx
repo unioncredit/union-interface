@@ -54,7 +54,6 @@ export default function ContactsPage({ type }) {
           </Grid.Col>
         </Grid.Row>
       </Grid>
-      <Box mb="120px" />
     </>
   );
 }

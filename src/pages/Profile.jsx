@@ -69,7 +69,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   };
 
   return (
-    <Box fluid justify="center" direction="vertical" mb="120px">
+    <Box fluid justify="center" direction="vertical">
       {/*--------------------------------------------------------------
         Profile Header 
       *--------------------------------------------------------------*/}

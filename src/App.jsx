@@ -1,4 +1,4 @@
-import { Layout } from "@unioncredit/ui";
+import { Box, Label, Layout } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
 
 import Routes from "./Routes";
@@ -50,6 +50,13 @@ export default function App() {
             </MemberData>
           </GovernanceData>
         </ProtocolData>
+        <Box mt="56px" mb="24px" w="100%">
+          <Box justify="center" fluid>
+            <Label as="p" size="small" grey={300} align="center">
+              Build: {process.env.REACT_APP_VERSION}
+            </Label>
+          </Box>
+        </Box>
       </Layout.Main>
     </Layout>
   );

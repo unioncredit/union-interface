@@ -35,7 +35,7 @@ export default function GovernancePage() {
           initialActive={0}
         />
       </Box>
-      <Box fluid justify="center" direction="vertical" mb="120px">
+      <Box fluid justify="center" direction="vertical">
         <NetworkNotice />
         <GovernaceStats />
         {connectedChain?.id === chain.mainnet.id && <MyGovernanceStats />}
