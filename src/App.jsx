@@ -1,4 +1,4 @@
-import { Box, Label, Layout } from "@unioncredit/ui";
+import { Box, Grid, Label, Layout } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { useEffect } from "react";

@@ -36,15 +36,29 @@ export default function NetworkSelect() {
     : chain?.id;
 
   useEffect(() => {
-    if (isConnected && targetChain && !chain?.unsupported) {
-      const toSelect = networks.find(
-        (network) => network.chainId === targetChain
-      );
-      if (toSelect?.chainId !== selected?.chainId) {
-        return setSelected(toSelect);
+    (async function () {
+      if (
+        switchNetworkAsync &&
+        isConnected &&
+        targetChain &&
+        !chain?.unsupported
+      ) {
+        const toSelect = networks.find(
+          (network) => network.chainId === targetChain
+        );
+        if (toSelect?.chainId !== selected?.chainId) {
+          setSelected(toSelect);
+
+          // If the current network is not he same as the selected network
+          // fire off a chain network request. This is to support the ?chain
+          // URL search param
+          if (toSelect.chainId !== chain.id) {
+            await switchNetworkAsync(toSelect.chainId);
+          }
+        }
       }
-    }
-  }, [isConnected, targetChain]);
+    })();
+  }, [isConnected, targetChain, switchNetworkAsync]);
 
   return (
     <Grid>
