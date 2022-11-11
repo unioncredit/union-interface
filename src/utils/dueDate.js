@@ -1,7 +1,7 @@
 import { ZERO } from "constants";
 import { BlockSpeed } from "constants";
 
-const NoPaymentLabel = "No payment due";
+export const NoPaymentLabel = "No payment due";
 
 function parseMs(milliseconds) {
   if (typeof milliseconds !== "number") {

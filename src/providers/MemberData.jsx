@@ -7,6 +7,7 @@ import { calculateMinPayment } from "utils/numbers";
 
 const selectUserManager = (data) => {
   const interest = data[12] || ZERO;
+  const owed = data[11] || ZERO;
 
   return {
     isMember: data[0] || false,
@@ -20,14 +21,14 @@ const selectUserManager = (data) => {
     unionBalance: data[8] || ZERO,
     daiBalance: data[9] || ZERO,
     unclaimedRewards: data[10] || ZERO,
-    owed: data[11] || ZERO,
+    owed,
     interest,
     lastRepay: data[13] || ZERO,
     votes: data[14] || ZERO,
     delegate: data[15] || ZERO_ADDRESS,
     isOverdue: data[16] || false,
     // calculated values
-    minPayment: calculateMinPayment(interest || ZERO),
+    minPayment: owed.gt(ZERO) ? calculateMinPayment(interest || ZERO) : ZERO,
   };
 };
 

@@ -4,7 +4,7 @@ import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInf
 
 import { ZERO } from "constants";
 import format from "utils/format";
-import dueDate from "utils/dueDate";
+import dueDate, { NoPaymentLabel } from "utils/dueDate";
 import { reduceBnSum } from "utils/reduce";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
@@ -35,6 +35,13 @@ export default function CreditStats() {
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
   const locked = vouchers.map(({ locked }) => locked).reduce(reduceBnSum, ZERO);
+
+  const dueDateDisplay = dueDate(
+    lastRepay,
+    overdueBlocks,
+    blockNumber,
+    connectedChain.id
+  );
 
   return (
     <Card>
@@ -80,15 +87,15 @@ export default function CreditStats() {
                 after={
                   <Label
                     size="small"
-                    color="blue500"
-                    onClick={() => open(PAYMENT_REMINDER_MODAL)}
+                    color={
+                      dueDateDisplay === NoPaymentLabel ? "grey500" : "blue500"
+                    }
+                    onClick={() =>
+                      dueDateDisplay !== NoPaymentLabel &&
+                      open(PAYMENT_REMINDER_MODAL)
+                    }
                   >
-                    {dueDate(
-                      lastRepay,
-                      overdueBlocks,
-                      blockNumber,
-                      connectedChain.id
-                    )}
+                    {dueDateDisplay}
                   </Label>
                 }
               />
