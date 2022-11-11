@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@unioncredit/ui": "0.3.0-beta.14",
+    "add-event-to-calendar": "^1.0.7",
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.6",
@@ -30,8 +31,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
     "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts start",
     "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
     "test": "react-scripts test",
