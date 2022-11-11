@@ -149,55 +149,57 @@ export default function ContactList({
           <EmptyState label="No contacts" />
         </Card.Body>
       ) : (
-        <Table>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead>Account</TableHead>
-            {type === ContactsType.VOUCHEES ? (
-              <>
-                <TableHead align="center">Status</TableHead>
-                <TableHead align="right">Balance owed (DAI)</TableHead>
-              </>
-            ) : (
-              <TableHead align="right">Trust Limit (DAI)</TableHead>
-            )}
-          </TableRow>
-          {contactsPage.map((row) => {
-            const { address, locking = ZERO, trust = ZERO } = row;
+        <div className="TableContainer">
+          <Table>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Account</TableHead>
+              {type === ContactsType.VOUCHEES ? (
+                <>
+                  <TableHead align="center">Status</TableHead>
+                  <TableHead align="right">Balance owed (DAI)</TableHead>
+                </>
+              ) : (
+                <TableHead align="right">Trust Limit (DAI)</TableHead>
+              )}
+            </TableRow>
+            {contactsPage.map((row) => {
+              const { address, locking = ZERO, trust = ZERO } = row;
 
-            return (
-              <TableRow
-                key={address}
-                active={address === contact?.address}
-                onClick={() => setContact(row)}
-              >
-                <TableCell fixedSize>
-                  <Avatar size={24} address={address} />
-                </TableCell>
-                <TableCell>
-                  <Box direction="vertical">
-                    <Label grey={700} m={0}>
-                      <PrimaryLabel address={address} />
-                    </Label>
-                    <Label size="small" grey={400} m={0}>
-                      {truncateAddress(address)}
-                    </Label>
-                  </Box>
-                </TableCell>
-                {type === ContactsType.VOUCHEES ? (
-                  <>
-                    <TableCell align="center">
-                      <StatusBadge address={address} />
-                    </TableCell>
-                    <TableCell align="right">{format(locking)}</TableCell>
-                  </>
-                ) : (
-                  <TableCell align="right">{format(trust)}</TableCell>
-                )}
-              </TableRow>
-            );
-          })}
-        </Table>
+              return (
+                <TableRow
+                  key={address}
+                  active={address === contact?.address}
+                  onClick={() => setContact(row)}
+                >
+                  <TableCell fixedSize>
+                    <Avatar size={24} address={address} />
+                  </TableCell>
+                  <TableCell>
+                    <Box direction="vertical">
+                      <Label grey={700} m={0}>
+                        <PrimaryLabel address={address} />
+                      </Label>
+                      <Label size="small" grey={400} m={0}>
+                        {truncateAddress(address)}
+                      </Label>
+                    </Box>
+                  </TableCell>
+                  {type === ContactsType.VOUCHEES ? (
+                    <>
+                      <TableCell align="center">
+                        <StatusBadge address={address} />
+                      </TableCell>
+                      <TableCell align="right">{format(locking)}</TableCell>
+                    </>
+                  ) : (
+                    <TableCell align="right">{format(trust)}</TableCell>
+                  )}
+                </TableRow>
+              );
+            })}
+          </Table>
+        </div>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
