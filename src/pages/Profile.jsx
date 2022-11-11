@@ -18,13 +18,8 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { isAddress } from "ethers/lib/utils";
 import { useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-import {
-  chain,
-  useAccount,
-  useEnsAddress,
-  useNetwork,
-  useSwitchNetwork,
-} from "wagmi";
+import { chain, useAccount, useEnsAddress, useSwitchNetwork } from "wagmi";
+
 import { useMemberData } from "providers/MemberData";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
@@ -37,7 +32,6 @@ import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const { open } = useModals();
-  const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
 
   const [copied, copy] = useCopyToClipboard();
@@ -59,7 +53,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   const isSelf = compareAddresses(
     profileMember.address,
-    connectedMember.address
+    connectedMember.address || ZERO_ADDRESS
   );
 
   const handleVouch = async () => {
@@ -94,7 +88,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 label={copiedAddress ? "Copied!" : truncateAddress(address)}
               />
               <a
-                href={blockExplorerAddress(chain.id, address)}
+                href={blockExplorerAddress(chainId, address)}
                 target="_blank"
                 rel="noreferrer"
               >

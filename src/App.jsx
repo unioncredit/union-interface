@@ -1,5 +1,7 @@
 import { Box, Label, Layout } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
+import { matchRoutes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import Routes from "./Routes";
 
@@ -11,21 +13,29 @@ import ProtocolData from "providers/ProtocolData";
 import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
-import { useEffect } from "react";
 import Header from "components/shared/Header";
+import { general as generalRoutes } from "App.routes";
 
 export default function App() {
+  const location = useLocation();
+
   const { chain } = useNetwork();
   const { isConnected, isDisconnected } = useAccount();
   const { appReady, setAppReady } = useAppNetwork();
+
+  const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
   useEffect(() => {
     if (appReady && (isDisconnected || chain?.unsupported)) {
       setAppReady(false);
     }
-  }, [appReady, chain?.unsupported, isDisconnected]);
 
-  if (chain?.unsupported || !isConnected) {
+    if (isGeneralRoute) {
+      setAppReady(true);
+    }
+  }, [appReady, chain?.unsupported, isDisconnected, isGeneralRoute]);
+
+  if ((chain?.unsupported || !isConnected) && !isGeneralRoute) {
     return (
       <Layout>
         <Layout.Main>
