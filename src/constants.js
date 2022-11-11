@@ -53,6 +53,12 @@ export const EIP3770 = {
   [chain.goerli.id]: "goe",
 };
 
+export const EIP3770Map = {
+  eth: chain.mainnet.id,
+  arb1: chain.arbitrum.id,
+  goe: chain.goerli.id,
+};
+
 export const TheGraphUrls = {
   [chain.mainnet.id]:
     "https://api.thegraph.com/subgraphs/name/geraldhost/union",

@@ -15,6 +15,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 import { networks } from "config/networks";
 import { useAppNetwork } from "providers/Network";
+import { EIP3770Map } from "constants";
 
 import "./NetworkSelect.scss";
 
@@ -27,14 +28,24 @@ export default function NetworkSelect() {
 
   const [selected, setSelected] = useState(null);
 
+  const urlSearchParams = new URLSearchParams(
+    window.location.hash.split("?")[1]
+  );
+
+  const targetChain = urlSearchParams.has("chain")
+    ? EIP3770Map[urlSearchParams.get("chain")]
+    : chain?.id;
+
   useEffect(() => {
-    if (isConnected && chain?.id && !chain?.unsupported) {
-      const toSelect = networks.find((network) => network.chainId === chain.id);
-      if (toSelect.chainId !== selected?.chainId) {
-        setSelected(toSelect);
+    if (isConnected && targetChain && !chain?.unsupported) {
+      const toSelect = networks.find(
+        (network) => network.chainId === targetChain
+      );
+      if (toSelect?.chainId !== selected?.chainId) {
+        return setSelected(toSelect);
       }
     }
-  }, [isConnected, chain?.id]);
+  }, [isConnected, targetChain]);
 
   return (
     <Grid>
