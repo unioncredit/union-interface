@@ -18,6 +18,7 @@ import { useAppNetwork } from "providers/Network";
 import { EIP3770Map } from "constants";
 
 import "./NetworkSelect.scss";
+import { locationSearch } from "utils/location";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -28,9 +29,7 @@ export default function NetworkSelect() {
 
   const [selected, setSelected] = useState(null);
 
-  const urlSearchParams = new URLSearchParams(
-    window.location.hash.split("?")[1]
-  );
+  const urlSearchParams = locationSearch();
 
   const targetChain = urlSearchParams.has("chain")
     ? EIP3770Map[urlSearchParams.get("chain")]

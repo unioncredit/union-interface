@@ -31,6 +31,7 @@ import { useModals } from "providers/ModalManager";
 import useContactSearch from "hooks/useContactSearch";
 import Filters, { filterFns, sortFns } from "./Filters";
 import useIsMobile from "hooks/useIsMobile";
+import { locationSearch } from "utils/location";
 
 export default function ContactList({
   contact,
@@ -51,9 +52,7 @@ export default function ContactList({
 
   useEffect(() => {
     // Get the fake search params from the end of the hash fragment
-    const urlSearchParams = new URLSearchParams(
-      window.location.hash.split("?")[1]
-    );
+    const urlSearchParams = locationSearch();
 
     // If a search param has been provided in the hash URL
     // #/contacts?address=ADDRESS then we try and find that
