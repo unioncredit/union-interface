@@ -12,6 +12,7 @@ import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
+import { PAYMENT_REMINDER_MODAL } from "components/modals/PaymentReminderModal";
 
 export default function CreditStats() {
   const { open } = useModals();
@@ -77,7 +78,11 @@ export default function CreditStats() {
                 mb="4.5px"
                 value={<Dai value={format(minPayment)} />}
                 after={
-                  <Label size="small" color="blue500" onClick={() => alert()}>
+                  <Label
+                    size="small"
+                    color="blue500"
+                    onClick={() => open(PAYMENT_REMINDER_MODAL)}
+                  >
                     {dueDate(
                       lastRepay,
                       overdueBlocks,

@@ -1,11 +1,34 @@
+import {
+  Box,
+  Label,
+  Modal,
+  ModalOverlay,
+  Text,
+  Button,
+  ButtonRow,
+} from "@unioncredit/ui";
 import { useMemo } from "react";
 import makeUrls from "add-event-to-calendar";
-import { Box, Label, Modal, ModalOverlay, Text, Button } from "@unioncredit/ui";
+import { chain, useBlockNumber, useNetwork } from "wagmi";
 import { ReactComponent as Calendar } from "@unioncredit/ui/lib/icons/calendar.svg";
+
+import format from "utils/format";
+import dueDate from "utils/dueDate";
+import { useMember } from "providers/MemberData";
+import { useProtocol } from "providers/ProtocolData";
+import { useModals } from "providers/ModalManager";
 
 export const PAYMENT_REMINDER_MODAL = "payment-reminder-modal";
 
 export default function PaymentReminderModal() {
+  const { close } = useModals();
+  const { chain: connectedChain } = useNetwork();
+  const { data: member = {} } = useMember();
+  const { data: protocol = {} } = useProtocol();
+  const { data: blockNumber } = useBlockNumber({
+    chainId: chain.mainnet.id,
+  });
+
   const date = useMemo(() => {
     const date = new Date();
     date.setDate(date.getDate() + 14);
@@ -21,6 +44,12 @@ export default function PaymentReminderModal() {
   };
 
   const urls = makeUrls(calendarData);
+
+  const {
+    interest = ZERO,
+    lastRepay = ZERO,
+    overdueBlocks = ZERO,
+  } = { ...member, ...protocol };
 
   /*--------------------------------------------------------------
     Render Component 
@@ -40,7 +69,7 @@ export default function PaymentReminderModal() {
               First payment amount
             </Label>
             <Label as="p" size="small" grey={400}>
-              {format(format(interest))} DAI
+              {format(interest)} DAI
             </Label>
           </Box>
           <Box justify="space-between" mt="4px">
@@ -48,7 +77,12 @@ export default function PaymentReminderModal() {
               First payment due
             </Label>
             <Label as="p" size="small" grey={400}>
-              {paymentDueDate}
+              {dueDate(
+                lastRepay,
+                overdueBlocks,
+                blockNumber,
+                connectedChain.id
+              )}
             </Label>
           </Box>
           <ButtonRow
