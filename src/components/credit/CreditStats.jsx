@@ -34,7 +34,6 @@ export default function CreditStats() {
   } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
-  const locked = vouchers.map(({ locked }) => locked).reduce(reduceBnSum, ZERO);
 
   const dueDateDisplay = dueDate(
     lastRepay,
@@ -63,7 +62,7 @@ export default function CreditStats() {
                 value={<Dai value={format(vouch)} />}
                 after={
                   <Label m={0}>
-                    {format(locked)} DAI unavailable
+                    {format(vouch.sub(creditLimit))} DAI unavailable
                     <Tooltip content="These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time">
                       <TooltipIcon width="16px" />
                     </Tooltip>
