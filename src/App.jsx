@@ -1,7 +1,7 @@
-import { Box, Grid, Label, Layout } from "@unioncredit/ui";
-import { useAccount, useNetwork } from "wagmi";
-import { matchRoutes, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAccount, useNetwork } from "wagmi";
+import { Box, Label, Layout } from "@unioncredit/ui";
+import { matchRoutes, useLocation } from "react-router-dom";
 
 import Routes from "./Routes";
 
@@ -57,6 +57,7 @@ export default function App() {
                     {appReady ? (
                       <>
                         <Header />
+                        <Box mb="24px" />
                         <Routes />
                       </>
                     ) : (
