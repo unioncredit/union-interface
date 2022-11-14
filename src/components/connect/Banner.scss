@@ -1,0 +1,24 @@
+.ConnectBanner {
+  height: 176px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../../images/gradient.png");
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  background-size: cover;
+  background-position: center;
+
+  @media screen and (max-width: 1200px) {
+    background-size: 1200px;
+  }
+
+  .heading.heading {
+    font-weight: 400;
+    font-size: 20px;
+    lin-height: 28px;
+  }
+}

@@ -24,7 +24,7 @@ import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
 
-export default function Header({ loading }) {
+export default function Header({ loading, showNav = true }) {
   const { open } = useModals();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
@@ -68,18 +68,20 @@ export default function Header({ loading }) {
                 {isConnected && <NetworkSelect />}
               </Box>
             </Grid.Col>
-            <Grid.Col align="center" className="hide-lt-850">
-              {/*--------------------------------------------------------------
+            {showNav && (
+              <Grid.Col align="center" className="hide-lt-850">
+                {/*--------------------------------------------------------------
                 Desktop Navigation 
               *--------------------------------------------------------------*/}
-              <Box
-                fluid
-                justify="center"
-                className={{ "Header__Box--loading": loading }}
-              >
-                {navigation}
-              </Box>
-            </Grid.Col>
+                <Box
+                  fluid
+                  justify="center"
+                  className={{ "Header__Box--loading": loading }}
+                >
+                  {navigation}
+                </Box>
+              </Grid.Col>
+            )}
             <Grid.Col align="right">
               <Box justify="flex-end">
                 {isConnected && (
@@ -101,14 +103,16 @@ export default function Header({ loading }) {
               </Box>
             </Grid.Col>
           </Grid.Row>
-          <Grid.Row>
-            {/*--------------------------------------------------------------
-              Mobile Navigation 
-            *--------------------------------------------------------------*/}
-            <Box my="16px" className="hide-gt-850" fluid>
-              <Grid.Col align="center">{navigation}</Grid.Col>
-            </Box>
-          </Grid.Row>
+          {showNav && (
+            <Grid.Row>
+              {/*--------------------------------------------------------------
+                Mobile Navigation 
+              *--------------------------------------------------------------*/}
+              <Box my="16px" className="hide-gt-850" fluid>
+                <Grid.Col align="center">{navigation}</Grid.Col>
+              </Box>
+            </Grid.Row>
+          )}
         </Grid>
       </Layout.Header>
       <OverdueAlert />
