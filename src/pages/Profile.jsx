@@ -52,7 +52,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   );
 
   const isSelf = compareAddresses(
-    profileMember.address,
+    profileMember.address || ZERO_ADDRESS,
     connectedMember.address || ZERO_ADDRESS
   );
 
@@ -193,7 +193,7 @@ export default function Profile() {
   return (
     <>
       <Helmet>
-        <title>Profile {address} | Union Credit Protocol</title>
+        <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <ProfileInner
         chainId={chainId}
