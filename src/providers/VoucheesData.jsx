@@ -6,6 +6,7 @@ import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { ZERO } from "constants";
+import { CACHE_TIME } from "constants";
 
 const VoucheesContext = createContext({});
 
@@ -66,6 +67,8 @@ export default function VoucheesData({ children }) {
       }));
     },
     contracts: contracts,
+    cacheTime: CACHE_TIME,
+    staleTime: Infinity,
   });
 
   useEffect(() => {

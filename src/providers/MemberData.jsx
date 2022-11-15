@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef } from "react";
 import useContract from "hooks/useContract";
 import { ZERO, ZERO_ADDRESS } from "constants";
 import { calculateMinPayment } from "utils/numbers";
+import { CACHE_TIME } from "constants";
 
 const selectUserManager = (data) => {
   const interest = data[12] || ZERO;
@@ -74,6 +75,7 @@ function usePollMemberData(address, chainId) {
       ...contract,
       chainId,
     })),
+    cacheTime: CACHE_TIME,
   });
 
   const { refetch } = resp;
@@ -195,6 +197,8 @@ export function useMemberData(address, chainId) {
       ...contract,
       chainId,
     })),
+    cacheTime: CACHE_TIME,
+    staleTime: Infinity,
   });
 
   return {
