@@ -50,7 +50,7 @@ export default function ConnectPage() {
                   />
                 )}
                 <Heading mt="24px" mb="0">
-                  Connect to a Credit Network
+                  Select a Credit Network
                 </Heading>
                 <Text mt="0" mb="16px">
                   Select one of Union’s credit networks
