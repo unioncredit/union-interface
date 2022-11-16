@@ -1,3 +1,5 @@
+import "./Register.scss";
+
 import {
   Card,
   Grid,
@@ -40,10 +42,10 @@ export default function RegisterPage() {
       <Helmet>
         <title>Register | Union Credit Protocol</title>
       </Helmet>
-      <Grid>
+      <Grid className="Register">
         <Grid.Row justify="center">
           <Grid.Col xs={11} md={8}>
-            <Heading mt="48px" mb="0">
+            <Heading mb="0" className="Register__heading">
               Become a Union member
             </Heading>
             <Text mt="0" mb="16px">

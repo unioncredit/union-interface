@@ -1,5 +1,6 @@
 @import "@rainbow-me/rainbowkit/styles.css";
 @import "@unioncredit/ui/lib";
+@import "./variables.scss";
 
 body {
   margin: 0;
@@ -41,4 +42,9 @@ a {
 
 .layout-header {
   padding: 16px 0;
+  margin-bottom: 24px;
+
+  @media screen and (max-width: $mobileWidth) {
+    margin-bottom: 0;
+  }
 }

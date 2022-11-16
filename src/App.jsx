@@ -57,7 +57,6 @@ export default function App() {
                     {appReady ? (
                       <>
                         <Header />
-                        <Box mb="24px" />
                         <Routes />
                       </>
                     ) : (

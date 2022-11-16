@@ -1,0 +1,11 @@
+@import "../variables.scss";
+
+.Register {
+  &__heading {
+    margin-top: 48px;
+
+    @media screen and (max-width: $mobileWidth) {
+      margin-top: 0;
+    }
+  }
+}
