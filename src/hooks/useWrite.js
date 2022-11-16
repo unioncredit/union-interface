@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useNetwork } from "wagmi";
 
 import { Status } from "constants";
 import praseAppLog from "utils/praseAppLog";
@@ -16,6 +16,7 @@ export default function useWrite({
   contract,
   onComplete,
 }) {
+  const { chain } = useNetwork();
   const { addLog } = useAppLogs();
   const { addToast, closeToast } = useToasts();
   const contractConfig = useContract(contract);
@@ -37,19 +38,28 @@ export default function useWrite({
    */
   const onClick = useCallback(async () => {
     setLoading(true);
-    const toastId = addToast(
-      parseToast(Status.PENDING, method, args, null),
+    let toastId = addToast(
+      parseToast(Status.PENDING, method, args, null, chain.id),
       false
     );
 
     try {
       const tx = await writeAsync();
+
+      // Replace current pending toast with a new pending toast
+      // that links out to etherscan
+      closeToast(toastId);
+      toastId = addToast(
+        parseToast(Status.PENDING, method, args, tx, chain.id),
+        false
+      );
+
       await tx.wait();
 
       onComplete && (await onComplete());
 
       addLog(praseAppLog(Status.SUCCESS, method, args, tx));
-      addToast(parseToast(Status.SUCCESS, method, args, tx));
+      addToast(parseToast(Status.SUCCESS, method, args, tx, chain.id));
 
       return true;
     } catch (error) {
@@ -59,7 +69,7 @@ export default function useWrite({
 
       if (error.code == "ACTION_REJECTED") {
         // User rejected the request
-        addToast(parseToast(Status.FAILED, method, args, null));
+        addToast(parseToast(Status.FAILED, method, args, null, chain.id));
       }
 
       return false;
@@ -67,7 +77,7 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [writeAsync, method, JSON.stringify(args)]);
+  }, [writeAsync, method, JSON.stringify(args), chain.id]);
 
   /*--------------------------------------------------------------
     Return  

@@ -1,14 +1,19 @@
-import { Status } from "constants";
+import { chain } from "wagmi";
+
 import format from "./format";
+import { Status } from "constants";
+import { blockExplorerTx } from "./blockExplorer";
 import { truncateAddress } from "./truncateAddress";
 
-// TODO:
-const chainId = null;
-const getBlockExplorerLink = () => "#";
-
-export default function praseToast(status, method, args, tx) {
+export default function parseToast(
+  status,
+  method,
+  args,
+  tx,
+  chainId = chain.mainnet.id
+) {
   const sharedProps = {
-    link: getBlockExplorerLink(chainId, tx),
+    link: tx ? blockExplorerTx(chainId, tx.hash) : null,
     variant: status,
     id: `${status}__${method}__${Date.now()}`,
   };
