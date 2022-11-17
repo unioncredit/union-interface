@@ -46,11 +46,13 @@ export default function ModalManager({ children }) {
   const [modal, setModal] = useState(null);
 
   const close = () => {
+    document.body.classList.remove("no-scroll");
     setModal(null);
     setProps(null);
   };
 
   const open = (key, props) => {
+    document.body.classList.add("no-scroll");
     setModal(key);
     if (props) setProps(props);
   };

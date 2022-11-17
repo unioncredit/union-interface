@@ -19,7 +19,18 @@ import { ZERO } from "constants";
 import { ContactsType } from "constants";
 import useIsMobile from "hooks/useIsMobile";
 import { useModals } from "providers/ModalManager";
+import { useEffect } from "react";
 import format from "utils/format";
+
+function NoScrollModal(props) {
+  useEffect(() => {
+    document.body.classList.add("no-scroll");
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  });
+  return <Modal {...props} />;
+}
 
 export default function ContactDetails({ contact, setContact, type }) {
   const { open } = useModals();
@@ -197,15 +208,15 @@ export default function ContactDetails({ contact, setContact, type }) {
     <Card overflow>
       {isMobile ? (
         <ModalOverlay onClick={() => setContact(null)}>
-          <Modal size="large">
+          <NoScrollModal size="large">
             <Modal.Header
               title="Contact details"
               className="contactDetailsModal"
               onClose={() => setContact(null)}
             />
             <Modal.Body>{content}</Modal.Body>
-            <TransactionHistory staker={address} pageSize={2} />
-          </Modal>
+            <TransactionHistory staker={address} pageSize={1} />
+          </NoScrollModal>
         </ModalOverlay>
       ) : (
         <>

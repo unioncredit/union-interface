@@ -7,6 +7,10 @@ body {
   padding: 0;
   overflow-y: scroll;
   background-color: #fff;
+
+  &.no-scroll {
+    overflow: hidden;
+  }
 }
 
 a {

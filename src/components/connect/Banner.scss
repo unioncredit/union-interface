@@ -1,7 +1,6 @@
 @import "../../variables.scss";
 
 .ConnectBanner {
-  margin-top: -24px;
   height: 176px;
   display: flex;
   width: 80%;
@@ -17,6 +16,10 @@
 
   @media screen and (max-width: $mobileWidth) {
     height: 120px;
+  }
+
+  @media screen and (min-width: $mobileWidth - 1px) {
+    margin-top: -24px;
   }
 
   .heading.heading {
