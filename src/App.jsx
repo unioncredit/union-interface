@@ -13,6 +13,7 @@ import ProtocolData from "providers/ProtocolData";
 import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
+import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 
@@ -48,26 +49,28 @@ export default function App() {
   return (
     <Layout>
       <Layout.Main>
-        <ProtocolData>
-          <GovernanceData>
-            <MemberData>
-              <VouchersData>
-                <VoucheesData>
-                  <ModalManager>
-                    {appReady ? (
-                      <>
-                        <Header />
-                        <Routes />
-                      </>
-                    ) : (
-                      <ConnectPage />
-                    )}
-                  </ModalManager>
-                </VoucheesData>
-              </VouchersData>
-            </MemberData>
-          </GovernanceData>
-        </ProtocolData>
+        <Cache>
+          <ProtocolData>
+            <GovernanceData>
+              <MemberData>
+                <VouchersData>
+                  <VoucheesData>
+                    <ModalManager>
+                      {appReady ? (
+                        <>
+                          <Header />
+                          <Routes />
+                        </>
+                      ) : (
+                        <ConnectPage />
+                      )}
+                    </ModalManager>
+                  </VoucheesData>
+                </VouchersData>
+              </MemberData>
+            </GovernanceData>
+          </ProtocolData>
+        </Cache>
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
             <Label as="p" size="small" grey={300} align="center">
