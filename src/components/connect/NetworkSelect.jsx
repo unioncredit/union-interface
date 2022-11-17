@@ -95,9 +95,6 @@ export default function NetworkSelect() {
                   })}
                 >
                   <Box align="center">
-                    <Box p="0 12px" className="NetworkSelect__controlBox">
-                      <Control type="radio" checked={active} />
-                    </Box>
                     <Box fluid p="12px" className="NetworkSelect__contentBox">
                       <Box justify="center" mr="16px">
                         <Avatar size={40} src={avatar} />
@@ -110,6 +107,13 @@ export default function NetworkSelect() {
                           {description}
                         </Label>
                       </Box>
+                    </Box>
+                    <Box p="0 12px" className="NetworkSelect__controlBox">
+                      {active ? (
+                        <Button variant="pill" label="Selected" color="blue" />
+                      ) : (
+                        <Button variant="pill" label="Switch" />
+                      )}
                     </Box>
                   </Box>
                 </Card>

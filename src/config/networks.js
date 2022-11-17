@@ -5,7 +5,7 @@ export const networks = [
     imageSrc: "/networks/ethereum.png",
     value: "ethereum",
     label: "Ethereum",
-    description: "Use Union on Ethereum’s main network",
+    description: "Use Union on Mainnet",
     avatar: "/networks/ethereum-avatar.png",
     chainId: 1,
     networkData: {
@@ -19,7 +19,7 @@ export const networks = [
     imageSrc: "/networks/arbitrum.png",
     value: "arbitrum one",
     label: "Arbitrum",
-    description: "Use Arbitrum’s L2 to manage your credit",
+    description: "Use Arbitrum’s L2",
     avatar: "/networks/arbitrum-avatar.png",
     chainId: 42161,
     networkData: {
