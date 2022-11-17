@@ -1,10 +1,6 @@
 .card.NetworkSelect__innerCard {
   cursor: pointer;
 
-  .NetworkSelect__contentBox {
-    border-left: 1px solid #e7e5e4;
-  }
-
   &--active {
     background: #eff6ff;
     border-color: #2563eb;

@@ -34,7 +34,7 @@ export const networks = [
     imageSrc: "/networks/gorli.png",
     value: "goerli",
     label: "Goerli",
-    description: "Use Union on goerli for testing",
+    description: "Use Union on a testnet",
     avatar: "/networks/gorli-avatar.png",
     chainId: 5,
     networkData: {
