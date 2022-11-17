@@ -65,6 +65,11 @@ export default function ContactList({
       );
 
       if (searchContact) {
+        window.history.pushState(
+          history.state,
+          document.title,
+          window.location.href.split("?")[0]
+        );
         setContact(searchContact);
         return;
       }
