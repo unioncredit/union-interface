@@ -195,23 +195,24 @@ export default function ContactDetails({ contact, setContact, type }) {
   -------------------------------------------------------*/
   return (
     <Card overflow>
-      <Card.Body>
-        {isMobile ? (
-          <ModalOverlay onClick={() => setContact(null)}>
-            <Modal size="large">
-              <Modal.Header
-                title="Contact details"
-                className="contactDetailsModal"
-                onClose={() => setContact(null)}
-              />
-              <Modal.Body>{content}</Modal.Body>
-            </Modal>
-          </ModalOverlay>
-        ) : (
-          content
-        )}
-      </Card.Body>
-      <TransactionHistory staker={address} />
+      {isMobile ? (
+        <ModalOverlay onClick={() => setContact(null)}>
+          <Modal size="large">
+            <Modal.Header
+              title="Contact details"
+              className="contactDetailsModal"
+              onClose={() => setContact(null)}
+            />
+            <Modal.Body>{content}</Modal.Body>
+            <TransactionHistory staker={address} pageSize={2} />
+          </Modal>
+        </ModalOverlay>
+      ) : (
+        <>
+          <Card.Body>{content}</Card.Body>
+          <TransactionHistory staker={address} />
+        </>
+      )}
     </Card>
   );
 }

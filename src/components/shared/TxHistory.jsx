@@ -121,6 +121,7 @@ function TransactionHistoryRow({
 }
 
 export function TransactionHistory({
+  pageSize = 8,
   staker = ZERO_ADDRESS,
   borrower = ZERO_ADDRESS,
 }) {
@@ -131,7 +132,7 @@ export function TransactionHistory({
     maxPages,
     activePage,
     onChange,
-  } = usePagination(data);
+  } = usePagination(data, pageSize);
 
   if (data.length <= 0) {
     return (
