@@ -21,7 +21,7 @@ export default function ConnectPage() {
             <Header showNav={false} />
             <Banner />
             <Box justify="center" fluid>
-              <Box maxw="420px" direction="vertical">
+              <Box className="ConnectPage__innerContainer" direction="vertical">
                 {chain?.unsupported && (
                   <Alert
                     m={0}
