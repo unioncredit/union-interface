@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { useContractRead } from "wagmi";
 import { useEffect, useState } from "react";
 import { MultiStepButton } from "@unioncredit/ui";
@@ -55,7 +56,7 @@ export default function Approval({
   const approveButtonProps = useWrite({
     contract: tokenContract,
     method: "approve",
-    args: [spender, amount],
+    args: [spender, ethers.constants.MaxUint256],
     enabled: amount.gt(0) && allowance.lt(amount),
     onComplete: refetchAllowance,
   });
