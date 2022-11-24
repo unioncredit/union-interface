@@ -1,3 +1,5 @@
+import "./Profile.scss";
+
 import {
   Badge,
   Box,
@@ -8,21 +10,33 @@ import {
   Heading,
   Stat,
   Text,
+  Avatar as UiAvatar,
 } from "@unioncredit/ui";
+import {
+  chain,
+  useAccount,
+  useEnsAddress,
+  useNetwork,
+  useSwitchNetwork,
+} from "wagmi";
 import { Helmet } from "react-helmet";
+import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
+import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
+import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
+import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { isAddress } from "ethers/lib/utils";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-import { chain, useAccount, useEnsAddress, useSwitchNetwork } from "wagmi";
 
 import { useMemberData } from "providers/MemberData";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
+import { networks } from "config/networks";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
@@ -31,7 +45,10 @@ import { blockExplorerAddress } from "utils/blockExplorer";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
+  const navigate = useNavigate();
+
   const { open } = useModals();
+  const { chain: connectedChain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
 
   const [copied, copy] = useCopyToClipboard();
@@ -56,20 +73,24 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
     connectedMember.address || ZERO_ADDRESS
   );
 
-  const handleVouch = async () => {
-    await switchNetworkAsync(Number(chainId));
-    open(VOUCH_MODAL, { address });
-  };
+  const targetNetwork = networks.find(
+    (network) => network.chainId === Number(chainId)
+  );
 
   return (
-    <Box fluid justify="center" direction="vertical">
+    <Box fluid justify="center" direction="vertical" className="ProfileInner">
       {/*--------------------------------------------------------------
         Profile Header 
       *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body>
           <Box direction="vertical" align="center">
-            <Avatar address={address} size={56} />
+            <div className="ProfileInner__avatar">
+              <Avatar address={address} size={56} />
+              <div className="ProfileInner__avatar__network">
+                <UiAvatar src={targetNetwork.avatar} size={24} />
+              </div>
+            </div>
             <Heading mt="8px" mb={0}>
               <PrimaryLabel address={address} />
             </Heading>
@@ -102,25 +123,57 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               buttonProps={{
                 fluid: true,
                 mt: "20px",
-                label: (
-                  <>
-                    Connect to vouch for <PrimaryLabel address={address} />
-                  </>
-                ),
+                label: "Connect Wallet",
               }}
               connectedElement={
-                <Button
-                  fluid
-                  mt="20px"
-                  onClick={handleVouch}
-                  disabled={alreadyVouching || isSelf}
-                  label={
-                    <>
-                      {alreadyVouching ? "Already vouching for" : "Vouch for"}{" "}
-                      <PrimaryLabel address={address} />
-                    </>
-                  }
-                />
+                isSelf ? (
+                  <Button
+                    fluid
+                    to="/"
+                    mt="20px"
+                    as={RouterLink}
+                    label="Go to Dashboard"
+                  />
+                ) : alreadyVouching ? (
+                  <Button
+                    fluid
+                    mt="20px"
+                    icon={Manage}
+                    label="Manage Contact"
+                    onClick={() => navigate(`/contacts/?address=${address}`)}
+                  />
+                ) : connectedChain?.id !== Number(chainId) ? (
+                  <Button
+                    fluid
+                    mt="20px"
+                    color="blue"
+                    icon={Switch}
+                    label={`Switch to ${targetNetwork.label}`}
+                    onClick={() => switchNetworkAsync(targetNetwork.chainId)}
+                  />
+                ) : !connectedMember.isMember ? (
+                  <Button
+                    fluid
+                    to="/"
+                    mt="20px"
+                    as={RouterLink}
+                    label="Register to vouch"
+                  />
+                ) : (
+                  <Button
+                    fluid
+                    mt="20px"
+                    icon={Vouch}
+                    onClick={() => {
+                      open(VOUCH_MODAL, { address });
+                    }}
+                    label={
+                      targetNetwork
+                        ? `Vouch on ${targetNetwork.label}`
+                        : "Vouch"
+                    }
+                  />
+                )
               }
             />
             <Button

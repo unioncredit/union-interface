@@ -1,0 +1,11 @@
+.ProfileInner {
+  &__avatar {
+    position: relative;
+
+    &__network {
+      position: absolute;
+      right: -8px;
+      bottom: 0px;
+    }
+  }
+}
