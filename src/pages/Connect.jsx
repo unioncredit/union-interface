@@ -51,11 +51,11 @@ export default function ConnectPage() {
               }
             />
           )}
-          <Heading mt="24px" mb="0">
+          <Heading mt="48px" mb="0">
             Select a Credit Network
           </Heading>
           <Text mt="0" mb="16px">
-            Select one of Union’s credit networks
+            Union’s networks are isolated, so it’s best to choose the network where your friends and DAO’s are.
           </Text>
           <NetworkSelect />
         </Box>
