@@ -11,6 +11,7 @@ import {
   Stat,
   Text,
   Avatar as UiAvatar,
+  BadgeRow,
 } from "@unioncredit/ui";
 import {
   chain,
@@ -88,26 +89,26 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <div className="ProfileInner__avatar">
               <Avatar address={address} size={56} />
               <div className="ProfileInner__avatar__network">
-                <UiAvatar src={targetNetwork.avatar} size={24} />
+                <UiAvatar src={targetNetwork.imageSrc} size={24} />
               </div>
             </div>
             <Heading mt="8px" mb={0}>
               <PrimaryLabel address={address} />
             </Heading>
             <Box mt="8px">
-              {isMember ? (
-                <Badge label="Union Member" color="blue" mr="4px" />
-              ) : (
-                <Badge label="Not a member" color="grey" mr="4px" />
-              )}
-            </Box>
-            <Box mt="8px">
-              <Badge
-                mr="4px"
-                color="grey"
-                onClick={() => copyAddress(address)}
-                label={copiedAddress ? "Copied!" : truncateAddress(address)}
-              />
+              <BadgeRow>
+                <Badge
+                  mr="4px"
+                  color="grey"
+                  onClick={() => copyAddress(address)}
+                  label={copiedAddress ? "Copied!" : truncateAddress(address)}
+                />
+                {isMember ? (
+                  <Badge label="Union Member" color="blue" mr="4px" />
+                ) : (
+                  <Badge label="Not a member" color="grey" mr="4px" />
+                )}
+              </BadgeRow>
               <a
                 href={blockExplorerAddress(chainId, address)}
                 target="_blank"
