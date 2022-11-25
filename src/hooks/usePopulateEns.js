@@ -34,7 +34,7 @@ export default function usePopulateEns(inputData) {
     args: [inputData.map(({ address }) => address)],
   });
 
-  return inputData.map((row, i) => ({
+  return inputData?.map((row, i) => ({
     ...row,
     ens: ensNames?.[i],
     label: getLabel(row.address),
