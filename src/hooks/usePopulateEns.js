@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import { fetchEnsName } from "@wagmi/core";
-import { chain } from "wagmi";
+import { chain, useContractRead } from "wagmi";
 import useLabels from "./useLabels";
 
 /**
@@ -10,33 +8,36 @@ import useLabels from "./useLabels";
  */
 export default function usePopulateEns(inputData) {
   const { getLabel } = useLabels();
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    async function populateData() {
-      try {
-        const populated = await Promise.all(
-          inputData.map(async (row) => ({
-            ...row,
-            label: getLabel(row.address),
-            ens: await fetchEnsName({
-              address: row.address,
-              chainId: chain.mainnet.id,
-            }),
-          }))
-        );
+  const { data: ensNames } = useContractRead({
+    chainId: chain.mainnet.id,
+    addressOrName: "0x3671ae578e63fdf66ad4f3e12cc0c0d71ac7510c",
+    contractInterface: [
+      {
+        inputs: [
+          { internalType: "contract ENS", name: "_ens", type: "address" },
+        ],
+        stateMutability: "nonpayable",
+        type: "constructor",
+      },
+      {
+        inputs: [
+          { internalType: "address[]", name: "addresses", type: "address[]" },
+        ],
+        name: "getNames",
+        outputs: [{ internalType: "string[]", name: "r", type: "string[]" }],
+        stateMutability: "view",
+        type: "function",
+      },
+    ],
+    functionName: "getNames",
+    args: [inputData?.map(({ address }) => address)],
+    enabled: !!inputData,
+  });
 
-        setData(populated);
-      } catch (e) {
-        console.log("populated ENS error:", error.message);
-      }
-    }
-
-    inputData &&
-      Array.isArray(inputData) &&
-      inputData.length > 0 &&
-      populateData();
-  }, [JSON.stringify(inputData)]);
-
-  return data || inputData;
+  return inputData?.map((row, i) => ({
+    ...row,
+    ens: ensNames?.[i],
+    label: getLabel(row.address),
+  }));
 }
