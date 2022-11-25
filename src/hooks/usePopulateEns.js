@@ -31,7 +31,8 @@ export default function usePopulateEns(inputData) {
       },
     ],
     functionName: "getNames",
-    args: [inputData.map(({ address }) => address)],
+    args: [inputData?.map(({ address }) => address)],
+    enabled: !!inputData,
   });
 
   return inputData?.map((row, i) => ({
