@@ -135,14 +135,6 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     as={RouterLink}
                     label="Go to Dashboard"
                   />
-                ) : alreadyVouching ? (
-                  <Button
-                    fluid
-                    mt="20px"
-                    icon={Manage}
-                    label="Manage Contact"
-                    onClick={() => navigate(`/contacts/?address=${address}`)}
-                  />
                 ) : connectedChain?.id !== Number(chainId) ? (
                   <Button
                     fluid
@@ -151,6 +143,14 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     icon={Switch}
                     label={`Switch to ${targetNetwork.label}`}
                     onClick={() => switchNetworkAsync(targetNetwork.chainId)}
+                  />
+                ) : alreadyVouching ? (
+                  <Button
+                    fluid
+                    mt="20px"
+                    icon={Manage}
+                    label="Manage Contact"
+                    onClick={() => navigate(`/contacts/?address=${address}`)}
                   />
                 ) : !connectedMember.isMember ? (
                   <Button
