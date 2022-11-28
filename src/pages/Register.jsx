@@ -44,7 +44,7 @@ export default function RegisterPage() {
       </Helmet>
       <Grid className="Register">
         <Grid.Row justify="center">
-          <Grid.Col xs={11} md={8}>
+          <Grid.Col xs={11} md={8} className="Register__col">
             <Heading mb="0" className="Register__heading">
               Become a Union member
             </Heading>

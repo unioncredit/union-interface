@@ -8,4 +8,10 @@
       margin-top: 0;
     }
   }
+  &__col {
+    @media screen and (max-width: $mobileWidth) {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
 }
