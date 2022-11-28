@@ -65,11 +65,6 @@ export default function StakeStep() {
       />
       <Card.Body>
         <Divider />
-        <ProgressBar
-          percentage={percentage}
-          completeText="Membership Fee Earned"
-          completeIcon={Check}
-        />
         <Box fluid mt="24px" mb="14px">
           <Box fluid>
             <Stat
@@ -88,12 +83,17 @@ export default function StakeStep() {
             />
           </Box>
         </Box>
-
+        <ProgressBar
+          percentage={percentage}
+          completeText="Membership Fee Earned"
+          completeIcon={Check}
+        />
         <Box
           className="StakeStep__Box__details"
           justify="space-between"
           pb="8px"
           mb="8px"
+          mt="16px"
         >
           <Label m={0}>Membership Fee</Label>
           <Label m={0}>{format(newMemberFee)} UNION</Label>
