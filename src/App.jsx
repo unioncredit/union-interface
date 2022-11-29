@@ -17,6 +17,9 @@ import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 
+/**
+ * Shim component that checks if the App is ready
+ */
 function AppReadyShim({ children }) {
   const location = useLocation();
 
@@ -28,15 +31,21 @@ function AppReadyShim({ children }) {
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
   useEffect(() => {
+    // If the member is a member then skip the connect/ready page
+    // and auto connect straight into the credit page "/"
     if (member.isMember) {
       setAppReady(true);
       return;
     }
 
+    // The app is currently set to ready but the chain is not
+    // connected or is unsupported
     if (appReady && (isDisconnected || chain?.unsupported)) {
       setAppReady(false);
     }
 
+    // If we are viewing a general route such as governance or 
+    // a member profile then we skip the ready (connect) page 
     if (isGeneralRoute) {
       setAppReady(true);
     }
