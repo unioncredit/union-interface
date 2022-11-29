@@ -6,7 +6,7 @@ import { matchRoutes, useLocation } from "react-router-dom";
 import Routes from "./Routes";
 
 import ModalManager from "providers/ModalManager";
-import MemberData from "providers/MemberData";
+import MemberData, { useMember } from "providers/MemberData";
 import VouchersData from "providers/VouchersData";
 import VoucheesData from "providers/VoucheesData";
 import ProtocolData from "providers/ProtocolData";
@@ -17,16 +17,22 @@ import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 
-export default function App() {
+function AppReadyShim({ children }) {
   const location = useLocation();
 
   const { chain } = useNetwork();
-  const { isConnected, isDisconnected } = useAccount();
+  const { isDisconnected } = useAccount();
+  const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
   useEffect(() => {
+    if (member.isMember) {
+      setAppReady(true);
+      return;
+    }
+
     if (appReady && (isDisconnected || chain?.unsupported)) {
       setAppReady(false);
     }
@@ -34,7 +40,25 @@ export default function App() {
     if (isGeneralRoute) {
       setAppReady(true);
     }
-  }, [appReady, chain?.unsupported, isDisconnected, isGeneralRoute]);
+  }, [
+    member.isMember,
+    appReady,
+    chain?.unsupported,
+    isDisconnected,
+    isGeneralRoute,
+  ]);
+
+  return <>{children}</>;
+}
+
+export default function App() {
+  const location = useLocation();
+
+  const { chain } = useNetwork();
+  const { isConnected } = useAccount();
+  const { appReady } = useAppNetwork();
+
+  const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
   if ((chain?.unsupported || !isConnected) && !isGeneralRoute) {
     return (
@@ -59,14 +83,16 @@ export default function App() {
                       <VouchersData>
                         <VoucheesData>
                           <ModalManager>
-                            {appReady ? (
-                              <>
-                                <Header />
-                                <Routes />
-                              </>
-                            ) : (
-                              <ConnectPage />
-                            )}
+                            <AppReadyShim>
+                              {appReady ? (
+                                <>
+                                  <Header />
+                                  <Routes />
+                                </>
+                              ) : (
+                                <ConnectPage />
+                              )}
+                            </AppReadyShim>
                           </ModalManager>
                         </VoucheesData>
                       </VouchersData>
