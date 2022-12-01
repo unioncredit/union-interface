@@ -20,6 +20,7 @@ import { useProtocol } from "providers/ProtocolData";
 import { calculateMaxBorrow } from "utils/numbers";
 import { WAD } from "constants";
 import useWrite from "hooks/useWrite";
+import { firstPaymentDueDate } from "../../utils/dueDate";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -137,7 +138,7 @@ export default function BorrowModal() {
               First Payment Due
             </Label>
             <Label as="p" size="small" grey={700}>
-              N/A
+              {firstPaymentDueDate()}
             </Label>
           </Box>
           <Box justify="space-between">

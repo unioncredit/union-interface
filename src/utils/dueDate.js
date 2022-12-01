@@ -1,5 +1,7 @@
 import { ZERO } from "constants";
 import { BlockSpeed } from "constants";
+import { useNetwork } from "wagmi";
+import { useProtocol } from "../providers/ProtocolData";
 
 export const NoPaymentLabel = "No payment due";
 
@@ -19,7 +21,7 @@ function parseMs(milliseconds) {
   };
 }
 
-const formatDueDate = (milliseconds) => {
+export const formatDueDate = (milliseconds) => {
   const { days, hours, minutes } = parseMs(milliseconds);
 
   if (days + hours + minutes <= 0) return NoPaymentLabel;
@@ -45,6 +47,15 @@ export default function dueDate(
     .add(overdueBlocks)
     .sub(blockNumber)
     .mul(BlockSpeed[chainId]);
+
+  return formatDueDate(Number(milliseconds.toString()));
+}
+
+export const firstPaymentDueDate = () => {
+  const { chain } = useNetwork();
+  const { data: protocol } = useProtocol();
+  const { overdueBlocks = ZERO } = { ...protocol };
+  const milliseconds = overdueBlocks.mul(BlockSpeed[chain.id])
 
   return formatDueDate(Number(milliseconds.toString()));
 }
