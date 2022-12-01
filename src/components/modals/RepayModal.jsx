@@ -86,7 +86,7 @@ export default function RepayModal() {
         "Make the payment required to cover the interest due on your loan",
     },
     {
-      display: format(Math.min(owed, daiBalance)),
+      display: format(daiBalance.lt(owed) ? daiBalance : owed),
       value: daiBalance.eq(0) ? ZERO : ethers.constants.MaxUint256,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
