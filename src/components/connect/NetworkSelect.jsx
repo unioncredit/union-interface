@@ -23,10 +23,12 @@ import format from "../../utils/format";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
+  const { address } = useAccount();
   const { isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { switchNetworkAsync } = useSwitchNetwork();
+  const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
@@ -67,7 +69,6 @@ export default function NetworkSelect() {
         <Grid.Col>
           <Box fluid align="center" direction="vertical" mb="6px">
             {networks.map((props) => {
-              const { address } = useAccount();
               const { label, value, avatar, description, chainId } = props;
               const { data } = useMemberSummary(address, chainId);
               const active = isConnected && selected?.chainId === chainId;
@@ -135,7 +136,9 @@ export default function NetworkSelect() {
               isConnected
                 ? chain?.unsupported
                   ? "Select a Supported Network"
-                  : "Open Union Dashboard"
+                  : member.isMember
+                    ? "Open Union Dashboard"
+                    : "Begin Membership Process"
                 : "Connect Wallet"
             }
             onClick={isConnected ? () => setAppReady(true) : openConnectModal}
