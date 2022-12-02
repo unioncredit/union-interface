@@ -6,7 +6,6 @@ import {
   Label,
   Button,
   Text,
-  Control,
 } from "@unioncredit/ui";
 import cn from "classnames";
 import { useEffect, useState } from "react";
@@ -19,6 +18,8 @@ import { EIP3770Map } from "constants";
 
 import "./NetworkSelect.scss";
 import { locationSearch } from "utils/location";
+import { useMemberSummary } from "../../providers/MemberData";
+import format from "../../utils/format";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -66,8 +67,9 @@ export default function NetworkSelect() {
         <Grid.Col>
           <Box fluid align="center" direction="vertical" mb="6px">
             {networks.map((props) => {
+              const { address } = useAccount();
               const { label, value, avatar, description, chainId } = props;
-
+              const { data } = useMemberSummary(address, chainId);
               const active = isConnected && selected?.chainId === chainId;
 
               return (
@@ -103,8 +105,14 @@ export default function NetworkSelect() {
                         <Text as="h3" m={0} grey={800}>
                           {label}
                         </Text>
-                        <Label as="p" m={0} pr="8px">
-                          {description}
+
+                        <Label as="p" m={0} pr="8px" size="small">
+                          {address
+                            ? data.isMember
+                              ? `Member · ${format(data.creditLimit)} DAI available`
+                              : "Not a member"
+                            : description
+                          }
                         </Label>
                       </Box>
                     </Box>
