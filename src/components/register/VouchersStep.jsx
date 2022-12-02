@@ -24,10 +24,15 @@ import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 import links from "config/links";
+import { useAccount, useNetwork } from "wagmi";
+import getProfileUrl, { generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 
 export default function VouchersStep() {
   const { data: vouchers = [] } = useVouchers();
   const { open } = useModals();
+  const { chain } = useNetwork();
+  const { address } = useAccount();
+  const profileUrl = getProfileUrl(address, chain.id);
 
   return (
     <Card size="fluid" mb="24px">
@@ -89,14 +94,14 @@ export default function VouchersStep() {
               variant="secondary"
               icon={Twitter}
               as="a"
-              href={links.twitter}
+              href={generateTwitterLink(profileUrl)}
               target="_blank"
             />
             <Button
               variant="secondary"
               icon={Telegram}
               as="a"
-              href={links.discord}
+              href={generateTelegramLink(profileUrl)}
               target="_blank"
             />
           </ButtonRow>
