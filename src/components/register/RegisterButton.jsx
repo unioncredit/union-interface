@@ -8,6 +8,7 @@ import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
+import { ReactComponent as CloudCheck } from "@unioncredit/ui/lib/icons/cloudCheck.svg";
 
 const createItems = (s1, s2, s3) => [
   { number: 1, status: s1 },
@@ -108,7 +109,7 @@ export default function RegisterButton({ onComplete }) {
       setItems(createItems("complete", "selected"));
     } else {
       // The member satisfies all the prerequisite and can register
-      setAction({ label: "Pay Membership Fee", onClick: handleRegister });
+      setAction({ label: "Pay Membership Fee", onClick: handleRegister, icon: CloudCheck });
       setLabel("Paying 1.00 UNION");
       setItems(createItems("complete", "complete", "selected"));
     }
