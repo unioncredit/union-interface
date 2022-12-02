@@ -30,6 +30,7 @@ export const Errors = {
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than locking",
   EXCEEDED_LOCK: "Amount exceeded locked value",
+  IS_OVERDUE: "You cannot borrow with an overdue balance",
 };
 
 export const ContactsType = {
