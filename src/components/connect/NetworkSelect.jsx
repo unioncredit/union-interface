@@ -18,8 +18,8 @@ import { EIP3770Map } from "constants";
 
 import "./NetworkSelect.scss";
 import { locationSearch } from "utils/location";
-import { useMemberSummary } from "../../providers/MemberData";
-import format from "../../utils/format";
+import { useMemberSummary } from "providers/MemberData";
+import format from "utils/format";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
