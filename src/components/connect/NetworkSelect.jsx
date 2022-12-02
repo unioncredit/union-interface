@@ -143,6 +143,15 @@ export default function NetworkSelect() {
             }
             onClick={isConnected ? () => setAppReady(true) : openConnectModal}
           />
+
+          <a
+            rel="noopener"
+            target="_blank"
+            className="NetworkSelect__footerLink"
+            href="https://docs.union.finance/user-guides/becoming-a-member"
+          >
+            Learn more about becoming a Union member
+          </a>
         </Grid.Col>
       </Grid.Row>
     </Grid>

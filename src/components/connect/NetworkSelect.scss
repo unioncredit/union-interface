@@ -14,3 +14,13 @@
     opacity: 0.4;
   }
 }
+.NetworkSelect__footerLink {
+  text-align: center;
+  margin-top: 1.5em;
+  font-size: 0.8em;
+  color: #373e98;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
