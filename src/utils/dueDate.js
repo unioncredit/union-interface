@@ -2,6 +2,7 @@ import { ZERO } from "constants";
 import { BlockSpeed } from "constants";
 
 export const NoPaymentLabel = "No payment due";
+const OverdueLabel = "Payment overdue";
 
 function parseMs(milliseconds) {
   if (typeof milliseconds !== "number") {
@@ -22,7 +23,7 @@ function parseMs(milliseconds) {
 const formatDueDate = (milliseconds) => {
   const { days, hours, minutes } = parseMs(milliseconds);
 
-  if (days + hours + minutes <= 0) return NoPaymentLabel;
+  if (days + hours + minutes <= 0) return OverdueLabel;
 
   return `in ${days > 0 ? `${days}d` : ""} ${hours > 0 ? `${hours}h` : ""} ${
     minutes > 0 ? `${minutes}m` : ""
