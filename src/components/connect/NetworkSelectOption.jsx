@@ -4,7 +4,7 @@ import cn from "classnames";
 import format from "utils/format";
 import useMemberSummary from "hooks/useMemberSummary";
 
-export const NetworkSelectOption = ({address, network, active, disabled, changeNetwork}) => {
+export const NetworkSelectOption = ({address, network, active, disabled, onClick}) => {
   const { label, value, avatar, description, chainId } = network;
   const { data } = useMemberSummary(address, chainId);
 
@@ -14,7 +14,7 @@ export const NetworkSelectOption = ({address, network, active, disabled, changeN
       packed
       maxw="100%"
       key={value}
-      onClick={() => changeNetwork(network, chainId)}
+      onClick={onClick}
       className={cn("NetworkSelectOption", {
         "NetworkSelectOption--active": active,
         "NetworkSelectOption--disabled": disabled,

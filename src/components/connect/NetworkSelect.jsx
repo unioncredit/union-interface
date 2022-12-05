@@ -33,14 +33,14 @@ export default function NetworkSelect() {
     ? EIP3770Map[urlSearchParams.get("chain")]
     : chain?.id;
 
-  const handleChangeNetwork = async (network, chainId) => {
+  const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
 
     const oldSelection = selected;
     setSelected(network);
 
     try {
-      await switchNetworkAsync(chainId);
+      await switchNetworkAsync(network.chainId);
     } catch (e) {
       console.log("Network select error:", e.message);
       setSelected(oldSelection);
@@ -82,7 +82,7 @@ export default function NetworkSelect() {
                 address={address}
                 network={network}
                 disabled={!isConnected}
-                changeNetwork={handleChangeNetwork}
+                onClick={() => handleChangeNetwork(network)}
                 active={isConnected && selected?.chainId === network.chainId}
               />
             ))}
