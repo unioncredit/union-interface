@@ -36,10 +36,12 @@ export default function BorrowModal() {
   } = { ...member, ...protocol };
 
   const validate = (inputs) => {
-    if (inputs.amount.raw.gt(creditLimit)) {
+    if (member.isOverdue) {
+      return Errors.IS_OVERDUE;
+    } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return Errors.MIN_BORROW;
+      return Errors.MIN_BORROW(minBorrow);
     }
   };
 
