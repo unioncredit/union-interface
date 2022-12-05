@@ -1,6 +1,6 @@
 # Union interface
 
-The front-end interface for the Union Finance credit protocol.
+The front-end interface for the Union credit protocol.
 
 ## Getting started
 
