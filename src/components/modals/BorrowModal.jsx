@@ -20,7 +20,7 @@ import { useProtocol } from "providers/ProtocolData";
 import { calculateMaxBorrow } from "utils/numbers";
 import { WAD } from "constants";
 import useWrite from "hooks/useWrite";
-import { firstPaymentDueDate } from "../../utils/dueDate";
+import useFirstPaymentDueDate from "../../hooks/useFirstPaymentDueDate";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -28,6 +28,7 @@ export default function BorrowModal() {
   const { close } = useModals();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
+  const firstPaymentDueDate = useFirstPaymentDueDate();
 
   const {
     owed = ZERO,
@@ -138,7 +139,7 @@ export default function BorrowModal() {
               First Payment Due
             </Label>
             <Label as="p" size="small" grey={700}>
-              {firstPaymentDueDate()}
+              {firstPaymentDueDate}
             </Label>
           </Box>
           <Box justify="space-between">
