@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { chain } from "wagmi";
+import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
 
@@ -26,7 +27,7 @@ export const Errors = {
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
-  MIN_BORROW: "Amount less than minimum borrow",
+  MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than locking",
   EXCEEDED_LOCK: "Amount exceeded locked value",

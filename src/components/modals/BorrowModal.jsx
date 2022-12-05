@@ -41,7 +41,7 @@ export default function BorrowModal() {
     } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return `${Errors.MIN_BORROW} (${format(minBorrow)})`;
+      return Errors.MIN_BORROW(minBorrow);
     }
   };
 
