@@ -7,23 +7,10 @@
       padding-left: 5px;
     }
   }
-
-  .avatar {
-    @media screen and (max-width: $microWidth) {
-      width: 18px !important;
-      height: 18px !important;
-    }
-  }
 }
 .VouchesStep__buttons {
-  button svg {
-    @media screen and (max-width: $microWidth) {
-      display: none;
-    }
-  }
-
   a {
-    @media screen and (max-width: $microWidth) {
+    @media screen and (max-width: 360px) {
       padding: 12px 6px !important;
     }
   }
