@@ -25,7 +25,10 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
 import links from "config/links";
 import { useAccount, useNetwork } from "wagmi";
-import getProfileUrl, { generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
+import getProfileUrl, {
+  generateTelegramLink,
+  generateTwitterLink,
+} from "utils/generateLinks";
 
 export default function VouchersStep() {
   const { data: vouchers = [] } = useVouchers();

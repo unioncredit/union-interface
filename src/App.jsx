@@ -44,8 +44,8 @@ function AppReadyShim({ children }) {
       setAppReady(false);
     }
 
-    // If we are viewing a general route such as governance or 
-    // a member profile then we skip the ready (connect) page 
+    // If we are viewing a general route such as governance or
+    // a member profile then we skip the ready (connect) page
     if (isGeneralRoute) {
       setAppReady(true);
     }

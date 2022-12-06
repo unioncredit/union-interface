@@ -109,7 +109,11 @@ export default function RegisterButton({ onComplete }) {
       setItems(createItems("complete", "selected"));
     } else {
       // The member satisfies all the prerequisite and can register
-      setAction({ label: "Pay Membership Fee", onClick: handleRegister, icon: CloudCheck });
+      setAction({
+        label: "Pay Membership Fee",
+        onClick: handleRegister,
+        icon: CloudCheck,
+      });
       setLabel("Paying 1.00 UNION");
       setItems(createItems("complete", "complete", "selected"));
     }

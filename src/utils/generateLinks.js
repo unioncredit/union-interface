@@ -1,4 +1,4 @@
-import {EIP3770} from "constants";
+import { EIP3770 } from "constants";
 
 /**
  * @name getProfileUrl

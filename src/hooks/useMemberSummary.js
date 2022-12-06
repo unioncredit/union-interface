@@ -7,17 +7,17 @@ export default function useMemberSummary(address, chainId) {
 
   const contracts = address
     ? [
-      {
-        ...userManagerContract,
-        functionName: "checkIsMember",
-        args: [address],
-      },
-      {
-        ...userManagerContract,
-        functionName: "getCreditLimit",
-        args: [address],
-      },
-    ]
+        {
+          ...userManagerContract,
+          functionName: "checkIsMember",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getCreditLimit",
+          args: [address],
+        },
+      ]
     : [];
 
   const { data, ...resp } = useContractReads({

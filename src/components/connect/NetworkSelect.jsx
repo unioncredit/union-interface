@@ -1,8 +1,4 @@
-import {
-  Grid,
-  Box,
-  Button,
-} from "@unioncredit/ui";
+import { Grid, Box, Button } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -45,7 +41,7 @@ export default function NetworkSelect() {
       console.log("Network select error:", e.message);
       setSelected(oldSelection);
     }
-  }
+  };
 
   useEffect(() => {
     (async function () {
@@ -95,8 +91,8 @@ export default function NetworkSelect() {
                 ? chain?.unsupported
                   ? "Select a Supported Network"
                   : member.isMember
-                    ? "Open Union Dashboard"
-                    : "Begin Membership Process"
+                  ? "Open Union Dashboard"
+                  : "Begin Membership Process"
                 : "Connect Wallet"
             }
             onClick={isConnected ? () => setAppReady(true) : openConnectModal}

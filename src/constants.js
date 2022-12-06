@@ -8,7 +8,7 @@ export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
 export const WAD = BigNumber.from("1000000000000000000");
 
-export const CACHE_TIME = 60_000 * 5; // 5 minutes 
+export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
 export const StakeType = {
   STAKE: "stake",
