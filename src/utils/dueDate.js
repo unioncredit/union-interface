@@ -20,7 +20,7 @@ function parseMs(milliseconds) {
   };
 }
 
-const formatDueDate = (milliseconds) => {
+export const formatDueDate = (milliseconds) => {
   const { days, hours, minutes } = parseMs(milliseconds);
 
   if (days + hours + minutes <= 0) return OverdueLabel;
