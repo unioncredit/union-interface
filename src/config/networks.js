@@ -18,7 +18,6 @@ export const networks = [
     id: "arbitrum",
     imageSrc: "/networks/arbitrum.png",
     value: "arbitrum one",
-    label: "Arbitrum",
     description: "Use Arbitrum’s L2",
     avatar: "/networks/arbitrum-avatar.png",
     chainId: 42161,
