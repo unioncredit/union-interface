@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { Heading, Label, Text, Grid, Box, Alert } from "@unioncredit/ui";
+import { Heading, Label, Text, Box, Alert } from "@unioncredit/ui";
 
 import Header from "components/shared/Header";
 import NetworkSelect from "components/connect/NetworkSelect";
@@ -22,6 +22,7 @@ export default function ConnectPage() {
           className="ConnectPage__innerContainer"
           direction="vertical"
           w="100%"
+          pb="2em"
           maxw="411px"
         >
           {chain?.unsupported && (
@@ -55,7 +56,8 @@ export default function ConnectPage() {
             Select a Credit Network
           </Heading>
           <Text mt="0" mb="16px">
-            Union’s networks are isolated, so it’s best to choose the network where your friends and DAO’s are.
+            Union’s networks are isolated, so it’s best to choose the network
+            where your friends and DAO’s are.
           </Text>
           <NetworkSelect />
         </Box>

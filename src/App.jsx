@@ -40,7 +40,13 @@ export default function App() {
     return (
       <Layout>
         <Layout.Main>
-          <ConnectPage />
+          <Grid style={{ display: "flex", flexGrow: 1 }}>
+            <Grid.Row style={{ width: "100%", margin: 0 }}>
+              <Grid.Col>
+                <ConnectPage />
+              </Grid.Col>
+            </Grid.Row>
+          </Grid>
         </Layout.Main>
       </Layout>
     );
