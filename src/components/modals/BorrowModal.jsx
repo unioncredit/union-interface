@@ -20,6 +20,7 @@ import { useProtocol } from "providers/ProtocolData";
 import { calculateMaxBorrow } from "utils/numbers";
 import { WAD } from "constants";
 import useWrite from "hooks/useWrite";
+import useFirstPaymentDueDate from "../../hooks/useFirstPaymentDueDate";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -27,6 +28,7 @@ export default function BorrowModal() {
   const { close } = useModals();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
+  const firstPaymentDueDate = useFirstPaymentDueDate();
 
   const {
     owed = ZERO,
@@ -36,10 +38,12 @@ export default function BorrowModal() {
   } = { ...member, ...protocol };
 
   const validate = (inputs) => {
-    if (inputs.amount.raw.gt(creditLimit)) {
+    if (member.isOverdue) {
+      return Errors.IS_OVERDUE;
+    } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return Errors.MIN_BORROW;
+      return Errors.MIN_BORROW(minBorrow);
     }
   };
 
@@ -137,7 +141,7 @@ export default function BorrowModal() {
               First Payment Due
             </Label>
             <Label as="p" size="small" grey={700}>
-              N/A
+              {firstPaymentDueDate}
             </Label>
           </Box>
           <Box justify="space-between">

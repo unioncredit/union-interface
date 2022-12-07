@@ -1,13 +1,25 @@
+import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
 import { Heading, Label, Text, Box, Alert } from "@unioncredit/ui";
 
+import LoadingPage from "pages/Loading";
 import Header from "components/shared/Header";
-import NetworkSelect from "components/connect/NetworkSelect";
-import { useNetwork } from "wagmi";
 import Banner from "components/connect/Banner";
+import { useMember } from "providers/MemberData";
+import NetworkSelect from "components/connect/NetworkSelect";
 
 export default function ConnectPage() {
   const { chain } = useNetwork();
+  const { isLoading } = useMember();
+
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <LoadingPage />
+      </>
+    );
+  }
 
   return (
     <>

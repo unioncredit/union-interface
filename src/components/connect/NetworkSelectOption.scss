@@ -1,0 +1,16 @@
+.card.NetworkSelectOption {
+  cursor: pointer;
+
+  &--active {
+    background: #eff6ff;
+    border-color: #2563eb;
+
+    .NetworkSelectOption__contentBox {
+      border-color: #bfdbfe;
+    }
+  }
+
+  &--disabled {
+    opacity: 0.4;
+  }
+}

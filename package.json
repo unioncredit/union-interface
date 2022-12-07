@@ -27,6 +27,7 @@
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
+    "serve": "^14.1.2",
     "wagmi": "^0.6.8",
     "web-vitals": "^2.1.4"
   },
@@ -35,7 +36,8 @@
     "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\""
+    "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
+    "serve": "serve build -l 3000"
   },
   "eslintConfig": {
     "extends": []

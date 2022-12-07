@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { chain } from "wagmi";
+import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
 
@@ -7,7 +8,7 @@ export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
 export const WAD = BigNumber.from("1000000000000000000");
 
-export const CACHE_TIME = 60_000 * 5; // 5 minutes 
+export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
 export const StakeType = {
   STAKE: "stake",
@@ -26,10 +27,11 @@ export const Errors = {
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
-  MIN_BORROW: "Amount less than minimum borrow",
+  MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than locking",
   EXCEEDED_LOCK: "Amount exceeded locked value",
+  IS_OVERDUE: "You cannot borrow with an overdue balance",
 };
 
 export const ContactsType = {

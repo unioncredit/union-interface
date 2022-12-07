@@ -19,6 +19,7 @@ export default function AppLogs({ children }) {
     const initialValue = JSON.parse(
       window.localStorage.getItem(getKey(chain.id)) || "[]"
     );
+    debugger;
 
     setLogs(initialValue);
   }, [logs, chain?.id]);
