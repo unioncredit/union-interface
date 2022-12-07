@@ -16,8 +16,12 @@ export default function StakeStats() {
 
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
-  const lockedPercentageBps = totalLockedStake.mul(WAD).div(stakedBalance);
-  const lockedPercentage = Number(lockedPercentageBps.toString()) / 1e16;
+  const lockedPercentageBps = totalLockedStake.gt(ZERO)
+    ? totalLockedStake.mul(WAD).div(stakedBalance)
+    : ZERO;
+  const lockedPercentage = lockedPercentageBps.gt(ZERO)
+    ? Number(lockedPercentageBps.toString()) / 1e16
+    : 0;
 
   const defaulted = vouchees
     .map(({ isOverdue, locking }) => {
