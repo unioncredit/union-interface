@@ -1,0 +1,17 @@
+@import "src/variables";
+
+.VouchersStep__table {
+  td:first-child,
+  th:first-of-type {
+    @media screen and (max-width: $microWidth) {
+      padding-left: 5px;
+    }
+  }
+}
+.VouchesStep__buttons {
+  a {
+    @media screen and (max-width: 360px) {
+      padding: 12px 6px !important;
+    }
+  }
+}

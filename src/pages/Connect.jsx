@@ -34,6 +34,7 @@ export default function ConnectPage() {
           className="ConnectPage__innerContainer"
           direction="vertical"
           w="100%"
+          pb="2em"
           maxw="411px"
         >
           {chain?.unsupported && (

@@ -1,3 +1,4 @@
+import "./VouchersStep.scss";
 import {
   Table,
   TableRow,
@@ -60,7 +61,7 @@ export default function VouchersStep() {
                 }
               />
             ) : (
-              <Table>
+              <Table className="VouchersStep__table">
                 <TableRow>
                   <TableHead></TableHead>
                   <TableHead>Account</TableHead>
@@ -85,7 +86,7 @@ export default function VouchersStep() {
               </Table>
             )}
           </Card>
-          <ButtonRow fluid mt="8px">
+          <ButtonRow fluid mt="8px" className="VouchesStep__buttons">
             <Button
               fluid
               color="blue"
