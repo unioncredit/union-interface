@@ -39,7 +39,7 @@ export default function ContactsPage({ type }) {
             },
           ]}
           onChange={() => setContact(null)}
-          initialActive={0}
+          initialActive={type === ContactsType.VOUCHEES ? 0 : 1}
         />
       </Box>
       <Grid>
