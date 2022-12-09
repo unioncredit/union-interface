@@ -215,7 +215,7 @@ export default function ContactDetails({ contact, setContact, type }) {
               onClose={() => setContact(null)}
             />
             <Modal.Body>{content}</Modal.Body>
-            <TransactionHistory staker={address} pageSize={1} />
+            <TransactionHistory staker={address} pageSize={3} />
           </NoScrollModal>
         </ModalOverlay>
       ) : (
