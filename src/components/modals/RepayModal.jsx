@@ -201,7 +201,7 @@ export default function RepayModal() {
                         name="amount"
                         suffix={<Dai />}
                         placeholder="0.0"
-                        error={errors.amount}
+                        error={isCustomSelected ? errors.amount : null}
                         onChange={register("amount")}
                       />
                     </Box>
