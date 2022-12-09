@@ -16,6 +16,7 @@ import { useAppNetwork } from "providers/Network";
 import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
+import ScrollToTop from "./components/misc/ScrollToTop";
 
 /**
  * Shim component that checks if the App is ready
@@ -72,6 +73,7 @@ export default function App() {
   if ((chain?.unsupported || !isConnected) && !isGeneralRoute) {
     return (
       <Layout>
+        <ScrollToTop />
         <Layout.Main>
           <Grid style={{ display: "flex", flexGrow: 1 }}>
             <Grid.Row style={{ width: "100%", margin: 0 }}>
@@ -87,6 +89,7 @@ export default function App() {
 
   return (
     <Layout>
+      <ScrollToTop />
       <Layout.Main>
         <Grid style={{ display: "flex", flexGrow: 1 }}>
           <Grid.Row style={{ width: "100%", margin: 0 }}>
