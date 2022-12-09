@@ -86,6 +86,7 @@ export default function CreditStats() {
                 after={
                   <Label
                     size="small"
+                    className="label--clickable"
                     color={
                       dueDateDisplay === NoPaymentLabel ? "grey500" : "blue500"
                     }
