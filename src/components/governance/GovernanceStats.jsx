@@ -4,8 +4,11 @@ import { useProtocol } from "providers/ProtocolData";
 
 import { ZERO } from "constants";
 import format from "utils/format";
+import { calculateInterestRate } from "utils/numbers";
+import { useNetwork } from "wagmi";
 
 export default function GovernaceStats() {
+  const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
 
   const {
@@ -49,7 +52,10 @@ export default function GovernaceStats() {
                 mt="32px"
                 align="center"
                 label="Interest rate"
-                value={format(0)}
+                value={`${calculateInterestRate(
+                  protocol.borrowRatePerBlock.toString(),
+                  chain.id
+                )}%`}
               />
             </Grid.Col>
           </Grid.Row>

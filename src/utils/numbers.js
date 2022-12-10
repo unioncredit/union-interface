@@ -1,6 +1,7 @@
-import { ZERO } from "constants";
+import { BlocksPerYear, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import format from "./format";
 
 export const min = (a, b) => {
   return a.gt(b) ? b : a;
@@ -45,4 +46,8 @@ export const calculateMinPayment = (interest) => {
   const floor = parseEther("0.1");
   const interestWithMargin = interest.mul(10010).div(10000);
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
+};
+
+export const calculateInterestRate = (borrowRatePerBlock, chainId) => {
+  return format((borrowRatePerBlock * BlocksPerYear[chainId]).toString());
 };
