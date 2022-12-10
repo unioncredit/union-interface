@@ -15,6 +15,13 @@ const buildContractConfigs = (contract, functionNames, chainId) =>
     chainId,
   }));
 
+const buildContractConfigsWithArgs = (contract, calls, chainId) =>
+  calls.map((call) => ({
+    ...contract,
+    ...call,
+    chainId,
+  }));
+
 export default function ProtcolData({ children }) {
   const { chain: connectedChain } = useNetwork();
 
@@ -22,11 +29,20 @@ export default function ProtcolData({ children }) {
 
   const isMainnet = connectedChain === chain.mainnet.id;
 
+  const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
   const governorContract = useContract("governor", chain.mainnet.id);
   const unionTokenContract = useContract("union", chainId);
+  const assetManagerContract = useContract("assetManager", chainId);
+
+  const assetManagerCalls = [
+    {
+      functionName: "getLoanableAmount",
+      args: [daiContract.addressOrName],
+    },
+  ];
 
   const userManagerFunctionNames = [
     "maxStakeAmount",
@@ -64,6 +80,11 @@ export default function ProtcolData({ children }) {
   const unionTokenFunctionNames = ["totalSupply"];
 
   const contracts = [
+    ...buildContractConfigsWithArgs(
+      assetManagerContract,
+      assetManagerCalls,
+      chainId
+    ),
     ...buildContractConfigs(
       userManagerContract,
       userManagerFunctionNames,
@@ -89,6 +110,7 @@ export default function ProtcolData({ children }) {
     enabled: true,
     select: (data) =>
       [
+        ...assetManagerCalls.map((c) => c.functionName),
         ...userManagerFunctionNames,
         ...uTokenFunctionNames,
         ...comptrollerFunctionNames,

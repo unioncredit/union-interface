@@ -1,4 +1,4 @@
-import { Stat, Button, Grid, Card, Dai, Bar } from "@unioncredit/ui";
+import { Stat, Button, Grid, Card, Dai } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 import { useProtocol } from "providers/ProtocolData";
 
@@ -8,7 +8,11 @@ import format from "utils/format";
 export default function GovernaceStats() {
   const { data: protocol = {} } = useProtocol();
 
-  const { totalStaked = ZERO, totalBorrows = ZERO } = protocol;
+  const {
+    totalStaked = ZERO,
+    totalBorrows = ZERO,
+    getLoanableAmount = ZERO,
+  } = protocol;
 
   return (
     <Card mb="24px">
@@ -29,7 +33,7 @@ export default function GovernaceStats() {
                 mt="8px"
                 label="Lending pool"
                 align="center"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(getLoanableAmount)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
