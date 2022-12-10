@@ -1,3 +1,4 @@
+import "./Connect.scss";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
 import { Heading, Label, Text, Box, Alert } from "@unioncredit/ui";
@@ -31,7 +32,7 @@ export default function ConnectPage() {
       <Banner />
       <Box justify="center" fluid>
         <Box
-          className="ConnectPage__innerContainer"
+          className="Connect__container"
           direction="vertical"
           w="100%"
           pb="2em"

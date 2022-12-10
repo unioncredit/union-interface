@@ -1,0 +1,12 @@
+.Connect__container {
+  .alert {
+    margin-top: 1em !important;
+
+    &:first-of-type {
+      margin-top: 2em !important;
+    }
+  }
+  .alert + .heading {
+    margin-top: 1.5em !important
+  }
+}
