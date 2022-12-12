@@ -25,6 +25,7 @@ import { Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { EIP3770 } from "constants";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -34,6 +35,7 @@ export default function AccountModal() {
   const { address } = useAccount();
   const { logs = [] } = useAppLogs();
   const { disconnect } = useDisconnect();
+  const [copied, copy] = useCopyToClipboard();
 
   return (
     <ModalOverlay onClick={close}>
@@ -47,7 +49,11 @@ export default function AccountModal() {
             <Heading level={2} my="4px">
               <PrimaryLabel address={address} />
             </Heading>
-            <Badge label={truncateAddress(address)} color="grey" />
+            <Badge
+              color="grey"
+              onClick={() => copy(address)}
+              label={copied ? "Copied!" : truncateAddress(address)}
+            />
           </Box>
           <ButtonRow mt="24px">
             <Button size="small" fluid label="View Profile" />
