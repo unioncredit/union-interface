@@ -34,7 +34,7 @@ export default function AccountModal() {
   const { close } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
-  const { logs = [] } = useAppLogs();
+  const { logs = [], clearLogs } = useAppLogs();
   const { disconnect } = useDisconnect();
   const [copied, copy] = useCopyToClipboard();
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
@@ -88,7 +88,12 @@ export default function AccountModal() {
           <Divider my="24px" />
           <Box justify="space-between" align="center" mb="12px">
             <Label grey={600}>Wallet Activity</Label>
-            <Button size="small" variant="pill" label="Clear activity" />
+            <Button
+              size="small"
+              variant="pill"
+              label="Clear activity"
+              onClick={clearLogs}
+            />
           </Box>
 
           <Box direction="vertical">

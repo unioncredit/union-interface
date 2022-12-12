@@ -34,6 +34,7 @@ export default function AppLogs({ children }) {
 
   const clearLogs = () => {
     window.localStorage.setItem(getKey(chain.id), JSON.stringify([]));
+    setLogs([]);
   };
 
   const appLogsCtx = {
