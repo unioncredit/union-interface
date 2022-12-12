@@ -26,6 +26,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { blockExplorerAddress } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -36,6 +37,7 @@ export default function AccountModal() {
   const { logs = [] } = useAppLogs();
   const { disconnect } = useDisconnect();
   const [copied, copy] = useCopyToClipboard();
+  const blockExplorerLink = blockExplorerAddress(chain.id, address);
 
   return (
     <ModalOverlay onClick={close}>
@@ -49,11 +51,18 @@ export default function AccountModal() {
             <Heading level={2} my="4px">
               <PrimaryLabel address={address} />
             </Heading>
-            <Badge
-              color="grey"
-              onClick={() => copy(address)}
-              label={copied ? "Copied!" : truncateAddress(address)}
-            />
+
+            <Box>
+              <Badge
+                color="grey"
+                onClick={() => copy(address)}
+                label={copied ? "Copied!" : truncateAddress(address)}
+              />
+
+              <a href={blockExplorerLink} target="_blank" rel="noreferrer">
+                <External width="24px" />
+              </a>
+            </Box>
           </Box>
           <ButtonRow mt="24px">
             <Button size="small" fluid label="View Profile" />
