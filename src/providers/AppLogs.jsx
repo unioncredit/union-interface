@@ -14,14 +14,14 @@ export default function AppLogs({ children }) {
   const [logs, setLogs] = useState(null);
 
   useEffect(() => {
-    if (logs !== null || !chain?.id) return;
+    if (!chain?.id) return;
 
     const initialValue = JSON.parse(
       window.localStorage.getItem(getKey(chain.id)) || "[]"
     );
 
     setLogs(initialValue);
-  }, [logs, chain?.id]);
+  }, [chain?.id]);
 
   const addLog = (props) => {
     if (!props) return;
