@@ -67,8 +67,14 @@ export default function AccountModal() {
               </a>
             </Box>
           </Box>
-          <ButtonRow mt="24px">
-            <Button size="small" fluid label="View Profile" />
+          <ButtonRow mt="24px" className="AccountModal__Buttons">
+            <Link
+              onClick={close}
+              to={`/profile/${EIP3770[chain.id]}:${address}`}
+            >
+              <Button size="small" fluid label="View Profile" />
+            </Link>
+
             <Button
               size="small"
               fluid
