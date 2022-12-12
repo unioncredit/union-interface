@@ -2,7 +2,8 @@ import { formatUnits } from "ethers/lib/utils";
 
 export default function format(n, digits = 2) {
   if (!n) n = "0";
-  return commify(Number(formatUnits(n)), digits);
+  const num = Number(formatUnits(n));
+  return commify(num < 0.01 ? 0 : num, digits);
 }
 
 function commify(num, digits) {
