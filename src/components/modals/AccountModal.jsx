@@ -45,7 +45,10 @@ export default function AccountModal() {
         <Modal.Header title="Wallet & Activity" onClose={close} />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
-            <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
+            <Link
+              onClick={close}
+              to={`/profile/${EIP3770[chain.id]}:${address}`}
+            >
               <Avatar size={56} address={address} />
             </Link>
             <Heading level={2} my="4px">
