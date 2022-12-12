@@ -25,6 +25,8 @@ import { Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { EIP3770 } from "constants";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { blockExplorerAddress } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -32,8 +34,10 @@ export default function AccountModal() {
   const { close } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
-  const { logs = [] } = useAppLogs();
+  const { logs = [], clearLogs } = useAppLogs();
   const { disconnect } = useDisconnect();
+  const [copied, copy] = useCopyToClipboard();
+  const blockExplorerLink = blockExplorerAddress(chain.id, address);
 
   return (
     <ModalOverlay onClick={close}>
@@ -41,16 +45,36 @@ export default function AccountModal() {
         <Modal.Header title="Wallet & Activity" onClose={close} />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
-            <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
+            <Link
+              onClick={close}
+              to={`/profile/${EIP3770[chain.id]}:${address}`}
+            >
               <Avatar size={56} address={address} />
             </Link>
             <Heading level={2} my="4px">
               <PrimaryLabel address={address} />
             </Heading>
-            <Badge label={truncateAddress(address)} color="grey" />
+
+            <Box>
+              <Badge
+                color="grey"
+                onClick={() => copy(address)}
+                label={copied ? "Copied!" : truncateAddress(address)}
+              />
+
+              <a href={blockExplorerLink} target="_blank" rel="noreferrer">
+                <External width="24px" />
+              </a>
+            </Box>
           </Box>
-          <ButtonRow mt="24px">
-            <Button size="small" fluid label="View Profile" />
+          <ButtonRow mt="24px" className="AccountModal__Buttons">
+            <Link
+              onClick={close}
+              to={`/profile/${EIP3770[chain.id]}:${address}`}
+            >
+              <Button size="small" fluid label="View Profile" />
+            </Link>
+
             <Button
               size="small"
               fluid
@@ -64,7 +88,12 @@ export default function AccountModal() {
           <Divider my="24px" />
           <Box justify="space-between" align="center" mb="12px">
             <Label grey={600}>Wallet Activity</Label>
-            <Button size="small" variant="pill" label="Clear activity" />
+            <Button
+              size="small"
+              variant="pill"
+              label="Clear activity"
+              onClick={clearLogs}
+            />
           </Box>
 
           <Box direction="vertical">

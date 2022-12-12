@@ -4,4 +4,12 @@
       margin-right: 4px;
     }
   }
+  &__Buttons {
+    & > a,
+    & > button {
+      width: 100%;
+      flex: 0 50%;
+      margin-right: 10px;
+    }
+  }
 }
