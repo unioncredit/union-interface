@@ -49,5 +49,5 @@ export const calculateMinPayment = (interest) => {
 };
 
 export const calculateInterestRate = (borrowRatePerBlock, chainId) => {
-  return format((borrowRatePerBlock * BlocksPerYear[chainId]).toString());
+  return format(borrowRatePerBlock.mul(BlocksPerYear[chainId]).toString());
 };

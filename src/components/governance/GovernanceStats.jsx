@@ -48,15 +48,17 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Stat
-                mt="32px"
-                align="center"
-                label="Interest rate"
-                value={`${calculateInterestRate(
-                  protocol.borrowRatePerBlock.toString(),
-                  chain.id
-                )}%`}
-              />
+              {protocol.borrowRatePerBlock && (
+                <Stat
+                  mt="32px"
+                  align="center"
+                  label="Interest rate"
+                  value={`${calculateInterestRate(
+                    protocol.borrowRatePerBlock,
+                    chain.id
+                  )}%`}
+                />
+              )}
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
