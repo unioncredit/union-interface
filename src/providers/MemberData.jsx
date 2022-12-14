@@ -2,7 +2,7 @@ import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect, useRef } from "react";
 
 import useContract from "hooks/useContract";
-import { ZERO, ZERO_ADDRESS } from "constants";
+import { DUST_THRESHOLD, ZERO, ZERO_ADDRESS } from "constants";
 import { calculateMinPayment } from "utils/numbers";
 import { CACHE_TIME } from "constants";
 
@@ -12,7 +12,7 @@ const selectUserManager = (data) => {
 
   return {
     isMember: data[0] || false,
-    creditLimit: data[1] || ZERO,
+    creditLimit: data[1].lt(DUST_THRESHOLD) ? ZERO : data[1],
     stakedBalance: data[2] || ZERO,
     totalLockedStake: data[3] || ZERO,
     totalFrozenAmount: data[4] || ZERO,
