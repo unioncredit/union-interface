@@ -16,7 +16,7 @@ import { useAppNetwork } from "providers/Network";
 import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
-import ScrollToTop from "./components/misc/ScrollToTop";
+import ScrollToTop from "components/misc/ScrollToTop";
 
 /**
  * Shim component that checks if the App is ready
