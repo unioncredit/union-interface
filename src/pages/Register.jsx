@@ -37,6 +37,22 @@ export default function RegisterPage() {
     unclaimedRewards = ZERO,
   } = member;
 
+  const getNumberOfTasksCompleted = () => {
+    let completed = 0;
+
+    if (unionBalance?.add(unclaimedRewards).gt(0)) {
+      completed++;
+    }
+    if (vouchers.length > 0) {
+      completed++;
+    }
+    if (isMember) {
+      completed++;
+    }
+
+    return completed;
+  };
+
   return (
     <>
       <Helmet>
@@ -49,7 +65,7 @@ export default function RegisterPage() {
               Become a Union member
             </Heading>
             <Text mt="0" mb="16px">
-              1 of 3 tasks completed
+              {getNumberOfTasksCompleted()} of 3 tasks completed
             </Text>
 
             <ProgressList>
