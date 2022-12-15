@@ -53,9 +53,8 @@ export default function GovernaceStats() {
                   mt="32px"
                   align="center"
                   label="Interest rate"
-                  value={`${calculateInterestRate(
-                    protocol.borrowRatePerBlock,
-                    chain.id
+                  value={`${format(
+                    calculateInterestRate(protocol.borrowRatePerBlock, chain.id)
                   )}%`}
                 />
               )}
