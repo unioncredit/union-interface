@@ -111,10 +111,18 @@ export default function ContactList({
 
   return (
     <Card>
-      <Card.Header
-        title={`Accounts you trust · ${contacts.length}`}
-        subTitle="Addresses you’re currently vouching for"
-      />
+      {type === ContactsType.VOUCHERS ? (
+        <Card.Header
+          title={`Accounts that trust you · ${contacts.length}`}
+          subTitle="Accounts providing you with credit"
+        />
+      ) : (
+        <Card.Header
+          title={`Accounts you trust · ${contacts.length}`}
+          subTitle="Addresses you’re currently vouching for"
+        />
+      )}
+
       {/*--------------------------------------------------------------
         Search and Filters 
       *--------------------------------------------------------------*/}
