@@ -197,7 +197,7 @@ export function useMemberData(address, chainId) {
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
+    cacheOnBlock: true,
     staleTime: Infinity,
   });
 
