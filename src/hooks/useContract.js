@@ -6,6 +6,7 @@ import {
   unionContract as GOERLI_unionContract,
   daiContract as GOERLI_daiContract,
   comptrollerContract as GOERLI_comptrollerContract,
+  assetManagerContract as GOERLI_assetManagerContract,
 } from "config/contracts/goerli";
 
 import {
@@ -14,6 +15,7 @@ import {
   unionContract as MAINNET_unionContract,
   daiContract as MAINNET_daiContract,
   comptrollerContract as MAINNET_comptrollerContract,
+  assetManagerContract as MAINNET_assetManagerContract,
   governorContract,
 } from "config/contracts/mainnet";
 
@@ -23,6 +25,7 @@ import {
   unionContract as ARBITRUM_unionContract,
   daiContract as ARBITRUM_daiContract,
   comptrollerContract as ARBITRUM_comptrollerContract,
+  assetManagerContract as ARBITRUM_assetManagerContract,
 } from "config/contracts/arbitrum";
 
 export default function useContract(name, chainId) {
@@ -35,6 +38,7 @@ export default function useContract(name, chainId) {
       union: GOERLI_unionContract,
       dai: GOERLI_daiContract,
       comptroller: GOERLI_comptrollerContract,
+      assetManager: GOERLI_assetManagerContract,
     },
     [chain.mainnet.id]: {
       governor: governorContract,
@@ -43,6 +47,7 @@ export default function useContract(name, chainId) {
       union: MAINNET_unionContract,
       dai: MAINNET_daiContract,
       comptroller: MAINNET_comptrollerContract,
+      assetManager: MAINNET_assetManagerContract,
     },
     [chain.arbitrum.id]: {
       userManager: ARBITRUM_userManagerContract,
@@ -50,6 +55,7 @@ export default function useContract(name, chainId) {
       union: ARBITRUM_unionContract,
       dai: ARBITRUM_daiContract,
       comptroller: ARBITRUM_comptrollerContract,
+      assetManager: ARBITRUM_assetManagerContract,
     },
   }[chainId || connectedChain?.id]?.[name];
 }

@@ -4,6 +4,7 @@ import unionAbi from "abis/union.json";
 import erc20Abi from "abis/erc20.json";
 import comptrollerAbi from "abis/comptroller.json";
 import governorAbi from "abis/governor.json";
+import assetManagerAbi from "abis/assetManager.json";
 
 export const userManagerContract = {
   addressOrName: "0x49c910Ba694789B58F53BFF80633f90B8631c195",
@@ -33,4 +34,9 @@ export const comptrollerContract = {
 export const governorContract = {
   addressOrName: "0xe1b3F07a9032F0d3deDf3E96c395A4Da74130f6e",
   contractInterface: governorAbi,
+};
+
+export const assetManagerContract = {
+  addressOrName: "0xb91a874D9AA8fF7E478bA61286ECc77c1A3E384d",
+  contractInterface: assetManagerAbi,
 };

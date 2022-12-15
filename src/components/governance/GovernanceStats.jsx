@@ -1,14 +1,21 @@
-import { Stat, Button, Grid, Card, Dai, Bar } from "@unioncredit/ui";
+import { Stat, Button, Grid, Card, Dai } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 import { useProtocol } from "providers/ProtocolData";
 
 import { ZERO } from "constants";
 import format from "utils/format";
+import { calculateInterestRate } from "utils/numbers";
+import { useNetwork } from "wagmi";
 
 export default function GovernaceStats() {
+  const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
 
-  const { totalStaked = ZERO, totalBorrows = ZERO } = protocol;
+  const {
+    totalStaked = ZERO,
+    totalBorrows = ZERO,
+    getLoanableAmount = ZERO,
+  } = protocol;
 
   return (
     <Card mb="24px">
@@ -29,7 +36,7 @@ export default function GovernaceStats() {
                 mt="8px"
                 label="Lending pool"
                 align="center"
-                value={<Dai value={format(0)} />}
+                value={<Dai value={format(getLoanableAmount)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
@@ -41,12 +48,16 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Stat
-                mt="32px"
-                align="center"
-                label="Interest rate"
-                value={format(0)}
-              />
+              {protocol.borrowRatePerBlock && (
+                <Stat
+                  mt="32px"
+                  align="center"
+                  label="Interest rate"
+                  value={`${format(
+                    calculateInterestRate(protocol.borrowRatePerBlock, chain.id)
+                  )}%`}
+                />
+              )}
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>

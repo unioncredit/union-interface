@@ -8,10 +8,10 @@ const ProtocolContext = createContext({});
 
 export const useProtocol = () => useContext(ProtocolContext);
 
-const buildContractConfigs = (contract, functionNames, chainId) =>
-  functionNames.map((functionName) => ({
+const buildContractConfigs = (contract, calls, chainId) =>
+  calls.map((call) => ({
     ...contract,
-    functionName,
+    ...call,
     chainId,
   }));
 
@@ -22,11 +22,20 @@ export default function ProtcolData({ children }) {
 
   const isMainnet = connectedChain === chain.mainnet.id;
 
+  const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
   const governorContract = useContract("governor", chain.mainnet.id);
   const unionTokenContract = useContract("union", chainId);
+  const assetManagerContract = useContract("assetManager", chainId);
+
+  const assetManagerCalls = [
+    {
+      functionName: "getLoanableAmount",
+      args: [daiContract.addressOrName],
+    },
+  ];
 
   const userManagerFunctionNames = [
     "maxStakeAmount",
@@ -64,23 +73,32 @@ export default function ProtcolData({ children }) {
   const unionTokenFunctionNames = ["totalSupply"];
 
   const contracts = [
+    ...buildContractConfigs(assetManagerContract, assetManagerCalls, chainId),
     ...buildContractConfigs(
       userManagerContract,
-      userManagerFunctionNames,
+      userManagerFunctionNames.map((n) => ({ functionName: n })),
       chainId
     ),
-    ...buildContractConfigs(uTokenContract, uTokenFunctionNames, chainId),
+    ...buildContractConfigs(
+      uTokenContract,
+      uTokenFunctionNames.map((n) => ({ functionName: n })),
+      chainId
+    ),
     ...buildContractConfigs(
       comptrollerContract,
-      comptrollerFunctionNames,
+      comptrollerFunctionNames.map((n) => ({ functionName: n })),
       chainId
     ),
     ...(isMainnet
-      ? buildContractConfigs(governorContract, governorFunctionsNames, chainId)
+      ? buildContractConfigs(
+          governorContract,
+          governorFunctionsNames.map((n) => ({ functionName: n })),
+          chainId
+        )
       : []),
     ...buildContractConfigs(
       unionTokenContract,
-      unionTokenFunctionNames,
+      unionTokenFunctionNames.map((n) => ({ functionName: n })),
       chainId
     ),
   ];
@@ -89,6 +107,7 @@ export default function ProtcolData({ children }) {
     enabled: true,
     select: (data) =>
       [
+        ...assetManagerCalls.map((c) => c.functionName),
         ...userManagerFunctionNames,
         ...uTokenFunctionNames,
         ...comptrollerFunctionNames,

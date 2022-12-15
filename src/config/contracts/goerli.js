@@ -3,6 +3,7 @@ import uTokenAbi from "abis/uToken.json";
 import unionAbi from "abis/union.json";
 import erc20Abi from "abis/erc20.json";
 import comptrollerAbi from "abis/comptroller.json";
+import assetManagerAbi from "../../abis/assetManager.json";
 
 export const userManagerContract = {
   addressOrName: "0xba25eb32f42B1A4c31711B3d4967e4D74561C37B",
@@ -27,4 +28,9 @@ export const daiContract = {
 export const comptrollerContract = {
   addressOrName: "0x68c44b8f51F199a02094f5a04dB3A6B8CfCd0722",
   contractInterface: comptrollerAbi,
+};
+
+export const assetManagerContract = {
+  addressOrName: "0x8B6559057C5206F6c7B19c348834Fc41067a52EB",
+  contractInterface: assetManagerAbi,
 };
