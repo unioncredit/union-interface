@@ -22,6 +22,7 @@ import { useMember } from "providers/MemberData";
 import Approval from "components/shared/Approval";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
+import { ZERO } from "constants";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -43,9 +44,16 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     ({ id }) => id === type
   );
 
-  const userStakeLimit = protocol.maxStakeAmount.sub(member.stakedBalance);
-  const maxUserStake = min(userStakeLimit, member.daiBalance);
-  const maxUserUnstake = member.stakedBalance.sub(member.totalLockedStake);
+  const {
+    stakedBalance = ZERO,
+    totalLockedStake = ZERO,
+    daiBalance = ZERO,
+    maxStakeAmount = ZERO,
+  } = { ...member, ...protocol };
+
+  const userStakeLimit = maxStakeAmount.sub(stakedBalance);
+  const maxUserStake = min(userStakeLimit, daiBalance);
+  const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
   const validateStake = (inputs) => {
     if (inputs.amount.raw.gt(maxUserStake)) {
@@ -76,7 +84,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          caption: `Balance: ${format(member.daiBalance)} DAI`,
+          caption: `Balance: ${format(daiBalance)} DAI`,
           onCaptionButtonClick: () => setRawValue("amount", maxUserStake),
         }
       : {
@@ -115,7 +123,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               Currently Staked
             </Label>
             <Label as="p" grey={700} m={0}>
-              {format(member.stakedBalance)}
+              {format(stakedBalance)}
             </Label>
           </Box>
           <Box justify="space-between" mb="4px">
@@ -123,7 +131,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               Utilized Stake
             </Label>
             <Label as="p" grey={700} m={0}>
-              {format(member.totalLockedStake)}
+              {format(totalLockedStake)}
             </Label>
           </Box>
           {type === StakeType.STAKE ? (
@@ -132,7 +140,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
                 Staking Limit
               </Label>
               <Label as="p" grey={700}>
-                {format(protocol.maxStakeAmount)}
+                {format(maxStakeAmount)}
               </Label>
             </Box>
           ) : (
