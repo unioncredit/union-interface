@@ -2,9 +2,8 @@ import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect, useRef } from "react";
 
 import useContract from "hooks/useContract";
-import { DUST_THRESHOLD, ZERO, ZERO_ADDRESS } from "constants";
 import { calculateMinPayment } from "utils/numbers";
-import { CACHE_TIME } from "constants";
+import { CACHE_TIME, DUST_THRESHOLD, ZERO, ZERO_ADDRESS } from "constants";
 
 const selectUserManager = (data) => {
   const interest = data[12] || ZERO;
@@ -197,7 +196,7 @@ export function useMemberData(address, chainId) {
       ...contract,
       chainId,
     })),
-    cacheOnBlock: true,
+    cacheTime: CACHE_TIME,
     staleTime: Infinity,
   });
 
