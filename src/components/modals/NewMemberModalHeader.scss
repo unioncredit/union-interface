@@ -1,4 +1,30 @@
 .NewMemberModalHeader {
-  background: linear-gradient(98deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(98deg, #046dfe 0%, #422adf 100%);
   padding: 32px;
+
+  &__content {
+    font-size: 0.9em;
+    margin: 0.5em 0 !important;
+  }
+}
+.NewMemberModalHeader__button {
+  color: white;
+  background: #006dff;
+  padding: 3px 10px !important;
+
+  &:hover {
+    color: #046dfe;
+
+    svg {
+      fill: #046dfe;
+    }
+  }
+
+  svg {
+    color: white;
+    fill: white;
+    width: 18px !important;
+    height: 18px !important;
+    margin-right: 0.5em !important;
+  }
 }

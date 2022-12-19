@@ -1,4 +1,6 @@
 import "./NewMemberModalHeader.scss";
+import { ReactComponent as Celebration } from "images/celebration.svg";
+import { ReactComponent as Twitter } from "images/twitter.svg";
 
 import JSConfetti from "js-confetti";
 import { useEffect, useRef } from "react";
@@ -32,20 +34,33 @@ export default function NewMemberModalHeader() {
   return (
     <div className="NewMemberModalHeader">
       <Heading align="center" color="white" size="large" m={0}>
-        New Union Member
+        Registration Complete
       </Heading>
-      <Text color="blue100" align="center" m={0}>
+      <Text
+        color="blue100"
+        align="center"
+        m={0}
+        className="NewMemberModalHeader__content"
+      >
         You’re now a member of Union’s credit network on Arbitrum. You’ll start
         with a credit line of 248.33 DAI
       </Text>
       <ButtonRow justify="center" mt="8px">
         <Button
+          icon={Celebration}
           variant="pill"
           size="small"
           label="Pop Confetti"
           onClick={popConfetti}
+          className="NewMemberModalHeader__button"
         />
-        <Button variant="pill" size="small" label="Share on Twitter" />
+        <Button
+          icon={Twitter}
+          variant="pill"
+          size="small"
+          label="Share on Twitter"
+          className="NewMemberModalHeader__button"
+        />
       </ButtonRow>
     </div>
   );
