@@ -3,6 +3,7 @@ import { parseUnits } from "ethers/lib/utils";
 
 import { ZERO } from "constants";
 import format from "utils/format";
+import { toFixed } from "utils/numbers";
 
 const empty = {
   display: "",
@@ -27,7 +28,7 @@ export default function useForm(props = {}) {
     } else {
       const parsed =
         type === "display"
-          ? { raw: parseUnits(value), display: value }
+          ? { raw: parseUnits(toFixed(value)), display: value }
           : { raw: value, display: formatValue(value) };
 
       newValues = { ...values, [name]: parsed };
