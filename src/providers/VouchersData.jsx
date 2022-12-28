@@ -6,6 +6,7 @@ import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME } from "constants";
+import { STALE_TIME } from "constants";
 
 const VouchersContext = createContext({});
 
@@ -52,7 +53,7 @@ export default function VouchersData({ children }) {
     },
     contracts: contracts,
     cacheTime: CACHE_TIME,
-    staleTime: Infinity,
+    staleTime: STALE_TIME,
   });
 
   useEffect(() => {
