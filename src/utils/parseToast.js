@@ -4,6 +4,7 @@ import format from "./format";
 import { Status } from "constants";
 import { blockExplorerTx } from "./blockExplorer";
 import { truncateAddress } from "./truncateAddress";
+import { ethers } from "ethers";
 
 export default function parseToast(
   status,
@@ -57,9 +58,12 @@ export default function parseToast(
           title: "Borrowed",
         };
       case "repayBorrow":
+        const amount = ethers.constants.MaxUint256.eq(args[0])
+          ? "maximum"
+          : format(args[0]);
         return {
           ...sharedProps,
-          content: `Repaid ${format(args[0])} DAI successfully`,
+          content: `Repaid ${amount} DAI successfully`,
           title: "Repaid borrow",
         };
       case "delegate":
@@ -77,7 +81,7 @@ export default function parseToast(
     }
   } else if (status === Status.FAILED) {
     /*--------------------------------------------------------------
-      Failed transactions 
+      Failed transactions
     --------------------------------------------------------------*/
 
     switch (method) {
@@ -114,9 +118,12 @@ export default function parseToast(
           title: "Borrowing",
         };
       case "repayBorrow":
+        const amount = ethers.constants.MaxUint256.eq(args[0])
+          ? "maximum"
+          : format(args[0]);
         return {
           ...sharedProps,
-          content: `Repaying ${format(args[0])} DAI failed`,
+          content: `Repaying ${amount} DAI failed`,
           title: "Repaying",
         };
       case "delegate":
@@ -134,7 +141,7 @@ export default function parseToast(
     }
   } else {
     /*--------------------------------------------------------------
-      Pending transactions 
+      Pending transactions
     --------------------------------------------------------------*/
 
     switch (method) {
@@ -171,9 +178,12 @@ export default function parseToast(
           title: "Borrowing",
         };
       case "repayBorrow":
+        const amount = ethers.constants.MaxUint256.eq(args[0])
+          ? "maximum"
+          : format(args[0]);
         return {
           ...sharedProps,
-          content: `Repaying ${format(args[0])} DAI`,
+          content: `Repaying ${amount} DAI`,
           title: "Repaying",
         };
       case "delegate":

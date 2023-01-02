@@ -1,3 +1,5 @@
+import { STALE_TIME } from "constants";
+import { CACHE_TIME } from "constants";
 import { chain, useContractRead } from "wagmi";
 import useLabels from "./useLabels";
 
@@ -33,6 +35,8 @@ export default function usePopulateEns(inputData) {
     functionName: "getNames",
     args: [inputData?.map(({ address }) => address)],
     enabled: !!inputData,
+    cacheTime: CACHE_TIME,
+    staleTime: STALE_TIME,
   });
 
   return inputData?.map((row, i) => ({

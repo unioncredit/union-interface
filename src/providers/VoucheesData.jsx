@@ -2,11 +2,10 @@ import chunk from "lodash/chunk";
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
-import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
+import { useMember } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
-import { ZERO } from "constants";
-import { CACHE_TIME } from "constants";
+import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
 
 const VoucheesContext = createContext({});
 
@@ -68,7 +67,7 @@ export default function VoucheesData({ children }) {
     },
     contracts: contracts,
     cacheTime: CACHE_TIME,
-    staleTime: Infinity,
+    staleTime: STALE_TIME,
   });
 
   useEffect(() => {

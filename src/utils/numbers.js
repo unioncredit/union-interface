@@ -16,23 +16,34 @@ export const bnPercent = (n, d) => {
   return Number(bps.toString()) / 10000;
 };
 
-// https://stackoverflow.com/questions/1685680/how-to-avoid-scientific-notation-for-large-numbers-in-javascript
+// Converts scientific notation to a decimal formatted string
+// https://stackoverflow.com/a/66072001
 export function toFixed(x) {
-  if (Math.abs(x) < 1.0) {
-    var e = parseInt(x.toString().split("e-")[1]);
-    if (e) {
-      x *= Math.pow(10, e - 1);
-      x = "0." + new Array(e).join("0") + x.toString().substring(2);
-    }
-  } else {
-    var e = parseInt(x.toString().split("+")[1]);
-    if (e > 20) {
-      e -= 20;
-      x /= Math.pow(10, e);
-      x += new Array(e + 1).join("0");
-    }
+  let sign = "";
+  (x += "").charAt(0) == "-" && ((x = x.substring(1)), (sign = "-"));
+  let arr = x.split(/[e]/gi);
+  if (arr.length < 2) return sign + x;
+  let dot = (0.1).toLocaleString().substr(1, 1),
+    n = arr[0],
+    exp = +arr[1],
+    w = (n = n.replace(/^0+/, "")).replace(dot, ""),
+    pos = n.split(dot)[1] ? n.indexOf(dot) + exp : w.length + exp,
+    L = pos - w.length,
+    s = "" + BigInt(w);
+  w =
+    exp >= 0
+      ? L >= 0
+        ? s + "0".repeat(L)
+        : r()
+      : pos <= 0
+      ? "0" + dot + "0".repeat(Math.abs(pos)) + s
+      : r();
+  L = w.split(dot);
+  if ((L[0] == 0 && L[1] == 0) || (+w == 0 && +s == 0)) w = 0; //** added 9/10/2021
+  return sign + w;
+  function r() {
+    return w.replace(new RegExp(`^(.{${pos}})(.)`), `$1${dot}$2`);
   }
-  return x;
 }
 
 export const calculateMaxBorrow = (creditLimit, originationFee) => {

@@ -46,7 +46,7 @@ export default function Network({ children }) {
 
   return (
     <NetworkContext.Provider value={{ appReady, setAppReady }}>
-      <WagmiConfig client={wagmiClient}>
+      <WagmiConfig client={wagmiClient} persister={null}>
         <RainbowKitProvider
           chains={chains}
           autoConnect={true}

@@ -1,6 +1,7 @@
-import useContract from "./useContract";
 import { useContractReads } from "wagmi";
-import { CACHE_TIME, ZERO } from "constants";
+
+import useContract from "hooks/useContract";
+import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 
 export default function useMemberSummary(address, chainId) {
   const userManagerContract = useContract("userManager", chainId);
@@ -31,7 +32,7 @@ export default function useMemberSummary(address, chainId) {
       chainId,
     })),
     cacheTime: CACHE_TIME,
-    staleTime: Infinity,
+    staleTime: STALE_TIME,
   });
 
   return {
