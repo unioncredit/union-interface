@@ -1,6 +1,6 @@
 import "./NewMemberModalHeader.scss";
-import { ReactComponent as Celebration } from "images/celebration.svg";
-import { ReactComponent as Twitter } from "images/twitter.svg";
+import { ReactComponent as Celebration } from "@unioncredit/ui/lib/icons/celebration.svg";
+import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter-filled.svg";
 
 import JSConfetti from "js-confetti";
 import { useEffect, useRef } from "react";
