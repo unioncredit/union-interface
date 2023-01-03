@@ -21,7 +21,9 @@ import {
   useSwitchNetwork,
 } from "wagmi";
 import { Helmet } from "react-helmet";
+import { isAddress } from "ethers/lib/utils";
 import { Link as RouterLink } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
@@ -30,20 +32,17 @@ import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
-import { isAddress } from "ethers/lib/utils";
-import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-
 import { useMemberData } from "providers/MemberData";
-import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
-import { networks } from "config/networks";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import ConnectButton from "components/shared/ConnectButton";
 import { blockExplorerAddress } from "utils/blockExplorer";
+import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
@@ -54,6 +53,8 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   const [copied, copy] = useCopyToClipboard();
   const [copiedAddress, copyAddress] = useCopyToClipboard();
+
+  const networks = useNetworks();
 
   const {
     address = ZERO_ADDRESS,

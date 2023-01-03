@@ -5,18 +5,19 @@ import { matchRoutes, useLocation } from "react-router-dom";
 
 import Routes from "./Routes";
 
-import ModalManager from "providers/ModalManager";
-import MemberData, { useMember } from "providers/MemberData";
-import VouchersData from "providers/VouchersData";
-import VoucheesData from "providers/VoucheesData";
-import ProtocolData from "providers/ProtocolData";
-import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
-import { useAppNetwork } from "providers/Network";
-import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
+
+import Cache from "providers/Cache";
+import ModalManager from "providers/ModalManager";
+import VouchersData from "providers/VouchersData";
+import VoucheesData from "providers/VoucheesData";
+import ProtocolData from "providers/ProtocolData";
+import { useAppNetwork } from "providers/Network";
+import GovernanceData from "providers/GovernanceData";
+import MemberData, { useMember } from "providers/MemberData";
 
 /**
  * Shim component that checks if the App is ready
