@@ -14,12 +14,12 @@ import { useAccount, useNetwork } from "wagmi";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
 
+import links from "config/links";
 import { EIP3770 } from "constants";
-import { networks } from "config/networks";
+import useNetworks from "hooks/useNetworks";
 import { useModals } from "providers/ModalManager";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import links from "config/links";
 
 export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 
@@ -30,6 +30,8 @@ export default function CreditRequestModal() {
 
   const [copied, copy] = useCopyToClipboard();
   const [network, setNetwork] = useState(null);
+
+  const networks = useNetworks();
 
   const defaultValue = networks.find(
     (network) => network.chainId === connectedChain.id

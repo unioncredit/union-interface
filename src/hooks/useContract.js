@@ -10,6 +10,15 @@ import {
 } from "config/contracts/goerli";
 
 import {
+  userManagerContract as GOERLI_V2_userManagerContract,
+  uTokenContract as GOERLI_V2_uTokenContract,
+  unionContract as GOERLI_V2_unionContract,
+  daiContract as GOERLI_V2_daiContract,
+  comptrollerContract as GOERLI_V2_comptrollerContract,
+  assetManagerContract as GOERLI_V2_assetManagerContract,
+} from "config/contracts/goerli-v2";
+
+import {
   userManagerContract as MAINNET_userManagerContract,
   uTokenContract as MAINNET_uTokenContract,
   unionContract as MAINNET_unionContract,
@@ -28,10 +37,13 @@ import {
   assetManagerContract as ARBITRUM_assetManagerContract,
 } from "config/contracts/arbitrum";
 
+import { useVersion, Versions } from "providers/Version";
+
 export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
+  const { version } = useVersion();
 
-  return {
+  const v1Contracts = {
     [chain.goerli.id]: {
       userManager: GOERLI_userManagerContract,
       uToken: GOERLI_uTokenContract,
@@ -57,5 +69,23 @@ export default function useContract(name, chainId) {
       comptroller: ARBITRUM_comptrollerContract,
       assetManager: ARBITRUM_assetManagerContract,
     },
-  }[chainId || connectedChain?.id]?.[name];
+  };
+
+  const v2Contracts = {
+    [chain.goerli.id]: {
+      userManager: GOERLI_V2_userManagerContract,
+      uToken: GOERLI_V2_uTokenContract,
+      union: GOERLI_V2_unionContract,
+      dai: GOERLI_V2_daiContract,
+      comptroller: GOERLI_V2_comptrollerContract,
+      assetManager: GOERLI_V2_assetManagerContract,
+    },
+  };
+
+  const contracts = {
+    [Versions.V1]: v1Contracts,
+    [Versions.V2]: v2Contracts,
+  };
+
+  return contracts[version][chainId || connectedChain?.id]?.[name];
 }
