@@ -1,11 +1,13 @@
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { NetworkSwitcher, NetworkButton } from "@unioncredit/ui";
 
-import { networks } from "config/networks";
+import useNetworks from "hooks/useNetworks";
 
 export default function NetworkSelect() {
   const { chain, chains } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
+
+  const networks = useNetworks();
 
   const defaultValue = networks.find((option) => option.chainId === chain?.id);
 

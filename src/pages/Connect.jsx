@@ -1,17 +1,20 @@
 import "./Connect.scss";
+
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
-import { Heading, Label, Text, Box, Alert } from "@unioncredit/ui";
+import { Heading, Label, Text, Box, Alert, ToggleMenu } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Header from "components/shared/Header";
 import Banner from "components/connect/Banner";
 import { useMember } from "providers/MemberData";
 import NetworkSelect from "components/connect/NetworkSelect";
+import { useVersion, Versions } from "providers/Version";
 
 export default function ConnectPage() {
   const { chain } = useNetwork();
   const { isLoading } = useMember();
+  const { version, setVersion } = useVersion();
 
   if (isLoading) {
     return (
@@ -21,6 +24,15 @@ export default function ConnectPage() {
       </>
     );
   }
+
+  const onToggleVersion = (value) => {
+    setVersion(value.id === Versions.V1 ? 1 : 2);
+  };
+
+  const versionToggleItems = [
+    { id: Versions.V2, label: "Union v2" },
+    { id: Versions.V1, label: "Union v1" },
+  ];
 
   return (
     <>
@@ -72,6 +84,16 @@ export default function ConnectPage() {
             Union’s networks are isolated, so it’s best to choose the network
             where your friends and DAO’s are.
           </Text>
+          <Box mb="16px" fluid>
+            <ToggleMenu
+              fluid
+              items={versionToggleItems}
+              onChange={onToggleVersion}
+              initialActive={versionToggleItems.findIndex(
+                (item) => item.id === version
+              )}
+            />
+          </Box>
           <NetworkSelect />
         </Box>
       </Box>
