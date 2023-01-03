@@ -1,14 +1,14 @@
-import { Grid, Box, Button } from "@unioncredit/ui";
-import { useEffect, useState } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-
-import { networks } from "config/networks";
-import { useAppNetwork } from "providers/Network";
-import { EIP3770Map } from "constants";
-
 import "./NetworkSelect.scss";
+
+import { useEffect, useState } from "react";
+import { Grid, Box, Button } from "@unioncredit/ui";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+
+import { EIP3770Map } from "constants";
+import useNetworks from "hooks/useNetworks";
 import { locationSearch } from "utils/location";
+import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
 
@@ -22,6 +22,8 @@ export default function NetworkSelect() {
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
+
+  const networks = useNetworks();
 
   const urlSearchParams = locationSearch();
 
