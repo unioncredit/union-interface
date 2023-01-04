@@ -1,5 +1,5 @@
+import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
-import { createContext, useContext, useEffect, useRef } from "react";
 
 import {
   STALE_TIME,
@@ -8,97 +8,73 @@ import {
   ZERO,
   ZERO_ADDRESS,
 } from "constants";
+import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
+import usePollMemberData from "hooks/usePollMember";
+import useRelatedAddresses from "hooks/useRelatedAddresses";
 
-const selectUserManager = (data) => {
-  const interest = data[12] || ZERO;
-  const owed = data[11] || ZERO;
+const selectMemberData = (data) => {
+  const [
+    isMember = false,
+    creditLimit = ZERO,
+    stakedBalance = ZERO,
+    totalLockedStake = ZERO,
+    memberFrozen = ZERO,
+    unionBalance = ZERO,
+    daiBalance = ZERO,
+    unclaimedRewards = ZERO,
+    owed = ZERO,
+    interest = ZERO,
+    lastRepay = ZERO,
+    votes = ZERO,
+    delegate = ZERO_ADDRESS,
+    isOverdue = false,
+    // Versioned values
+    totalFrozenAmount = ZERO,
+    borrowerAddresses = [],
+    stakerAddresses = [],
+  ] = data || [];
 
-  return {
-    isMember: data[0] || false,
-    creditLimit: data[1]?.lt(DUST_THRESHOLD) ? ZERO : data[1],
-    stakedBalance: data[2] || ZERO,
-    totalLockedStake: data[3] || ZERO,
-    totalFrozenAmount: data[4] || ZERO,
-    memberFrozen: data[5] || ZERO,
-    borrowerAddresses: data[6] || [],
-    stakerAddresses: data[7] || [],
-    unionBalance: data[8] || ZERO,
-    daiBalance: data[9] || ZERO,
-    unclaimedRewards: data[10] || ZERO,
+  const result = {
+    isMember,
+    creditLimit,
+    stakedBalance,
+    totalLockedStake,
+    totalFrozenAmount,
+    memberFrozen,
+    borrowerAddresses,
+    stakerAddresses,
+    unionBalance,
+    daiBalance,
+    unclaimedRewards,
     owed,
     interest,
-    lastRepay: data[13] || ZERO,
-    votes: data[14] || ZERO,
-    delegate: data[15] || ZERO_ADDRESS,
-    isOverdue: data[16] || false,
-    // calculated values
-    minPayment: owed.gt(ZERO) ? calculateMinPayment(interest || ZERO) : ZERO,
+    lastRepay,
+    votes,
+    delegate,
+    isOverdue,
+    minPayment: ZERO,
   };
+
+  if (creditLimit.lt(DUST_THRESHOLD)) {
+    result.creditLimit = ZERO;
+  }
+
+  if (owed.gt(ZERO)) {
+    result.minPayment = calculateMinPayment(interest);
+  }
+
+  return result;
 };
 
 const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-function usePollMemberData(address, chainId) {
-  const timer = useRef(null);
-
-  const daiContract = useContract("dai", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
-
-  const contracts = address
-    ? [
-        {
-          ...comptrollerContract,
-          functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.address, ZERO],
-        },
-        {
-          ...uTokenContract,
-          functionName: "borrowBalanceView",
-          args: [address],
-        },
-        {
-          ...uTokenContract,
-          functionName: "calculatingInterest",
-          args: [address],
-        },
-      ]
-    : [];
-
-  const resp = useContractReads({
-    enabled: false,
-    select: (data) => ({
-      unclaimedRewards: data[0] || ZERO,
-      owed: data[1] || ZERO,
-      interest: data[2] || ZERO,
-    }),
-    contracts: contracts.map((contract) => ({
-      ...contract,
-      chainId,
-    })),
-    cacheTime: CACHE_TIME,
-  });
-
-  const { refetch } = resp;
-
-  useEffect(() => {
-    if (!address) return;
-
-    timer.current = setInterval(refetch, 5000);
-
-    return () => {
-      clearInterval(timer.current);
-    };
-  }, [address]);
-
-  return resp;
-}
-
 export function useMemberData(address, chainId) {
+  const { version } = useVersion();
+
   const daiContract = useContract("dai", chainId);
   const unionContract = useContract("union", chainId);
   const uTokenContract = useContract("uToken", chainId);
@@ -129,22 +105,7 @@ export function useMemberData(address, chainId) {
         },
         {
           ...userManagerContract,
-          functionName: "getTotalFrozenAmount",
-          args: [address],
-        },
-        {
-          ...userManagerContract,
           functionName: "memberFrozen",
-          args: [address],
-        },
-        {
-          ...userManagerContract,
-          functionName: "getBorrowerAddresses",
-          args: [address],
-        },
-        {
-          ...userManagerContract,
-          functionName: "getStakerAddresses",
           args: [address],
         },
         {
@@ -192,12 +153,37 @@ export function useMemberData(address, chainId) {
           functionName: "checkIsOverdue",
           args: [address],
         },
+        // Versioned values
+        ...(version === Versions.V1
+          ? [
+              {
+                ...userManagerContract,
+                functionName: "getTotalFrozenAmount",
+                args: [address],
+              },
+              {
+                ...userManagerContract,
+                functionName: "getBorrowerAddresses",
+                args: [address],
+              },
+              {
+                ...userManagerContract,
+                functionName: "getStakerAddresses",
+                args: [address],
+              },
+            ]
+          : []),
       ]
     : [];
 
   const { data, ...resp } = useContractReads({
-    enabled: !!address,
-    select: (data) => selectUserManager(data),
+    enabled:
+      !!address &&
+      !!userManagerContract &&
+      !!unionContract &&
+      !!uTokenContract &&
+      !!comptrollerContract,
+    select: (data) => selectMemberData(data),
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
@@ -206,8 +192,13 @@ export function useMemberData(address, chainId) {
     staleTime: STALE_TIME,
   });
 
+  const {
+    stakerAddresses = data?.stakerAddresses,
+    borrowerAddresses = data?.borrowerAddresses,
+  } = useRelatedAddresses(address, chainId);
+
   return {
-    data: { ...data, address },
+    data: { ...data, address, stakerAddresses, borrowerAddresses },
     ...resp,
   };
 }
