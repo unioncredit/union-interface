@@ -68,6 +68,8 @@ const proposalsQuery = gql`
 
 const selectProposals = (data) => {
   return chunk(data, 2).map(([proposal, state]) => {
+    if (!proposal) return {};
+
     return {
       // proposal(uint256 pid)
       pid: proposal.id,
