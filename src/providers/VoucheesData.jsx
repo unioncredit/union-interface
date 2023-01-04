@@ -6,25 +6,37 @@ import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
 import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
+import { useVersion, Versions } from "./Version";
 
 const VoucheesContext = createContext({});
 
 export const useVouchees = () => useContext(VoucheesContext);
 
-const selectVouchee = (data) => ({
+const selectVouchee = (version) => (data) => ({
   isMember: data[0],
-  locking: data[1].lockedStake,
-  trust: data[1].trustAmount,
-  vouch: data[1].vouchingAmount,
+  ...(version === Versions.V1
+    ? {
+        locking: data[1].lockedStake,
+        trust: data[1].trustAmount,
+        vouch: data[1].vouchingAmount,
+      }
+    : {
+        locking: data[1].voucher.locked,
+        trust: data[1].voucher.trust,
+        vouch: data[1].voucher.vouch,
+      }),
   isOverdue: data[2],
   interest: data[3] || ZERO,
   lastRepay: data[4],
 });
 
 export default function VoucheesData({ children }) {
-  const { address, isConnected } = useAccount();
+  const { version } = useVersion();
   const { data: member = {} } = useMember();
+  const { address, isConnected } = useAccount();
 
+  const daiContract = useContract("dai");
+  const unionLens = useContract("unionLens");
   const uTokenContract = useContract("uToken");
   const userManagerContract = useContract("userManager");
 
@@ -32,11 +44,17 @@ export default function VoucheesData({ children }) {
 
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
-    {
-      ...userManagerContract,
-      functionName: "getBorrowerAsset",
-      args: [staker, borrower],
-    },
+    version === Versions.V1
+      ? {
+          ...userManagerContract,
+          functionName: "getBorrowerAsset",
+          args: [staker, borrower],
+        }
+      : {
+          ...unionLens,
+          functionName: "getRelatedInfo",
+          args: [daiContract.addressOrName, staker, borrower],
+        },
     {
       ...uTokenContract,
       functionName: "checkIsOverdue",
@@ -67,7 +85,7 @@ export default function VoucheesData({ children }) {
       const chunked = chunk(data, chunkSize);
 
       return chunked.map((chunk, i) => ({
-        ...selectVouchee(chunk),
+        ...selectVouchee(version)(chunk),
         address: borrowerAddresses[i],
       }));
     },
