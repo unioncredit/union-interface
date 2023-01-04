@@ -7,32 +7,50 @@ import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME } from "constants";
 import { STALE_TIME } from "constants";
+import { useVersion, Versions } from "./Version";
 
 const VouchersContext = createContext({});
 
 export const useVouchers = () => useContext(VouchersContext);
 
-const selectVoucher = (data) => ({
+const selectVoucher = (version) => (data) => ({
   checkIsMember: data[0],
-  trust: data[1].trustAmount,
-  vouch: data[1].vouchingAmount,
-  locked: data[1].lockedStake,
+  ...(version === Versions.V1
+    ? {
+        locking: data[1].lockedStake,
+        trust: data[1].trustAmount,
+        vouch: data[1].vouchingAmount,
+      }
+    : {
+        locking: data[1].voucher.locked,
+        trust: data[1].voucher.trust,
+        vouch: data[1].voucher.vouch,
+      }),
 });
 
 export default function VouchersData({ children }) {
+  const { version } = useVersion();
   const { address } = useAccount();
   const { data: member = {} } = useMember();
+
+  const daiContract = useContract("dai");
   const userManagerContract = useContract("userManager");
 
   const { stakerAddresses } = member;
 
   const buildVoucherQueries = (borrower, staker) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
-    {
-      ...userManagerContract,
-      functionName: "getStakerAsset",
-      args: [borrower, staker],
-    },
+    version === Versions.V1
+      ? {
+          ...userManagerContract,
+          functionName: "getBorrowerAsset",
+          args: [staker, borrower],
+        }
+      : {
+          ...unionLens,
+          functionName: "getRelatedInfo",
+          args: [daiContract.addressOrName, staker, borrower],
+        },
   ];
 
   const contracts = (stakerAddresses || []).reduce(
@@ -47,7 +65,7 @@ export default function VouchersData({ children }) {
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
       return chunked.map((x, i) => ({
-        ...selectVoucher(x),
+        ...selectVoucher(version)(x),
         address: stakerAddresses[i],
       }));
     },
