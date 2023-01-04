@@ -17,7 +17,7 @@ import {
   daiContract as GOERLI_V2_daiContract,
   comptrollerContract as GOERLI_V2_comptrollerContract,
   assetManagerContract as GOERLI_V2_assetManagerContract,
-} from "config/contracts/goerli-v2";
+} from "config/contracts/v2/goerli";
 
 import {
   userManagerContract as MAINNET_userManagerContract,
@@ -43,7 +43,7 @@ import { useVersion, Versions } from "providers/Version";
 export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
-
+  
   const v1Contracts = {
     [chain.goerli.id]: {
       userManager: GOERLI_userManagerContract,
