@@ -77,6 +77,7 @@ export default function NetworkSelect() {
           <Box fluid align="center" direction="vertical" mb="6px">
             {networks.map((network) => (
               <NetworkSelectOption
+                key={network.id}
                 address={address}
                 network={network}
                 disabled={!isConnected}
