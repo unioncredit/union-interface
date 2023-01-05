@@ -42,6 +42,10 @@ export default function VouchersStep() {
     voucher.stakerBalance.gt(ZERO)
   );
 
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakedBalance.gt(ZERO)
+  );
+
   return (
     <Card size="fluid" mb="24px">
       <Card.Header
