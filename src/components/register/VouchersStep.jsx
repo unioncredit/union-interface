@@ -30,13 +30,18 @@ import getProfileUrl, {
   generateTelegramLink,
   generateTwitterLink,
 } from "utils/generateLinks";
+import { ZERO } from "constants";
 
 export default function VouchersStep() {
-  const { data: vouchers = [] } = useVouchers();
+  const { data: vouchersData = [] } = useVouchers();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const profileUrl = getProfileUrl(address, chain.id);
+
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakedBalance.gt(ZERO)
+  );
 
   return (
     <Card size="fluid" mb="24px">

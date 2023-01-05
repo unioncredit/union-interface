@@ -14,8 +14,8 @@ export default function useRelatedAddresses(address, chainId) {
     useContractReads({
       enabled: !!address && !!userManagerContract && isV2,
       select: (data) => ({
-        voucheeCount: Number(data[0].toString()),
-        voucherCount: Number(data[1].toString()),
+        voucherCount: Number(data[0].toString()),
+        voucheeCount: Number(data[1].toString()),
       }),
       contracts: [
         {

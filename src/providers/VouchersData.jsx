@@ -13,20 +13,25 @@ const VouchersContext = createContext({});
 
 export const useVouchers = () => useContext(VouchersContext);
 
-const selectVoucher = (version) => (data) => ({
-  checkIsMember: data[0],
-  ...(version === Versions.V1
-    ? {
-        locking: data[1].lockedStake,
-        trust: data[1].trustAmount,
-        vouch: data[1].vouchingAmount,
-      }
-    : {
-        locking: data[1].voucher.locked,
-        trust: data[1].voucher.trust,
-        vouch: data[1].voucher.vouch,
-      }),
-});
+const selectVoucher = (version) => (data) => {
+  const [checkIsMember = false, stakedBalance = ZERO, info = []] = data || [];
+
+  return {
+    checkIsMember,
+    stakedBalance,
+    ...(version === Versions.V1
+      ? {
+          locking: info.lockedStake,
+          trust: info.trustAmount,
+          vouch: info.vouchingAmount,
+        }
+      : {
+          locking: info.voucher.locked,
+          trust: info.voucher.trust,
+          vouch: info.voucher.vouch,
+        }),
+  };
+};
 
 export default function VouchersData({ children }) {
   const { version } = useVersion();
@@ -34,12 +39,18 @@ export default function VouchersData({ children }) {
   const { data: member = {} } = useMember();
 
   const daiContract = useContract("dai");
+  const unionLensContract = useContract("unionLens");
   const userManagerContract = useContract("userManager");
 
   const { stakerAddresses } = member;
 
   const buildVoucherQueries = (borrower, staker) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
+    {
+      ...userManagerContract,
+      functionName: "getStakerBalance",
+      args: [staker],
+    },
     version === Versions.V1
       ? {
           ...userManagerContract,
@@ -47,7 +58,7 @@ export default function VouchersData({ children }) {
           args: [staker, borrower],
         }
       : {
-          ...unionLens,
+          ...unionLensContract,
           functionName: "getRelatedInfo",
           args: [daiContract.addressOrName, staker, borrower],
         },

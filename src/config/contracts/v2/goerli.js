@@ -36,7 +36,7 @@ export const assetManagerContract = {
   contractInterface: assetManagerAbi,
 };
 
-export const unionLens = {
-  addressOrName: "",
+export const unionLensContract = {
+  addressOrName: "0x50BD6A6Ef7B455aa74eCFc5aB516aFe83D9602e2",
   contractInterface: unionLensAbi,
 };
