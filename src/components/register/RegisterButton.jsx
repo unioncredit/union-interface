@@ -48,14 +48,14 @@ export default function RegisterButton({ onComplete }) {
     }
   );
 
-  const { onClick: claim } = useWrite({
+  const { onClick: claim, loading: claimLoading } = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unionBalance.lt(newMemberFee),
     onComplete: () => refetchMember(),
   });
 
-  const { onClick: approve } = useWrite({
+  const { onClick: approve, loading: approveLoading } = useWrite({
     contract: "union",
     method: "approve",
     args: [userManagerConfig.addressOrName, newMemberFee],
@@ -63,7 +63,7 @@ export default function RegisterButton({ onComplete }) {
     onComplete: () => refetchAllowance(),
   });
 
-  const { onClick: register } = useWrite({
+  const { onClick: register, loading: registerLoading } = useWrite({
     contract: "userManager",
     method: "registerMember",
     args: [address],
@@ -100,13 +100,15 @@ export default function RegisterButton({ onComplete }) {
       // If there is any UNION available
       setAction({ label: "Claim UNION", onClick: handleClaim });
       setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
-      setItems(createItems("selected"));
+      setItems(createItems(claimLoading ? "pending" : "selected"));
     } else if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
       setAction({ label: "Approve UNION", onClick: handleApprove });
       setLabel("Approving 1.00 UNION");
-      setItems(createItems("complete", "selected"));
+      setItems(
+        createItems("complete", approveLoading ? "pending" : "selected")
+      );
     } else {
       // The member satisfies all the prerequisite and can register
       setAction({
@@ -115,7 +117,13 @@ export default function RegisterButton({ onComplete }) {
         icon: CloudCheck,
       });
       setLabel("Paying 1.00 UNION");
-      setItems(createItems("complete", "complete", "selected"));
+      setItems(
+        createItems(
+          "complete",
+          "complete",
+          registerLoading ? "pending" : "selected"
+        )
+      );
     }
   }, [
     isMember,
@@ -125,6 +133,9 @@ export default function RegisterButton({ onComplete }) {
     handleRegister,
     handleApprove,
     handleClaim,
+    claimLoading,
+    approveLoading,
+    registerLoading,
   ]);
 
   /*--------------------------------------------------------------
