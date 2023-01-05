@@ -18,6 +18,7 @@ import ProtocolData from "providers/ProtocolData";
 import { useAppNetwork } from "providers/Network";
 import GovernanceData from "providers/GovernanceData";
 import MemberData, { useMember } from "providers/MemberData";
+import { useVersion } from "providers/Version";
 
 /**
  * Shim component that checks if the App is ready
@@ -66,12 +67,13 @@ export default function App() {
   const location = useLocation();
 
   const { chain } = useNetwork();
+  const { version } = useVersion();
   const { isConnected } = useAccount();
   const { appReady } = useAppNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
-  if ((chain?.unsupported || !isConnected) && !isGeneralRoute) {
+  if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute)) {
     return (
       <Layout>
         <ScrollToTop />
