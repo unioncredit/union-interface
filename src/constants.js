@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from "ethers";
-import { mainnet, arbitrum, goerli } from "wagmi/chains";
+import { Versions } from "providers/Version";
+import { chain } from "wagmi";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -68,11 +69,18 @@ export const EIP3770Map = {
 };
 
 export const TheGraphUrls = {
-  [mainnet.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union",
-  [arbitrum.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
-  [goerli.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+  [Versions.V1]: {
+    [chain.mainnet.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union",
+    [chain.arbitrum.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
+    [chain.goerli.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+  },
+  [Versions.V2]: {
+    [chain.goerli.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
+  },
 };
 
 export const ProposalState = [
