@@ -2,6 +2,8 @@ import { useContractReads } from "wagmi";
 import { useVersion, Versions } from "providers/Version";
 
 import useContract from "./useContract";
+import { STALE_TIME } from "constants";
+import { CACHE_TIME } from "constants";
 
 export default function useRelatedAddresses(address, chainId) {
   const { version } = useVersion();
@@ -29,6 +31,8 @@ export default function useRelatedAddresses(address, chainId) {
           args: [address],
         },
       ],
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
     });
 
   const { data: stakerAddresses } = useContractReads({
@@ -41,6 +45,8 @@ export default function useRelatedAddresses(address, chainId) {
         functionName: "vouchers",
         args: [address, i],
       })),
+    cacheTime: CACHE_TIME,
+    staleTime: STALE_TIME,
   });
 
   const { data: borrowerAddresses } = useContractReads({
@@ -53,6 +59,8 @@ export default function useRelatedAddresses(address, chainId) {
         functionName: "vouchees",
         args: [address, i],
       })),
+    cacheTime: CACHE_TIME,
+    staleTime: STALE_TIME,
   });
 
   return { stakerAddresses, borrowerAddresses };

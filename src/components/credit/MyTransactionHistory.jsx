@@ -12,7 +12,6 @@ export default function MyTransactionHistory() {
         title="Transaction History"
         subTitle="Your credit based transaction history"
       />
-      <Box mt="24px" />
       <TransactionHistory staker={address} />
     </Card>
   );
