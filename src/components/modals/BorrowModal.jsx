@@ -95,7 +95,7 @@ export default function BorrowModal() {
                   size="medium"
                   align="center"
                   label="Available credit"
-                  value={<Dai value={format(creditLimit)} />}
+                  value={<Dai value={format(creditLimit, 2, false)} />}
                 />
               </Grid.Col>
               <Grid.Col>
