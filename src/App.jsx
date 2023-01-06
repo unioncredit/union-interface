@@ -24,6 +24,7 @@ import useMemberListener from "hooks/useMemberListener";
 import GovernanceData from "providers/GovernanceData";
 import MemberData, { useMember } from "providers/MemberData";
 import { useVersion } from "providers/Version";
+import Settings from "providers/Settings";
 
 /**
  * Shim component that checks if the App is ready
@@ -97,30 +98,32 @@ export default function App() {
         <Grid style={{ display: "flex", flexGrow: 1 }}>
           <Grid.Row style={{ width: "100%", margin: 0 }}>
             <Grid.Col>
-              <Cache>
-                <ProtocolData>
-                  <GovernanceData>
-                    <MemberData>
-                      <VouchersData>
-                        <VoucheesData>
-                          <ModalManager>
-                            <AppReadyShim>
-                              {appReady ? (
-                                <>
-                                  <Header />
-                                  <Routes />
-                                </>
-                              ) : (
-                                <ConnectPage />
-                              )}
-                            </AppReadyShim>
-                          </ModalManager>
-                        </VoucheesData>
-                      </VouchersData>
-                    </MemberData>
-                  </GovernanceData>
-                </ProtocolData>
-              </Cache>
+              <Settings>
+                <Cache>
+                  <ProtocolData>
+                    <GovernanceData>
+                      <MemberData>
+                        <VouchersData>
+                          <VoucheesData>
+                            <ModalManager>
+                              <AppReadyShim>
+                                {appReady ? (
+                                  <>
+                                    <Header />
+                                    <Routes />
+                                  </>
+                                ) : (
+                                  <ConnectPage />
+                                )}
+                              </AppReadyShim>
+                            </ModalManager>
+                          </VoucheesData>
+                        </VouchersData>
+                      </MemberData>
+                    </GovernanceData>
+                  </ProtocolData>
+                </Cache>
+              </Settings>
             </Grid.Col>
           </Grid.Row>
         </Grid>
