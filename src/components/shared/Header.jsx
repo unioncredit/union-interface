@@ -23,6 +23,7 @@ import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
+import SettingToggle from "./SettingToggle";
 
 export default function Header({ loading, showNav = true }) {
   const { open } = useModals();
@@ -99,7 +100,20 @@ export default function Header({ loading, showNav = true }) {
                   />
                 )}
                 <ConnectButton buttonProps={{ packed: true }} />
-                <ContextMenu position="left" items={contextMenuItems} />
+                <ContextMenu
+                  position="left"
+                  items={[
+                    ...contextMenuItems,
+                    {
+                      as: () => (
+                        <SettingToggle
+                          settingKey="showTestnets"
+                          label="Test networks"
+                        />
+                      ),
+                    },
+                  ]}
+                />
               </Box>
             </Grid.Col>
           </Grid.Row>
