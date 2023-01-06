@@ -195,10 +195,20 @@ export function useMemberData(address, chainId) {
   const {
     stakerAddresses = data?.stakerAddresses,
     borrowerAddresses = data?.borrowerAddresses,
+    refetch: refetchRelated,
   } = useRelatedAddresses(address, chainId);
 
   return {
-    data: { ...data, address, stakerAddresses, borrowerAddresses },
+    data: {
+      ...data,
+      refetch: async () => {
+        await data.refetch();
+        await refetchRelated();
+      },
+      address,
+      stakerAddresses,
+      borrowerAddresses,
+    },
     ...resp,
   };
 }
