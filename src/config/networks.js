@@ -1,4 +1,7 @@
+import { chain } from "wagmi";
 import { Versions } from "providers/Version";
+
+export const testNetworkIds = [chain.goerli.id];
 
 export const networks = {
   [Versions.V1]: [
@@ -50,7 +53,7 @@ export const networks = {
       id: "goerli",
       imageSrc: "/networks/gorli.png",
       value: "goerli",
-      label: "Goerli",
+      label: "Goerli (V2)",
       description: "Use Union on a testnet",
       avatar: "/networks/gorli-avatar.png",
       chainId: 5,
@@ -60,3 +63,10 @@ export const networks = {
     },
   ],
 };
+
+export function parseNetworksVersions() {
+  return Object.keys(networks).reduce((acc, version) => {
+    const nets = networks[version];
+    return [...acc, ...nets.map((net) => ({ ...net, version }))];
+  }, []);
+}

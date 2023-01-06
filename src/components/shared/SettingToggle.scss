@@ -1,0 +1,14 @@
+.SettingToggle {
+  display: block;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: normal;
+  text-align: left;
+  display: flex;
+  align-items: center;
+
+  &__toggle {
+    margin-left: auto;
+    display: inline-block;
+  }
+}

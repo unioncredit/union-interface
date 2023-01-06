@@ -201,15 +201,15 @@ export function useMemberData(address, chainId) {
   return {
     data: {
       ...data,
-      refetch: async () => {
-        await data.refetch();
-        await refetchRelated();
-      },
       address,
       stakerAddresses,
       borrowerAddresses,
     },
     ...resp,
+    refetch: async () => {
+      await resp.refetch();
+      await refetchRelated();
+    },
   };
 }
 
