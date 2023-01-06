@@ -3,6 +3,7 @@ import { ZERO_ADDRESS } from "constants";
 import { useEffect, useState } from "react";
 
 import { useCache } from "providers/Cache";
+import { useVersion } from "providers/Version";
 import fetchUserTransactions from "fetchers/fetchUserTransactions";
 import fetchUTokenTransactions from "fetchers/fetchUTokenTransactions";
 import fetchRegisterTransactions from "fetchers/fetchRegisterTransactions";
@@ -12,6 +13,7 @@ export default function useTxHistory({
   borrower = ZERO_ADDRESS,
 }) {
   const { chain } = useNetwork();
+  const { version } = useVersion();
   const { cache, cached } = useCache();
   const [data, setData] = useState([]);
 
@@ -27,22 +29,26 @@ export default function useTxHistory({
       }
 
       const registerTransactions = await fetchRegisterTransactions(
+        version,
         chain.id,
         staker
       );
       const utokenTransactions = await fetchUTokenTransactions(
+        version,
         chain.id,
         staker
       );
-      const userTransactions = await fetchUserTransactions(chain.id, staker);
+      const userTransactions = await fetchUserTransactions(
+        version,
+        chain.id,
+        staker
+      );
 
       const txHistory = [
         ...registerTransactions,
         ...utokenTransactions,
         ...userTransactions,
-      ].sort((a, b) => {
-        return Number(b.timestamp) - Number(a.timestamp);
-      });
+      ].sort((a, b) => Number(b.timestamp) - Number(a.timestamp));
 
       cache(cacheKey, txHistory);
       setData(txHistory);

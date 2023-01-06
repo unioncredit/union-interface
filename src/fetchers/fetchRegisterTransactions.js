@@ -15,7 +15,7 @@ const query = gql`
   }
 `;
 
-export default async function fetchUserTransactions(chainId, account) {
+export default async function fetchUserTransactions(version, chainId, account) {
   const variables = {
     first: 100,
     memberApplicationsFilter: {
@@ -23,7 +23,7 @@ export default async function fetchUserTransactions(chainId, account) {
     },
   };
 
-  const resp = await request(TheGraphUrls[chainId], query, variables);
+  const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   const flattened = Object.keys(resp).reduce((acc, key) => {
     const parsed = resp[key].map((item) => ({

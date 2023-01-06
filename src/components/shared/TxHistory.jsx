@@ -144,6 +144,7 @@ export function TransactionHistory({
 
   return (
     <div className="TransactionHistory">
+      <Box mt="24px" />
       <Table>
         <TableRow>
           <TableHead></TableHead>

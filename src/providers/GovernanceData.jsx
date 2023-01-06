@@ -13,6 +13,7 @@ import { TheGraphUrls } from "constants";
 import useContract from "hooks/useContract";
 import { chunk, flatten } from "lodash";
 import { ProposalState } from "constants";
+import { Versions } from "./Version";
 
 const GovernanceContext = createContext({});
 
@@ -41,7 +42,7 @@ async function getProposalHistory(pid) {
   };
 
   const resp = await request(
-    TheGraphUrls[mainnet.id],
+    TheGraphUrls[Versions.V1][chain.mainnet.id],
     proposalHistoryQuery,
     variables
   );
@@ -108,7 +109,10 @@ function useProposals() {
   const governorContract = useContract("governor", mainnet.id);
 
   const getProposals = useCallback(async () => {
-    const resp = await request(TheGraphUrls[mainnet.id], proposalsQuery);
+    const resp = await request(
+      TheGraphUrls[Versions.V1][chain.mainnet.id],
+      proposalsQuery
+    );
     const proposals = resp.proposals;
 
     return Promise.all(
