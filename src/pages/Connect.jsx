@@ -34,6 +34,11 @@ export default function ConnectPage() {
     { id: Versions.V1, label: "Union v1" },
   ];
 
+  const initialActive0 = versionToggleItems.findIndex(
+    (item) => item.id === version
+  );
+  const initialActive = !!~initialActive0 ? initialActive0 : 0;
+
   return (
     <>
       <Helmet>
@@ -89,9 +94,7 @@ export default function ConnectPage() {
               fluid
               items={versionToggleItems}
               onChange={onToggleVersion}
-              initialActive={versionToggleItems.findIndex(
-                (item) => item.id === version
-              )}
+              initialActive={initialActive}
             />
           </Box>
           <NetworkSelect />
