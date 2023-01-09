@@ -12,6 +12,8 @@ import { useMember } from "providers/MemberData";
 import useWrite from "hooks/useWrite";
 import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
+import { useVouchers } from "providers/VouchersData";
+import { useVouchees } from "providers/VoucheesData";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -36,7 +38,11 @@ export default function VouchModal({
   address: initialAddress = null,
 }) {
   const { close } = useModals();
+
   const { refetch: refetchMember } = useMember();
+  const { refetch: refetchVouchers } = useVouchers();
+  const { refetch: refetchVouchees } = useVouchees();
+
   const { values, errors = {}, register } = useForm();
   const { setLabel } = useLabels();
 
@@ -49,6 +55,8 @@ export default function VouchModal({
     enabled: values?.trust?.raw.gt(0) && address,
     onComplete: async () => {
       await refetchMember();
+      await refetchVouchees();
+      await refetchVouchers();
       if (values.name) {
         setLabel(address, values.name);
       }

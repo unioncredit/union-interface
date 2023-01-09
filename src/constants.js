@@ -1,4 +1,5 @@
 import { BigNumber, ethers } from "ethers";
+import { Versions } from "providers/Version";
 import { chain } from "wagmi";
 import format from "./utils/format";
 
@@ -10,7 +11,7 @@ export const WAD = BigNumber.from("1000000000000000000");
 
 export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
-export const STALE_TIME = 30_000; // 30 seconds 
+export const STALE_TIME = 30_000; // 30 seconds
 
 export const DUST_THRESHOLD = "10000000000000000";
 
@@ -68,12 +69,18 @@ export const EIP3770Map = {
 };
 
 export const TheGraphUrls = {
-  [chain.mainnet.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union",
-  [chain.arbitrum.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
-  [chain.goerli.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+  [Versions.V1]: {
+    [chain.mainnet.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union",
+    [chain.arbitrum.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
+    [chain.goerli.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+  },
+  [Versions.V2]: {
+    [chain.goerli.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
+  },
 };
 
 export const ProposalState = [

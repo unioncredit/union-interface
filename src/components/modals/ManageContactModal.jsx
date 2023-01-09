@@ -58,7 +58,10 @@ export default function ManageContactModal({ contact, type }) {
         ? [connectedAddress, address]
         : [address, connectedAddress],
     enabled: locking.lte(ZERO),
-    onComplete: () => refetchMember(),
+    onComplete: async () => {
+      await refetchMember();
+      close();
+    },
   });
 
   return (

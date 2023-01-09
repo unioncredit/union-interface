@@ -10,6 +10,7 @@ import reportWebVitals from "./reportWebVitals";
 import Toasts from "providers/Toasts";
 import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
+import Version from "providers/Version";
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
@@ -17,13 +18,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <Router>
-    <Network>
-      <Toasts>
-        <AppLogs>
-          <App />
-        </AppLogs>
-      </Toasts>
-    </Network>
+    <Version>
+      <Network>
+        <Toasts>
+          <AppLogs>
+            <App />
+          </AppLogs>
+        </Toasts>
+      </Network>
+    </Version>
   </Router>
 );
 

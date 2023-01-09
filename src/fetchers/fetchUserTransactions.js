@@ -1,6 +1,5 @@
 import { request, gql } from "graphql-request";
 
-import format from "utils/format";
 import { TransactionTypes, TheGraphUrls } from "constants";
 
 const query = gql`
@@ -33,7 +32,12 @@ const query = gql`
   }
 `;
 
-export default async function fetchUserTransactions(chainId, staker, borrower) {
+export default async function fetchUserTransactions(
+  version,
+  chainId,
+  staker,
+  borrower
+) {
   const borrowerVariable = borrower ? { borrower } : {};
 
   const variables = {
@@ -52,7 +56,7 @@ export default async function fetchUserTransactions(chainId, staker, borrower) {
     },
   };
 
-  const resp = await request(TheGraphUrls[chainId], query, variables);
+  const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   const flattened = Object.keys(resp).reduce((acc, key) => {
     const parsed = resp[key].map((item) => {
