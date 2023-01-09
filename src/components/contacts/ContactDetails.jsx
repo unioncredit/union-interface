@@ -100,7 +100,7 @@ export default function ContactDetails({ contact, setContact, type }) {
   // amount. If therefore either locking or locked is going to be zero
   // so we can just subtract them both to handle both vouchee and voucher
   // cases here
-  const available = trust.sub(locking).sub(locked);
+  const available = vouch.sub(locking).sub(locked);
 
   const content = (
     <>
