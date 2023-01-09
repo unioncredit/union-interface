@@ -23,7 +23,7 @@ export default function VouchersCard() {
   const { data: vouchers = [] } = useVouchers();
 
   const vouchersOrdered = vouchers.sort((a, b) =>
-    a.trust.gt(b.trust) ? -1 : 1
+    a.vouch.gt(b.vouch) ? -1 : 1
   );
 
   const {
@@ -52,9 +52,9 @@ export default function VouchersCard() {
             <TableRow>
               <TableHead></TableHead>
               <TableHead>Account</TableHead>
-              <TableHead align="right">Trust Amount (DAI)</TableHead>
+              <TableHead align="right">Vouch (DAI)</TableHead>
             </TableRow>
-            {vouchersPage.map(({ address, trust }) => (
+            {vouchersPage.map(({ address, vouch }) => (
               <TableRow
                 key={address}
                 onClick={() =>
@@ -74,7 +74,7 @@ export default function VouchersCard() {
                     </Label>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{format(trust)}</TableCell>
+                <TableCell align="right">{format(vouch)}</TableCell>
               </TableRow>
             ))}
           </Table>
