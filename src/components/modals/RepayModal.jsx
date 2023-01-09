@@ -87,7 +87,7 @@ export default function RepayModal() {
     },
     {
       display: format(daiBalance.lt(owed) ? daiBalance : owed),
-      value: daiBalance.eq(0) ? ZERO : ethers.constants.MaxUint256,
+      value: daiBalance.lt(owed) ? daiBalance : ethers.constants.MaxUint256,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
         ? "Pay-off entire loan"
