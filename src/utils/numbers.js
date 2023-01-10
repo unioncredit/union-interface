@@ -1,4 +1,5 @@
-import { BlocksPerYear, WAD, ZERO } from "constants";
+import { BlocksPerYear, ZERO } from "constants";
+import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
 export const min = (a, b) => {
@@ -46,8 +47,9 @@ export function toFixed(x) {
 }
 
 export const calculateMaxBorrow = (creditLimit, originationFee) => {
-  const borrowFee = creditLimit.mul(originationFee).div(WAD);
-  return creditLimit.sub(borrowFee);
+  const cl = Number(creditLimit.mul(99999).div(100000).toString());
+  const ofe = Number(originationFee.toString()) / 1e18;
+  return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
 };
 
 export const calculateMinPayment = (interest) => {
