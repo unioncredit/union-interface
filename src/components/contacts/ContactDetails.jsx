@@ -221,7 +221,7 @@ export default function ContactDetails({ contact, setContact, type }) {
       ) : (
         <>
           <Card.Body>{content}</Card.Body>
-          <TransactionHistory staker={address} />
+          <TransactionHistory staker={address} pageSize={5} />
         </>
       )}
     </Card>
