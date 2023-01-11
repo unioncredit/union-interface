@@ -5,9 +5,20 @@ import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter-fil
 import JSConfetti from "js-confetti";
 import { useEffect, useRef } from "react";
 import { Text, Heading, ButtonRow, Button } from "@unioncredit/ui";
+import getProfileUrl, { generateTwitterLink } from "utils/generateLinks";
+import { useAccount, useNetwork } from "wagmi";
+import { useMember } from "providers/MemberData";
+import { ZERO } from "constants";
+import format from "utils/format";
 
 export default function NewMemberModalHeader() {
+  const { chain } = useNetwork();
+  const { address } = useAccount();
+  const profileUrl = getProfileUrl(address, chain.id);
   const confettiRef = useRef(null);
+
+  const { data: member = {} } = useMember();
+  const { creditLimit = ZERO } = { ...member };
 
   const popConfetti = () => confettiRef.current.addConfetti();
 
@@ -42,8 +53,8 @@ export default function NewMemberModalHeader() {
         m={0}
         className="NewMemberModalHeader__content"
       >
-        You’re now a member of Union’s credit network on Arbitrum. You’ll start
-        with a credit line of 248.33 DAI
+        You’re now a member of Union’s credit network on {chain.name}. You’ll
+        start with a credit line of {format(creditLimit)} DAI
       </Text>
       <ButtonRow justify="center" mt="8px">
         <Button
@@ -60,6 +71,9 @@ export default function NewMemberModalHeader() {
           size="small"
           label="Share on Twitter"
           className="NewMemberModalHeader__button"
+          as="a"
+          href={generateTwitterLink(profileUrl)}
+          target="_blank"
         />
       </ButtonRow>
     </div>
