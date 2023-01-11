@@ -9,8 +9,12 @@ export default function NetworkSelect() {
 
   const defaultValue = networks.find((option) => option.chainId === chain?.id);
 
-  const handleChangeNetwork = async (value) => {
-    await switchNetworkAsync(value.chainId);
+  const handleChangeNetwork = async (value, setSelected) => {
+    try {
+      await switchNetworkAsync(value.chainId);
+    } catch (_) {
+      setSelected(networks.find((option) => option.chainId === chain?.id));
+    }
   };
 
   const networkOptions = networks
