@@ -47,8 +47,8 @@ export default function NewMemberModalHeader() {
         m={0}
         className="NewMemberModalHeader__content"
       >
-        You’re now a member of Union’s credit network on Arbitrum. You’ll start
-        with a credit line of 248.33 DAI
+        You’re now a member of Union’s credit network on {chain.name}. You’ll
+        start with a credit line of 248.33 DAI
       </Text>
       <ButtonRow justify="center" mt="8px">
         <Button
