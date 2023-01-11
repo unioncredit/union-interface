@@ -3,13 +3,13 @@ import { useContractRead } from "wagmi";
 import { useEffect, useState } from "react";
 import { MultiStepButton } from "@unioncredit/ui";
 
-import { ZERO } from "constants";
+import { MultiStep, ZERO } from "constants";
 import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
 import { useModals } from "providers/ModalManager";
 import { useMember } from "providers/MemberData";
 
-const initialItems = [{ number: 1, status: "selected" }, { number: 2 }];
+const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 const initialButtonProps = { label: "Enter an amount", disabled: true };
 
 export default function Approval({
@@ -96,15 +96,15 @@ export default function Approval({
   useEffect(() => {
     if (approveButtonProps.loading) {
       // Approval is loading
-      setItems([{ number: 1, status: "pending" }, { number: 2 }]);
+      setItems([{ number: 1, status: MultiStep.PENDING }, { number: 2 }]);
     } else if (txButtonProps.loading) {
       // Transaction is loading
-      setItems([{ number: 1 }, { number: 2, status: "pending" }]);
+      setItems([{ number: 1 }, { number: 2, status: MultiStep.PENDING }]);
     } else if (allowance.gte(amount)) {
       // Allowance has been complete
       setItems([
-        { number: 1, status: "complete" },
-        { number: 2, status: "selected" },
+        { number: 1, status: MultiStep.COMPLETE },
+        { number: 2, status: MultiStep.SELECTED },
       ]);
     } else {
       // Return to normal state

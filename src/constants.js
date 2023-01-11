@@ -102,3 +102,9 @@ export const TransactionTypes = {
   TRUST: "trust",
   TRUSTED: "trusted",
 };
+
+export const MultiStep = {
+  SELECTED: "selected",
+  PENDING: "pending",
+  COMPLETE: "complete",
+};

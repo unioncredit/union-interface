@@ -2,7 +2,7 @@ import { MultiStepButton } from "@unioncredit/ui";
 import { useAccount, useContractRead } from "wagmi";
 import { useEffect, useState, useCallback } from "react";
 
-import { ZERO } from "constants";
+import { MultiStep, ZERO } from "constants";
 import format from "utils/format";
 import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
@@ -48,14 +48,14 @@ export default function RegisterButton({ onComplete }) {
     }
   );
 
-  const { onClick: claim } = useWrite({
+  const { onClick: claim, loading: claimLoading } = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unionBalance.lt(newMemberFee),
     onComplete: () => refetchMember(),
   });
 
-  const { onClick: approve } = useWrite({
+  const { onClick: approve, loading: approveLoading } = useWrite({
     contract: "union",
     method: "approve",
     args: [userManagerConfig.addressOrName, newMemberFee],
@@ -63,7 +63,7 @@ export default function RegisterButton({ onComplete }) {
     onComplete: () => refetchAllowance(),
   });
 
-  const { onClick: register } = useWrite({
+  const { onClick: register, loading: registerLoading } = useWrite({
     contract: "userManager",
     method: "registerMember",
     args: [address],
@@ -76,17 +76,19 @@ export default function RegisterButton({ onComplete }) {
    --------------------------------------------------------------*/
 
   const handleClaim = useCallback(async () => {
-    setItems(createItems("pending"));
+    setItems(createItems(MultiStep.PENDING));
     await claim();
   }, [claim, refetchMember]);
 
   const handleApprove = useCallback(async () => {
-    setItems(createItems("complete", "pending"));
+    setItems(createItems(MultiStep.COMPLETE, MultiStep.PENDING));
     await approve();
   }, [approve, refetchAllowance]);
 
   const handleRegister = useCallback(async () => {
-    setItems(createItems("complete", "complete", "pending"));
+    setItems(
+      createItems(MultiStep.COMPLETE, MultiStep.COMPLETE, MultiStep.PENDING)
+    );
     await register();
   }, [register, refetchMember]);
 
@@ -100,13 +102,20 @@ export default function RegisterButton({ onComplete }) {
       // If there is any UNION available
       setAction({ label: "Claim UNION", onClick: handleClaim });
       setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
-      setItems(createItems("selected"));
+      setItems(
+        createItems(claimLoading ? MultiStep.PENDING : MultiStep.SELECTED)
+      );
     } else if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
       setAction({ label: "Approve UNION", onClick: handleApprove });
       setLabel("Approving 1.00 UNION");
-      setItems(createItems("complete", "selected"));
+      setItems(
+        createItems(
+          MultiStep.COMPLETE,
+          approveLoading ? MultiStep.PENDING : MultiStep.SELECTED
+        )
+      );
     } else {
       // The member satisfies all the prerequisite and can register
       setAction({
@@ -115,7 +124,13 @@ export default function RegisterButton({ onComplete }) {
         icon: CloudCheck,
       });
       setLabel("Paying 1.00 UNION");
-      setItems(createItems("complete", "complete", "selected"));
+      setItems(
+        createItems(
+          MultiStep.COMPLETE,
+          MultiStep.COMPLETE,
+          registerLoading ? MultiStep.PENDING : MultiStep.SELECTED
+        )
+      );
     }
   }, [
     isMember,
@@ -125,6 +140,9 @@ export default function RegisterButton({ onComplete }) {
     handleRegister,
     handleApprove,
     handleClaim,
+    claimLoading,
+    approveLoading,
+    registerLoading,
   ]);
 
   /*--------------------------------------------------------------
