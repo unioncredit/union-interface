@@ -28,8 +28,11 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
-  const { data: vouchers = [] } = useVouchers();
+  const { data: vouchersData = [] } = useVouchers();
   const { data: member = {}, refetch: refetchMember } = useMember();
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakerBalance.gt(ZERO)
+  );
 
   const {
     isMember = false,

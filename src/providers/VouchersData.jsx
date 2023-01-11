@@ -17,6 +17,7 @@ const selectVoucher = (data) => ({
   trust: data[1].trustAmount,
   vouch: data[1].vouchingAmount,
   locked: data[1].lockedStake,
+  stakerBalance: data[2],
 });
 
 export default function VouchersData({ children }) {
@@ -32,6 +33,11 @@ export default function VouchersData({ children }) {
       ...userManagerContract,
       functionName: "getStakerAsset",
       args: [borrower, staker],
+    },
+    {
+      ...userManagerContract,
+      functionName: "getStakerBalance",
+      args: [staker],
     },
   ];
 

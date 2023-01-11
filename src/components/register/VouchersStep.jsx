@@ -30,19 +30,23 @@ import getProfileUrl, {
   generateTelegramLink,
   generateTwitterLink,
 } from "utils/generateLinks";
+import { ZERO } from "constants";
 
 export default function VouchersStep() {
-  const { data: vouchers = [] } = useVouchers();
+  const { data: vouchersData = [] } = useVouchers();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const profileUrl = getProfileUrl(address, chain.id);
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakerBalance.gt(ZERO)
+  );
 
   return (
     <Card size="fluid" mb="24px">
       <Card.Header
         title="Find vouchers"
-        subTitle="Get an existing Union member to vouch for you. They’ll need to trust you, as vouching on Union puts the vouchers funds at risk if you fail to repay."
+        subTitle="Get an existing Union member to vouch for you. They’ll need to trust you, as vouching on Union puts the vouchers funds at risk if you fail to repay. The voucher must have DAI staked in order to be valid."
       />
       <Card.Body>
         <Divider />
