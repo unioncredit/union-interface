@@ -40,7 +40,6 @@ export default function VouchModal({
   const { refetch: refetchMember } = useMember();
   const { values, errors = {}, register } = useForm();
   const { setLabel } = useLabels();
-  const handleClose = () => onClose?.() && close();
 
   const [address, setAddress] = useState(initialAddress);
 
@@ -57,6 +56,11 @@ export default function VouchModal({
       close();
     },
   });
+
+  const handleClose = () => {
+    onClose?.();
+    close();
+  };
 
   return (
     <ModalOverlay onClick={handleClose}>
