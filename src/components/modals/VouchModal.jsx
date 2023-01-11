@@ -31,7 +31,7 @@ const Canvas = React.memo(() => (
 export default function VouchModal({
   title = "New Vouch",
   subTitle = "",
-  onClose = null,
+  onClose,
   showNewMemberHeader = false,
   showAddressSummary = true,
   address: initialAddress = null,
