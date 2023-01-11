@@ -31,6 +31,7 @@ const Canvas = React.memo(() => (
 export default function VouchModal({
   title = "New Vouch",
   subTitle = "",
+  onClose,
   showNewMemberHeader = false,
   showAddressSummary = true,
   address: initialAddress = null,
@@ -56,16 +57,21 @@ export default function VouchModal({
     },
   });
 
+  const handleClose = () => {
+    onClose?.();
+    close();
+  };
+
   return (
-    <ModalOverlay onClick={close}>
+    <ModalOverlay onClick={handleClose}>
       <Canvas />
       <Modal
         className={cn("VouchModal", {
           "VouchModal--newMember": showNewMemberHeader,
         })}
       >
-        {showNewMemberHeader && <NewMemberModalHeader onClose={close} />}
-        <Modal.Header onClose={close} title={title} subTitle={subTitle} />
+        {showNewMemberHeader && <NewMemberModalHeader onClose={handleClose} />}
+        <Modal.Header onClose={handleClose} title={title} subTitle={subTitle} />
         <Modal.Body>
           {showAddressSummary && <AddressSummary address={address} />}
           <AddressInput
