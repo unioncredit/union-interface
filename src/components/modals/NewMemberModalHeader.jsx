@@ -5,8 +5,13 @@ import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter-fil
 import JSConfetti from "js-confetti";
 import { useEffect, useRef } from "react";
 import { Text, Heading, ButtonRow, Button } from "@unioncredit/ui";
+import getProfileUrl, { generateTwitterLink } from "utils/generateLinks";
+import { useAccount, useNetwork } from "wagmi";
 
 export default function NewMemberModalHeader() {
+  const { chain } = useNetwork();
+  const { address } = useAccount();
+  const profileUrl = getProfileUrl(address, chain.id);
   const confettiRef = useRef(null);
 
   const popConfetti = () => confettiRef.current.addConfetti();
@@ -60,6 +65,9 @@ export default function NewMemberModalHeader() {
           size="small"
           label="Share on Twitter"
           className="NewMemberModalHeader__button"
+          as="a"
+          href={generateTwitterLink(profileUrl)}
+          target="_blank"
         />
       </ButtonRow>
     </div>
