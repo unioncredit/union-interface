@@ -1,21 +1,26 @@
 import { formatUnits } from "ethers/lib/utils";
 
-export default function format(n, digits = 2) {
+export default function format(n, digits = 2, rounded = true) {
   if (!n) n = "0";
-  return commify(Number(formatUnits(n)), digits);
+  return commify(Number(formatUnits(n)), digits, rounded);
 }
 
-function commify(num, digits) {
+function commify(num, digits, rounded = true) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 
   if (!num) return `0${digits > 0 ? "." : ""}${"".padEnd(digits, "0")}`;
 
-  const numStr = Number(num).toLocaleString("en", {
+  let numStr = Number(num).toLocaleString("en", {
     useGrouping: false,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: rounded ? digits : 18,
+    maximumFractionDigits: rounded ? digits : 18,
   });
+
+  if (!rounded) {
+    const pattern = new RegExp("^-?\\d+(?:\\.\\d{0," + digits + "})?");
+    numStr = numStr.match(pattern)[0];
+  }
 
   const parts = numStr.split(".");
 
