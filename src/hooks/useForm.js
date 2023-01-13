@@ -10,7 +10,8 @@ const empty = {
   raw: ZERO,
 };
 
-const formatValue = (value) => format(value).replace(/\,/g, "");
+const formatValue = (value, rounded) =>
+  format(value, 2, rounded).replace(/\,/g, "");
 
 export default function useForm(props = {}) {
   const { validate } = props;
@@ -18,7 +19,7 @@ export default function useForm(props = {}) {
   const [values, setValues] = useState();
   const [errors, setErrors] = useState();
 
-  const setNumber = (name, value, type) => {
+  const setNumber = (name, value, type, rounded) => {
     let newValues;
 
     if (!value) {
@@ -29,7 +30,7 @@ export default function useForm(props = {}) {
       const parsed =
         type === "display"
           ? { raw: parseUnits(toFixed(value)), display: value }
-          : { raw: value, display: formatValue(value) };
+          : { raw: value, display: formatValue(value, rounded) };
 
       newValues = { ...values, [name]: parsed };
     }
@@ -47,16 +48,16 @@ export default function useForm(props = {}) {
     setValues(newValues);
   };
 
-  const setValue = (name, display, type) => {
+  const setValue = (name, display, type, rounded = true) => {
     if (type === "number") {
-      setNumber(name, display, "display");
+      setNumber(name, display, "display", rounded);
     } else {
       setSimple(name, display);
     }
   };
 
-  const setRawValue = (name, raw) => {
-    setNumber(name, raw, "raw");
+  const setRawValue = (name, raw, rounded = true) => {
+    setNumber(name, raw, "raw", rounded);
   };
 
   const register = (name) => (event) => {
