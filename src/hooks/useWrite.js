@@ -54,12 +54,20 @@ export default function useWrite({
         false
       );
 
-      await tx.wait();
+      const response = await tx.wait();
 
       onComplete && (await onComplete());
 
       addLog(praseAppLog(Status.SUCCESS, method, args, tx));
-      addToast(parseToast(Status.SUCCESS, method, args, tx, chain.id));
+      addToast(
+        parseToast(
+          response.status ? Status.SUCCESS : Status.FAILED,
+          method,
+          args,
+          tx,
+          chain.id
+        )
+      );
 
       return true;
     } catch (error) {
