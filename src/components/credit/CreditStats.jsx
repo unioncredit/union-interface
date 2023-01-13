@@ -53,7 +53,7 @@ export default function CreditStats() {
                 size="large"
                 align="center"
                 label="Available credit"
-                value={<Dai value={format(creditLimit)} />}
+                value={<Dai value={format(creditLimit, 2, false)} />}
               />
               <Stat
                 mt="24px"
