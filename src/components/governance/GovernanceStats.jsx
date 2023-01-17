@@ -1,15 +1,27 @@
 import { Stat, Button, Grid, Card, Dai } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 import { useProtocol } from "providers/ProtocolData";
+import { chain, useNetwork } from "wagmi";
 
 import { ZERO } from "constants";
 import format from "utils/format";
 import { calculateInterestRate } from "utils/numbers";
-import { useNetwork } from "wagmi";
+
+const getAnalyticsUrl = (chainId) => {
+  switch (chainId) {
+    case chain.mainnet.id:
+      return "https://data.union.finance/";
+    case chain.arbitrum.id:
+      return "https://data.union.finance/arbitrum";
+    default:
+      return null;
+  }
+};
 
 export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
+  const analyticsUrl = getAnalyticsUrl(chain.id);
 
   const {
     totalStaked = ZERO,
@@ -63,21 +75,23 @@ export default function GovernaceStats() {
               )}
             </Grid.Col>
           </Grid.Row>
-          <Grid.Row>
-            <Grid.Col>
-              <Button
-                fluid
-                as="a"
-                href="#"
-                target="_blank"
-                mt="32px"
-                variant="secondary"
-                label="Dune Analytics"
-                icon={External}
-                iconPosition="end"
-              />
-            </Grid.Col>
-          </Grid.Row>
+          {analyticsUrl && (
+            <Grid.Row>
+              <Grid.Col>
+                <Button
+                  fluid
+                  as="a"
+                  href={analyticsUrl}
+                  target="_blank"
+                  mt="32px"
+                  variant="secondary"
+                  label="Analytics"
+                  icon={External}
+                  iconPosition="end"
+                />
+              </Grid.Col>
+            </Grid.Row>
+          )}
         </Grid>
       </Card.Body>
     </Card>
