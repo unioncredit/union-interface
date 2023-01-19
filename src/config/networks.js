@@ -67,6 +67,9 @@ export const networks = {
 export function parseNetworksVersions() {
   return Object.keys(networks).reduce((acc, version) => {
     const nets = networks[version];
-    return [...acc, ...nets.map((net) => ({ ...net, version }))];
+    return [
+      ...acc,
+      ...nets.map((net) => ({ ...net, version, id: `${version}_${net.id}` })),
+    ];
   }, []);
 }
