@@ -1,6 +1,11 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const DEFAULT_SETTINGS = { showTestnets: false };
+const SETTINGS_STORAGE_KEY = "union:settings";
+
+const DEFAULT_SETTINGS = {
+  showTestnets: false,
+  ...JSON.parse(window.localStorage.getItem(SETTINGS_STORAGE_KEY)),
+};
 
 const SettingsContext = createContext({
   settings: DEFAULT_SETTINGS,
@@ -16,6 +21,12 @@ export default function Settings({ children }) {
   const setSetting = (key, value) => {
     setSettings((x) => ({ ...x, [key]: value }));
   };
+
+  const settingsSting = JSON.stringify(settings);
+
+  useEffect(() => {
+    window.localStorage.setItem(SETTINGS_STORAGE_KEY, settingsSting);
+  }, [settingsSting]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings, setSetting }}>
