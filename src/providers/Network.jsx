@@ -12,15 +12,14 @@ import {
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { createContext, useContext, useState } from "react";
-import { WagmiConfig, createClient, configureChains } from "wagmi";
-import { mainnet, arbitrum, goerli } from "wagmi/chains";
+import { chain, WagmiConfig, createClient, configureChains } from "wagmi";
 
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
 const { chains, provider } = configureChains(
-  [mainnet, arbitrum, goerli],
+  [chain.mainnet, chain.arbitrum, chain.goerli, chain.optimismGoerli],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
     publicProvider(),
