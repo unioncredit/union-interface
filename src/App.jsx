@@ -17,6 +17,7 @@ import Cache from "providers/Cache";
 import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
+import useMemberListener from "hooks/useMemberListener";
 
 /**
  * Shim component that checks if the App is ready
@@ -30,6 +31,8 @@ function AppReadyShim({ children }) {
   const { appReady, setAppReady } = useAppNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
+
+  useMemberListener();
 
   useEffect(() => {
     // If the member is a member then skip the connect/ready page
