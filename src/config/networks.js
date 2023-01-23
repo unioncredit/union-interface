@@ -1,7 +1,7 @@
 import { chain } from "wagmi";
 import { Versions } from "providers/Version";
 
-export const testNetworkIds = [chain.goerli.id];
+export const testNetworkIds = [chain.goerli.id, chain.optimismGoerli.id];
 
 export const networks = {
   [Versions.V1]: [
@@ -59,6 +59,19 @@ export const networks = {
       chainId: 5,
       networkData: {
         chainId: "0x5",
+      },
+    },
+    {
+      type: "optimism-goerli",
+      id: "optimism-goerli",
+      imageSrc: "/networks/gorli.png",
+      value: "optimism-goerli",
+      label: "Optimism Goerli (V2)",
+      description: "Use Union on a testnet",
+      avatar: "/networks/gorli-avatar.png",
+      chainId: 420,
+      networkData: {
+        chainId: "0x1A4",
       },
     },
   ],
