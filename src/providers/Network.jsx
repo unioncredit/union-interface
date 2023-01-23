@@ -17,7 +17,7 @@ const NetworkContext = createContext({});
 export const useAppNetwork = () => useContext(NetworkContext);
 
 const { chains, provider } = configureChains(
-  [chain.mainnet, chain.arbitrum, chain.goerli],
+  [chain.mainnet, chain.arbitrum, chain.goerli, chain.optimismGoerli],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
     publicProvider(),

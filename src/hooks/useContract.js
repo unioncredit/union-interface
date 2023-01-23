@@ -20,6 +20,16 @@ import {
 } from "config/contracts/v2/goerli";
 
 import {
+  userManagerContract as OPTIMISM_GOERLI_V2_userManagerContract,
+  uTokenContract as OPTIMISM_GOERLI_V2_uTokenContract,
+  unionContract as OPTIMISM_GOERLI_V2_unionContract,
+  daiContract as OPTIMISM_GOERLI_V2_daiContract,
+  comptrollerContract as OPTIMISM_GOERLI_V2_comptrollerContract,
+  assetManagerContract as OPTIMISM_GOERLI_V2_assetManagerContract,
+  unionLensContract as OPTIMISM_GOERLI_V2_unionLensContract,
+} from "config/contracts/v2/optimismGoerli";
+
+import {
   userManagerContract as MAINNET_userManagerContract,
   uTokenContract as MAINNET_uTokenContract,
   unionContract as MAINNET_unionContract,
@@ -81,6 +91,15 @@ export default function useContract(name, chainId) {
       comptroller: GOERLI_V2_comptrollerContract,
       assetManager: GOERLI_V2_assetManagerContract,
       unionLens: GOERLI_V2_unionLensContract,
+    },
+    [chain.optimismGoerli.id]: {
+      userManager: OPTIMISM_GOERLI_V2_userManagerContract,
+      uToken: OPTIMISM_GOERLI_V2_uTokenContract,
+      union: OPTIMISM_GOERLI_V2_unionContract,
+      dai: OPTIMISM_GOERLI_V2_daiContract,
+      comptroller: OPTIMISM_GOERLI_V2_comptrollerContract,
+      assetManager: OPTIMISM_GOERLI_V2_assetManagerContract,
+      unionLens: OPTIMISM_GOERLI_V2_unionLensContract,
     },
   };
 
