@@ -41,9 +41,7 @@ export default function Header({ loading, showNav = true }) {
     ...item,
     active:
       item.pathname === "/"
-        ? item.pathname === pathname
-        : item.id === "credit"
-        ? pathname.match(/\/(stake|credit)/)
+        ? item.pathname === pathname || !!pathname.match(/\/(stake|credit)/)
         : pathname.startsWith(item.pathname),
   }));
 
