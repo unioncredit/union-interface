@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { parseUnits } from "ethers/lib/utils";
+import { formatEther, parseUnits } from "ethers/lib/utils";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -25,12 +25,23 @@ export default function useForm(props = {}) {
     if (!value) {
       // If the value is empty set the raw value to 0 and
       // the display value to an empty string
-      newValues = { ...values, [name]: { raw: ZERO, display: "" } };
+      newValues = {
+        ...values,
+        [name]: { raw: ZERO, display: "", formatted: "" },
+      };
     } else {
       const parsed =
         type === "display"
-          ? { raw: parseUnits(toFixed(value)), display: value }
-          : { raw: value, display: formatValue(value, rounded) };
+          ? {
+              raw: parseUnits(toFixed(value)),
+              display: value,
+              formatted: value,
+            }
+          : {
+              raw: value,
+              display: formatValue(value, rounded),
+              formatted: formatEther(value),
+            };
 
       newValues = { ...values, [name]: parsed };
     }
