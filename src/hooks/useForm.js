@@ -16,8 +16,8 @@ const formatValue = (value, rounded) =>
 export default function useForm(props = {}) {
   const { validate } = props;
 
-  const [values, setValues] = useState();
-  const [errors, setErrors] = useState();
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
 
   const setNumber = (name, value, type, rounded) => {
     let newValues;
@@ -64,6 +64,11 @@ export default function useForm(props = {}) {
     setValue(name, event.target.value, event.target.type);
   };
 
+  const reset = () => {
+    setValues({});
+    setErrors({});
+  };
+
   return {
     values,
     errors: errors,
@@ -71,6 +76,7 @@ export default function useForm(props = {}) {
     setRawValue,
     setSimple,
     register,
+    reset,
     empty,
     isErrored: Object.values(errors || {}).filter(Boolean).length > 0,
   };

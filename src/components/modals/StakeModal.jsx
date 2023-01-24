@@ -73,6 +73,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     errors = {},
     empty,
     setRawValue,
+    reset,
     isErrored,
   } = useForm({
     validate: type === StakeType.STAKE ? validateStake : validateUnstake,
@@ -103,7 +104,10 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             packed
             items={toggleMenuOptions}
             initialActive={initialActiveIndex}
-            onChange={(item) => setType(item.id)}
+            onChange={(item) => {
+              setType(item.id);
+              reset();
+            }}
           />
 
           <Box mt="24px">
