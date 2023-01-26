@@ -4,7 +4,7 @@ import {
   Dai,
   Grid,
   Input,
-  Label,
+  Text,
   Modal,
   ModalOverlay,
   Stat,
@@ -109,17 +109,17 @@ export default function WriteOffDebtModal({ address }) {
             caption={`Write off max. ${format(locking)} DAI`}
           />
           <Box justify="space-between" mt="16px">
-            <Label as="p" size="small" m={0}>
+            <Text size="small" m={0}>
               New balance owed
-            </Label>
-            <Label as="p" size="small" m={0}>
+            </Text>
+            <Text size="small" m={0}>
               {format(locking.sub(amount.raw))}
-            </Label>
+            </Text>
           </Box>
-          <Label align="center" as="p" size="small" color="red500" mt="16px">
+          <Text align="center" as="p" size="small" color="red500" mt="16px">
             When you write-off debt, your locked funds are consumed, this action
             cannot be undone.
-          </Label>
+          </Text>
           <Button fluid label="Write-off debt" {...buttonProps} />
         </Modal.Body>
       </Modal>

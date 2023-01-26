@@ -1,4 +1,4 @@
-import { Stat, Grid, Tooltip, Label } from "@unioncredit/ui";
+import { Stat, Grid, Tooltip, Text } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
 
 import { ZERO } from "constants";
@@ -24,12 +24,12 @@ export default function ProfileGovernanceStats() {
         <Grid.Col>
           <Stat
             label={
-              <Label size="small" weight="medium">
+              <Text size="small" weight="medium">
                 From others{" "}
                 <Tooltip content="If other users delegate their votes to you, they’ll appear here.">
                   <TooltipIcon />
                 </Tooltip>
-              </Label>
+              </Text>
             }
             value={format(votesDelegated, 0)}
           />

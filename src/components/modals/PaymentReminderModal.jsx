@@ -1,6 +1,5 @@
 import {
   Box,
-  Label,
   Modal,
   ModalOverlay,
   Text,
@@ -65,25 +64,25 @@ export default function PaymentReminderModal() {
             defaulted state on your loan.
           </Text>
           <Box justify="space-between" mt="24px">
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               First payment amount
-            </Label>
-            <Label as="p" size="small" grey={400}>
+            </Text>
+            <Text size="small" grey={400}>
               {format(interest)} DAI
-            </Label>
+            </Text>
           </Box>
           <Box justify="space-between" mt="4px">
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               First payment due
-            </Label>
-            <Label as="p" size="small" grey={400}>
+            </Text>
+            <Text size="small" grey={400}>
               {dueDate(
                 lastRepay,
                 overdueBlocks,
                 blockNumber,
                 connectedChain.id
               )}
-            </Label>
+            </Text>
           </Box>
           <ButtonRow
             align="center"
@@ -92,7 +91,7 @@ export default function PaymentReminderModal() {
             direction="vertical"
           >
             <Text mb="16px">
-              <Label
+              <Text
                 as="a"
                 variant="lite"
                 download="Union payment reminder"
@@ -103,7 +102,7 @@ export default function PaymentReminderModal() {
                 fluid
               >
                 Download .ICS file
-              </Label>
+              </Text>
             </Text>
             <Button
               as="a"

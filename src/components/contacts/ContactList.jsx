@@ -7,15 +7,15 @@ import {
   TableCell,
   TableHead,
   Box,
-  Label,
+  Text,
   Input,
   Button,
   Collapse,
+  FilterIcon,
+  SearchIcon,
 } from "@unioncredit/ui";
 import { useEffect, useMemo, useState } from "react";
-import { ReactComponent as Search } from "@unioncredit/ui/lib/icons/search.svg";
 import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
-import { ReactComponent as Filter } from "@unioncredit/ui/lib/icons/filter.svg";
 
 import format from "utils/format";
 import { ZERO, ContactsType } from "constants";
@@ -128,7 +128,7 @@ export default function ContactList({
       *--------------------------------------------------------------*/}
       <Box fluid p="12px">
         <Input
-          prefix={<Search />}
+          prefix={<SearchIcon width="15px" />}
           placeholder="Search"
           onChange={(event) => {
             setQuery(event.target.value);
@@ -137,8 +137,9 @@ export default function ContactList({
         <Button
           ml="8px"
           fluid
-          icon={Filter}
-          variant="secondary"
+          icon={FilterIcon}
+          color="secondary"
+          variant="light"
           onClick={() => setShowFilters((x) => !x)}
         />
         {type === ContactsType.VOUCHEES && (
@@ -190,12 +191,12 @@ export default function ContactList({
                   </TableCell>
                   <TableCell>
                     <Box direction="vertical">
-                      <Label grey={700} m={0}>
+                      <Text grey={700} m={0}>
                         <PrimaryLabel address={address} />
-                      </Label>
-                      <Label size="small" grey={400} m={0}>
+                      </Text>
+                      <Text size="small" grey={400} m={0}>
                         {truncateAddress(address)}
-                      </Label>
+                      </Text>
                     </Box>
                   </TableCell>
                   {type === ContactsType.VOUCHEES ? (

@@ -4,7 +4,7 @@ import {
   Box,
   Dai,
   Stat,
-  Label,
+  Text,
   Button,
   Skeleton,
   ModalOverlay,
@@ -155,28 +155,22 @@ export default function ContactDetails({ contact, setContact, type }) {
             <Grid.Row>
               <Grid.Col xs={12}>
                 <Box justify="space-between" mt="8px">
-                  <Label as="p" grey={400}>
-                    Balance Owed
-                  </Label>
-                  <Label as="p" grey={700} m={0}>
+                  <Text grey={400}>Balance Owed</Text>
+                  <Text grey={700} m={0}>
                     {format(locking)}
-                  </Label>
+                  </Text>
                 </Box>
                 <Box justify="space-between">
-                  <Label as="p" grey={400}>
-                    Min. Payment
-                  </Label>
-                  <Label as="p" grey={700} m={0}>
+                  <Text grey={400}>Min. Payment</Text>
+                  <Text grey={700} m={0}>
                     {format(interest)}
-                  </Label>
+                  </Text>
                 </Box>
                 <Box justify="space-between">
-                  <Label as="p" grey={400}>
-                    Payment Due
-                  </Label>
-                  <Label as="p" grey={700} m={0}>
+                  <Text grey={400}>Payment Due</Text>
+                  <Text grey={700} m={0}>
                     No Payment Due
-                  </Label>
+                  </Text>
                 </Box>
               </Grid.Col>
             </Grid.Row>
@@ -191,7 +185,8 @@ export default function ContactDetails({ contact, setContact, type }) {
               fluid
               mt="12px"
               icon={Manage}
-              variant="secondary"
+              color="secondary"
+              variant="light"
               label="Manage Contact"
               onClick={() => open(MANAGE_CONTACT_MODAL, { contact, type })}
             />

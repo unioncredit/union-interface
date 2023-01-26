@@ -7,7 +7,7 @@ import {
   Stat,
   Grid,
   Tooltip,
-  Label,
+  Text,
 } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
@@ -63,12 +63,12 @@ export default function MyGovernanceStats() {
             <Grid.Col>
               <Stat
                 label={
-                  <Label size="small" weight="medium">
+                  <Text size="small" weight="medium">
                     From others{" "}
                     <Tooltip content="If other users delegate their votes to you, they’ll appear here.">
                       <TooltipIcon />
                     </Tooltip>
-                  </Label>
+                  </Text>
                 }
                 value={format(votesDelegated, 0)}
               />

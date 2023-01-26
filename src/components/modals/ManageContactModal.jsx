@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Dai,
-  Label,
-  Modal,
-  ModalOverlay,
-  Text,
-} from "@unioncredit/ui";
+import { Box, Button, Dai, Modal, ModalOverlay, Text } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
 
 import { ZERO } from "constants";
@@ -83,9 +75,9 @@ export default function ManageContactModal({ contact, type }) {
               justify="space-between"
             >
               <Box direction="vertical">
-                <Label size="small" grey={400} as="p" m={0}>
+                <Text grey={400} as="p" m={0}>
                   {label.toUpperCase()}
-                </Label>
+                </Text>
                 <Text size="large" mb={0} grey={800}>
                   {value}
                 </Text>
@@ -103,9 +95,9 @@ export default function ManageContactModal({ contact, type }) {
           {/*----------------------------------------------------
             * Buttons 
           -------------------------------------------------------*/}
-          <Label as="p" align="center" mt="24px" grey={400} size="small">
+          <Text align="center" mt="24px" grey={400} size="small">
             Contacts with outstanding balance can’t be removed
-          </Label>
+          </Text>
           <Button
             fluid
             mt="16px"

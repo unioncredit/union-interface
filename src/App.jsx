@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Label, Layout, Grid } from "@unioncredit/ui";
+import { Box, Text, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 
 import Routes from "./Routes";
@@ -126,9 +126,9 @@ export default function App() {
         </Grid>
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
-            <Label as="p" size="small" grey={300} align="center">
+            <Text size="small" grey={300} align="center">
               Build: {process.env.REACT_APP_VERSION}
-            </Label>
+            </Text>
           </Box>
         </Box>
       </Layout.Main>

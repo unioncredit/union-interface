@@ -9,7 +9,6 @@ import {
   Text,
   Box,
   Divider,
-  Label,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
@@ -100,9 +99,9 @@ export default function RegisterPage() {
                           <Heading size="large" grey={700} mb={0} mt="2px">
                             {format(protocol.newMemberFee, 0)} UNION
                           </Heading>
-                          <Label m={0} grey={500} mb="24px">
+                          <Text m={0} grey={500} mb="24px">
                             Membership Fee
-                          </Label>
+                          </Text>
                           <RegisterButton
                             onComplete={() =>
                               open(VOUCH_MODAL, {

@@ -8,7 +8,7 @@ import {
   Dai,
   Grid,
   Input,
-  Label,
+  Text,
   Modal,
   ModalOverlay,
   Stat,
@@ -156,9 +156,9 @@ export default function RepayModal() {
                         checked={selected}
                       />
                       <Collapse active={selected}>
-                        <Label as="p" mt="4px" mb={0}>
+                        <Text mt="4px" mb={0}>
                           {option.content}
-                        </Label>
+                        </Text>
                       </Collapse>
                     </Box>
                     {option.value && (
@@ -214,12 +214,10 @@ export default function RepayModal() {
             Stats After 
           *--------------------------------------------------------------*/}
           <Box justify="space-between" mt="24px" mb="18px">
-            <Label as="p" grey={400}>
-              New balance owed
-            </Label>
-            <Label as="p" grey={400} m={0}>
+            <Text grey={400}>New balance owed</Text>
+            <Text grey={400} m={0}>
               {format(newOwed)} DAI
-            </Label>
+            </Text>
           </Box>
           {/*--------------------------------------------------------------
             Button

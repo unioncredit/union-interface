@@ -10,7 +10,6 @@ import {
   Button,
   Text,
   TableCell,
-  Label,
   EmptyState,
 } from "@unioncredit/ui";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
@@ -77,12 +76,12 @@ export default function VouchersStep() {
                       <Avatar address={address} />
                     </TableCell>
                     <TableCell>
-                      <Label as="p" grey={700} m={0}>
+                      <Text grey={700} m={0}>
                         <PrimaryLabel address={address} />
-                      </Label>
-                      <Label as="p" size="small" grey={400} m={0}>
+                      </Text>
+                      <Text size="small" grey={400} m={0}>
                         {truncateAddress(address)}
-                      </Label>
+                      </Text>
                     </TableCell>
                     <TableCell align="right">{format(trust)}</TableCell>
                   </TableRow>

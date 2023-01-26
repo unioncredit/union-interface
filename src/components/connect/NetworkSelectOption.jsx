@@ -1,5 +1,5 @@
 import "./NetworkSelectOption.scss";
-import { Avatar, Box, Button, Card, Label, Text } from "@unioncredit/ui";
+import { Avatar, Box, Button, Card, Text } from "@unioncredit/ui";
 import cn from "classnames";
 import format from "utils/format";
 import useMemberSummary from "hooks/useMemberSummary";
@@ -36,20 +36,30 @@ export const NetworkSelectOption = ({
               {label}
             </Text>
 
-            <Label as="p" m={0} pr="8px" size="small">
+            <Text color="grey500" m={0} pr="8px" size="small">
               {address
                 ? data.isMember
                   ? `Member · ${format(data.creditLimit)} DAI available`
                   : "Not a member"
                 : description}
-            </Label>
+            </Text>
           </Box>
         </Box>
         <Box p="0 12px" className="NetworkSelectOption__controlBox">
           {active ? (
-            <Button variant="pill" label="Selected" color="blue" />
+            <Button
+              size="pill"
+              label="Selected"
+              color="primary"
+              variant="light"
+            />
           ) : (
-            <Button variant="pill" label="Switch" />
+            <Button
+              size="pill"
+              color="secondary"
+              variant="light"
+              label="Switch"
+            />
           )}
         </Box>
       </Box>

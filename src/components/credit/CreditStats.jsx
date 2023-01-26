@@ -1,5 +1,5 @@
 import { useBlockNumber, useNetwork, chain } from "wagmi";
-import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
+import { Stat, Button, Grid, Card, Text, Tooltip, Dai } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
 
 import { ZERO } from "constants";
@@ -61,12 +61,12 @@ export default function CreditStats() {
                 label="Vouch"
                 value={<Dai value={format(vouch)} />}
                 after={
-                  <Label m={0}>
+                  <Text color="grey500" m={0}>
                     {format(vouch.sub(creditLimit))} DAI unavailable
                     <Tooltip content="These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time">
                       <TooltipIcon width="16px" />
                     </Tooltip>
-                  </Label>
+                  </Text>
                 }
               />
             </Grid.Col>
@@ -84,7 +84,7 @@ export default function CreditStats() {
                 mb="4.5px"
                 value={<Dai value={format(minPayment)} />}
                 after={
-                  <Label
+                  <Text
                     size="small"
                     className="label--clickable"
                     color={
@@ -96,7 +96,7 @@ export default function CreditStats() {
                     }
                   >
                     {dueDateDisplay}
-                  </Label>
+                  </Text>
                 }
               />
             </Grid.Col>
@@ -113,7 +113,8 @@ export default function CreditStats() {
             <Grid.Col xs={6}>
               <Button
                 mt="28px"
-                variant="secondary"
+                color="secondary"
+                variant="light"
                 label="Make a payment"
                 disabled={owed.lte(ZERO)}
                 onClick={() => open(REPAY_MODAL)}

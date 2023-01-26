@@ -7,7 +7,7 @@ import {
   ModalOverlay,
   ToggleMenu,
   Box,
-  Label,
+  Text,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -119,38 +119,26 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
           </Box>
 
           <Box justify="space-between" mt="16px" mb="4px">
-            <Label as="p" grey={400}>
-              Currently Staked
-            </Label>
-            <Label as="p" grey={700} m={0}>
+            <Text grey={400}>Currently Staked</Text>
+            <Text grey={700} m={0}>
               {format(stakedBalance)}
-            </Label>
+            </Text>
           </Box>
           <Box justify="space-between" mb="4px">
-            <Label as="p" grey={400}>
-              Utilized Stake
-            </Label>
-            <Label as="p" grey={700} m={0}>
+            <Text grey={400}>Utilized Stake</Text>
+            <Text grey={700} m={0}>
               {format(totalLockedStake)}
-            </Label>
+            </Text>
           </Box>
           {type === StakeType.STAKE ? (
             <Box justify="space-between" mb="18px">
-              <Label as="p" grey={400}>
-                Staking Limit
-              </Label>
-              <Label as="p" grey={700}>
-                {format(maxStakeAmount)}
-              </Label>
+              <Text grey={400}>Staking Limit</Text>
+              <Text grey={700}>{format(maxStakeAmount)}</Text>
             </Box>
           ) : (
             <Box justify="space-between" mb="18px">
-              <Label as="p" grey={400}>
-                Available to Unstake
-              </Label>
-              <Label as="p" grey={700}>
-                {format(maxUserUnstake)}
-              </Label>
+              <Text grey={400}>Available to Unstake</Text>
+              <Text grey={700}>{format(maxUserUnstake)}</Text>
             </Box>
           )}
 

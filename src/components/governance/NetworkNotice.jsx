@@ -1,5 +1,5 @@
 import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { Heading, Card, Text, Button, Label } from "@unioncredit/ui";
+import { Heading, Card, Text, Button } from "@unioncredit/ui";
 import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
 export default function NetworkNotice({ lite }) {
@@ -7,7 +7,7 @@ export default function NetworkNotice({ lite }) {
   const { switchNetwork } = useSwitchNetwork();
   const { chain: connectedChain } = useNetwork();
 
-  if (!isConnected || connectedChain?.id == chain.mainnet.id) {
+  if (!isConnected || connectedChain?.id === chain.mainnet.id) {
     return null;
   }
 
@@ -15,15 +15,15 @@ export default function NetworkNotice({ lite }) {
     <Card variant="blue" mb="24px" packed={lite}>
       <Card.Body>
         {lite ? (
-          <Label as="p" align="center" mb="8px">
+          <Text align="center" mb="8px">
             Voting only on Ethereum mainnet
-          </Label>
+          </Text>
         ) : (
           <>
             <Heading align="center" mb={0}>
               Union Governance on Ethereum
             </Heading>
-            <Text align="center" mb="24px">
+            <Text align="center" mt="5px" mb="24px">
               Voting on proposals isn’t supported on Arbitrum. Switch to
               Ethereum’s Mainnet in order to take part in Union Governance.
             </Text>

@@ -1,5 +1,4 @@
-import { Stat, Button, Grid, Card, Dai } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
+import { Stat, Button, Grid, Card, Dai, ExternalIcon } from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
 import { chain, useNetwork } from "wagmi";
 
@@ -84,10 +83,17 @@ export default function GovernaceStats() {
                   href={analyticsUrl}
                   target="_blank"
                   mt="32px"
-                  variant="secondary"
+                  color="secondary"
+                  variant="light"
                   label="Analytics"
-                  icon={External}
+                  icon={ExternalIcon}
                   iconPosition="end"
+                  iconProps={{
+                    style: {
+                      width: "12px",
+                      height: "12px",
+                    },
+                  }}
                 />
               </Grid.Col>
             </Grid.Row>

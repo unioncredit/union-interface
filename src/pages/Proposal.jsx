@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Grid, Label, Heading, Text } from "@unioncredit/ui";
+import { Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
 import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
 
 import { ZERO_ADDRESS } from "constants";
@@ -73,9 +73,9 @@ export default function ProposalPage() {
             <Heading size="xlarge" mb="12px" grey={800}>
               {title}
             </Heading>
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               PROPOSED BY
-            </Label>
+            </Text>
             <Box>
               <Avatar address={proposer} size={24} />
               <Text mb="0" mx="8px">
@@ -132,7 +132,7 @@ export default function ProposalPage() {
 
                 return (
                   <Fragment key={`${target}${signature}${calldata}`}>
-                    <Label
+                    <Text
                       as="a"
                       w="100%"
                       m={0}
@@ -143,11 +143,11 @@ export default function ProposalPage() {
                       style={{ wordWrap: "break-word" }}
                     >
                       Contract: {target}
-                    </Label>
-                    <Label as="p" w="100%" style={{ wordWrap: "break-word" }}>
+                    </Text>
+                    <Text w="100%" style={{ wordWrap: "break-word" }}>
                       Function: {signature.replace(/(\(=?)(.*)$/, "")}(
                       {argumentString})
-                    </Label>
+                    </Text>
                   </Fragment>
                 );
               })}

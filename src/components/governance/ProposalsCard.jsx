@@ -3,7 +3,6 @@ import {
   Button,
   Box,
   Table,
-  Label,
   Badge,
   EmptyState,
   TableCell,
@@ -39,7 +38,12 @@ export default function ProposalsCard({
         action={
           showAction && (
             <Link to="/governance/proposals">
-              <Button variant="secondary" label="View all" inline />
+              <Button
+                color="secondary"
+                variant="light"
+                label="View all"
+                inline
+              />
             </Link>
           )
         }
@@ -70,7 +74,7 @@ export default function ProposalsCard({
                         {title.slice(0, maxStrLength)}
                         {title.length > maxStrLength && "..."}
                       </Text>
-                      <Label>
+                      <Text color="grey500">
                         <Badge
                           color={StatusColorMap[status] || "blue"}
                           label={status}
@@ -78,7 +82,7 @@ export default function ProposalsCard({
                         />
                         {percent(percentageFor)} yes &bull;{" "}
                         <BlockRelativeTime block={startBlock} />
-                      </Label>
+                      </Text>
                     </TableCell>
                   </TableRow>
                 );

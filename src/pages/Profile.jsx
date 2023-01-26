@@ -95,7 +95,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <Heading mt="8px" mb={0}>
               <PrimaryLabel address={address} />
             </Heading>
-            <Box mt="8px">
+            <Box mt="8px" align="center">
               <BadgeRow>
                 <Badge
                   mr="4px"
@@ -114,7 +114,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <External width="24px" />
+                <External width="12px" />
               </a>
             </Box>
             {/*--------------------------------------------------------------
@@ -181,7 +181,8 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               fluid
               mt="8px"
               icon={Link}
-              variant="secondary"
+              color="secondary"
+              variant="light"
               label={copied ? "Copied" : "Copy profile link"}
               onClick={() => copy(window.location.host + window.location.hash)}
             />
@@ -194,7 +195,9 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
       <Card mb="24px">
         <Card.Body>
           <Heading mb="24px">Reputation</Heading>
-          <Text mb="12px">Wallet traits</Text>
+          <Text color="grey500" mb="12px">
+            Wallet traits
+          </Text>
           <Grid>
             <Grid.Row>
               <Grid.Col>

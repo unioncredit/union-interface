@@ -9,12 +9,12 @@ import {
   Badge,
   ButtonRow,
   Divider,
-  Label,
+  Text,
+  ExternalIcon,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
 import { ReactComponent as Failed } from "@unioncredit/ui/lib/icons/failed.svg";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { useModals } from "providers/ModalManager";
 import Avatar from "components/shared/Avatar";
@@ -55,15 +55,16 @@ export default function AccountModal() {
               <PrimaryLabel address={address} />
             </Heading>
 
-            <Box>
+            <Box align="center">
               <Badge
+                mr="5px"
                 color="grey"
                 onClick={() => copy(address)}
                 label={copied ? "Copied!" : truncateAddress(address)}
               />
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                <External width="24px" />
+                <ExternalIcon width="14px" />
               </a>
             </Box>
           </Box>
@@ -72,12 +73,12 @@ export default function AccountModal() {
               onClick={close}
               to={`/profile/${EIP3770[chain.id]}:${address}`}
             >
-              <Button size="small" fluid label="View Profile" />
+              <Button size="thin" fluid label="View Profile" />
             </Link>
 
             <Button
-              size="small"
               fluid
+              size="thin"
               label="Disconnect Wallet"
               onClick={() => {
                 disconnect();
@@ -87,10 +88,11 @@ export default function AccountModal() {
           </ButtonRow>
           <Divider my="24px" />
           <Box justify="space-between" align="center" mb="12px">
-            <Label grey={600}>Wallet Activity</Label>
+            <Text grey={600}>Wallet Activity</Text>
             <Button
-              size="small"
-              variant="pill"
+              size="pill"
+              color="secondary"
+              variant="light"
               label="Clear activity"
               onClick={clearLogs}
             />
@@ -98,9 +100,9 @@ export default function AccountModal() {
 
           <Box direction="vertical">
             {logs.length <= 0 ? (
-              <Label grey={400} size="small" m={0}>
+              <Text grey={400} size="small" m={0}>
                 No activity logs
-              </Label>
+              </Text>
             ) : (
               logs.map(({ txHash, status, label, value }) => (
                 <Box key={txHash} align="center" justify="space-between" fluid>
@@ -112,16 +114,16 @@ export default function AccountModal() {
                         <Failed width="16px" />
                       )}
                     </div>
-                    <Label grey={600} m={0}>
+                    <Text grey={600} m={0}>
                       {label}
-                    </Label>
+                    </Text>
                   </Box>
                   <Box align="center">
-                    <Label m={0} grey={700}>
+                    <Text m={0} grey={700}>
                       {format(value)}
-                    </Label>
+                    </Text>
                     <a href="#" target="_blank">
-                      <External width="24px" />
+                      <ExternalIcon width="24px" />
                     </a>
                   </Box>
                 </Box>

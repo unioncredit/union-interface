@@ -5,7 +5,7 @@ import {
   EmptyState,
   TableRow,
   TableHead,
-  Label,
+  Text,
   TableCell,
   Box,
 } from "@unioncredit/ui";
@@ -66,12 +66,12 @@ export default function VouchersCard() {
                 </TableCell>
                 <TableCell>
                   <Box direction="vertical">
-                    <Label grey={700} m={0}>
+                    <Text grey={700} m={0}>
                       <PrimaryLabel address={address} />
-                    </Label>
-                    <Label size="small" grey={400} m={0}>
+                    </Text>
+                    <Text size="small" grey={400} m={0}>
                       {truncateAddress(address)}
-                    </Label>
+                    </Text>
                   </Box>
                 </TableCell>
                 <TableCell align="right">{format(vouch)}</TableCell>

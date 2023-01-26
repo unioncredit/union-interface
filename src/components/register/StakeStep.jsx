@@ -6,7 +6,7 @@ import {
   Stat,
   Dai,
   Box,
-  Label,
+  Text,
   ButtonRow,
   Button,
   Union,
@@ -95,8 +95,8 @@ export default function StakeStep() {
           mb="8px"
           mt="16px"
         >
-          <Label m={0}>Membership Fee</Label>
-          <Label m={0}>{format(newMemberFee)} UNION</Label>
+          <Text m={0}>Membership Fee</Text>
+          <Text m={0}>{format(newMemberFee)} UNION</Text>
         </Box>
         <Box
           className="StakeStep__Box__details"
@@ -104,8 +104,8 @@ export default function StakeStep() {
           pb="8px"
           mb="12px"
         >
-          <Label m={0}>Estimated daily earnings</Label>
-          <Label m={0}>{format(dailyEarnings)} UNION</Label>
+          <Text m={0}>Estimated daily earnings</Text>
+          <Text m={0}>{format(dailyEarnings)} UNION</Text>
         </Box>
 
         <ButtonRow>

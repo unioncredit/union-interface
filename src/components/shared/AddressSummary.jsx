@@ -49,7 +49,7 @@ export default function AddressSummary({ address }) {
               </Heading>
             </Box>
           </Link>
-          <Box>
+          <Box align="center">
             <BadgeRow>
               <Badge
                 mr="4px"
@@ -61,7 +61,7 @@ export default function AddressSummary({ address }) {
             </BadgeRow>
 
             <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-              <External width="24px" />
+              <External width="12px" />
             </a>
           </Box>
         </Box>

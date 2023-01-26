@@ -91,7 +91,8 @@ export default function StakeStats() {
               <Button
                 mt="24px"
                 label="Withdraw DAI"
-                variant="secondary"
+                color="secondary"
+                variant="light"
                 onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
               />
             </Grid.Col>

@@ -30,6 +30,7 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
 
         return (
           <Button
+            size="thin"
             label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}

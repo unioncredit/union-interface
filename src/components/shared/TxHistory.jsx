@@ -5,7 +5,6 @@ import {
   Table,
   TableCell,
   TableRow,
-  Label,
   Box,
   Skeleton,
   Pagination,
@@ -48,7 +47,7 @@ const Address = ({ address }) => {
   const { address: connectedAddress } = useAccount();
 
   return (
-    <Label as="span" grey={400} m={0}>
+    <Text as="span" grey={400} m={0}>
       <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
         {compareAddresses(connectedAddress, address) ? (
           "You"
@@ -56,7 +55,7 @@ const Address = ({ address }) => {
           <PrimaryLabel address={address} />
         )}
       </Link>
-    </Label>
+    </Text>
   );
 };
 
@@ -102,15 +101,14 @@ function TransactionHistoryRow({
       </TableCell>
       <TableCell>
         <Box direction="vertical">
-          <Label as="p" grey={700} m={0}>
+          <Text grey={700} m={0}>
             {text}
-          </Label>
-          <Label as="p" size="small" grey={400} m={0}>
+          </Text>
+          <Text size="small" grey={400} m={0}>
             <a href={blockExplorerTx(chain.id, hash)} target="_blank">
-              <RelativeTime timestamp={timestamp} />{" "}
-              <InlineExternal width="12px" />
+              <RelativeTime timestamp={timestamp} /> <InlineExternal />
             </a>
-          </Label>
+          </Text>
         </Box>
       </TableCell>
       <TableCell align="right">

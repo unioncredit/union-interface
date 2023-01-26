@@ -4,7 +4,7 @@ import {
   Dai,
   Grid,
   Input,
-  Label,
+  Text,
   Modal,
   ModalOverlay,
   Stat,
@@ -122,35 +122,37 @@ export default function BorrowModal() {
               value={amount.display}
               onChange={register("amount")}
               caption={`Max. ${format(maxBorrow)} DAI`}
-              onCaptionButtonClick={() => setRawValue("amount", maxBorrow, false)}
+              onCaptionButtonClick={() =>
+                setRawValue("amount", maxBorrow, false)
+              }
             />
           </Box>
           {/*--------------------------------------------------------------
             Stats After 
           *--------------------------------------------------------------*/}
           <Box justify="space-between" mt="16px">
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               Total including fee
-            </Label>
-            <Label as="p" size="small" grey={700}>
+            </Text>
+            <Text size="small" grey={700}>
               {format(borrow)} DAI
-            </Label>
+            </Text>
           </Box>
           <Box justify="space-between">
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               First Payment Due
-            </Label>
-            <Label as="p" size="small" grey={700}>
+            </Text>
+            <Text size="small" grey={700}>
               {firstPaymentDueDate}
-            </Label>
+            </Text>
           </Box>
           <Box justify="space-between">
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               New balance owed
-            </Label>
-            <Label as="p" size="small" grey={700}>
+            </Text>
+            <Text size="small" grey={700}>
               {format(newOwed)} DAI
-            </Label>
+            </Text>
           </Box>
           {/*--------------------------------------------------------------
             Button 

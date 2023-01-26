@@ -7,7 +7,6 @@ import {
   Divider,
   Text,
   Box,
-  Label,
   Stat,
 } from "@unioncredit/ui";
 import { StatusColorMap } from "constants";
@@ -43,21 +42,13 @@ export default function VotingCard({ data }) {
       />
       <Card.Body>
         <Box justify="space-between" mb="4px">
-          <Label as="p" m={0}>
-            For
-          </Label>
-          <Label as="p" m={0}>
-            {format(forVotes, 0)} Votes
-          </Label>
+          <Text m={0}>For</Text>
+          <Text m={0}>{format(forVotes, 0)} Votes</Text>
         </Box>
         <Bar percentage={percentageFor * 100} size="large" color="green" />
         <Box justify="space-between" mt="18px" mb="4px">
-          <Label as="p" m={0}>
-            Against
-          </Label>
-          <Label as="p" m={0}>
-            {format(againstVotes, 0)} Votes
-          </Label>
+          <Text m={0}>Against</Text>
+          <Text m={0}>{format(againstVotes, 0)} Votes</Text>
         </Box>
         <Bar percentage={percentageAgainst * 100} size="large" />
         <Box mt="22px">
@@ -65,9 +56,9 @@ export default function VotingCard({ data }) {
           <Stat
             fluid
             label={
-              <Label as="p" m={0} weight="medium" size="small">
+              <Text m={0} weight="medium" size="small">
                 {percent(quorumPercent)} Quorum {0 >= 1 && <WireCheck />}
-              </Label>
+              </Text>
             }
             value={<Bar size="large" percentage={quorumProgress * 100} />}
           />

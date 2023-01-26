@@ -5,7 +5,7 @@ import {
   Card,
   Button,
   ButtonRow,
-  Label,
+  Text,
   Select,
 } from "@unioncredit/ui";
 import QRCode from "qrcode.react";
@@ -66,8 +66,7 @@ export default function CreditRequestModal() {
                 />
               </Box>
               <Box mb="16px" direction="vertical" align="center">
-                <Label
-                  as="p"
+                <Text
                   m={0}
                   style={{
                     wordBreak: "break-all",
@@ -76,7 +75,7 @@ export default function CreditRequestModal() {
                   }}
                 >
                   {urlDisplay}
-                </Label>
+                </Text>
                 <Button
                   mt="8px"
                   variant="pill"
