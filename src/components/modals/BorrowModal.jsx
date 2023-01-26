@@ -119,10 +119,12 @@ export default function BorrowModal() {
               suffix={<Dai />}
               placeholder="0.0"
               error={errors.amount}
-              value={amount.display}
+              value={amount.formatted}
               onChange={register("amount")}
               caption={`Max. ${format(maxBorrow)} DAI`}
-              onCaptionButtonClick={() => setRawValue("amount", maxBorrow, false)}
+              onCaptionButtonClick={() =>
+                setRawValue("amount", maxBorrow, false)
+              }
             />
           </Box>
           {/*--------------------------------------------------------------

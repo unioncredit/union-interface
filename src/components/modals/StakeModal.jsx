@@ -112,7 +112,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               placeholder="0"
               suffix={<Dai />}
               error={errors.amount}
-              value={amount.display}
+              value={amount.formatted}
               onChange={register("amount")}
               {...inputProps}
             />
