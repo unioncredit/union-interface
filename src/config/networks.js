@@ -49,19 +49,6 @@ export const networks = {
   ],
   [Versions.V2]: [
     {
-      type: "goerli",
-      id: "goerli",
-      imageSrc: "/networks/gorli.png",
-      value: "goerli",
-      label: "Goerli (V2)",
-      description: "Use Union on a testnet",
-      avatar: "/networks/gorli-avatar.png",
-      chainId: 5,
-      networkData: {
-        chainId: "0x5",
-      },
-    },
-    {
       type: "optimism-goerli",
       id: "optimism-goerli",
       imageSrc: "/networks/gorli.png",

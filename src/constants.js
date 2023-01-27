@@ -78,7 +78,7 @@ export const TheGraphUrls = {
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
   },
   [Versions.V2]: {
-    [chain.goerli.id]:
+    [chain.optimismGoerli.id]:
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
   },
 };
