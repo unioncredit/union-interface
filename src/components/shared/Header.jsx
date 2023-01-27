@@ -144,7 +144,10 @@ export default function Header({ loading, showNav = true }) {
         <HeaderMobileMenu
           navLinks={navItems}
           footerLinks={contextMenuItems}
-          closeMenu={() => setMenuOpen(false)}
+          closeMenu={() => {
+            setMenuOpen(false);
+            setScrollLock(false);
+          }}
         />
       )}
     </>
