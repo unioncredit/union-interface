@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
+import { Versions } from "./Version";
 
 const ProtocolContext = createContext({});
 
@@ -26,7 +27,11 @@ export default function ProtcolData({ children }) {
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
-  const governorContract = useContract("governor", chain.mainnet.id);
+  const governorContract = useContract(
+    "governor",
+    chain.mainnet.id,
+    Versions.V1
+  );
   const unionTokenContract = useContract("union", chainId);
   const assetManagerContract = useContract("assetManager", chainId);
 

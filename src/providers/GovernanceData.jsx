@@ -105,7 +105,11 @@ const selectProposals = (data) => {
 function useProposals() {
   const [proposals, setProposals] = useState([]);
 
-  const governorContract = useContract("governor", chain.mainnet.id);
+  const governorContract = useContract(
+    "governor",
+    chain.mainnet.id,
+    Versions.V1
+  );
 
   const getProposals = useCallback(async () => {
     const resp = await request(

@@ -48,24 +48,28 @@ export const BlockSpeed = {
   [chain.mainnet.id]: 12e3,
   [chain.arbitrum.id]: 12e3,
   [chain.goerli.id]: 12e3,
+  [chain.optimismGoerli.id]: 12e3,
 };
 
 export const BlocksPerYear = {
   [chain.mainnet.id]: 2407328,
   [chain.arbitrum.id]: 2407328,
   [chain.goerli.id]: 2407328,
+  [chain.optimismGoerli.id]: 2407328,
 };
 
 export const EIP3770 = {
   [chain.mainnet.id]: "eth",
   [chain.arbitrum.id]: "arb1",
   [chain.goerli.id]: "goe",
+  [chain.optimismGoerli.id]: "optgoe",
 };
 
 export const EIP3770Map = {
   eth: chain.mainnet.id,
   arb1: chain.arbitrum.id,
   goe: chain.goerli.id,
+  optgoe: chain.optimismGoerli.id,
 };
 
 export const TheGraphUrls = {
