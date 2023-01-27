@@ -10,6 +10,7 @@ export default function useMemberListener() {
   const { refetch: refetchVouchers } = useVouchers();
 
   const userManager = useContract("userManager");
+  const daiContract = useContract("dai");
 
   const refreshMember = () => {
     console.log("Listener: refreshing member");
@@ -45,6 +46,17 @@ export default function useMemberListener() {
     listener: ([, account]) => {
       console.log("Listener: LogRegisterMember received", { account, address });
       if (account === address) {
+        refreshMember();
+      }
+    },
+  });
+
+  useContractEvent({
+    ...daiContract,
+    eventName: "Transfer",
+    listener: ([from, to]) => {
+      if (address === from || address === to) {
+        console.log("Listener: DAI Transfer received", { address, from, to });
         refreshMember();
       }
     },
