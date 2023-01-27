@@ -55,7 +55,7 @@ export default function useTxHistory({
     }
 
     staker !== ZERO_ADDRESS && loadData();
-  }, [chain.id, borrower, staker]);
+  }, [version, chain.id, borrower, staker]);
 
   return { data };
 }
