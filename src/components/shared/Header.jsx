@@ -6,9 +6,11 @@ import {
   Layout,
   Box,
   ContextMenu,
-  Text,
   Button,
+  HamburgerIcon,
+  CloseIcon,
 } from "@unioncredit/ui";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
@@ -23,12 +25,20 @@ import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
+import HeaderMobileMenu from "components/shared/HeaderMobileMenu";
+import useWindowDimensions from "hooks/useWindowDimensions";
+import useScrollLock from "hooks/useScrollLock";
 
 export default function Header({ loading, showNav = true }) {
+  const mobileNavBreakpoint = 900;
   const { open } = useModals();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
+  const { width } = useWindowDimensions();
+  const setScrollLock = useScrollLock();
+
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
@@ -69,7 +79,7 @@ export default function Header({ loading, showNav = true }) {
               </Box>
             </Grid.Col>
             {showNav && (
-              <Grid.Col align="center" className="hide-lt-850">
+              <Grid.Col align="center" className="hide-lt-900">
                 {/*--------------------------------------------------------------
                 Desktop Navigation 
               *--------------------------------------------------------------*/}
@@ -83,39 +93,57 @@ export default function Header({ loading, showNav = true }) {
               </Grid.Col>
             )}
             <Grid.Col align="right">
-              <Box justify="flex-end">
+              <Box justify="flex-end" align="center">
                 {isConnected && (
                   <Button
                     mr="4px"
                     icon={Union}
-                    variant="secondary"
+                    iconProps={{
+                      style: {
+                        width: "24px",
+                        height: "24px",
+                      },
+                    }}
+                    color="secondary"
+                    variant="light"
                     className="UnionWallet"
                     onClick={() => open(WALLET_MODAL)}
-                    label={
-                      <Text mb="0" ml="4px">
-                        {format(unclaimedRewards.add(unionBalance))}
-                      </Text>
-                    }
+                    label={format(unclaimedRewards.add(unionBalance))}
                   />
                 )}
                 <ConnectButton buttonProps={{ packed: true }} />
-                <ContextMenu position="left" items={contextMenuItems} />
+                {width > mobileNavBreakpoint ? (
+                  <ContextMenu
+                    className="Header__context-menu"
+                    position="left"
+                    items={contextMenuItems}
+                  />
+                ) : (
+                  <Button
+                    color="secondary"
+                    variant="light"
+                    className="Header__hamburger"
+                    icon={menuOpen ? CloseIcon : HamburgerIcon}
+                    onClick={() => {
+                      setScrollLock(!menuOpen);
+                      setMenuOpen(!menuOpen);
+                    }}
+                  />
+                )}
               </Box>
             </Grid.Col>
           </Grid.Row>
-          {showNav && (
-            <Grid.Row>
-              {/*--------------------------------------------------------------
-                Mobile Navigation 
-              *--------------------------------------------------------------*/}
-              <Box my="16px" className="hide-gt-850" fluid>
-                <Grid.Col align="center">{navigation}</Grid.Col>
-              </Box>
-            </Grid.Row>
-          )}
         </Grid>
       </Layout.Header>
       <OverdueAlert />
+
+      {menuOpen && width <= mobileNavBreakpoint && (
+        <HeaderMobileMenu
+          navLinks={navItems}
+          footerLinks={contextMenuItems}
+          closeMenu={() => setMenuOpen(false)}
+        />
+      )}
     </>
   );
 }
