@@ -45,27 +45,31 @@ export const ContactsType = {
 };
 
 export const BlockSpeed = {
-  [mainnet.id]: 12e3,
-  [arbitrum.id]: 12e3,
-  [goerli.id]: 12e3,
+  [chain.mainnet.id]: 12e3,
+  [chain.arbitrum.id]: 12e3,
+  [chain.goerli.id]: 12e3,
+  [chain.optimismGoerli.id]: 12e3,
 };
 
 export const BlocksPerYear = {
-  [mainnet.id]: 2407328,
-  [arbitrum.id]: 2407328,
-  [goerli.id]: 2407328,
+  [chain.mainnet.id]: 2407328,
+  [chain.arbitrum.id]: 2407328,
+  [chain.goerli.id]: 2407328,
+  [chain.optimismGoerli.id]: 2407328,
 };
 
 export const EIP3770 = {
-  [mainnet.id]: "eth",
-  [arbitrum.id]: "arb1",
-  [goerli.id]: "goe",
+  [chain.mainnet.id]: "eth",
+  [chain.arbitrum.id]: "arb1",
+  [chain.goerli.id]: "goe",
+  [chain.optimismGoerli.id]: "optgoe",
 };
 
 export const EIP3770Map = {
-  eth: mainnet.id,
-  arb1: arbitrum.id,
-  goe: goerli.id,
+  eth: chain.mainnet.id,
+  arb1: chain.arbitrum.id,
+  goe: chain.goerli.id,
+  optgoe: chain.optimismGoerli.id,
 };
 
 export const TheGraphUrls = {
