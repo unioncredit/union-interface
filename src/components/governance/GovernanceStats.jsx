@@ -62,7 +62,7 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {chain && borrowRatePerBlock && (
+              {borrowRatePerBlock && (
                 <Stat
                   mt="32px"
                   align="center"

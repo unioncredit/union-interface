@@ -51,7 +51,7 @@ import {
 
 import { useVersion, Versions } from "providers/Version";
 
-export default function useContract(name, chainId) {
+export default function useContract(name, chainId, forceVersion) {
   const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
 
@@ -109,5 +109,9 @@ export default function useContract(name, chainId) {
     [Versions.V2]: v2Contracts,
   };
 
-  return contracts[version]?.[chainId || connectedChain?.id]?.[name] || {};
+  return (
+    contracts[forceVersion || version]?.[chainId || connectedChain?.id]?.[
+      name
+    ] || {}
+  );
 }
