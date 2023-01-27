@@ -34,6 +34,7 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
             label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}
+            style={{ height: "40px" }}
             {...buttonProps}
           />
         );

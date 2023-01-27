@@ -74,7 +74,10 @@ export default function Header({ loading, showNav = true }) {
           <Grid.Row align="center">
             <Grid.Col>
               <Box align="center">
-                <Logo width="32px" style={{ marginRight: "8px" }} />
+                <Link to="/">
+                  <Logo width="32px" style={{ marginRight: "8px" }} />
+                </Link>
+
                 {isConnected && <NetworkSelect />}
               </Box>
             </Grid.Col>
