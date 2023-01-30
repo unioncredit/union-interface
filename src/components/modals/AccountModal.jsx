@@ -11,6 +11,8 @@ import {
   Divider,
   Text,
   ExternalIcon,
+  DisconnectWalletIcon,
+  IdentityIcon,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
@@ -64,7 +66,7 @@ export default function AccountModal() {
               />
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                <ExternalIcon width="14px" />
+                <ExternalIcon width="12px" />
               </a>
             </Box>
           </Box>
@@ -73,13 +75,23 @@ export default function AccountModal() {
               onClick={close}
               to={`/profile/${EIP3770[chain.id]}:${address}`}
             >
-              <Button size="thin" fluid label="View Profile" />
+              <Button
+                fluid
+                size="thin"
+                variant="light"
+                color="secondary"
+                label="View Profile"
+                icon={IdentityIcon}
+              />
             </Link>
 
             <Button
               fluid
               size="thin"
+              variant="light"
+              color="secondary"
               label="Disconnect Wallet"
+              icon={DisconnectWalletIcon}
               onClick={() => {
                 disconnect();
                 close();
@@ -119,11 +131,11 @@ export default function AccountModal() {
                     </Text>
                   </Box>
                   <Box align="center">
-                    <Text m={0} grey={700}>
+                    <Text m={0} mr="5px" grey={700}>
                       {format(value)}
                     </Text>
                     <a href="#" target="_blank">
-                      <ExternalIcon width="24px" />
+                      <ExternalIcon width="12px" />
                     </a>
                   </Box>
                 </Box>
