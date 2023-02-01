@@ -2832,10 +2832,10 @@
     "@typescript-eslint/types" "5.40.0"
     eslint-visitor-keys "^3.3.0"
 
-"@unioncredit/ui@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.4.0.tgz#8ae9cf6cafcd739650baa1148498fa50e5f2e776"
-  integrity sha512-JGjmrxKB3hqTc8q+n8wllxTpHdRTCZUg81dNJZnzWHovysPQll/V2tgsHRZZFSbqEtRrOffhsIspUpiimKqzrg==
+"@unioncredit/ui@0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.4.2.tgz#7f032235133108a9b58e0bd4d0b147fcda29b0a6"
+  integrity sha512-Fm2Mb9HSMg5Pl2OMeM0WA2Qdz60gqklGp/7H40N2QU9PTABekm0Wzbq3/lGodc9BP+b73IFvARgchOO5oaJ3Xw==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
@@ -5605,6 +5605,13 @@ eth-json-rpc-middleware@^6.0.0:
     node-fetch "^2.6.1"
     pify "^3.0.0"
     safe-event-emitter "^1.0.1"
+
+eth-permit@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/eth-permit/-/eth-permit-0.2.3.tgz#7d8b051e329d2166fef32553ed397970d369cafe"
+  integrity sha512-d4tbiRQgbpdeJbdC9hdyT0SUJcJx28FIy3o2RxEAoeYI+zyYbNC0ZpdE6kxBK+7iY2payjHRE7rs7tr5EcOVLg==
+  dependencies:
+    utf8 "^3.0.0"
 
 eth-query@^2.1.0, eth-query@^2.1.2:
   version "2.1.2"
@@ -11228,6 +11235,11 @@ utf-8-validate@^5.0.2:
   integrity sha512-Yek7dAy0v3Kl0orwMlvi7TPtiCNrdfHNd7Gcc/pLq4BLXqfAmd0J7OWMizUQnTTJsyjKn02mU7anqwfmUP4J8Q==
   dependencies:
     node-gyp-build "^4.3.0"
+
+utf8@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/utf8/-/utf8-3.0.0.tgz#f052eed1364d696e769ef058b183df88c87f69d1"
+  integrity sha512-E8VjFIQ/TyQgp+TZfS6l8yp/xWppSAHzidGiRrqe4bK4XP9pTRyKFgGJpO3SN7zdX4DeomTrwaseCHovfpFcqQ==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
