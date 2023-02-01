@@ -32,7 +32,7 @@ function NoScrollModal(props) {
   return <Modal {...props} />;
 }
 
-export default function ContactDetails({ contact, setContact, type }) {
+export default function ContactDetails({ contact, setContactIndex, type }) {
   const { open } = useModals();
 
   const isMobile = useIsMobile();
@@ -207,12 +207,12 @@ export default function ContactDetails({ contact, setContact, type }) {
   return (
     <Card overflow>
       {isMobile ? (
-        <ModalOverlay onClick={() => setContact(null)}>
+        <ModalOverlay onClick={() => setContactIndex(null)}>
           <NoScrollModal size="large">
             <Modal.Header
               title="Contact details"
               className="contactDetailsModal"
-              onClose={() => setContact(null)}
+              onClose={() => setContactIndex(null)}
             />
             <Modal.Body>{content}</Modal.Body>
             <TransactionHistory staker={address} pageSize={3} />

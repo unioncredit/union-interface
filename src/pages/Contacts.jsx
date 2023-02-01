@@ -6,13 +6,21 @@ import { Box, ToggleMenu, Grid } from "@unioncredit/ui";
 import { ContactsType } from "constants";
 import ContactList from "components/contacts/ContactList";
 import ContactDetails from "components/contacts/ContactDetails";
+import { useVouchers } from "providers/VouchersData";
+import { useVouchees } from "providers/VoucheesData";
 
 export default function ContactsPage({ type }) {
-  const [contact, setContact] = useState(null);
+  const { data: vouchees } = useVouchees();
+  const { data: vouchers } = useVouchers();
+
+  const [contactIndex, setContactIndex] = useState(null);
+
+  const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
   const contactComponentProps = {
-    contact,
-    setContact,
+    contact: contactIndex !== null ? contacts[contactIndex] : null,
+    setContactIndex,
+    contacts,
     type,
   };
 
@@ -38,7 +46,7 @@ export default function ContactsPage({ type }) {
               to: "/contacts/trusts-you",
             },
           ]}
-          onChange={() => setContact(null)}
+          onChange={() => setContactIndex(null)}
           initialActive={type === ContactsType.VOUCHEES ? 0 : 1}
         />
       </Box>
