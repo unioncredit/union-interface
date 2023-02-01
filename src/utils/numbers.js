@@ -47,7 +47,7 @@ export function toFixed(x) {
 }
 
 export const calculateMaxBorrow = (creditLimit, originationFee) => {
-  const cl = Number(creditLimit.mul(9999).div(10000).toString());
+  const cl = Number(creditLimit.mul(9990).div(10000).toString());
   const ofe = Number(originationFee.toString()) / 1e18;
   return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
 };
