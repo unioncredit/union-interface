@@ -35,20 +35,17 @@ import { locationSearch } from "utils/location";
 
 export default function ContactList({
   contact,
-  setContact,
+  setContactIndex,
+  contacts,
   type = ContactsType.VOUCHEES,
 }) {
   const isMobile = useIsMobile();
 
   const { open } = useModals();
-  const { data: vouchees } = useVouchees();
-  const { data: vouchers } = useVouchers();
 
   const [query, setQuery] = useState(null);
   const [filters, setFilters] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
-
-  const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
   useEffect(() => {
     // Get the fake search params from the end of the hash fragment
@@ -60,17 +57,17 @@ export default function ContactList({
     // it as the active address in the list
     if (!contact && urlSearchParams.has("address")) {
       const searchAddress = urlSearchParams.get("address");
-      const searchContact = contacts.find(
+      const searchContactIndex = contacts.findIndex(
         ({ address }) => address === searchAddress
       );
 
-      if (searchContact) {
+      if (!!~searchContactIndex) {
         window.history.pushState(
           history.state,
           document.title,
           window.location.href.split("?")[0]
         );
-        setContact(searchContact);
+        setContactIndex(searchContactIndex);
         return;
       }
     }
@@ -84,7 +81,7 @@ export default function ContactList({
     // trust) then we need to reset the contact to the first one on the list
     !contact &&
       !contacts.find(({ address }) => address === contact?.address) &&
-      setContact(contacts[0]);
+      setContactIndex(0);
   }, [contact, contacts[0], isMobile]);
 
   /*--------------------------------------------------------------
@@ -176,14 +173,14 @@ export default function ContactList({
                 <TableHead align="right">Trust Limit (DAI)</TableHead>
               )}
             </TableRow>
-            {contactsPage.map((row) => {
+            {contactsPage.map((row, i) => {
               const { address, locking = ZERO, trust = ZERO } = row;
 
               return (
                 <TableRow
                   key={address}
                   active={address === contact?.address}
-                  onClick={() => setContact(row)}
+                  onClick={() => setContactIndex(i)}
                 >
                   <TableCell fixedSize>
                     <Avatar size={24} address={address} />
