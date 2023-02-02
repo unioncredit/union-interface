@@ -31,9 +31,9 @@ export default function WriteOffDebtModal({ address }) {
 
   const { locking = ZERO, vouch = ZERO, isOverdue } = vouchee || {};
 
-  const back = () =>
+  const back = (contact) =>
     open(MANAGE_CONTACT_MODAL, {
-      contact: vouchee,
+      contact: contact,
       type: ContactsType.VOUCHEES,
     });
 
@@ -59,8 +59,11 @@ export default function WriteOffDebtModal({ address }) {
     args: [vouchee.address, amount.raw],
     enabled: isOverdue && vouchee?.address && amount.raw.gt(ZERO),
     onComplete: async () => {
-      await refetchVouchees();
-      back();
+      const response = await refetchVouchees();
+      const contact = response.data.find((c) =>
+        compareAddresses(c.address, address)
+      );
+      back(contact);
     },
   });
 
