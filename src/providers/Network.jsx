@@ -42,7 +42,7 @@ const wagmiClient = createClient({
 });
 
 export default function Network({ children }) {
-  const [appReady, setAppReady] = useState(false);
+  const [appReady, setAppReady] = useState(null);
 
   return (
     <NetworkContext.Provider value={{ appReady, setAppReady }}>
