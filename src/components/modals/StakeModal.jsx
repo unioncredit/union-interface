@@ -23,6 +23,7 @@ import Approval from "components/shared/Approval";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
+import { parseEther } from "ethers/lib/utils";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -51,7 +52,9 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     maxStakeAmount = ZERO,
   } = { ...member, ...protocol };
 
-  const userStakeLimit = maxStakeAmount.sub(stakedBalance);
+  let userStakeLimit = maxStakeAmount.sub(stakedBalance);
+  userStakeLimit = userStakeLimit.lte(0) ? ZERO : userStakeLimit;
+
   const maxUserStake = min(userStakeLimit, daiBalance);
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
@@ -85,7 +88,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          caption: `Balance: ${format(daiBalance)} DAI`,
+          caption: `Balance: ${format(maxUserStake)} DAI`,
           onCaptionButtonClick: () => setRawValue("amount", maxUserStake),
         }
       : {
