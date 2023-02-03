@@ -6,6 +6,8 @@ import {
   walletConnectWallet,
   metaMaskWallet,
   injectedWallet,
+  coinbaseWallet,
+  rainbowWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -31,6 +33,8 @@ const connectors = connectorsForWallets([
       injectedWallet({ chains }),
       metaMaskWallet({ chains, shimDisconnect: true }),
       walletConnectWallet({ chains }),
+      coinbaseWallet({ chains }),
+      rainbowWallet({ chains, shimDisconnect: true }),
     ],
   },
 ]);
