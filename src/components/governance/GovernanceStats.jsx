@@ -27,6 +27,7 @@ export default function GovernaceStats() {
     totalStaked = ZERO,
     totalBorrows = ZERO,
     getLoanableAmount = ZERO,
+    borrowRatePerBlock = ZERO,
   } = protocol;
 
   return (
@@ -60,16 +61,13 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {chain && protocol.borrowRatePerBlock && (
+              {chain && borrowRatePerBlock && (
                 <Stat
                   mt="32px"
                   align="center"
                   label="Interest rate"
                   value={`${format(
-                    calculateInterestRate(
-                      protocol.borrowRatePerBlock,
-                      chain.id
-                    ).mul(100)
+                    calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
                   )}%`}
                 />
               )}
