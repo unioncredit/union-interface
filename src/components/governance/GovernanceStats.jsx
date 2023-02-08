@@ -21,7 +21,7 @@ const getAnalyticsUrl = (chainId) => {
 export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
-  const analyticsUrl = getAnalyticsUrl(chain.id);
+  const analyticsUrl = getAnalyticsUrl(chain?.id);
 
   const {
     totalStaked = ZERO,
@@ -60,7 +60,7 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {protocol.borrowRatePerBlock && (
+              {chain && protocol.borrowRatePerBlock && (
                 <Stat
                   mt="32px"
                   align="center"
