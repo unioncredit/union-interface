@@ -28,6 +28,15 @@ import {
   assetManagerContract as ARBITRUM_assetManagerContract,
 } from "config/contracts/arbitrum";
 
+import {
+  userManagerContract as OPTIMISM_GOERLI_userManagerContract,
+  uTokenContract as OPTIMISM_GOERLI_uTokenContract,
+  unionContract as OPTIMISM_GOERLI_unionContract,
+  daiContract as OPTIMISM_GOERLI_daiContract,
+  comptrollerContract as OPTIMISM_GOERLI_comptrollerContract,
+  assetManagerContract as OPTIMISM_GOERLI_assetManagerContract,
+} from "config/contracts/optimismGoerli";
+
 export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
 
@@ -56,6 +65,14 @@ export default function useContract(name, chainId) {
       dai: ARBITRUM_daiContract,
       comptroller: ARBITRUM_comptrollerContract,
       assetManager: ARBITRUM_assetManagerContract,
+    },
+    [chain.optimismGoerli.id]: {
+      userManager: OPTIMISM_GOERLI_userManagerContract,
+      uToken: OPTIMISM_GOERLI_uTokenContract,
+      union: OPTIMISM_GOERLI_unionContract,
+      dai: OPTIMISM_GOERLI_daiContract,
+      comptroller: OPTIMISM_GOERLI_comptrollerContract,
+      assetManager: OPTIMISM_GOERLI_assetManagerContract,
     },
   }[chainId || connectedChain?.id]?.[name];
 }

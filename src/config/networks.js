@@ -51,6 +51,8 @@ export const networks = [
     chainId: 420,
     networkData: {
       chainId: "0x1a4",
+      rpcUrls: ["https://goerli.optimism.io"],
+      chainName: "goerli optimism",
     },
   },
 ];
