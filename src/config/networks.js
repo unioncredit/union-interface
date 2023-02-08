@@ -40,4 +40,17 @@ export const networks = [
       chainId: "0x5",
     },
   },
+  {
+    type: "optimismGoerli",
+    id: "optimismGoerli",
+    imageSrc: "/networks/gorli.png",
+    value: "optimismGoerli",
+    label: "OptimismGoerli",
+    description: "Use Union on a testnet",
+    avatar: "/networks/gorli-avatar.png",
+    chainId: 420,
+    networkData: {
+      chainId: "0x1a4",
+    },
+  },
 ];

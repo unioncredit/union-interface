@@ -10,7 +10,7 @@ export const WAD = BigNumber.from("1000000000000000000");
 
 export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
-export const STALE_TIME = 30_000; // 30 seconds 
+export const STALE_TIME = 30_000; // 30 seconds
 
 export const DUST_THRESHOLD = "10000000000000000";
 
@@ -47,24 +47,28 @@ export const BlockSpeed = {
   [chain.mainnet.id]: 12e3,
   [chain.arbitrum.id]: 12e3,
   [chain.goerli.id]: 12e3,
+  [chain.optimismGoerli.id]: 12e3,
 };
 
 export const BlocksPerYear = {
   [chain.mainnet.id]: 2407328,
   [chain.arbitrum.id]: 2407328,
   [chain.goerli.id]: 2407328,
+  [chain.optimismGoerli.id]: 2407328,
 };
 
 export const EIP3770 = {
   [chain.mainnet.id]: "eth",
   [chain.arbitrum.id]: "arb1",
   [chain.goerli.id]: "goe",
+  [chain.optimismGoerli.id]: "optGoe",
 };
 
 export const EIP3770Map = {
   eth: chain.mainnet.id,
   arb1: chain.arbitrum.id,
   goe: chain.goerli.id,
+  optGoe: chain.optimismGoerli.id,
 };
 
 export const TheGraphUrls = {
@@ -74,6 +78,8 @@ export const TheGraphUrls = {
     "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
   [chain.goerli.id]:
     "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+  [chain.optimismGoerli.id]:
+    "https://api.thegraph.com/subgraphs/name/geraldhost/union-optimismGoerli",
 };
 
 export const ProposalState = [

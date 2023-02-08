@@ -1,6 +1,7 @@
 const urls = {
   1: "https://etherscan.io",
   5: "https://goerli.etherscan.io",
+  420: "https://goerli.optimism.io",
   42161: "https://arbiscan.io",
 };
 
