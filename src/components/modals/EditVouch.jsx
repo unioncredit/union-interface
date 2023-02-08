@@ -29,9 +29,9 @@ export default function EditVouchModal({ address }) {
 
   const { locking = ZERO, trust = ZERO } = vouchee;
 
-  const back = () =>
+  const back = (contact) =>
     open(MANAGE_CONTACT_MODAL, {
-      contact: vouchee,
+      contact: contact,
       type: ContactsType.VOUCHEES,
     });
 
@@ -51,8 +51,11 @@ export default function EditVouchModal({ address }) {
     args: [address, amount.raw],
     enabled: amount.raw.gte(locking),
     onComplete: async () => {
-      await refetchVouchees();
-      back();
+      const response = await refetchVouchees();
+      const contact = response.data.find((c) =>
+        compareAddresses(c.address, address)
+      );
+      back(contact);
     },
   });
 
