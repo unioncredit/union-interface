@@ -110,7 +110,7 @@ export default function App() {
                                   <Header />
                                   <Routes />
                                 </>
-                              ) : (
+                              ) : appReady === null ? null : (
                                 <ConnectPage />
                               )}
                             </AppReadyShim>
@@ -124,13 +124,15 @@ export default function App() {
             </Grid.Col>
           </Grid.Row>
         </Grid>
-        <Box mt="56px" mb="24px" w="100%">
-          <Box justify="center" fluid>
-            <Label as="p" size="small" grey={300} align="center">
-              Build: {process.env.REACT_APP_VERSION}
-            </Label>
+        {appReady !== null && (
+          <Box mt="56px" mb="24px" w="100%">
+            <Box justify="center" fluid>
+              <Label as="p" size="small" grey={300} align="center">
+                Build: {process.env.REACT_APP_VERSION}
+              </Label>
+            </Box>
           </Box>
-        </Box>
+        )}
       </Layout.Main>
     </Layout>
   );
