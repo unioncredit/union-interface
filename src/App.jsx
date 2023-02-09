@@ -35,24 +35,15 @@ function AppReadyShim({ children }) {
   useMemberListener();
 
   useEffect(() => {
-    // If the member is a member then skip the connect/ready page
-    // and auto connect straight into the credit page "/"
-    if (member.isMember) {
+    // If the user is a member, or we are accessing a general route, then
+    // skip the connect/ready page and auto connect straight into
+    // the credit page "/"
+    if (member.isMember || isGeneralRoute) {
       setAppReady(true);
       return;
     }
 
-    // The app is currently set to ready but the chain is not
-    // connected or is unsupported
-    if (appReady && (isDisconnected || chain?.unsupported)) {
-      setAppReady(false);
-    }
-
-    // If we are viewing a general route such as governance or
-    // a member profile then we skip the ready (connect) page
-    if (isGeneralRoute) {
-      setAppReady(true);
-    }
+    setAppReady(false);
   }, [
     member.isMember,
     appReady,
