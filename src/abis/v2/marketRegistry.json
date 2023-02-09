@@ -147,7 +147,13 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "admin",
+        "type": "address"
+      }
+    ],
     "name": "__MarketRegistry_init",
     "outputs": [],
     "stateMutability": "nonpayable",
