@@ -110,8 +110,8 @@ export default function App() {
                                   <Header />
                                   <Routes />
                                 </>
-                              ) : appReady === null ? null : (
-                                <ConnectPage />
+                              ) : (
+                                appReady !== null && <ConnectPage />
                               )}
                             </AppReadyShim>
                           </ModalManager>
