@@ -760,6 +760,11 @@
         "internalType": "uint256",
         "name": "effectiveLocked",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMember",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -859,6 +864,19 @@
       {
         "internalType": "uint256",
         "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "globalTotalStaked",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "globalTotal",
         "type": "uint256"
       }
     ],
@@ -1005,6 +1023,11 @@
         "internalType": "uint256",
         "name": "effectiveLocked",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isMember",
+        "type": "bool"
       }
     ],
     "stateMutability": "nonpayable",
@@ -1233,6 +1256,39 @@
       }
     ],
     "name": "stake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "stakeWithERC20Permit",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

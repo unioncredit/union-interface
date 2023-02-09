@@ -76,6 +76,11 @@
   },
   {
     "inputs": [],
+    "name": "OriginationFeeExceedLimit",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "Paused",
     "type": "error"
   },
@@ -475,6 +480,11 @@
       {
         "internalType": "uint256",
         "name": "originationFee_",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "originationFeeMax_",
         "type": "uint256"
       },
       {
@@ -1086,6 +1096,19 @@
   },
   {
     "inputs": [],
+    "name": "originationFeeMax",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "overdueBlocks",
     "outputs": [
       {
@@ -1246,9 +1269,80 @@
         "internalType": "address",
         "name": "borrower",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "repayBorrowWithERC20Permit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
       }
     ],
     "name": "repayInterest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "borrower",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "deadline",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "repayInterestWithPermit",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
