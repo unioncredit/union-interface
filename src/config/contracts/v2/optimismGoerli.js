@@ -7,36 +7,36 @@ import userManagerAbi from "abis/v2/userManager.json";
 import unionLensAbi from "abis/v2/unionLens.json";
 
 export const userManagerContract = {
-  addressOrName: "0x2735f7f27ab27242203665D014FEBD3748CEEDEd",
+  addressOrName: "0x72a4E84255322C8852E0424fD2137EA1B4Cda305",
   contractInterface: userManagerAbi,
 };
 
 export const uTokenContract = {
-  addressOrName: "0x146C98A62aAaf96A7051c5828b4c12D9c7B7DDa1",
+  addressOrName: "0xc49a11229804ad944F432362802f7959E5d1E590",
   contractInterface: uTokenAbi,
 };
 
 export const unionContract = {
-  addressOrName: "0x04622FDe6a7C0B19Ff7748eC8882870367530074",
+  addressOrName: "0xe8281FdF8945E06C608b1C95D8f6dCEDbf2AC323",
   contractInterface: unionAbi,
 };
 
 export const daiContract = {
-  addressOrName: "0xD9BB4C7B03C403ece2FeC5B9d188359CE310393D",
+  addressOrName: "0xD9662ae38fB577a3F6843b6b8EB5af3410889f3A",
   contractInterface: erc20Abi,
 };
 
 export const comptrollerContract = {
-  addressOrName: "0x628F018Dc633557a4B2e27325041a58CD49c47A8",
+  addressOrName: "0xab986c3Fd541D80C64B883FC84f82faB20C6D3cd",
   contractInterface: comptrollerAbi,
 };
 
 export const assetManagerContract = {
-  addressOrName: "0x79f3AD63E9016eD7b0FB7153509C4CaCba4812D9",
+  addressOrName: "0x54fF159764A7B02c1Bff84A1BB889FEDcdBf5aEA",
   contractInterface: assetManagerAbi,
 };
 
 export const unionLensContract = {
-  addressOrName: "0x73DEE12FC768Bba7d94906b7e66D31cC206AaaE1",
+  addressOrName: "0xD8630Ed4D8cAd86433B291B96A6ff0D1C061E5c3",
   contractInterface: unionLensAbi,
 };
