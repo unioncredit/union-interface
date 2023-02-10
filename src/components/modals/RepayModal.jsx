@@ -231,7 +231,7 @@ export default function RepayModal() {
             requireApproval
             tokenContract="dai"
             actionProps={{
-              args: [amount.raw],
+              args: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
