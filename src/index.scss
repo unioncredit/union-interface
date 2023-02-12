@@ -53,3 +53,7 @@ a {
     margin-bottom: 0;
   }
 }
+
+.fillPath path {
+  fill: inherit;
+}

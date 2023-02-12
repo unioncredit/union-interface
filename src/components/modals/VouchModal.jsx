@@ -2,7 +2,20 @@ import "./VouchModal.scss";
 
 import React, { useState } from "react";
 import cn from "classnames";
-import { Modal, ModalOverlay, Input, Dai, Button, Box } from "@unioncredit/ui";
+import {
+  Modal,
+  ModalOverlay,
+  Input,
+  Dai,
+  Button,
+  Box,
+  ExpandingInfo,
+  WarningIcon,
+  Text,
+  ButtonReveal,
+  PlusIcon,
+  DataLineItems,
+} from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
@@ -49,10 +62,11 @@ export default function VouchModal({
     args: [address, values?.trust?.raw],
     enabled: values?.trust?.raw.gt(0) && address,
     onComplete: async () => {
-      await refetchMember();
       if (values.name) {
         setLabel(address, values.name);
       }
+
+      await refetchMember();
       close();
     },
   });
@@ -73,26 +87,72 @@ export default function VouchModal({
         {showNewMemberHeader && <NewMemberModalHeader onClose={handleClose} />}
         <Modal.Header onClose={handleClose} title={title} subTitle={subTitle} />
         <Modal.Body>
-          {showAddressSummary && <AddressSummary address={address} />}
+          {address && showAddressSummary && (
+            <AddressSummary address={address} />
+          )}
           <AddressInput
             defaultValue={initialAddress}
-            label="Address or ENS"
+            label="Address or ENS of recipient"
             onChange={setAddress}
           />
-          <Box fluid mt="16px">
-            <Input
-              error={errors.name}
-              label="Contact name"
-              onChange={register("name")}
-            />
-          </Box>
-          <Input
-            type="number"
-            suffix={<Dai />}
-            error={errors.trust}
-            label="Trust amount"
-            onChange={register("trust")}
-          />
+
+          {address && (
+            <>
+              <Input
+                mt="16px"
+                type="number"
+                suffix={<Dai />}
+                error={errors.trust}
+                label="Trust amount"
+                onChange={register("trust")}
+              />
+
+              <Box fluid mt="16px">
+                <ButtonReveal
+                  w="100%"
+                  title="Contact alias"
+                  buttonProps={{
+                    w: "100%",
+                    h: "40px",
+                    icon: PlusIcon,
+                    size: "small",
+                    color: "secondary",
+                    variant: "light",
+                    label: "Add a contact alias",
+                  }}
+                >
+                  <Input error={errors.name} onChange={register("name")} />
+                </ButtonReveal>
+              </Box>
+
+              <DataLineItems
+                mt="24px"
+                items={[
+                  {
+                    label: "Time to default",
+                    value: "30 days",
+                  },
+                  {
+                    label: "Time to write-off",
+                    value: "90 days",
+                  },
+                ]}
+              />
+            </>
+          )}
+
+          <ExpandingInfo
+            mt="16px"
+            icon={WarningIcon}
+            title="Vouching puts your staked funds at risk"
+          >
+            <Text m={0}>
+              If an account you vouch for doesn't pay the minimum due within 30
+              days, they'll be in a defaulted state. If they stay that way for
+              90 days, your stake could be lost permanently to cover their debt.
+            </Text>
+          </ExpandingInfo>
+
           <Button fluid mt="16px" label="Submit Vouch" {...buttonProps} />
         </Modal.Body>
       </Modal>

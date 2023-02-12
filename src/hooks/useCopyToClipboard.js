@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 
-const DELAY = 3000;
+const DELAY = 2000;
 
 export default function useCopyToClipboard(delay = DELAY) {
   const timers = useRef([]);

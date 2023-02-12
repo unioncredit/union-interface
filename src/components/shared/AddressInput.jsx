@@ -59,18 +59,20 @@ export default function AddressInput(props) {
       error={error || props.error}
       onChange={handleChange}
       caption={
-        <Box direction="horizontal" align="center" mt="4px">
-          {isAddress(address) && <Avatar size={16} address={address} />}
-          <Text m={0} ml="4px" size="small">
-            {ens || address || "-"}
-          </Text>
-        </Box>
+        (ens || address) && (
+          <Box direction="horizontal" align="center" mt="4px">
+            {isAddress(address) && <Avatar size={16} address={address} />}
+            <Text m={0} ml="4px" size="small">
+              {ens || address}
+            </Text>
+          </Box>
+        )
       }
       suffix={
         isLoadingName || isLoadingAddress ? (
           <LoadingSpinner />
         ) : (
-          value?.endsWith(".eth") && <EnsIcon />
+          value?.endsWith(".eth") && <EnsIcon style={{ width: "20px" }} />
         )
       }
     />
