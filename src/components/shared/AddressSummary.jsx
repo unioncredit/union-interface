@@ -17,12 +17,14 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
+import getProfileUrl from "utils/generateLinks";
 
 export default function AddressSummary({ address }) {
   const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
+  const profileLink = getProfileUrl(address, chain.id);
 
   if (!address) {
     return (
@@ -67,7 +69,7 @@ export default function AddressSummary({ address }) {
               <StatusBadge address={address} />
             </BadgeRow>
 
-            <a href="#">
+            <a href={profileLink} target="_blank" rel="noreferrer">
               <AvatarFilledIcon width="20px" style={{ marginLeft: "6px" }} />
             </a>
 
