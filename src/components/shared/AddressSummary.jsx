@@ -17,7 +17,7 @@ import PrimaryLabel from "components/shared/PrimaryLabel";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
-import getProfileUrl from "utils/generateLinks";
+import { getProfileUrl } from "utils/generateLinks";
 
 export default function AddressSummary({ address }) {
   const { chain } = useNetwork();

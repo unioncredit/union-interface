@@ -9,7 +9,7 @@ import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter-fil
 import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
 import format from "utils/format";
-import getProfileUrl, { generateTwitterLink } from "utils/generateLinks";
+import { getProfileUrl, generateTwitterLink } from "utils/generateLinks";
 
 export default function NewMemberModalHeader() {
   const confettiRef = useRef(null);
