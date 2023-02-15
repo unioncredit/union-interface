@@ -208,7 +208,10 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
           </Grid>
           <Divider my="24px" />
           <Heading mb="24px">Governance</Heading>
-          <ProfileGovernanceStats />
+          <ProfileGovernanceStats
+            address={address}
+            chainId={connectedChain.id}
+          />
         </Card.Body>
       </Card>
     </Box>
