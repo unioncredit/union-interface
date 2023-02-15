@@ -1,7 +1,8 @@
 import { Stat, Button, Grid, Card, Dai } from "@unioncredit/ui";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 import { useProtocol } from "providers/ProtocolData";
-import { chain, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
+import { mainnet, arbitrum } from "wagmi/chains";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -9,9 +10,9 @@ import { calculateInterestRate } from "utils/numbers";
 
 const getAnalyticsUrl = (chainId) => {
   switch (chainId) {
-    case chain.mainnet.id:
+    case mainnet.id:
       return "https://data.union.finance/";
-    case chain.arbitrum.id:
+    case arbitrum.id:
       return "https://data.union.finance/arbitrum";
     default:
       return null;

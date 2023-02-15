@@ -1,4 +1,5 @@
-import { chain, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
+import { mainnet, arbitrum, goerli } from "wagmi/chains";
 
 import {
   userManagerContract as GOERLI_userManagerContract,
@@ -32,7 +33,7 @@ export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
 
   return {
-    [chain.goerli.id]: {
+    [goerli.id]: {
       userManager: GOERLI_userManagerContract,
       uToken: GOERLI_uTokenContract,
       union: GOERLI_unionContract,
@@ -40,7 +41,7 @@ export default function useContract(name, chainId) {
       comptroller: GOERLI_comptrollerContract,
       assetManager: GOERLI_assetManagerContract,
     },
-    [chain.mainnet.id]: {
+    [mainnet.id]: {
       governor: governorContract,
       userManager: MAINNET_userManagerContract,
       uToken: MAINNET_uTokenContract,
@@ -49,7 +50,7 @@ export default function useContract(name, chainId) {
       comptroller: MAINNET_comptrollerContract,
       assetManager: MAINNET_assetManagerContract,
     },
-    [chain.arbitrum.id]: {
+    [arbitrum.id]: {
       userManager: ARBITRUM_userManagerContract,
       uToken: ARBITRUM_uTokenContract,
       union: ARBITRUM_unionContract,

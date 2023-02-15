@@ -44,7 +44,7 @@ export default function RegisterButton({ onComplete }) {
     {
       ...unionConfig,
       functionName: "allowance",
-      args: [address, userManagerConfig.addressOrName],
+      args: [address, userManagerConfig.address],
     }
   );
 
@@ -58,7 +58,7 @@ export default function RegisterButton({ onComplete }) {
   const { onClick: approve, loading: approveLoading } = useWrite({
     contract: "union",
     method: "approve",
-    args: [userManagerConfig.addressOrName, newMemberFee],
+    args: [userManagerConfig.address, newMemberFee],
     enabled: allowance.lt(newMemberFee),
     onComplete: () => refetchAllowance(),
   });
