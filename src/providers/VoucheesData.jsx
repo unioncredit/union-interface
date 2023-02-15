@@ -18,6 +18,7 @@ const selectVouchee = (data) => ({
   vouch: data[1].vouchingAmount,
   isOverdue: data[2],
   interest: data[3] || ZERO,
+  lastRepay: data[4],
 });
 
 export default function VoucheesData({ children }) {
@@ -44,6 +45,11 @@ export default function VoucheesData({ children }) {
     {
       ...uTokenContract,
       functionName: "calculatingInterest",
+      args: [borrower],
+    },
+    {
+      ...uTokenContract,
+      functionName: "getLastRepay",
       args: [borrower],
     },
   ];
