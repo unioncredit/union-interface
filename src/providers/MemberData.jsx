@@ -54,7 +54,7 @@ function usePollMemberData(address, chainId) {
         {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, ZERO],
+          args: [address, daiContract.address, ZERO],
         },
         {
           ...uTokenContract,
@@ -160,7 +160,7 @@ export function useMemberData(address, chainId) {
         {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, ZERO],
+          args: [address, daiContract.address, ZERO],
         },
         {
           ...uTokenContract,

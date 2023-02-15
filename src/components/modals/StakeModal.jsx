@@ -23,7 +23,6 @@ import Approval from "components/shared/Approval";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
-import { parseEther } from "ethers/lib/utils";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -164,7 +163,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
           <Approval
             owner={address}
             amount={amount.raw}
-            spender={userManagerContract.addressOrName}
+            spender={userManagerContract.address}
             requireApproval={type === StakeType.STAKE}
             tokenContract="dai"
             actionProps={{

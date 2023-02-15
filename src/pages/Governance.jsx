@@ -1,7 +1,8 @@
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { useNetwork, chain } from "wagmi";
+import { useNetwork } from "wagmi";
 import { Box, ToggleMenu } from "@unioncredit/ui";
+import { mainnet } from "wagmi/chains";
 
 import GovernaceStats from "components/governance/GovernanceStats";
 import ProposalsCard from "components/governance/ProposalsCard";
@@ -36,7 +37,7 @@ export default function GovernancePage() {
       <Box fluid justify="center" direction="vertical">
         <NetworkNotice />
         <GovernaceStats />
-        {connectedChain?.id === chain.mainnet.id && <MyGovernanceStats />}
+        {connectedChain?.id === mainnet.id && <MyGovernanceStats />}
         <ProposalsCard
           filter={filterActiveProposals}
           emptyLabel="There are no live proposals"

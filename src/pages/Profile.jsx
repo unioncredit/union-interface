@@ -13,13 +13,8 @@ import {
   Avatar as UiAvatar,
   BadgeRow,
 } from "@unioncredit/ui";
-import {
-  chain,
-  useAccount,
-  useEnsAddress,
-  useNetwork,
-  useSwitchNetwork,
-} from "wagmi";
+import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { Link as RouterLink } from "react-router-dom";
 import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
@@ -229,11 +224,11 @@ export default function Profile() {
   const addressOrEnsParts = addressOrEnsParam.split(":");
   const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1):/)
     ? addressOrEnsParts
-    : [EIP3770[chain.mainnet.id], addressOrEnsParam];
+    : [EIP3770[mainnet.id], addressOrEnsParam];
 
   const { data: addressFromEns } = useEnsAddress({
     name: addressOrEns,
-    chainId: chain.mainnet.id,
+    chainId: mainnet.id,
   });
 
   const address = isAddress(addressOrEns) ? addressOrEns : addressFromEns;
