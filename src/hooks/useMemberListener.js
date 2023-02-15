@@ -1,4 +1,4 @@
-import { chain, useAccount, useContractEvent, useNetwork } from "wagmi";
+import { mainnet, useAccount, useContractEvent, useNetwork } from "wagmi";
 
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
@@ -12,12 +12,9 @@ export default function useMemberListener() {
 
   const userManager = useContract(
     "userManager",
-    connectedChain?.id ?? chain.mainnet.id
+    connectedChain?.id ?? mainnet.id
   );
-  const daiContract = useContract(
-    "dai",
-    connectedChain?.id ?? chain.mainnet.id
-  );
+  const daiContract = useContract("dai", connectedChain?.id ?? mainnet.id);
 
   const refreshMember = () => {
     console.log("Listener: refreshing member");
