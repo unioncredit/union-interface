@@ -9,7 +9,7 @@ import {
 } from "@unioncredit/ui";
 import { useMemo } from "react";
 import makeUrls from "add-event-to-calendar";
-import { chain, useBlockNumber, useNetwork } from "wagmi";
+import { useBlockNumber, useNetwork } from "wagmi";
 import { ReactComponent as Calendar } from "@unioncredit/ui/lib/icons/calendar.svg";
 
 import format from "utils/format";
@@ -26,7 +26,7 @@ export default function PaymentReminderModal() {
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
   const { data: blockNumber } = useBlockNumber({
-    chainId: chain.mainnet.id,
+    chainId: mainnet.id,
   });
 
   const date = useMemo(() => {

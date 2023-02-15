@@ -227,7 +227,7 @@ export default function RepayModal() {
           <Approval
             owner={address}
             amount={amount.raw}
-            spender={uTokenContract.addressOrName}
+            spender={uTokenContract.address}
             requireApproval
             tokenContract="dai"
             actionProps={{
