@@ -22,12 +22,13 @@ const getAnalyticsUrl = (chainId) => {
 export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
-  const analyticsUrl = getAnalyticsUrl(chain.id);
+  const analyticsUrl = getAnalyticsUrl(chain?.id);
 
   const {
     totalStaked = ZERO,
     totalBorrows = ZERO,
     getLoanableAmount = ZERO,
+    borrowRatePerBlock = ZERO,
   } = protocol;
 
   return (
@@ -61,16 +62,13 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {protocol.borrowRatePerBlock && (
+              {chain && borrowRatePerBlock && (
                 <Stat
                   mt="32px"
                   align="center"
                   label="Interest rate"
                   value={`${format(
-                    calculateInterestRate(
-                      protocol.borrowRatePerBlock,
-                      chain.id
-                    ).mul(100)
+                    calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
                   )}%`}
                 />
               )}
