@@ -210,7 +210,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
           <Heading mb="24px">Governance</Heading>
           <ProfileGovernanceStats
             address={address}
-            chainId={connectedChain.id}
+            chainId={connectedChain?.id}
           />
         </Card.Body>
       </Card>
