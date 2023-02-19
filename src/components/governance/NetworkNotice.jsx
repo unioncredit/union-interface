@@ -1,13 +1,14 @@
-import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { Heading, Card, Text, Button, Label } from "@unioncredit/ui";
 import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
+import { mainnet } from "wagmi/chains";
 
 export default function NetworkNotice({ lite }) {
   const { isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
   const { chain: connectedChain } = useNetwork();
 
-  if (!isConnected || connectedChain?.id == chain.mainnet.id) {
+  if (!isConnected || connectedChain?.id === mainnet.id) {
     return null;
   }
 
@@ -32,7 +33,7 @@ export default function NetworkNotice({ lite }) {
         <Button
           fluid
           icon={Switch}
-          onClick={() => switchNetwork(chain.mainnet.id)}
+          onClick={() => switchNetwork(mainnet.id)}
           label={lite ? "Switch network" : "Switch Network to Ethereum"}
         />
       </Card.Body>

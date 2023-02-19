@@ -6,7 +6,8 @@ import {
   useState,
 } from "react";
 import { request, gql } from "graphql-request";
-import { chain, useContractReads } from "wagmi";
+import { useContractReads } from "wagmi";
+import { mainnet } from "wagmi/chains";
 
 import { TheGraphUrls } from "constants";
 import useContract from "hooks/useContract";
@@ -40,7 +41,7 @@ async function getProposalHistory(pid) {
   };
 
   const resp = await request(
-    TheGraphUrls[chain.mainnet.id],
+    TheGraphUrls[mainnet.id],
     proposalHistoryQuery,
     variables
   );
@@ -102,10 +103,10 @@ const selectProposals = (data) => {
 function useProposals() {
   const [proposals, setProposals] = useState([]);
 
-  const governorContract = useContract("governor", chain.mainnet.id);
+  const governorContract = useContract("governor", mainnet.id);
 
   const getProposals = useCallback(async () => {
-    const resp = await request(TheGraphUrls[chain.mainnet.id], proposalsQuery);
+    const resp = await request(TheGraphUrls[mainnet.id], proposalsQuery);
     const proposals = resp.proposals;
 
     return Promise.all(
@@ -122,13 +123,13 @@ function useProposals() {
         ...governorContract,
         functionName: "proposals",
         args: [proposal.pid],
-        chainId: chain.mainnet.id,
+        chainId: mainnet.id,
       },
       {
         ...governorContract,
         functionName: "state",
         args: [proposal.pid],
-        chainId: chain.mainnet.id,
+        chainId: mainnet.id,
       },
     ])
   );

@@ -17,7 +17,7 @@ const selectUserManager = (data) => {
 
   return {
     isMember: data[0] || false,
-    creditLimit: data[1].lt(DUST_THRESHOLD) ? ZERO : data[1],
+    creditLimit: data[1]?.lt(DUST_THRESHOLD) ? ZERO : data[1],
     stakedBalance: data[2] || ZERO,
     totalLockedStake: data[3] || ZERO,
     totalFrozenAmount: data[4] || ZERO,
@@ -54,7 +54,7 @@ function usePollMemberData(address, chainId) {
         {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, ZERO],
+          args: [address, daiContract.address, ZERO],
         },
         {
           ...uTokenContract,
@@ -160,7 +160,7 @@ export function useMemberData(address, chainId) {
         {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, ZERO],
+          args: [address, daiContract.address, ZERO],
         },
         {
           ...uTokenContract,

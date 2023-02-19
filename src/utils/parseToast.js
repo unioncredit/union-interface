@@ -1,4 +1,4 @@
-import { chain } from "wagmi";
+import { mainnet } from "wagmi/chains";
 
 import format from "./format";
 import { Status } from "constants";
@@ -11,7 +11,7 @@ export default function parseToast(
   method,
   args,
   tx,
-  chainId = chain.mainnet.id
+  chainId = mainnet.id
 ) {
   const sharedProps = {
     link: tx ? blockExplorerTx(chainId, tx.hash) : null,

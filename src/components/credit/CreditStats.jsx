@@ -1,4 +1,4 @@
-import { useBlockNumber, useNetwork, chain } from "wagmi";
+import { useBlockNumber, useNetwork, mainnet } from "wagmi";
 import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
 
@@ -22,7 +22,7 @@ export default function CreditStats() {
   const { data: vouchers = [] } = useVouchers();
   const { data: protocol = {} } = useProtocol();
   const { data: blockNumber } = useBlockNumber({
-    chainId: chain.mainnet.id,
+    chainId: mainnet.id,
   });
 
   const {

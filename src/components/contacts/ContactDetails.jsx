@@ -10,6 +10,7 @@ import {
   ModalOverlay,
   Modal,
 } from "@unioncredit/ui";
+import { useBlockNumber, useNetwork } from "wagmi";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
@@ -21,6 +22,8 @@ import useIsMobile from "hooks/useIsMobile";
 import { useModals } from "providers/ModalManager";
 import { useEffect } from "react";
 import format from "utils/format";
+import dueDate from "utils/dueDate";
+import { useProtocol } from "providers/ProtocolData";
 
 function NoScrollModal(props) {
   useEffect(() => {
@@ -33,9 +36,15 @@ function NoScrollModal(props) {
 }
 
 export default function ContactDetails({ contact, setContactIndex, type }) {
-  const { open } = useModals();
-
   const isMobile = useIsMobile();
+  const { open } = useModals();
+  const { data: protocol = {} } = useProtocol();
+  const { chain: connectedChain } = useNetwork();
+  const { data: blockNumber } = useBlockNumber({
+    chainId: connectedChain.id,
+  });
+
+  const { overdueBlocks } = protocol;
 
   /*----------------------------------------------------
    * Hide on mobile when no contact
@@ -94,6 +103,7 @@ export default function ContactDetails({ contact, setContactIndex, type }) {
     locking = ZERO,
     locked = ZERO,
     interest = ZERO,
+    lastRepay = ZERO,
   } = contact || {};
 
   // vouchers have a locked amount while vouchees have a locking
@@ -175,7 +185,12 @@ export default function ContactDetails({ contact, setContactIndex, type }) {
                     Payment Due
                   </Label>
                   <Label as="p" grey={700} m={0}>
-                    No Payment Due
+                    {dueDate(
+                      lastRepay,
+                      overdueBlocks,
+                      blockNumber,
+                      connectedChain.id
+                    )}
                   </Label>
                 </Box>
               </Grid.Col>

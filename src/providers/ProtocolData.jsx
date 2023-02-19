@@ -1,5 +1,6 @@
-import { useContractReads, chain, useNetwork } from "wagmi";
+import { useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext } from "react";
+import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
@@ -18,22 +19,22 @@ const buildContractConfigs = (contract, calls, chainId) =>
 export default function ProtcolData({ children }) {
   const { chain: connectedChain } = useNetwork();
 
-  const chainId = connectedChain?.id || chain.mainnet.id;
+  const chainId = connectedChain?.id || mainnet.id;
 
-  const isMainnet = connectedChain === chain.mainnet.id;
+  const isMainnet = connectedChain === mainnet.id;
 
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
-  const governorContract = useContract("governor", chain.mainnet.id);
+  const governorContract = useContract("governor", mainnet.id);
   const unionTokenContract = useContract("union", chainId);
   const assetManagerContract = useContract("assetManager", chainId);
 
   const assetManagerCalls = [
     {
       functionName: "getLoanableAmount",
-      args: [daiContract.addressOrName],
+      args: [daiContract.address],
     },
   ];
 

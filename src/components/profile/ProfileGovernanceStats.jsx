@@ -3,10 +3,10 @@ import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip
 
 import { ZERO } from "constants";
 import format from "utils/format";
-import { useMember } from "providers/MemberData";
+import { useMemberData } from "providers/MemberData";
 
-export default function ProfileGovernanceStats() {
-  const { data: member = {} } = useMember();
+export default function ProfileGovernanceStats({ address, chainId }) {
+  const { data: member = {} } = useMemberData(address, chainId);
 
   const { unionBalance = ZERO, votes = ZERO } = member;
 
