@@ -1,4 +1,5 @@
-import { chain, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
+import { mainnet, arbitrum, goerli } from "wagmi/chains";
 
 import {
   userManagerContract as GOERLI_userManagerContract,
@@ -31,31 +32,33 @@ import {
 export default function useContract(name, chainId) {
   const { chain: connectedChain } = useNetwork();
 
-  return {
-    [chain.goerli.id]: {
-      userManager: GOERLI_userManagerContract,
-      uToken: GOERLI_uTokenContract,
-      union: GOERLI_unionContract,
-      dai: GOERLI_daiContract,
-      comptroller: GOERLI_comptrollerContract,
-      assetManager: GOERLI_assetManagerContract,
-    },
-    [chain.mainnet.id]: {
-      governor: governorContract,
-      userManager: MAINNET_userManagerContract,
-      uToken: MAINNET_uTokenContract,
-      union: MAINNET_unionContract,
-      dai: MAINNET_daiContract,
-      comptroller: MAINNET_comptrollerContract,
-      assetManager: MAINNET_assetManagerContract,
-    },
-    [chain.arbitrum.id]: {
-      userManager: ARBITRUM_userManagerContract,
-      uToken: ARBITRUM_uTokenContract,
-      union: ARBITRUM_unionContract,
-      dai: ARBITRUM_daiContract,
-      comptroller: ARBITRUM_comptrollerContract,
-      assetManager: ARBITRUM_assetManagerContract,
-    },
-  }[chainId || connectedChain?.id]?.[name];
+  return (
+    {
+      [goerli.id]: {
+        userManager: GOERLI_userManagerContract,
+        uToken: GOERLI_uTokenContract,
+        union: GOERLI_unionContract,
+        dai: GOERLI_daiContract,
+        comptroller: GOERLI_comptrollerContract,
+        assetManager: GOERLI_assetManagerContract,
+      },
+      [mainnet.id]: {
+        governor: governorContract,
+        userManager: MAINNET_userManagerContract,
+        uToken: MAINNET_uTokenContract,
+        union: MAINNET_unionContract,
+        dai: MAINNET_daiContract,
+        comptroller: MAINNET_comptrollerContract,
+        assetManager: MAINNET_assetManagerContract,
+      },
+      [arbitrum.id]: {
+        userManager: ARBITRUM_userManagerContract,
+        uToken: ARBITRUM_uTokenContract,
+        union: ARBITRUM_unionContract,
+        dai: ARBITRUM_daiContract,
+        comptroller: ARBITRUM_comptrollerContract,
+        assetManager: ARBITRUM_assetManagerContract,
+      },
+    }[chainId || connectedChain?.id]?.[name] || {}
+  );
 }
