@@ -22,8 +22,6 @@ import { ZERO, ContactsType } from "constants";
 import Avatar from "components/shared/Avatar";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import StatusBadge from "components/shared/StatusBadge";
-import { useVouchees } from "providers/VoucheesData";
-import { useVouchers } from "providers/VouchersData";
 import usePagination from "hooks/usePagination";
 import { truncateAddress } from "utils/truncateAddress";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
@@ -103,6 +101,7 @@ export default function ContactList({
     data: contactsPage,
     maxPages,
     activePage,
+    pageSize,
     onChange,
   } = usePagination(filtered);
 
@@ -180,7 +179,9 @@ export default function ContactList({
                 <TableRow
                   key={address}
                   active={address === contact?.address}
-                  onClick={() => setContactIndex(i)}
+                  onClick={() =>
+                    setContactIndex(pageSize * (activePage - 1) + i)
+                  }
                 >
                   <TableCell fixedSize>
                     <Avatar size={24} address={address} />
