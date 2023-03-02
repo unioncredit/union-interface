@@ -2,7 +2,16 @@ import "./VouchModal.scss";
 
 import React, { useState } from "react";
 import cn from "classnames";
-import { Modal, ModalOverlay, Input, Dai, Button, Box } from "@unioncredit/ui";
+import {
+  ExpandingInfo,
+  Modal,
+  ModalOverlay,
+  Input,
+  Dai,
+  Button,
+  Box,
+  Text,
+} from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
@@ -14,6 +23,7 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
+import { useVersion } from "providers/Version";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -39,6 +49,7 @@ export default function VouchModal({
   address: initialAddress = null,
 }) {
   const { close } = useModals();
+  const { version } = useVersion();
 
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
@@ -101,6 +112,18 @@ export default function VouchModal({
             label="Trust amount"
             onChange={register("trust")}
           />
+
+          {version === "v2" && (
+            <ExpandingInfo title="Vouching puts your staked funds at risk">
+              <Text m={0} style={{ fontSize: 14 }}>
+                If an account you vouch for doesn't pay the minimum due within
+                30 days, they'll be in a defaulted state. If they stay that way
+                for 90 days, your stake could be lost permanently to cover their
+                debt.
+              </Text>
+            </ExpandingInfo>
+          )}
+
           <Button fluid mt="16px" label="Submit Vouch" {...buttonProps} />
         </Modal.Body>
       </Modal>
