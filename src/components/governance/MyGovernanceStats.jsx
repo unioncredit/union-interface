@@ -4,10 +4,10 @@ import {
   Heading,
   Card,
   Button,
-  Stat,
   Grid,
   Tooltip,
   Text,
+  NumericalBlock,
 } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
@@ -55,30 +55,30 @@ export default function MyGovernanceStats() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Col>
-              <Stat label="Total Votes" value={format(votes, 0)} />
+              <NumericalBlock title="Total Votes" value={format(votes, 0)} />
             </Grid.Col>
             <Grid.Col>
-              <Stat label="Union Balance" value={format(unionBalance)} />
+              <NumericalBlock
+                title="Union Balance"
+                value={format(unionBalance)}
+              />
             </Grid.Col>
             <Grid.Col>
-              <Stat
-                label={
-                  <Text size="small" weight="medium">
-                    From others{" "}
-                    <Tooltip content="If other users delegate their votes to you, they’ll appear here.">
-                      <TooltipIcon />
-                    </Tooltip>
-                  </Text>
-                }
+              <NumericalBlock
+                title="From others"
+                titleTooltip={{
+                  content:
+                    "If other users delegate their votes to you, they’ll appear here.",
+                }}
                 value={format(votesDelegated, 0)}
               />
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
             <Grid.Col>
-              <Stat
+              <NumericalBlock
                 mt="28px"
-                label="DELEGATING TO"
+                title="DELEGATING TO"
                 value={
                   !isVotingConfigured ? (
                     "Not configured"

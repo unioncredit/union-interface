@@ -6,6 +6,7 @@ import {
   Stat,
   Dai,
   Input,
+  NumericalBlock,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -68,20 +69,16 @@ export default function EditVouchModal({ address }) {
           <Grid>
             <Grid.Row>
               <Grid.Col>
-                <Stat
+                <NumericalBlock
                   mb="24px"
-                  size="medium"
-                  align="center"
-                  label="Current trust"
+                  title="Current trust"
                   value={<Dai value={format(trust)} />}
                 />
               </Grid.Col>
               <Grid.Col>
-                <Stat
+                <NumericalBlock
                   mb="24px"
-                  size="medium"
-                  align="center"
-                  label="Unpaid debt"
+                  title="Unpaid debt"
                   value={<Dai value={format(locking)} />}
                 />
               </Grid.Col>

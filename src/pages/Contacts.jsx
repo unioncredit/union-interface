@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { Box, ToggleMenu, Grid } from "@unioncredit/ui";
+import { Box, Grid, SegmentedControl } from "@unioncredit/ui";
 
 import { ContactsType } from "constants";
 import ContactList from "components/contacts/ContactList";
@@ -22,7 +22,7 @@ export default function ContactsPage({ type }) {
         <title>Contacts | Union Credit Protocol</title>
       </Helmet>
       <Box justify="center" fluid mb="24px">
-        <ToggleMenu
+        <SegmentedControl
           className="ToggleMenu"
           items={[
             {

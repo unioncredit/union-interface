@@ -15,6 +15,7 @@ import {
   ButtonReveal,
   PlusIcon,
   DataLineItems,
+  NumericalLines,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -125,7 +126,7 @@ export default function VouchModal({
                 </ButtonReveal>
               </Box>
 
-              <DataLineItems
+              <NumericalLines
                 mt="24px"
                 items={[
                   {

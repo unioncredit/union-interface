@@ -8,6 +8,7 @@ import {
   Modal,
   ModalOverlay,
   Stat,
+  NumericalBlock,
 } from "@unioncredit/ui";
 
 import { ContactsType } from "constants";
@@ -79,18 +80,14 @@ export default function WriteOffDebtModal({ address }) {
           <Grid>
             <Grid.Row>
               <Grid.Col>
-                <Stat
-                  size="medium"
-                  align="center"
-                  label="Vouch"
+                <NumericalBlock
+                  title="Vouch"
                   value={<Dai value={format(vouch)} />}
                 />
               </Grid.Col>
               <Grid.Col>
-                <Stat
-                  size="medium"
-                  align="center"
-                  label="Unpaid debt"
+                <NumericalBlock
+                  title="Unpaid debt"
                   value={<Dai value={format(locking)} />}
                 />
               </Grid.Col>

@@ -1,13 +1,14 @@
 import {
   Badge,
-  Bar,
   Button,
   ButtonRow,
   Card,
   Divider,
   Text,
   Box,
-  Stat,
+  NumericalBlock,
+  WireCheckIcon,
+  PercentBar,
 } from "@unioncredit/ui";
 import { StatusColorMap } from "constants";
 import { ZERO } from "constants";
@@ -45,22 +46,21 @@ export default function VotingCard({ data }) {
           <Text m={0}>For</Text>
           <Text m={0}>{format(forVotes, 0)} Votes</Text>
         </Box>
-        <Bar percentage={percentageFor * 100} size="large" color="green" />
+        <PercentBar percentage={percentageFor * 100} />
         <Box justify="space-between" mt="18px" mb="4px">
           <Text m={0}>Against</Text>
           <Text m={0}>{format(againstVotes, 0)} Votes</Text>
         </Box>
-        <Bar percentage={percentageAgainst * 100} size="large" />
+        <PercentBar percentage={percentageAgainst * 100} />
         <Box mt="22px">
           <Stat fluid label="Votes cast" value={format(totalVotes, 0)} />
-          <Stat
-            fluid
-            label={
-              <Text m={0} weight="medium" size="small">
-                {percent(quorumPercent)} Quorum {0 >= 1 && <WireCheck />}
-              </Text>
-            }
-            value={<Bar size="large" percentage={quorumProgress * 100} />}
+          <NumericalBlock
+            title={`${percent(quorumPercent)} Quorum ${
+              0 >= 1 && <WireCheckIcon />
+            }`}
+            barProps={{
+              percentage: quorumProgress * 100,
+            }}
           />
         </Box>
         {false && (

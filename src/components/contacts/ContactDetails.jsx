@@ -3,12 +3,12 @@ import {
   Grid,
   Box,
   Dai,
-  Stat,
   Text,
   Button,
   Skeleton,
   ModalOverlay,
   Modal,
+  NumericalBlock,
 } from "@unioncredit/ui";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
@@ -111,38 +111,41 @@ export default function ContactDetails({ contact, setContact, type }) {
         -------------------------------------------------------*/}
         <Grid.Row>
           <Grid.Col xs={4}>
-            <Stat
-              size="extra-small"
-              label="Trust"
-              tooltip={
-                type === ContactsType.VOUCHERS
-                  ? "The DAI amount this address trusts you with"
-                  : "The DAI amount you trust this address with"
-              }
+            <NumericalBlock
+              size="x-small"
+              title="Trust"
+              titleTooltip={{
+                content:
+                  type === ContactsType.VOUCHERS
+                    ? "The DAI amount this address trusts you with"
+                    : "The DAI amount you trust this address with",
+              }}
               value={<Dai value={format(trust)} />}
             />
           </Grid.Col>
           <Grid.Col xs={4}>
-            <Stat
-              size="extra-small"
-              label="Vouch"
-              tooltip={
-                type === ContactsType.VOUCHERS
-                  ? "The DAI amount this address can underwrite based on their total staked DAI"
-                  : "The DAI amount you can underwrite for this address"
-              }
+            <NumericalBlock
+              size="x-small"
+              title="Vouch"
+              titleTooltip={{
+                content:
+                  type === ContactsType.VOUCHERS
+                    ? "The DAI amount this address can underwrite based on their total staked DAI"
+                    : "The DAI amount you can underwrite for this address",
+              }}
               value={<Dai value={format(vouch)} />}
             />
           </Grid.Col>
           <Grid.Col xs={4}>
-            <Stat
-              size="extra-small"
+            <NumericalBlock
+              size="x-small"
               label="Available"
-              tooltip={
-                type === ContactsType.VOUCHERS
-                  ? "The DAI amount you can borrow from this address"
-                  : "The DAI amount this address can lock of yours"
-              }
+              titleTooltip={{
+                content:
+                  type === ContactsType.VOUCHERS
+                    ? "The DAI amount you can borrow from this address"
+                    : "The DAI amount this address can lock of yours",
+              }}
               value={<Dai value={format(available)} />}
             />
           </Grid.Col>

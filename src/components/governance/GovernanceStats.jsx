@@ -1,4 +1,11 @@
-import { Stat, Button, Grid, Card, Dai, ExternalIcon } from "@unioncredit/ui";
+import {
+  Button,
+  Grid,
+  Card,
+  Dai,
+  ExternalIcon,
+  NumericalBlock,
+} from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
 import { chain, useNetwork } from "wagmi";
 
@@ -35,35 +42,31 @@ export default function GovernaceStats() {
         <Grid>
           <Grid.Row>
             <Grid.Col xs={6}>
-              <Stat
+              <NumericalBlock
                 mt="8px"
-                align="center"
-                label="Total Staked"
+                title="Total Staked"
                 value={<Dai value={format(totalStaked)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Stat
+              <NumericalBlock
                 mt="8px"
-                label="Lending pool"
-                align="center"
+                title="Lending pool"
                 value={<Dai value={format(getLoanableAmount)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Stat
+              <NumericalBlock
                 mt="32px"
-                align="center"
-                label="Outstanding loans"
+                title="Outstanding loans"
                 value={<Dai value={format(totalBorrows)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               {protocol.borrowRatePerBlock && (
-                <Stat
+                <NumericalBlock
                   mt="32px"
-                  align="center"
-                  label="Interest rate"
+                  title="Interest rate"
                   value={`${format(
                     calculateInterestRate(
                       protocol.borrowRatePerBlock,

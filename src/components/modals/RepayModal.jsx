@@ -11,7 +11,7 @@ import {
   Text,
   Modal,
   ModalOverlay,
-  Stat,
+  NumericalBlock,
 } from "@unioncredit/ui";
 
 import useForm from "hooks/useForm";
@@ -113,20 +113,16 @@ export default function RepayModal() {
           <Grid>
             <Grid.Row>
               <Grid.Col xs={6}>
-                <Stat
+                <NumericalBlock
                   mb="16px"
-                  align="center"
-                  size="medium"
-                  label="Balance owed"
+                  title="Balance owed"
                   value={<Dai value={format(owed)} />}
                 />
               </Grid.Col>
               <Grid.Col xs={6}>
-                <Stat
+                <NumericalBlock
                   mb="16px"
-                  align="center"
-                  size="medium"
-                  label="Dai in Wallet"
+                  title="Dai in Wallet"
                   value={<Dai value={format(daiBalance)} />}
                 />
               </Grid.Col>

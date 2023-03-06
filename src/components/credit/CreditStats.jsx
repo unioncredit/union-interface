@@ -1,6 +1,5 @@
 import { useBlockNumber, useNetwork, chain } from "wagmi";
-import { Stat, Button, Grid, Card, Text, Tooltip, Dai } from "@unioncredit/ui";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
+import { Button, Grid, Card, Dai, NumericalBlock } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -49,55 +48,40 @@ export default function CreditStats() {
         <Grid divider>
           <Grid.Row>
             <Grid.Col xs={6}>
-              <Stat
+              <NumericalBlock
                 size="large"
-                align="center"
-                label="Available credit"
+                title="Available credit"
                 value={<Dai value={format(creditLimit, 2, false)} />}
               />
-              <Stat
+              <NumericalBlock
                 mt="24px"
-                align="center"
-                label="Vouch"
+                title="Vouch"
                 value={<Dai value={format(vouch)} />}
-                after={
-                  <Text color="grey500" m={0}>
-                    {format(vouch.sub(creditLimit))} DAI unavailable
-                    <Tooltip content="These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time">
-                      <TooltipIcon width="16px" />
-                    </Tooltip>
-                  </Text>
-                }
+                subtitle={`${format(vouch.sub(creditLimit))} DAI unavailable`}
+                subtitleTooltip={{
+                  content:
+                    "These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time",
+                }}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              <Stat
-                size="large"
-                align="center"
-                label="Balance owed"
+              <NumericalBlock
+                title="Balance owed"
                 value={<Dai value={format(owed)} />}
               />
-              <Stat
-                align="center"
-                label="Minimum due"
+              <NumericalBlock
+                title="Minimum due"
                 mt="24px"
                 mb="4.5px"
                 value={<Dai value={format(minPayment)} />}
-                after={
-                  <Text
-                    size="small"
-                    className="label--clickable"
-                    color={
-                      dueDateDisplay === NoPaymentLabel ? "grey500" : "blue500"
-                    }
-                    onClick={() =>
-                      dueDateDisplay !== NoPaymentLabel &&
-                      open(PAYMENT_REMINDER_MODAL)
-                    }
-                  >
-                    {dueDateDisplay}
-                  </Text>
-                }
+                subtitle={dueDateDisplay}
+                subtitleProps={{
+                  color:
+                    dueDateDisplay === NoPaymentLabel ? "grey500" : "blue500",
+                  onClick: () =>
+                    dueDateDisplay !== NoPaymentLabel &&
+                    open(PAYMENT_REMINDER_MODAL),
+                }}
               />
             </Grid.Col>
           </Grid.Row>

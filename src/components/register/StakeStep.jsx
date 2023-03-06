@@ -11,6 +11,7 @@ import {
   Button,
   Union,
   ProgressBar,
+  NumericalBlock,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
 import { ReactComponent as Check } from "@unioncredit/ui/lib/icons/wireCheck.svg";
@@ -67,16 +68,14 @@ export default function StakeStep() {
         <Divider />
         <Box fluid mt="24px" mb="14px">
           <Box fluid>
-            <Stat
-              size="medium"
+            <NumericalBlock
               label="Total Staked"
               value={<Dai value={format(stakedBalance)} />}
             />
           </Box>
           <Box fluid>
-            <Stat
-              size="medium"
-              label="UNION Earned"
+            <NumericalBlock
+              title="UNION Earned"
               value={
                 <Union value={format(unionBalance.add(unclaimedRewards), 3)} />
               }

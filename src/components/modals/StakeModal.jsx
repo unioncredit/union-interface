@@ -5,9 +5,9 @@ import {
   Input,
   Modal,
   ModalOverlay,
-  ToggleMenu,
   Box,
   Text,
+  SegmentedControl,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -98,9 +98,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
       <Modal className="StakeModal">
         <Modal.Header onClose={close} title="Stake or unstake DAI" />
         <Modal.Body>
-          <ToggleMenu
-            fluid
-            packed
+          <SegmentedControl
             items={toggleMenuOptions}
             initialActive={initialActiveIndex}
             onChange={(item) => setType(item.id)}

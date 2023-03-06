@@ -7,7 +7,7 @@ import {
   Text,
   Modal,
   ModalOverlay,
-  Stat,
+  NumericalBlock,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -91,18 +91,18 @@ export default function BorrowModal() {
           <Grid>
             <Grid.Row>
               <Grid.Col>
-                <Stat
+                <NumericalBlock
                   size="medium"
                   align="center"
-                  label="Available credit"
+                  title="Available credit"
                   value={<Dai value={format(creditLimit, 2, false)} />}
                 />
               </Grid.Col>
               <Grid.Col>
-                <Stat
+                <NumericalBlock
                   size="medium"
                   align="center"
-                  label="You owe"
+                  title="You owe"
                   value={<Dai value={format(owed)} />}
                 />
               </Grid.Col>

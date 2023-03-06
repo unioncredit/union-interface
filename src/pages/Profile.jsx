@@ -8,10 +8,10 @@ import {
   Divider,
   Grid,
   Heading,
-  Stat,
   Text,
   Avatar as UiAvatar,
   BadgeRow,
+  NumericalBlock,
 } from "@unioncredit/ui";
 import {
   chain,
@@ -201,14 +201,16 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
           <Grid>
             <Grid.Row>
               <Grid.Col>
-                <Stat
-                  label="receiving vouches from"
+                <NumericalBlock
+                  size="x-small"
+                  title="Receiving vouches from"
                   value={`${stakerAddresses.length} accounts`}
                 />
               </Grid.Col>
               <Grid.Col>
-                <Stat
-                  label="Vouching for"
+                <NumericalBlock
+                  size="x-small"
+                  title="Vouching for"
                   value={`${borrowerAddresses.length} accounts`}
                 />
               </Grid.Col>

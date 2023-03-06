@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { Box, ToggleMenu } from "@unioncredit/ui";
+import { Box, SegmentedControl } from "@unioncredit/ui";
 
 import ProposalsCard from "components/governance/ProposalsCard";
 import NetworkNotice from "components/governance/NetworkNotice";
@@ -12,7 +12,7 @@ export default function ProposalsPage() {
         <title>Proposals | Union Credit Protocol</title>
       </Helmet>
       <Box justify="center" fluid mb="24px">
-        <ToggleMenu
+        <SegmentedControl
           className="ToggleMenu"
           items={[
             { id: "overview", label: "Overview", to: "/governance", as: Link },

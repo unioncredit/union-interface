@@ -1,4 +1,12 @@
-import { Stat, Button, Grid, Card, Dai, Bar } from "@unioncredit/ui";
+import {
+  Stat,
+  Button,
+  Grid,
+  Card,
+  Dai,
+  Bar,
+  NumericalBlock,
+} from "@unioncredit/ui";
 
 import format from "utils/format";
 import { WAD, ZERO } from "constants";
@@ -36,45 +44,37 @@ export default function StakeStats() {
         <Grid>
           <Grid.Row>
             <Grid.Col xs={12}>
-              <Stat
-                size="large"
-                align="center"
-                label="Staked"
+              <NumericalBlock
+                title="Staked"
                 value={<Dai value={format(stakedBalance)} />}
               />
             </Grid.Col>
           </Grid.Row>
           <Grid.Row>
             <Grid.Col xs={4}>
-              <Stat
+              <NumericalBlock
                 mt="24px"
-                label="Utilized"
-                align="center"
+                title="Utilized"
                 value={<Dai value={format(totalLockedStake)} />}
-                after={
-                  <Bar
-                    size="large"
-                    label={`${lockedPercentage.toFixed(2)}%`}
-                    percentage={lockedPercentage}
-                  />
-                }
+                barProps={{
+                  percentage: lockedPercentage,
+                  label: `${lockedPercentage.toFixed(2)}%`,
+                }}
               />
             </Grid.Col>
             <Grid.Col xs={4}>
-              <Stat
+              <NumericalBlock
                 mt="24px"
-                align="center"
-                label="Withdrawable"
+                title="Withdrawable"
                 value={
                   <Dai value={format(stakedBalance.sub(totalLockedStake))} />
                 }
               />
             </Grid.Col>
             <Grid.Col xs={4}>
-              <Stat
+              <NumericalBlock
                 mt="24px"
-                align="center"
-                label="Defaulted"
+                title="Defaulted"
                 value={<Dai value={format(defaulted)} />}
               />
             </Grid.Col>

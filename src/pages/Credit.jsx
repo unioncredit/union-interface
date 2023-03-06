@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { Box, ToggleMenu } from "@unioncredit/ui";
+import { Box, SegmentedControl } from "@unioncredit/ui";
 
 import CreditStats from "components/credit/CreditStats";
 import ShareCard from "components/credit/ShareCard";
@@ -18,7 +18,7 @@ export default function CreditPage() {
         <title>Credit | Union Credit Protocol</title>
       </Helmet>
       <Box justify="center" fluid mb="24px">
-        <ToggleMenu
+        <SegmentedControl
           className="ToggleMenu"
           items={[
             { id: "borrow", label: "Borrow", to: "/", as: Link },

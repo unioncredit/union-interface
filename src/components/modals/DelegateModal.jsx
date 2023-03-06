@@ -1,4 +1,10 @@
-import { Text, Button, Modal, ModalOverlay, ToggleMenu } from "@unioncredit/ui";
+import {
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  SegmentedControl,
+} from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 
@@ -56,8 +62,7 @@ export default function DelegateModal() {
       <Modal className="DelegateModal">
         <Modal.Header title="Delegate voting power" onClose={close} />
         <Modal.Body>
-          <ToggleMenu
-            fluid
+          <SegmentedControl
             mb="24px"
             items={options}
             onChange={({ id }) => setSelected(id)}
