@@ -9,5 +9,12 @@ export default function useFirstPaymentDueDate() {
   const { overdueBlocks = ZERO } = { ...protocol };
   const milliseconds = overdueBlocks.mul(BlockSpeed[chain.id]);
 
-  return formatDueDate(Number(milliseconds.toString()));
+  let date = new Date();
+  date.setSeconds(date.getSeconds() + milliseconds / 1000);
+
+  return date.toLocaleDateString("en-us", {
+    year: "2-digit",
+    month: "short",
+    day: "numeric",
+  });
 }
