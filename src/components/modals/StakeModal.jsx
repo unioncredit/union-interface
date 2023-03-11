@@ -1,12 +1,9 @@
-import "./StakeModal.scss";
-
 import {
   Dai,
   Input,
   Modal,
   ModalOverlay,
   Box,
-  Text,
   SegmentedControl,
   NumericalLines,
 } from "@unioncredit/ui";
