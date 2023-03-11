@@ -8,6 +8,7 @@ import {
   Box,
   Text,
   SegmentedControl,
+  NumericalLines,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -56,14 +57,17 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
   const validateStake = (inputs) => {
+    if (inputs.amount.raw.gt(userStakeLimit)) {
+      return Errors.MAX_STAKE_LIMIT_EXCEEDED;
+    }
     if (inputs.amount.raw.gt(maxUserStake)) {
-      return Errors.MAX_USER_STAKE;
+      return Errors.MAX_USER_BALANCE_EXCEEDED;
     }
   };
 
   const validateUnstake = (inputs) => {
     if (inputs.amount.raw.gt(maxUserUnstake)) {
-      return Errors.MAX_USER_UNSTAKE;
+      return Errors.MAX_USER_BALANCE_EXCEEDED;
     }
   };
 
@@ -72,7 +76,6 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     values = {},
     errors = {},
     empty,
-    setRawValue,
     isErrored,
   } = useForm({
     validate: type === StakeType.STAKE ? validateStake : validateUnstake,
@@ -84,13 +87,10 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          caption: `Balance: ${format(daiBalance)} DAI`,
-          onCaptionButtonClick: () => setRawValue("amount", maxUserStake),
+          rightLabel: `Max. ${format(daiBalance)} DAI`,
         }
       : {
           label: "Amount to unstake",
-          caption: `Withdrawable: ${format(maxUserUnstake)} DAI`,
-          onCaptionButtonClick: () => setRawValue("amount", maxUserUnstake),
         };
 
   return (
@@ -116,29 +116,60 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             />
           </Box>
 
-          <Box justify="space-between" mt="16px" mb="4px">
-            <Text grey={400}>Currently Staked</Text>
-            <Text grey={700} m={0}>
-              {format(stakedBalance)}
-            </Text>
-          </Box>
-          <Box justify="space-between" mb="4px">
-            <Text grey={400}>Utilized Stake</Text>
-            <Text grey={700} m={0}>
-              {format(totalLockedStake)}
-            </Text>
-          </Box>
-          {type === StakeType.STAKE ? (
-            <Box justify="space-between" mb="18px">
-              <Text grey={400}>Staking Limit</Text>
-              <Text grey={700}>{format(maxStakeAmount)}</Text>
-            </Box>
-          ) : (
-            <Box justify="space-between" mb="18px">
-              <Text grey={400}>Available to Unstake</Text>
-              <Text grey={700}>{format(maxUserUnstake)}</Text>
-            </Box>
-          )}
+          <NumericalLines
+            m="24px 0"
+            items={[
+              {
+                label: "Currently staked",
+                value: `${format(stakedBalance)} DAI`,
+                tooltip: {
+                  shrink: true,
+                  content: "TODO",
+                  position: "right",
+                },
+              },
+              {
+                label: "Your locked stake",
+                value: `${format(totalLockedStake)} DAI`,
+                tooltip: {
+                  shrink: true,
+                  content: "TODO",
+                  position: "right",
+                },
+              },
+              type === StakeType.STAKE
+                ? {
+                    label: "Available to stake",
+                    value: `${format(daiBalance)} DAI`,
+                    error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
+                    tooltip: {
+                      shrink: true,
+                      content: "TODO",
+                      position: "right",
+                    },
+                  }
+                : {
+                    label: "Available to unstake",
+                    value: `${format(maxUserUnstake)} DAI`,
+                    error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
+                    tooltip: {
+                      shrink: true,
+                      content: "TODO",
+                      position: "right",
+                    },
+                  },
+              type === StakeType.STAKE && {
+                label: "Staking limit",
+                value: `${format(maxStakeAmount)} DAI`,
+                error: errors.amount === Errors.MAX_STAKE_LIMIT_EXCEEDED,
+                tooltip: {
+                  shrink: true,
+                  content: "TODO",
+                  position: "right",
+                },
+              },
+            ]}
+          />
 
           <Approval
             owner={address}

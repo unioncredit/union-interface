@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
 
-import CreditRequestModal, {
-  CREDIT_REQUEST_MODAL,
-} from "components/modals/CreditRequestModal";
+import VouchLinkModal, {
+  VOUCH_LINK_MODAL,
+} from "components/modals/VouchLinkModal";
 import ManageContactModal, {
   MANAGE_CONTACT_MODAL,
 } from "components/modals/ManageContactModal";
@@ -29,7 +29,7 @@ const modals = {
   [ACCOUNT_MODAL]: AccountModal,
   [STAKE_MODAL]: StakeModal,
   [WALLET_MODAL]: WalletModal,
-  [CREDIT_REQUEST_MODAL]: CreditRequestModal,
+  [VOUCH_LINK_MODAL]: VouchLinkModal,
   // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
   ["vouch-modal"]: VouchModal,
   [REPAY_MODAL]: RepayModal,

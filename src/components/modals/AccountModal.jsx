@@ -13,10 +13,10 @@ import {
   ExternalIcon,
   DisconnectWalletIcon,
   IdentityIcon,
+  SuccessIcon,
+  FailedIcon,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
-import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
-import { ReactComponent as Failed } from "@unioncredit/ui/lib/icons/failed.svg";
 
 import { useModals } from "providers/ModalManager";
 import Avatar from "components/shared/Avatar";
@@ -77,7 +77,7 @@ export default function AccountModal() {
             >
               <Button
                 fluid
-                size="thin"
+                size="small"
                 variant="light"
                 color="secondary"
                 label="View Profile"
@@ -87,7 +87,7 @@ export default function AccountModal() {
 
             <Button
               fluid
-              size="thin"
+              size="small"
               variant="light"
               color="secondary"
               label="Disconnect Wallet"
@@ -100,7 +100,9 @@ export default function AccountModal() {
           </ButtonRow>
           <Divider my="24px" />
           <Box justify="space-between" align="center" mb="12px">
-            <Text grey={600}>Wallet Activity</Text>
+            <Text size="medium" weight="medium" grey={700}>
+              Wallet Activity
+            </Text>
             <Button
               size="pill"
               color="secondary"
@@ -121,21 +123,27 @@ export default function AccountModal() {
                   <Box align="center">
                     <div className="AccountModal__Activity__statusIcon">
                       {status === Status.SUCCESS ? (
-                        <Success width="16px" />
+                        <SuccessIcon width="20px" />
                       ) : (
-                        <Failed width="16px" />
+                        <FailedIcon width="20px" />
                       )}
                     </div>
-                    <Text grey={600} m={0}>
+                    <Text size="medium" weight="medium" grey={500} m={0}>
                       {label}
                     </Text>
                   </Box>
                   <Box align="center">
-                    <Text m={0} mr="5px" grey={700}>
+                    <Text
+                      size="medium"
+                      weight="medium"
+                      m={0}
+                      mr="5px"
+                      grey={700}
+                    >
                       {format(value)}
                     </Text>
                     <a href="#" target="_blank">
-                      <ExternalIcon width="12px" />
+                      <ExternalIcon width="16px" />
                     </a>
                   </Box>
                 </Box>

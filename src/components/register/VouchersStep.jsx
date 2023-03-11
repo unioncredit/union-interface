@@ -22,10 +22,11 @@ import { useModals } from "providers/ModalManager";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
-import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
+import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import links from "config/links";
 import { useAccount, useNetwork } from "wagmi";
-import getProfileUrl, {
+import {
+  getProfileUrl,
   generateTelegramLink,
   generateTwitterLink,
 } from "utils/generateLinks";
@@ -95,7 +96,7 @@ export default function VouchersStep() {
               color="blue"
               icon={Link}
               label="Get vouch link"
-              onClick={() => open(CREDIT_REQUEST_MODAL)}
+              onClick={() => open(VOUCH_LINK_MODAL)}
             />
             <Button
               variant="secondary"
