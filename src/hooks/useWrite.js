@@ -22,10 +22,12 @@ export default function useWrite({
   const contractConfig = useContract(contract);
   const [loading, setLoading] = useState(false);
 
+  const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
+
   const { config } = usePrepareContractWrite({
     ...contractConfig,
     functionName: method,
-    args,
+    args: memoisedArgs,
     enabled,
   });
 
@@ -85,7 +87,7 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [writeAsync, method, JSON.stringify(args), chain.id]);
+  }, [method, JSON.stringify(args), chain.id]);
 
   /*--------------------------------------------------------------
     Return  

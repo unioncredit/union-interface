@@ -38,15 +38,22 @@ function AppReadyShim({ children }) {
     // If the user is a member, or we are accessing a general route, then
     // skip the connect/ready page and auto connect straight into
     // the credit page "/"
-    if (member.isMember || isGeneralRoute) {
+    if (!appReady && member.isMember) {
       setAppReady(true);
       return;
     }
 
-    setAppReady(false);
+    if (appReady && (isDisconnected || chain?.unsupported)) {
+      setAppReady(false);
+    }
+
+    // If we are viewing a general route such as governance or
+    // a member profile then we skip the ready (connect) page
+    if (!appReady && isGeneralRoute) {
+      setAppReady(true);
+    }
   }, [
-    member.isMember,
-    appReady,
+    member?.isMember,
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
@@ -102,7 +109,7 @@ export default function App() {
                                   <Routes />
                                 </>
                               ) : (
-                                appReady !== null && <ConnectPage />
+                                <ConnectPage />
                               )}
                             </AppReadyShim>
                           </ModalManager>
@@ -115,15 +122,13 @@ export default function App() {
             </Grid.Col>
           </Grid.Row>
         </Grid>
-        {appReady !== null && (
-          <Box mt="56px" mb="24px" w="100%">
-            <Box justify="center" fluid>
-              <Label as="p" size="small" grey={300} align="center">
-                Build: {process.env.REACT_APP_VERSION}
-              </Label>
-            </Box>
+        <Box mt="56px" mb="24px" w="100%">
+          <Box justify="center" fluid>
+            <Label as="p" size="small" grey={300} align="center">
+              Build: {process.env.REACT_APP_VERSION}
+            </Label>
           </Box>
-        )}
+        </Box>
       </Layout.Main>
     </Layout>
   );
