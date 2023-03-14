@@ -87,7 +87,7 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [method, JSON.stringify(args), chain.id]);
+  }, [writeAsync, method, JSON.stringify(args), chain.id]);
 
   /*--------------------------------------------------------------
     Return  
@@ -99,6 +99,6 @@ export default function useWrite({
       loading,
       onClick,
     }),
-    [onClick, loading, isDisabled]
+    [writeAsync, onClick, loading, isDisabled]
   );
 }
