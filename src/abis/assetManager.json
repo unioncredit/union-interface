@@ -1,64 +1,17 @@
 [
-  {
-    "inputs": [],
-    "name": "AmountZero",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "AuthFailed",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "InsufficientBalance",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotParity",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "NotPaused",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "Paused",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "RemainingFunds",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SenderNotAdmin",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SenderNotGuardian",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SenderNotPendingAdmin",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "TokenExists",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "UnsupportedToken",
-    "type": "error"
-  },
+  { "inputs": [], "name": "AmountZero", "type": "error" },
+  { "inputs": [], "name": "AuthFailed", "type": "error" },
+  { "inputs": [], "name": "InsufficientBalance", "type": "error" },
+  { "inputs": [], "name": "NotParity", "type": "error" },
+  { "inputs": [], "name": "NotPaused", "type": "error" },
+  { "inputs": [], "name": "ParamsError", "type": "error" },
+  { "inputs": [], "name": "Paused", "type": "error" },
+  { "inputs": [], "name": "RemainingFunds", "type": "error" },
+  { "inputs": [], "name": "SenderNotAdmin", "type": "error" },
+  { "inputs": [], "name": "SenderNotGuardian", "type": "error" },
+  { "inputs": [], "name": "SenderNotPendingAdmin", "type": "error" },
+  { "inputs": [], "name": "TokenExists", "type": "error" },
+  { "inputs": [], "name": "UnsupportedToken", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -89,6 +42,19 @@
       }
     ],
     "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -207,11 +173,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "admin",
-        "type": "address"
-      },
+      { "internalType": "address", "name": "admin", "type": "address" },
       {
         "internalType": "address",
         "name": "_marketRegistry",
@@ -219,19 +181,6 @@
       }
     ],
     "name": "__AssetManager_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "admin_",
-        "type": "address"
-      }
-    ],
-    "name": "__Controller_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -245,11 +194,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "adapterAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "adapterAddress", "type": "address" }
     ],
     "name": "addAdapter",
     "outputs": [],
@@ -258,11 +203,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "addToken",
     "outputs": [],
@@ -272,23 +213,13 @@
   {
     "inputs": [],
     "name": "admin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "approveAllMarketsMax",
     "outputs": [],
@@ -297,11 +228,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "adapterAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "adapterAddress", "type": "address" }
     ],
     "name": "approveAllTokensMax",
     "outputs": [],
@@ -310,40 +237,18 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" }
     ],
     "name": "balances",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "debtWriteOff",
     "outputs": [],
@@ -352,154 +257,72 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "deposit",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "getLoanableAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "marketId",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" },
+      { "internalType": "uint256", "name": "marketId", "type": "uint256" }
     ],
     "name": "getMoneyMarket",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "rate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenSupply",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "rate", "type": "uint256" },
+      { "internalType": "uint256", "name": "tokenSupply", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "getPoolBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "isAdmin",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "isMarketSupported",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "marketRegistry",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "moneyMarkets",
     "outputs": [
       {
@@ -514,13 +337,7 @@
   {
     "inputs": [],
     "name": "moneyMarketsCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -534,49 +351,34 @@
   {
     "inputs": [],
     "name": "pauseGuardian",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "pendingAdmin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
+      { "internalType": "address", "name": "tokenAddress", "type": "address" },
       {
         "internalType": "uint256[]",
         "name": "percentages",
@@ -590,11 +392,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "adapterAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "adapterAddress", "type": "address" }
     ],
     "name": "removeAdapter",
     "outputs": [],
@@ -603,11 +401,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "removeToken",
     "outputs": [],
@@ -616,11 +410,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "setGuardian",
     "outputs": [],
@@ -642,11 +432,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "setPendingAdmin",
     "outputs": [],
@@ -655,11 +441,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "newSeq",
-        "type": "uint256[]"
-      }
+      { "internalType": "address[]", "name": "newSeq", "type": "address[]" }
     ],
     "name": "setWithdrawSequence",
     "outputs": [],
@@ -667,110 +449,48 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "supportedMarkets",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "supportedTokensCount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "supportedTokensList",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "name": "totalPrincipal",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "totalSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      }
+      { "internalType": "address", "name": "tokenAddress", "type": "address" }
     ],
     "name": "totalSupplyView",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -801,11 +521,7 @@
         "name": "newImplementation",
         "type": "address"
       },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
     ],
     "name": "upgradeToAndCall",
     "outputs": [],
@@ -814,47 +530,23 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "withdraw",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "name": "withdrawSeq",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IMoneyMarketAdapter",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",

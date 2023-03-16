@@ -363,15 +363,6 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "admin_", "type": "address" }
-    ],
-    "name": "__Controller_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       { "internalType": "address", "name": "assetManager_", "type": "address" },
       { "internalType": "address", "name": "unionToken_", "type": "address" },
       { "internalType": "address", "name": "stakingToken_", "type": "address" },
