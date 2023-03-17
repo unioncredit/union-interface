@@ -1,5 +1,5 @@
 import { useNetwork } from "wagmi";
-import { mainnet, goerli, arbitrum } from "wagmi/chains";
+import { mainnet, goerli, arbitrum, optimismGoerli } from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const VersionContext = createContext({});
@@ -13,8 +13,12 @@ export const Versions = {
 
 const versionSupport = {
   [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [goerli.id],
+  [Versions.V2]: [optimismGoerli.id],
 };
+
+export function isVersionSupported(version, chainId) {
+  return versionSupport[version].includes(chainId);
+}
 
 export default function Version({ children }) {
   const { chain: connectedChain } = useNetwork();
@@ -23,7 +27,7 @@ export default function Version({ children }) {
   useEffect(() => {
     if (version || !connectedChain) return;
 
-    if (versionSupport[Versions.V2].includes(connectedChain.id)) {
+    if (isVersionSupported(Versions.V2, connectedChain.id)) {
       // Priorities support for V2. If the connectted network is connected
       // to a V2 supported network then set the default version to v2
       setVersionState(Versions.V2);
