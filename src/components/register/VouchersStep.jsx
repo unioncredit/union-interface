@@ -38,9 +38,6 @@ export default function VouchersStep() {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const profileUrl = getProfileUrl(address, chain.id);
-  const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakerBalance.gt(ZERO)
-  );
 
   const vouchers = vouchersData.filter((voucher) =>
     voucher.stakedBalance.gt(ZERO)

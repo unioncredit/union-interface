@@ -1,5 +1,5 @@
 import { useNetwork } from "wagmi";
-import { mainnet, arbitrum, goerli } from "wagmi/chains";
+import { mainnet, arbitrum, goerli, optimismGoerli } from "wagmi/chains";
 
 import {
   userManagerContract as GOERLI_userManagerContract,
@@ -56,7 +56,7 @@ export default function useContract(name, chainId, forceVersion) {
   const { version } = useVersion();
 
   const v1Contracts = {
-    [chain.goerli.id]: {
+    [goerli.id]: {
       userManager: GOERLI_userManagerContract,
       uToken: GOERLI_uTokenContract,
       union: GOERLI_unionContract,
@@ -64,7 +64,7 @@ export default function useContract(name, chainId, forceVersion) {
       comptroller: GOERLI_comptrollerContract,
       assetManager: GOERLI_assetManagerContract,
     },
-    [chain.mainnet.id]: {
+    [mainnet.id]: {
       governor: governorContract,
       userManager: MAINNET_userManagerContract,
       uToken: MAINNET_uTokenContract,
@@ -73,7 +73,7 @@ export default function useContract(name, chainId, forceVersion) {
       comptroller: MAINNET_comptrollerContract,
       assetManager: MAINNET_assetManagerContract,
     },
-    [chain.arbitrum.id]: {
+    [arbitrum.id]: {
       userManager: ARBITRUM_userManagerContract,
       uToken: ARBITRUM_uTokenContract,
       union: ARBITRUM_unionContract,
@@ -84,7 +84,7 @@ export default function useContract(name, chainId, forceVersion) {
   };
 
   const v2Contracts = {
-    [chain.goerli.id]: {
+    [goerli.id]: {
       userManager: GOERLI_V2_userManagerContract,
       uToken: GOERLI_V2_uTokenContract,
       union: GOERLI_V2_unionContract,
@@ -93,7 +93,7 @@ export default function useContract(name, chainId, forceVersion) {
       assetManager: GOERLI_V2_assetManagerContract,
       unionLens: GOERLI_V2_unionLensContract,
     },
-    [chain.optimismGoerli.id]: {
+    [optimismGoerli.id]: {
       userManager: OPTIMISM_GOERLI_V2_userManagerContract,
       uToken: OPTIMISM_GOERLI_V2_uTokenContract,
       union: OPTIMISM_GOERLI_V2_unionContract,

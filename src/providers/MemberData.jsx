@@ -120,8 +120,14 @@ export function useMemberData(address, chainId) {
         },
         {
           ...comptrollerContract,
-          functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.address, ZERO],
+          functionName:
+            version === Versions.V1
+              ? "calculateRewardsByBlocks"
+              : "calculateRewards",
+          args:
+            version === Versions.V1
+              ? [address, daiContract.address, ZERO]
+              : [address, daiContract.address],
         },
         {
           ...uTokenContract,
@@ -179,10 +185,11 @@ export function useMemberData(address, chainId) {
   const { data, ...resp } = useContractReads({
     enabled:
       !!address &&
-      !!userManagerContract &&
-      !!unionContract &&
-      !!uTokenContract &&
-      !!comptrollerContract,
+      !!daiContract?.address &&
+      !!userManagerContract?.address &&
+      !!unionContract?.address &&
+      !!uTokenContract?.address &&
+      !!comptrollerContract?.address,
     select: (data) => selectMemberData(data),
     contracts: contracts.map((contract) => ({
       ...contract,

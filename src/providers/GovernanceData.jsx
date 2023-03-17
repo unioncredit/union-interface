@@ -42,7 +42,7 @@ async function getProposalHistory(pid) {
   };
 
   const resp = await request(
-    TheGraphUrls[Versions.V1][chain.mainnet.id],
+    TheGraphUrls[Versions.V1][mainnet.id],
     proposalHistoryQuery,
     variables
   );
@@ -106,15 +106,11 @@ const selectProposals = (data) => {
 function useProposals() {
   const [proposals, setProposals] = useState([]);
 
-  const governorContract = useContract(
-    "governor",
-    chain.mainnet.id,
-    Versions.V1
-  );
+  const governorContract = useContract("governor", mainnet.id, Versions.V1);
 
   const getProposals = useCallback(async () => {
     const resp = await request(
-      TheGraphUrls[Versions.V1][chain.mainnet.id],
+      TheGraphUrls[Versions.V1][mainnet.id],
       proposalsQuery
     );
     const proposals = resp.proposals;
