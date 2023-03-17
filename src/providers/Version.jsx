@@ -1,4 +1,5 @@
-import { useNetwork, chain } from "wagmi";
+import { useNetwork } from "wagmi";
+import { mainnet, goerli, arbitrum } from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const VersionContext = createContext({});
@@ -11,8 +12,8 @@ export const Versions = {
 };
 
 const versionSupport = {
-  [Versions.V1]: [chain.mainnet.id, chain.goerli.id, chain.arbitrum.id],
-  [Versions.V2]: [chain.goerli.id],
+  [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
+  [Versions.V2]: [goerli.id],
 };
 
 export default function Version({ children }) {

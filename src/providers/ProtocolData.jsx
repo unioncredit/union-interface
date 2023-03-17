@@ -28,11 +28,7 @@ export default function ProtcolData({ children }) {
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
-  const governorContract = useContract(
-    "governor",
-    chain.mainnet.id,
-    Versions.V1
-  );
+  const governorContract = useContract("governor", mainnet.id, Versions.V1);
   const unionTokenContract = useContract("union", chainId);
   const assetManagerContract = useContract("assetManager", chainId);
 

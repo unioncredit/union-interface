@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
-import { chain } from "wagmi";
+import { mainnet, arbitrum, goerli, optimismGoerli } from "wagmi/chains";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -45,44 +45,43 @@ export const ContactsType = {
 };
 
 export const BlockSpeed = {
-  [chain.mainnet.id]: 12e3,
-  [chain.arbitrum.id]: 12e3,
-  [chain.goerli.id]: 12e3,
-  [chain.optimismGoerli.id]: 12e3,
+  [mainnet.id]: 12e3,
+  [arbitrum.id]: 12e3,
+  [goerli.id]: 12e3,
+  [optimismGoerli.id]: 12e3,
 };
 
 export const BlocksPerYear = {
-  [chain.mainnet.id]: 2407328,
-  [chain.arbitrum.id]: 2407328,
-  [chain.goerli.id]: 2407328,
-  [chain.optimismGoerli.id]: 2407328,
+  [mainnet.id]: 2407328,
+  [arbitrum.id]: 2407328,
+  [goerli.id]: 2407328,
+  [optimismGoerli.id]: 2407328,
 };
 
 export const EIP3770 = {
-  [chain.mainnet.id]: "eth",
-  [chain.arbitrum.id]: "arb1",
-  [chain.goerli.id]: "goe",
-  [chain.optimismGoerli.id]: "optgoe",
+  [mainnet.id]: "eth",
+  [arbitrum.id]: "arb1",
+  [goerli.id]: "goe",
+  [optimismGoerli.id]: "optgoe",
 };
 
 export const EIP3770Map = {
-  eth: chain.mainnet.id,
-  arb1: chain.arbitrum.id,
-  goe: chain.goerli.id,
-  optgoe: chain.optimismGoerli.id,
+  eth: mainnet.id,
+  arb1: arbitrum.id,
+  goe: goerli.id,
+  optgoe: optimismGoerli.id,
 };
 
 export const TheGraphUrls = {
   [Versions.V1]: {
-    [chain.mainnet.id]:
-      "https://api.thegraph.com/subgraphs/name/geraldhost/union",
-    [chain.arbitrum.id]:
+    [mainnet.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union",
+    [arbitrum.id]:
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
-    [chain.goerli.id]:
+    [goerli.id]:
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
   },
   [Versions.V2]: {
-    [chain.optimismGoerli.id]:
+    [optimismGoerli.id]:
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
   },
 };

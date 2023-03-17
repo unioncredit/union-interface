@@ -3,9 +3,11 @@ import { useEffect, useRef } from "react";
 
 import { CACHE_TIME, ZERO } from "constants";
 import useContract from "hooks/useContract";
+import { useVersion, Versions } from "providers/Version";
 
 export default function usePollMemberData(address, chainId) {
   const timer = useRef(null);
+  const { version } = useVersion();
 
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
@@ -15,8 +17,14 @@ export default function usePollMemberData(address, chainId) {
     ? [
         {
           ...comptrollerContract,
-          functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, ZERO],
+          functionName:
+            version === Versions.V1
+              ? "calculateRewardsByBlocks"
+              : "calculateRewards",
+          args:
+            version === Versions.V1
+              ? [address, daiContract.address, ZERO]
+              : [address, daiContract.address],
         },
         {
           ...uTokenContract,

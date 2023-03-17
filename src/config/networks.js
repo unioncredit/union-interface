@@ -1,7 +1,7 @@
-import { chain } from "wagmi";
+import { goerli, optimismGoerli } from "wagmi/chains";
 import { Versions } from "providers/Version";
 
-export const testNetworkIds = [chain.goerli.id, chain.optimismGoerli.id];
+export const testNetworkIds = [goerli.id, optimismGoerli.id];
 
 export const networks = {
   [Versions.V1]: [
