@@ -3,5 +3,5 @@ import { networks as allNetworks } from "config/networks";
 
 export default function useNetworks() {
   const { version } = useVersion();
-  return allNetworks[version || Versions.V2];
+  return allNetworks[version || Versions.V1];
 }

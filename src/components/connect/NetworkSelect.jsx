@@ -11,8 +11,10 @@ import { locationSearch } from "utils/location";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
+import { useVersion } from "providers/Version";
 
 export default function NetworkSelect() {
+  const { version } = useVersion();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { isConnected } = useAccount();
@@ -70,6 +72,10 @@ export default function NetworkSelect() {
     })();
   }, [isConnected, targetChain, switchNetworkAsync]);
 
+  useEffect(() => {
+    setSelected(null);
+  }, [version]);
+
   return (
     <Grid>
       <Grid.Row justify="center">
@@ -88,10 +94,10 @@ export default function NetworkSelect() {
           </Box>
           <Button
             fluid
-            disabled={chain?.unsupported}
+            disabled={chain?.unsupported || (!selected && isConnected)}
             label={
               isConnected
-                ? chain?.unsupported
+                ? chain?.unsupported || !selected
                   ? "Select a Supported Network"
                   : member.isMember
                   ? "Open Union Dashboard"

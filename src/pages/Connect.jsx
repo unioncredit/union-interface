@@ -30,8 +30,8 @@ export default function ConnectPage() {
   };
 
   const versionToggleItems = [
-    { id: Versions.V2, label: "Union v2" },
     { id: Versions.V1, label: "Union v1" },
+    { id: Versions.V2, label: "Union v2" },
   ];
 
   const initialActive0 = versionToggleItems.findIndex(
