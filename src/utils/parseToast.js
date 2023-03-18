@@ -54,13 +54,13 @@ export default function parseToast(
       case "borrow":
         return {
           ...sharedProps,
-          content: `Borrowed ${format(args[0])} DAI successfully`,
+          content: `Borrowed ${format(args[1])} DAI successfully`,
           title: "Borrowed",
         };
       case "repayBorrow":
-        const amount = ethers.constants.MaxUint256.eq(args[0])
+        const amount = ethers.constants.MaxUint256.eq(args[1])
           ? "maximum"
-          : format(args[0]);
+          : format(args[1]);
         return {
           ...sharedProps,
           content: `Repaid ${amount} DAI successfully`,
@@ -114,13 +114,13 @@ export default function parseToast(
       case "borrow":
         return {
           ...sharedProps,
-          content: `Borrowing ${format(args[0])} failed`,
+          content: `Borrowing ${format(args[1])} failed`,
           title: "Borrowing",
         };
       case "repayBorrow":
-        const amount = ethers.constants.MaxUint256.eq(args[0])
+        const amount = ethers.constants.MaxUint256.eq(args[1])
           ? "maximum"
-          : format(args[0]);
+          : format(args[1]);
         return {
           ...sharedProps,
           content: `Repaying ${amount} DAI failed`,
@@ -174,13 +174,13 @@ export default function parseToast(
       case "borrow":
         return {
           ...sharedProps,
-          content: `Borrowing ${format(args[0])}`,
+          content: `Borrowing ${format(args[1])}`,
           title: "Borrowing",
         };
       case "repayBorrow":
-        const amount = ethers.constants.MaxUint256.eq(args[0])
+        const amount = ethers.constants.MaxUint256.eq(args[1])
           ? "maximum"
-          : format(args[0]);
+          : format(args[1]);
         return {
           ...sharedProps,
           content: `Repaying ${amount} DAI`,
