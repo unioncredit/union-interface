@@ -60,7 +60,7 @@ export default function VouchersData({ children }) {
       : {
           ...unionLensContract,
           functionName: "getRelatedInfo",
-          args: [daiContract.addressOrName, staker, borrower],
+          args: [daiContract.address, staker, borrower],
         },
   ];
 
@@ -86,8 +86,22 @@ export default function VouchersData({ children }) {
   });
 
   useEffect(() => {
-    if (address && stakerAddresses?.length > 0) resp.refetch();
-  }, [address, stakerAddresses?.length, resp.refetch]);
+    if (
+      daiContract?.address &&
+      unionLensContract?.address &&
+      userManagerContract.address &&
+      address &&
+      stakerAddresses?.length > 0
+    )
+      resp.refetch();
+  }, [
+    daiContract?.address,
+    unionLensContract?.address,
+    userManagerContract.address,
+    address,
+    stakerAddresses?.length,
+    resp.refetch,
+  ]);
 
   const data = usePopulateEns(resp.data);
 
