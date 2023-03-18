@@ -1,7 +1,4 @@
-import "./VouchModal.scss";
-
 import React, { useState } from "react";
-import cn from "classnames";
 import {
   Modal,
   ModalOverlay,
@@ -14,13 +11,12 @@ import {
   Text,
   ButtonReveal,
   PlusIcon,
-  DataLineItems,
   NumericalLines,
+  VouchIcon,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import AddressInput from "components/shared/AddressInput";
-import NewMemberModalHeader from "components/modals/NewMemberModalHeader";
 import AddressSummary from "components/shared/AddressSummary";
 import { useMember } from "providers/MemberData";
 import useWrite from "hooks/useWrite";
@@ -29,24 +25,11 @@ import useLabels from "hooks/useLabels";
 
 export const VOUCH_MODAL = "vouch-modal";
 
-const Canvas = React.memo(() => (
-  <canvas
-    id="confettiCanvas"
-    style={{
-      position: "fixed",
-      top: "0px",
-      left: "0px",
-      width: "100%",
-      height: "100%",
-    }}
-  />
-));
-
 export default function VouchModal({
   title = "New Vouch",
   subTitle = "",
   onClose,
-  showNewMemberHeader = false,
+  newMember = false,
   showAddressSummary = true,
   address: initialAddress = null,
 }) {
@@ -79,13 +62,7 @@ export default function VouchModal({
 
   return (
     <ModalOverlay onClick={handleClose}>
-      <Canvas />
-      <Modal
-        className={cn("VouchModal", {
-          "VouchModal--newMember": showNewMemberHeader,
-        })}
-      >
-        {showNewMemberHeader && <NewMemberModalHeader onClose={handleClose} />}
+      <Modal className="VouchModal">
         <Modal.Header onClose={handleClose} title={title} subTitle={subTitle} />
         <Modal.Body>
           {address && showAddressSummary && (
@@ -154,7 +131,30 @@ export default function VouchModal({
             </Text>
           </ExpandingInfo>
 
-          <Button fluid mt="16px" label="Submit Vouch" {...buttonProps} />
+          {newMember ? (
+            <>
+              <Button
+                fluid
+                mt="16px"
+                size="large"
+                label="Confirm vouch"
+                icon={VouchIcon}
+                {...buttonProps}
+              />
+
+              <Button
+                fluid
+                mt="8px"
+                size="large"
+                color="secondary"
+                variant="light"
+                label="Skip for now"
+                onClick={handleClose}
+              />
+            </>
+          ) : (
+            <Button fluid mt="16px" label="Submit Vouch" {...buttonProps} />
+          )}
         </Modal.Body>
       </Modal>
     </ModalOverlay>

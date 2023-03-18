@@ -6,7 +6,7 @@ import VouchLinkModal, {
 import ManageContactModal, {
   MANAGE_CONTACT_MODAL,
 } from "components/modals/ManageContactModal";
-import VouchModal from "components/modals/VouchModal";
+import VouchModal, { VOUCH_MODAL } from "components/modals/VouchModal";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
@@ -20,6 +20,7 @@ import WriteOffDebtModal, {
 import PaymentReminderModal, {
   PAYMENT_REMINDER_MODAL,
 } from "components/modals/PaymentReminderModal";
+import WelcomeModal, { WELCOME_MODAL } from "components/modals/WelcomeModal";
 
 const ModalContext = createContext({});
 
@@ -27,18 +28,19 @@ export const useModals = () => useContext(ModalContext);
 
 const modals = {
   [ACCOUNT_MODAL]: AccountModal,
+  [BORROW_MODAL]: BorrowModal,
+  [DELEGATE_MODAL]: DelegateModal,
+  [EDIT_VOUCH_MODAL]: EditVouchModal,
+  [MANAGE_CONTACT_MODAL]: ManageContactModal,
+  [PAYMENT_REMINDER_MODAL]: PaymentReminderModal,
+  [REPAY_MODAL]: RepayModal,
   [STAKE_MODAL]: StakeModal,
-  [WALLET_MODAL]: WalletModal,
   [VOUCH_LINK_MODAL]: VouchLinkModal,
   // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
   ["vouch-modal"]: VouchModal,
-  [REPAY_MODAL]: RepayModal,
-  [BORROW_MODAL]: BorrowModal,
-  [MANAGE_CONTACT_MODAL]: ManageContactModal,
-  [DELEGATE_MODAL]: DelegateModal,
-  [EDIT_VOUCH_MODAL]: EditVouchModal,
+  [WALLET_MODAL]: WalletModal,
+  [WELCOME_MODAL]: WelcomeModal,
   [WRITE_OFF_DEBT_MODAL]: WriteOffDebtModal,
-  [PAYMENT_REMINDER_MODAL]: PaymentReminderModal,
 };
 
 export default function ModalManager({ children }) {

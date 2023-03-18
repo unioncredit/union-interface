@@ -23,12 +23,13 @@ import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
-  const { data: member = {}, refetch: refetchMember } = useMember();
+  const { data: member = {} } = useMember();
   const vouchers = vouchersData.filter((voucher) =>
     voucher.stakerBalance.gt(ZERO)
   );
@@ -103,15 +104,7 @@ export default function RegisterPage() {
                             Membership Fee
                           </Text>
                           <RegisterButton
-                            onComplete={() =>
-                              open(VOUCH_MODAL, {
-                                title: "Vouch for a friend",
-                                subTitle:
-                                  "Expand the web of trust with a vouch",
-                                showNewMemberHeader: true,
-                                onClose: () => refetchMember(),
-                              })
-                            }
+                            onComplete={() => open(WELCOME_MODAL)}
                           />
                         </Box>
                       </Box>
