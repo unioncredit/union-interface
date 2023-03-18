@@ -5,9 +5,14 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-export default function BlockRelativeTime({ block: blockNumber }) {
+export default function BlockRelativeTime({
+  block: blockNumber,
+  chainId = undefined,
+}) {
   const [timestamp, setTimestamp] = useState(null);
-  const provider = useProvider();
+  const provider = useProvider({
+    chainId: chainId,
+  });
 
   useEffect(() => {
     async function load() {

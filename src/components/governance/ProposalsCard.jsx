@@ -11,6 +11,7 @@ import {
   Text,
 } from "@unioncredit/ui";
 import { Link, useNavigate } from "react-router-dom";
+import { mainnet } from "wagmi/chains";
 
 import { percent } from "utils/numbers";
 import { StatusColorMap } from "constants";
@@ -77,7 +78,10 @@ export default function ProposalsCard({
                           mr="8px"
                         />
                         {percent(percentageFor)} yes &bull;{" "}
-                        <BlockRelativeTime block={startBlock} />
+                        <BlockRelativeTime
+                          block={startBlock}
+                          chainId={mainnet.id}
+                        />
                       </Label>
                     </TableCell>
                   </TableRow>
