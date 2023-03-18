@@ -42,6 +42,8 @@ export default function VoucheesData({ children }) {
 
   const { borrowerAddresses } = member;
 
+  console.log(borrowerAddresses);
+
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
     version === Versions.V1
@@ -53,7 +55,7 @@ export default function VoucheesData({ children }) {
       : {
           ...unionLens,
           functionName: "getRelatedInfo",
-          args: [daiContract.addressOrName, staker, borrower],
+          args: [daiContract.address, staker, borrower],
         },
     {
       ...uTokenContract,
