@@ -1,4 +1,5 @@
 @import "@rainbow-me/rainbowkit/styles.css";
+@import "@unioncredit/ui/src/variables";
 @import "@unioncredit/ui/lib";
 @import "./variables.scss";
 
@@ -6,7 +7,11 @@ body {
   margin: 0;
   padding: 0;
   overflow-y: scroll;
-  background-color: #fff;
+  background-color: $grey50;
+
+  &.white-background {
+    background-color: white;
+  }
 
   &.no-scroll {
     overflow: hidden;

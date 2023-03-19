@@ -1,16 +1,27 @@
-.card.NetworkSelectOption {
+@import "@unioncredit/ui/src/variables";
+
+.NetworkSelectOption {
   cursor: pointer;
 
   &--active {
-    background: #eff6ff;
-    border-color: #2563eb;
+    background: $blue50;
+    border-color: $blue600;
 
     .NetworkSelectOption__contentBox {
-      border-color: #bfdbfe;
+      border-color: $blue200;
     }
   }
 
   &--disabled {
     opacity: 0.4;
+  }
+
+  &__check {
+    width: 8px;
+    margin-right: 4px;
+
+    path {
+      fill: $blue600;
+    }
   }
 }

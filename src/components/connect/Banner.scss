@@ -3,7 +3,6 @@
 .ConnectBanner {
   height: 176px;
   display: flex;
-  width: 80%;
   align-items: center;
   justify-content: center;
   background-image: url("../../images/gradient.png");
@@ -14,12 +13,12 @@
   background-size: cover;
   background-position: center;
 
-  @media screen and (max-width: $mobileWidth) {
-    height: 120px;
+  &__bold {
+    font-weight: 500;
   }
 
-  @media screen and (min-width: $mobileWidth - 1px) {
-    margin-top: -24px;
+  @media screen and (max-width: $mobileWidth) {
+    height: 120px;
   }
 
   .heading.heading {

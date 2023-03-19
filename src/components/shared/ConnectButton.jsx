@@ -31,10 +31,12 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
         return (
           <Button
             size="thin"
+            color="secondary"
+            variant="light"
             label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}
-            style={{ height: "40px" }}
+            style={{ height: "40px", fontSize: "16px" }}
             {...buttonProps}
           />
         );

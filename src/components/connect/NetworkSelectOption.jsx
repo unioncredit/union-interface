@@ -1,5 +1,12 @@
 import "./NetworkSelectOption.scss";
-import { Avatar, Box, Button, Card, Text } from "@unioncredit/ui";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CheckAlternativeIcon,
+  Text,
+} from "@unioncredit/ui";
 import cn from "classnames";
 import format from "utils/format";
 import useMemberSummary from "hooks/useMemberSummary";
@@ -26,23 +33,34 @@ export const NetworkSelectOption = ({
         "NetworkSelectOption--disabled": disabled,
       })}
     >
-      <Box align="center">
-        <Box fluid p="12px" className="NetworkSelectOption__contentBox">
+      <Box align="center" h="64px">
+        <Box
+          fluid
+          p="12px"
+          className="NetworkSelectOption__contentBox"
+          align="center"
+        >
           <Box justify="center" mr="16px">
             <Avatar size={40} src={avatar} />
           </Box>
           <Box direction="vertical">
-            <Text as="h3" m={0} grey={800}>
+            <Text as="h3" m={0} size="medium" weight="medium" grey={800}>
               {label}
             </Text>
 
-            <Text color="grey500" m={0} pr="8px" size="small">
-              {address
-                ? data.isMember
-                  ? `Member · ${format(data.creditLimit)} DAI available`
-                  : "Not a member"
-                : description}
-            </Text>
+            <Box align="center">
+              {data.isMember && (
+                <CheckAlternativeIcon className="NetworkSelectOption__check" />
+              )}
+
+              <Text grey={600} m={0} pr="8px" size="small">
+                {address
+                  ? data.isMember
+                    ? `Member · ${format(data.creditLimit)} DAI available`
+                    : "Not a member"
+                  : description}
+              </Text>
+            </Box>
           </Box>
         </Box>
         <Box p="0 12px" className="NetworkSelectOption__controlBox">
@@ -50,8 +68,13 @@ export const NetworkSelectOption = ({
             <Button
               size="pill"
               label="Selected"
-              color="primary"
+              color="blue"
               variant="light"
+              style={{
+                height: "24px",
+                fontSize: "12px",
+                pointerEvents: "none",
+              }}
             />
           ) : (
             <Button
@@ -59,6 +82,11 @@ export const NetworkSelectOption = ({
               color="secondary"
               variant="light"
               label="Switch"
+              style={{
+                height: "24px",
+                fontSize: "12px",
+                pointerEvents: "none",
+              }}
             />
           )}
         </Box>

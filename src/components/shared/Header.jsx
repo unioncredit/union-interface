@@ -68,75 +68,77 @@ export default function Header({ loading, showNav = true }) {
   );
 
   return (
-    <>
-      <Layout.Header align="center">
-        <Grid>
-          <Grid.Row align="center">
-            <Grid.Col>
-              <Box align="center">
-                <Link to="/">
-                  <Logo width="32px" style={{ marginRight: "8px" }} />
-                </Link>
+    <Box className="Header">
+      <Layout.Header w="100%" align="center">
+        <Layout.Columned>
+          <Grid>
+            <Grid.Row align="center">
+              <Grid.Col>
+                <Box align="center">
+                  <Link to="/">
+                    <Logo width="32px" style={{ marginRight: "8px" }} />
+                  </Link>
 
-                {isConnected && <NetworkSelect />}
-              </Box>
-            </Grid.Col>
-            {showNav && (
-              <Grid.Col align="center" className="hide-lt-900">
-                {/*--------------------------------------------------------------
-                Desktop Navigation 
-              *--------------------------------------------------------------*/}
-                <Box
-                  fluid
-                  justify="center"
-                  className={{ "Header__Box--loading": loading }}
-                >
-                  {navigation}
+                  {isConnected && <NetworkSelect />}
                 </Box>
               </Grid.Col>
-            )}
-            <Grid.Col align="right">
-              <Box justify="flex-end" align="center">
-                {isConnected && (
-                  <Button
-                    mr="4px"
-                    icon={Union}
-                    iconProps={{
-                      style: {
-                        width: "24px",
-                        height: "24px",
-                      },
-                    }}
-                    color="secondary"
-                    variant="light"
-                    className="UnionWallet"
-                    onClick={() => open(WALLET_MODAL)}
-                    label={format(unclaimedRewards.add(unionBalance))}
-                  />
-                )}
-                <ConnectButton buttonProps={{ packed: true }} />
-                {width > mobileNavBreakpoint ? (
-                  <ContextMenu
-                    className="Header__context-menu"
-                    position="left"
-                    items={contextMenuItems}
-                  />
-                ) : (
-                  <Button
-                    color="secondary"
-                    variant="light"
-                    className="Header__hamburger"
-                    icon={menuOpen ? CloseIcon : HamburgerIcon}
-                    onClick={() => {
-                      setScrollLock(!menuOpen);
-                      setMenuOpen(!menuOpen);
-                    }}
-                  />
-                )}
-              </Box>
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+              {showNav && (
+                <Grid.Col align="center" className="hide-lt-900">
+                  {/*--------------------------------------------------------------
+                Desktop Navigation
+              *--------------------------------------------------------------*/}
+                  <Box
+                    fluid
+                    justify="center"
+                    className={{ "Header__Box--loading": loading }}
+                  >
+                    {navigation}
+                  </Box>
+                </Grid.Col>
+              )}
+              <Grid.Col align="right">
+                <Box justify="flex-end" align="center">
+                  {isConnected && (
+                    <Button
+                      mr="4px"
+                      icon={Union}
+                      iconProps={{
+                        style: {
+                          width: "24px",
+                          height: "24px",
+                        },
+                      }}
+                      color="secondary"
+                      variant="light"
+                      className="UnionWallet"
+                      onClick={() => open(WALLET_MODAL)}
+                      label={format(unclaimedRewards.add(unionBalance))}
+                    />
+                  )}
+                  <ConnectButton buttonProps={{ packed: true }} />
+                  {width > mobileNavBreakpoint ? (
+                    <ContextMenu
+                      className="Header__context-menu"
+                      position="left"
+                      items={contextMenuItems}
+                    />
+                  ) : (
+                    <Button
+                      color="secondary"
+                      variant="light"
+                      className="Header__hamburger"
+                      icon={menuOpen ? CloseIcon : HamburgerIcon}
+                      onClick={() => {
+                        setScrollLock(!menuOpen);
+                        setMenuOpen(!menuOpen);
+                      }}
+                    />
+                  )}
+                </Box>
+              </Grid.Col>
+            </Grid.Row>
+          </Grid>
+        </Layout.Columned>
       </Layout.Header>
       <OverdueAlert />
 
@@ -150,6 +152,6 @@ export default function Header({ loading, showNav = true }) {
           }}
         />
       )}
-    </>
+    </Box>
   );
 }

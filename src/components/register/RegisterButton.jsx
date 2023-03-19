@@ -100,7 +100,7 @@ export default function RegisterButton({ onComplete }) {
     if (unionBalance.lt(newMemberFee)) {
       // Member UNION balance is not enough so needs to claim UNION
       // If there is any UNION available
-      setAction({ label: "Claim UNION", onClick: handleClaim });
+      setAction({ label: "Claim UNION", onClick: handleClaim, size: "large" });
       setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
       setItems(
         createItems(claimLoading ? MultiStep.PENDING : MultiStep.SELECTED)
@@ -108,7 +108,11 @@ export default function RegisterButton({ onComplete }) {
     } else if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
-      setAction({ label: "Approve UNION", onClick: handleApprove });
+      setAction({
+        label: "Approve UNION",
+        onClick: handleApprove,
+        size: "large",
+      });
       setLabel("Approving 1.00 UNION");
       setItems(
         createItems(
@@ -122,6 +126,7 @@ export default function RegisterButton({ onComplete }) {
         label: "Pay Membership Fee",
         onClick: handleRegister,
         icon: CloudCheck,
+        size: "large",
       });
       setLabel("Paying 1.00 UNION");
       setItems(

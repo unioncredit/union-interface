@@ -1,18 +1,5 @@
 export const networks = [
   {
-    type: "ethereum",
-    id: "ethereum",
-    imageSrc: "/networks/ethereum.png",
-    value: "ethereum",
-    label: "Ethereum",
-    description: "Use Union on Mainnet",
-    avatar: "/networks/ethereum-avatar.png",
-    chainId: 1,
-    networkData: {
-      chainId: "0x1",
-    },
-  },
-  {
     label: "Arbitrum",
     type: "arbitrum",
     id: "arbitrum",
@@ -25,6 +12,19 @@ export const networks = [
       chainId: "0xA4B1",
       rpcUrls: ["https://arb1.arbitrum.io/rpc"],
       chainName: "Arbitrum One",
+    },
+  },
+  {
+    type: "ethereum",
+    id: "ethereum",
+    imageSrc: "/networks/ethereum.png",
+    value: "ethereum",
+    label: "Ethereum",
+    description: "Use Union on Mainnet",
+    avatar: "/networks/ethereum-avatar.png",
+    chainId: 1,
+    networkData: {
+      chainId: "0x1",
     },
   },
   {

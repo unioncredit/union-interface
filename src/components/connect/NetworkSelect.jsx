@@ -1,4 +1,10 @@
-import { Grid, Box, Button } from "@unioncredit/ui";
+import "./NetworkSelect.scss";
+
+import {
+  Box,
+  Button,
+  WalletIcon,
+} from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -7,10 +13,10 @@ import { networks } from "config/networks";
 import { useAppNetwork } from "providers/Network";
 import { EIP3770Map } from "constants";
 
-import "./NetworkSelect.scss";
 import { locationSearch } from "utils/location";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
+import cn from "classnames";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -69,45 +75,61 @@ export default function NetworkSelect() {
   }, [isConnected, targetChain, switchNetworkAsync]);
 
   return (
-    <Grid>
-      <Grid.Row justify="center">
-        <Grid.Col>
-          <Box fluid align="center" direction="vertical" mb="6px">
-            {networks.map((network) => (
-              <NetworkSelectOption
-                address={address}
-                network={network}
-                disabled={!isConnected}
-                onClick={() => handleChangeNetwork(network)}
-                active={isConnected && selected?.chainId === network.chainId}
-              />
-            ))}
-          </Box>
-          <Button
-            fluid
-            disabled={chain?.unsupported}
-            label={
-              isConnected
-                ? chain?.unsupported
-                  ? "Select a Supported Network"
-                  : member.isMember
-                  ? "Open Union Dashboard"
-                  : "Begin Membership Process"
-                : "Connect Wallet"
-            }
-            onClick={isConnected ? () => setAppReady(true) : openConnectModal}
+    <Box
+      fluid
+      direction="vertical"
+      className={cn("NetworkSelect", {
+        "NetworkSelect--connected": isConnected,
+      })}
+    >
+      <Box
+        fluid
+        align="center"
+        direction="vertical"
+        mb="16px"
+        className="NetworkSelect__networks"
+      >
+        {networks.map((network) => (
+          <NetworkSelectOption
+            address={address}
+            network={network}
+            disabled={!isConnected}
+            onClick={() => handleChangeNetwork(network)}
+            active={isConnected && selected?.chainId === network.chainId}
           />
+        ))}
+      </Box>
+      <Button
+        w="100%"
+        disabled={chain?.unsupported}
+        size="large"
+        icon={!isConnected && WalletIcon}
+        iconProps={{
+          style: {
+            width: "16px",
+            height: "16px",
+          },
+        }}
+        label={
+          isConnected
+            ? chain?.unsupported
+              ? "Select a Supported Network"
+              : member.isMember
+              ? "Open Union Dashboard"
+              : "Begin membership process"
+            : "Connect Wallet"
+        }
+        onClick={isConnected ? () => setAppReady(true) : openConnectModal}
+      />
 
-          <a
-            rel="noopener"
-            target="_blank"
-            className="NetworkSelect__footerLink"
-            href="https://docs.union.finance/user-guides/becoming-a-member"
-          >
-            Learn more about becoming a Union member
-          </a>
-        </Grid.Col>
-      </Grid.Row>
-    </Grid>
+      <a
+        rel="noopener"
+        target="_blank"
+        className="NetworkSelect__footerLink"
+        href="https://docs.union.finance/user-guides/becoming-a-member"
+      >
+        Learn more about becoming a Union member
+      </a>
+    </Box>
   );
 }

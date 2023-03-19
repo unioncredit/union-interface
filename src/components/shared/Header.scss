@@ -14,6 +14,13 @@
   font-size: 14px !important;
 }
 
+.Header {
+  .UnionWallet.button,
+  .wallet.button {
+    background: $grey50;
+  }
+}
+
 .Header__context-menu .context-menu-button,
 .Header__hamburger {
   width: 40px;

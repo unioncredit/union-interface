@@ -96,7 +96,7 @@ export default function App() {
       <Layout.Main>
         <Grid style={{ display: "flex", flexGrow: 1 }}>
           <Grid.Row style={{ width: "100%", margin: 0 }}>
-            <Grid.Col>
+            <Grid.Col noPadding>
               <Cache>
                 <ProtocolData>
                   <GovernanceData>
@@ -108,7 +108,9 @@ export default function App() {
                               {appReady ? (
                                 <>
                                   <Header />
-                                  <Routes />
+                                  <Layout.Columned>
+                                    <Routes />
+                                  </Layout.Columned>
                                 </>
                               ) : (
                                 <ConnectPage />
