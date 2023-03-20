@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { Box, Text, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 import Routes from "./Routes";
 
@@ -18,6 +19,8 @@ import Header from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 import useMemberListener from "hooks/useMemberListener";
+
+import ErrorPage from "pages/Error";
 
 /**
  * Shim component that checks if the App is ready
@@ -81,7 +84,10 @@ export default function App() {
           <Grid style={{ display: "flex", flexGrow: 1 }}>
             <Grid.Row style={{ width: "100%", margin: 0 }}>
               <Grid.Col>
-                <ConnectPage />
+                <Header showNav={false} />
+                <ErrorBoundary FallbackComponent={ErrorPage}>
+                  <ConnectPage />
+                </ErrorBoundary>
               </Grid.Col>
             </Grid.Row>
           </Grid>
@@ -105,12 +111,14 @@ export default function App() {
                         <VoucheesData>
                           <ModalManager>
                             <AppReadyShim>
+                              <Header />
                               {appReady ? (
                                 <>
-                                  <Header />
-                                  <Layout.Columned>
-                                    <Routes />
-                                  </Layout.Columned>
+                                  <ErrorBoundary FallbackComponent={ErrorPage}>
+                                    <Layout.Columned>
+                                      <Routes />
+                                    </Layout.Columned>
+                                  </ErrorBoundary>
                                 </>
                               ) : (
                                 <ConnectPage />

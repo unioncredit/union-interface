@@ -1,14 +1,13 @@
 import "./Connect.scss";
+import { useEffect } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
 import { Heading, Text, Box, Alert, WarningIcon } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
-import Header from "components/shared/Header";
 import Banner from "components/connect/Banner";
 import { useMember } from "providers/MemberData";
 import NetworkSelect from "components/connect/NetworkSelect";
-import { useEffect } from "react";
 
 export default function ConnectPage() {
   const { chain } = useNetwork();
@@ -23,12 +22,7 @@ export default function ConnectPage() {
   }, []);
 
   if (isLoading) {
-    return (
-      <>
-        <Header />
-        <LoadingPage />
-      </>
-    );
+    return <LoadingPage />;
   }
 
   return (
@@ -37,7 +31,6 @@ export default function ConnectPage() {
         <title>Connect | Union Credit Protocol</title>
       </Helmet>
 
-      <Header showNav={false} />
       <Banner />
       <Box justify="center" fluid>
         <Box
