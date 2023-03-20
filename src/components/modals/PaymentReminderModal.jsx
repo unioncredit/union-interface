@@ -9,7 +9,7 @@ import {
 } from "@unioncredit/ui";
 import { useMemo } from "react";
 import makeUrls from "add-event-to-calendar";
-import { useBlockNumber, useNetwork } from "wagmi";
+import { mainnet, useBlockNumber, useNetwork } from "wagmi";
 import { ReactComponent as Calendar } from "@unioncredit/ui/lib/icons/calendar.svg";
 
 import format from "utils/format";
