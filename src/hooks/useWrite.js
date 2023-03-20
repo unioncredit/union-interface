@@ -3,10 +3,11 @@ import { useContractWrite, usePrepareContractWrite, useNetwork } from "wagmi";
 
 import { Status } from "constants";
 import praseAppLog from "utils/praseAppLog";
-import parseToast from "utils/parseToast";
+import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
+import { useVersion } from "providers/Version";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -16,6 +17,7 @@ export default function useWrite({
   contract,
   onComplete,
 }) {
+  const { version } = useVersion();
   const { chain } = useNetwork();
   const { addLog } = useAppLogs();
   const { addToast, closeToast } = useToasts();
@@ -40,10 +42,10 @@ export default function useWrite({
    */
   const onClick = useCallback(async () => {
     setLoading(true);
-    let toastId = addToast(
-      parseToast(Status.PENDING, method, args, null, chain.id),
-      false
-    );
+
+    const parseToast = createParseToast(method, args, chain.id, version);
+
+    let toastId = addToast(parseToast(Status.PENDING, null), false);
 
     try {
       const tx = await writeAsync();
@@ -51,10 +53,7 @@ export default function useWrite({
       // Replace current pending toast with a new pending toast
       // that links out to etherscan
       closeToast(toastId);
-      toastId = addToast(
-        parseToast(Status.PENDING, method, args, tx, chain.id),
-        false
-      );
+      toastId = addToast(parseToast(Status.PENDING, tx), false);
 
       const response = await tx.wait();
 
@@ -62,13 +61,7 @@ export default function useWrite({
 
       addLog(praseAppLog(Status.SUCCESS, method, args, tx));
       addToast(
-        parseToast(
-          response.status ? Status.SUCCESS : Status.FAILED,
-          method,
-          args,
-          tx,
-          chain.id
-        )
+        parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx)
       );
 
       return true;
@@ -79,7 +72,7 @@ export default function useWrite({
 
       if (error.code == "ACTION_REJECTED") {
         // User rejected the request
-        addToast(parseToast(Status.FAILED, method, args, null, chain.id));
+        addToast(parseToast(Status.FAILED, null));
       }
 
       return false;

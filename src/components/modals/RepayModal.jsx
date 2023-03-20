@@ -24,6 +24,7 @@ import format from "utils/format";
 import { useState } from "react";
 import { Errors } from "constants";
 import { ethers } from "ethers";
+import { useVersion, Versions } from "providers/Version";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -36,6 +37,7 @@ const PaymentType = {
 export default function RepayModal() {
   const { close } = useModals();
   const { address } = useAccount();
+  const { version } = useVersion();
   const { data: member } = useMember();
   const [paymentType, setPaymentType] = useState(null);
 
@@ -231,7 +233,8 @@ export default function RepayModal() {
             requireApproval
             tokenContract="dai"
             actionProps={{
-              args: [address, amount.raw],
+              args:
+                version === Versions.V1 ? [amount.raw] : [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
