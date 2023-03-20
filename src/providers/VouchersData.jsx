@@ -88,15 +88,14 @@ export default function VouchersData({ children }) {
   useEffect(() => {
     if (
       daiContract?.address &&
-      unionLensContract?.address &&
       userManagerContract.address &&
       address &&
       stakerAddresses?.length > 0
-    )
+    ) {
       resp.refetch();
+    }
   }, [
     daiContract?.address,
-    unionLensContract?.address,
     userManagerContract.address,
     address,
     stakerAddresses?.length,
