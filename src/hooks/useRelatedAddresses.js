@@ -67,9 +67,9 @@ export default function useRelatedAddresses(address, chainId) {
     });
 
   return {
-    stakerAddresses: stakerAddresses.length > 0 ? stakerAddresses : undefined,
+    stakerAddresses: stakerAddresses?.length > 0 ? stakerAddresses : undefined,
     borrowerAddresses:
-      borrowerAddresses.length > 0 ? borrowerAddresses : undefined,
+      borrowerAddresses?.length > 0 ? borrowerAddresses : undefined,
     refetch: async () => {
       await refetchCounts();
       await refetchVouchees();
