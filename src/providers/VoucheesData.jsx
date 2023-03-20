@@ -42,8 +42,6 @@ export default function VoucheesData({ children }) {
 
   const { borrowerAddresses } = member;
 
-  console.log(borrowerAddresses);
-
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
     version === Versions.V1
