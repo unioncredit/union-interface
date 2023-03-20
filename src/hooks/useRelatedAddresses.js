@@ -38,7 +38,7 @@ export default function useRelatedAddresses(address, chainId) {
   });
 
   const { data: stakerAddresses, refetch: refetchVouchers } = useContractReads({
-    enabled: voucherCount > 0,
+    enabled: voucherCount > 0 && isV2,
     select: (data) => data.map((row) => row.staker),
     contracts: Array(voucherCount)
       .fill(null)
@@ -53,7 +53,7 @@ export default function useRelatedAddresses(address, chainId) {
 
   const { data: borrowerAddresses, refetch: refetchVouchees } =
     useContractReads({
-      enabled: voucheeCount > 0,
+      enabled: voucheeCount > 0 && isV2,
       select: (data) => data.map((row) => row.borrower),
       contracts: Array(voucheeCount)
         .fill(null)
@@ -67,8 +67,9 @@ export default function useRelatedAddresses(address, chainId) {
     });
 
   return {
-    stakerAddresses,
-    borrowerAddresses,
+    stakerAddresses: stakerAddresses.length > 0 ? stakerAddresses : undefined,
+    borrowerAddresses:
+      borrowerAddresses.length > 0 ? borrowerAddresses : undefined,
     refetch: async () => {
       await refetchCounts();
       await refetchVouchees();
