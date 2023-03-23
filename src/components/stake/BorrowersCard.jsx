@@ -50,7 +50,7 @@ export default function BorrowersCard() {
         subTitle="Contacts actively borrowing against your stake"
       />
       <Box mt="16px" />
-      {vouchees.length <= 0 ? (
+      {borrowers.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No borrowers" />
         </Card.Body>
