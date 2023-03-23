@@ -25,17 +25,20 @@ export default function Version({ children }) {
   const [version, setVersionState] = useState(null);
 
   useEffect(() => {
-    if (version || !connectedChain) return;
+    if (!connectedChain?.id) return;
 
-    if (isVersionSupported(Versions.V2, connectedChain.id)) {
+    const checkVersion = (_version) =>
+      isVersionSupported(_version, connectedChain.id) && version !== _version;
+
+    if (checkVersion(Versions.V2)) {
       // Priorities support for V2. If the connectted network is connected
       // to a V2 supported network then set the default version to v2
       setVersionState(Versions.V2);
-    } else {
+    } else if (checkVersion(Versions.V1)) {
       // Otherwise fallback to V1
       setVersionState(Versions.V1);
     }
-  }, [version, connectedChain]);
+  }, [version, connectedChain?.id]);
 
   const setVersion = (v) => {
     if (v === 1) {
