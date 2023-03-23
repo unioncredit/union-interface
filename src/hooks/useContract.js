@@ -28,6 +28,7 @@ import {
   comptrollerContract as OPTIMISM_GOERLI_V2_comptrollerContract,
   assetManagerContract as OPTIMISM_GOERLI_V2_assetManagerContract,
   unionLensContract as OPTIMISM_GOERLI_V2_unionLensContract,
+  vouchFaucetContract as OPTIMISM_GOERLI_V2_vouchFaucet,
 } from "config/contracts/v2/optimismGoerli";
 
 import {
@@ -101,6 +102,7 @@ export default function useContract(name, chainId, forceVersion) {
       comptroller: OPTIMISM_GOERLI_V2_comptrollerContract,
       assetManager: OPTIMISM_GOERLI_V2_assetManagerContract,
       unionLens: OPTIMISM_GOERLI_V2_unionLensContract,
+      vouchFaucet: OPTIMISM_GOERLI_V2_vouchFaucet,
     },
   };
 
