@@ -14,6 +14,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { createContext, useContext, useState } from "react";
 import { WagmiConfig, createClient, configureChains } from "wagmi";
 import { mainnet, arbitrum, goerli, optimismGoerli } from "wagmi/chains";
+import { useAppReadyState } from "./AppReadyState";
 
 const NetworkContext = createContext({});
 
@@ -47,7 +48,7 @@ const wagmiClient = createClient({
 });
 
 export default function Network({ children }) {
-  const [appReady, setAppReady] = useState(null);
+  const { appReady, setAppReady } = useAppReadyState();
 
   return (
     <NetworkContext.Provider value={{ appReady, setAppReady }}>

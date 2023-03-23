@@ -11,10 +11,8 @@ import { locationSearch } from "utils/location";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
-import { useVersion } from "providers/Version";
 
 export default function NetworkSelect() {
-  const { version } = useVersion();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { isConnected } = useAccount();
@@ -73,9 +71,10 @@ export default function NetworkSelect() {
   }, [isConnected, targetChain, switchNetworkAsync]);
 
   useEffect(() => {
+    if (!chain?.id) return;
     const found = networks.find((net) => net.chainId === chain.id);
     setSelected(found || null);
-  }, [chain.id]);
+  }, [chain?.id, JSON.stringify(networks)]);
 
   return (
     <Grid>
@@ -105,7 +104,13 @@ export default function NetworkSelect() {
                   : "Begin Membership Process"
                 : "Connect Wallet"
             }
-            onClick={isConnected ? () => setAppReady(true) : openConnectModal}
+            onClick={() => {
+              if (isConnected) {
+                setAppReady(true);
+              } else {
+                openConnectModal();
+              }
+            }}
           />
 
           <a

@@ -2,7 +2,7 @@ import { useNetwork } from "wagmi";
 import { mainnet, goerli, arbitrum, optimismGoerli } from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
-import { useAppNetwork } from "providers/Network";
+import { useAppReadyState } from "./AppReadyState";
 
 const VersionContext = createContext({});
 
@@ -25,7 +25,7 @@ export function isVersionSupported(version, chainId) {
 export default function Version({ children }) {
   const { chain: connectedChain } = useNetwork();
   const [version, setVersionState] = useState(null);
-  const { appReady } = useAppNetwork();
+  const { appReady } = useAppReadyState();
 
   useEffect(() => {
     if (!connectedChain?.id || !appReady) return;
