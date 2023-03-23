@@ -2,6 +2,8 @@ import { useNetwork } from "wagmi";
 import { mainnet, goerli, arbitrum, optimismGoerli } from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
+import { useAppNetwork } from "providers/Network";
+
 const VersionContext = createContext({});
 
 export const useVersion = () => useContext(VersionContext);
@@ -23,9 +25,10 @@ export function isVersionSupported(version, chainId) {
 export default function Version({ children }) {
   const { chain: connectedChain } = useNetwork();
   const [version, setVersionState] = useState(null);
+  const { appReady } = useAppNetwork();
 
   useEffect(() => {
-    if (!connectedChain?.id) return;
+    if (!connectedChain?.id || !appReady) return;
 
     const checkVersion = (_version) =>
       isVersionSupported(_version, connectedChain.id) && version !== _version;
@@ -38,7 +41,7 @@ export default function Version({ children }) {
       // Otherwise fallback to V1
       setVersionState(Versions.V1);
     }
-  }, [version, connectedChain?.id]);
+  }, [appReady, version, connectedChain?.id]);
 
   const setVersion = (v) => {
     if (v === 1) {
