@@ -73,8 +73,9 @@ export default function NetworkSelect() {
   }, [isConnected, targetChain, switchNetworkAsync]);
 
   useEffect(() => {
-    setSelected(null);
-  }, [version]);
+    const found = networks.find((net) => net.chainId === chain.id);
+    setSelected(found || null);
+  }, [chain.id]);
 
   return (
     <Grid>
