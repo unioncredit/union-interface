@@ -17,7 +17,7 @@ export default function NewMemberModalHeader() {
   const { data: member = {} } = useMember();
   const { chain } = useNetwork();
   const { address } = useAccount();
-  const { creditLimit = ZERO } = { member };
+  const { creditLimit = ZERO } = member;
   const profileUrl = getProfileUrl(address, chain.id);
 
   const popConfetti = () => confettiRef.current.addConfetti();
