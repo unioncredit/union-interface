@@ -151,7 +151,7 @@ export default function Header({ loading, showNav = true }) {
             variant="info"
             label="Union V2 is available to try on Optimism Goerli"
             action={{
-              label: "Go To Optimism",
+              label: "Go To Testnet",
               onClick: () => switchNetworkAsync(optimismGoerli.id),
             }}
           />
