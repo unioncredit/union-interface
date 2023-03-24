@@ -146,13 +146,13 @@ export default function Header({ loading, showNav = true }) {
           className="v2-alert"
         >
           <Alert
-            variant="info"
-            size="small"
             packed
+            size="small"
+            variant="info"
             label="Union V2 is available to try on Optimism Goerli"
             action={{
               label: "Go To Optimism",
-              onClick: () => switchNetworkAsync(optimismGoerli),
+              onClick: () => switchNetworkAsync(optimismGoerli.id),
             }}
           />
         </Box>
