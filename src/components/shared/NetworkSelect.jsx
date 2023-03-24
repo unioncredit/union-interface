@@ -19,10 +19,6 @@ export default function NetworkSelect() {
     settings.showTestnets ? true : !testNetworkIds.includes(network.chainId)
   );
 
-  const defaultValue = networks.find(
-    (option) => option.chainId === chain?.id && option.version === version
-  );
-
   const handleChangeNetwork = async (value) => {
     await switchNetworkAsync(value.chainId);
     setVersion(value.version === Versions.V1 ? 1 : 2);
@@ -31,6 +27,10 @@ export default function NetworkSelect() {
   const networkOptions = networks
     .map((network) => ({ ...network, as: NetworkButton }))
     .filter((network) => chains.find((c) => c.id === network.chainId));
+
+  const defaultValue = networkOptions.find(
+    (option) => option.chainId === chain?.id
+  );
 
   return (
     <NetworkSwitcher
