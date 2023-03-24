@@ -8,8 +8,10 @@ import {
   ContextMenu,
   Text,
   Button,
+  Alert,
 } from "@unioncredit/ui";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchNetwork, useNetwork } from "wagmi";
+import { optimismGoerli } from "wagmi/chains";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
@@ -27,9 +29,11 @@ import SettingToggle from "./SettingToggle";
 
 export default function Header({ loading, showNav = true }) {
   const { open } = useModals();
+  const { chain } = useNetwork();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
+  const { switchNetworkAsync } = useSwitchNetwork();
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
@@ -70,8 +74,8 @@ export default function Header({ loading, showNav = true }) {
             {showNav && (
               <Grid.Col align="center" className="hide-lt-850">
                 {/*--------------------------------------------------------------
-                Desktop Navigation 
-              *--------------------------------------------------------------*/}
+                  Desktop Navigation 
+                *--------------------------------------------------------------*/}
                 <Box
                   fluid
                   justify="center"
@@ -128,6 +132,29 @@ export default function Header({ loading, showNav = true }) {
         </Grid>
       </Layout.Header>
       <OverdueAlert />
+      {chain?.id !== optimismGoerli.id && (
+        <Box
+          w="100%"
+          maxw="445px"
+          mb="24px"
+          align="center"
+          justify="center"
+          ml="auto"
+          mr="auto"
+          className="v2-alert"
+        >
+          <Alert
+            variant="info"
+            size="small"
+            packed
+            label="Union V2 is available to try on Optimism Goerli"
+            action={{
+              label: "Go To Optimism",
+              onClick: () => switchNetworkAsync(optimismGoerli),
+            }}
+          />
+        </Box>
+      )}
     </>
   );
 }
