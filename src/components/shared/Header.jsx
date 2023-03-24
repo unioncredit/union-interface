@@ -26,6 +26,7 @@ import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
 import SettingToggle from "./SettingToggle";
+import { useAppReadyState } from "providers/AppReadyState";
 
 export default function Header({ loading, showNav = true }) {
   const { open } = useModals();
@@ -34,6 +35,7 @@ export default function Header({ loading, showNav = true }) {
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
   const { switchNetworkAsync } = useSwitchNetwork();
+  const { appReady } = useAppReadyState();
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
@@ -132,7 +134,7 @@ export default function Header({ loading, showNav = true }) {
         </Grid>
       </Layout.Header>
       <OverdueAlert />
-      {chain?.id !== optimismGoerli.id && (
+      {chain?.id !== optimismGoerli.id && appReady && (
         <Box
           w="100%"
           maxw="445px"
