@@ -3,6 +3,7 @@ import { useNetwork } from "wagmi";
 import useWrite from "hooks/useWrite";
 import { goerli, optimismGoerli } from "wagmi/chains";
 import { useVouchers } from "providers/VouchersData";
+import links from "config/links";
 
 export default function VouchFaucetButton() {
   const { chain } = useNetwork();
@@ -22,7 +23,7 @@ export default function VouchFaucetButton() {
     return (
       <>
         No frens?{" "}
-        <a href={links.discord} target="_blank">
+        <a href={links?.discord} target="_blank">
           Try Discord
         </a>
       </>
