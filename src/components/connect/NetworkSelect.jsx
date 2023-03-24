@@ -18,12 +18,15 @@ export default function NetworkSelect() {
   const { isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { switchNetworkAsync } = useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+  });
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
   const networks = useNetworks();
+  const allNetworks = useNetworks(true);
 
   const urlSearchParams = locationSearch();
 
@@ -53,7 +56,7 @@ export default function NetworkSelect() {
         targetChain &&
         !chain?.unsupported
       ) {
-        const toSelect = networks.find(
+        const toSelect = allNetworks.find(
           (network) => network.chainId === targetChain
         );
         if (toSelect?.chainId !== selected?.chainId) {
@@ -63,12 +66,13 @@ export default function NetworkSelect() {
           // fire off a chain network request. This is to support the ?chain
           // URL search param
           if (toSelect.chainId !== chain.id) {
-            await switchNetworkAsync(toSelect.chainId);
+            // TODO: temp remove this behaviour
+            // await switchNetworkAsync(toSelect.chainId);
           }
         }
       }
     })();
-  }, [isConnected, targetChain, switchNetworkAsync]);
+  }, [isConnected, targetChain, allNetworks, switchNetworkAsync]);
 
   useEffect(() => {
     if (!chain?.id) return;
