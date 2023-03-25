@@ -16,8 +16,7 @@ import {
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
-import AddressInput from "components/shared/AddressInput";
-import AddressSummary from "components/shared/AddressSummary";
+import { AddressInput, AddressSummary } from "components/shared";
 import { useMember } from "providers/MemberData";
 import useWrite from "hooks/useWrite";
 import useForm from "hooks/useForm";

@@ -2,18 +2,13 @@ import {
   Modal,
   ModalOverlay,
   Box,
-  Card,
   Button,
   ButtonRow,
-  Text,
   Select,
   Input,
   LinkIcon,
   TwitterFilledIcon,
   TelegramFilledIcon,
-  CheckAlternativeIcon,
-  CheckIcon,
-  CheckFilledIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
@@ -21,8 +16,7 @@ import { useAccount, useNetwork } from "wagmi";
 import { networks } from "config/networks";
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import links from "config/links";
-import AddressSummary from "components/shared/AddressSummary";
+import { AddressSummary } from "components/shared";
 import {
   generateTelegramLink,
   generateTwitterLink,

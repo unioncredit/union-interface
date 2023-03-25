@@ -5,6 +5,10 @@ export default function format(n, digits = 2, rounded = true) {
   return commify(Number(formatUnits(n)), digits, rounded);
 }
 
+export const formattedNumber = (n, digits = 2, rounded = true) => {
+  return parseFloat(format(n, digits, rounded));
+};
+
 function commify(num, digits, rounded = true) {
   num = Number(num);
   num = num <= 0 ? 0 : num;

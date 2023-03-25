@@ -2,10 +2,9 @@ import "./AddressLabelBox.scss";
 
 import { Box, Text } from "@unioncredit/ui";
 
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel } from "components/shared";
 
-export default function AddressLabelBox({ label, address, ...props }) {
+export function AddressLabelBox({ label, address, ...props }) {
   return (
     <Box className="AddressLabelBox" justify="space-between" {...props}>
       <Text m={0} size="medium" color="blue600" weight="medium">

@@ -6,9 +6,8 @@ import { Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
 import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
 
 import { ZERO_ADDRESS } from "constants";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
 import VotingCard from "components/governance/VotingCard";
 import NetworkNotice from "components/governance/NetworkNotice";

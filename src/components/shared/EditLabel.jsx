@@ -22,7 +22,7 @@ function setEndOfContentEditable(contentEditableElement) {
   }
 }
 
-export default function EditLabel({ address }) {
+export function EditLabel({ address }) {
   const labelEl = useRef(null);
   const [editting, setEditting] = useState(false);
 

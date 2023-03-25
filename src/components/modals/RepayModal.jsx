@@ -19,7 +19,7 @@ import {
 } from "@unioncredit/ui";
 
 import useForm from "hooks/useForm";
-import Approval from "components/shared/Approval";
+import { Approval } from "components/shared";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useContract from "hooks/useContract";

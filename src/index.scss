@@ -62,3 +62,7 @@ a {
 .fillPath path {
   fill: inherit;
 }
+
+.bg-color {
+  @include colors(background);
+}

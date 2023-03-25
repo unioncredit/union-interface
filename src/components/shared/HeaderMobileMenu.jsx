@@ -3,7 +3,7 @@ import { Box, NavItem } from "@unioncredit/ui";
 import { Link } from "react-router-dom";
 import { createElement } from "react";
 
-export default function HeaderMobileMenu({ navLinks, footerLinks, closeMenu }) {
+export function HeaderMobileMenu({ navLinks, footerLinks, closeMenu }) {
   return (
     <Box className="HeaderMobileMenu" direction="vertical">
       <Box className="HeaderMobileMenu__navigation" direction="vertical">

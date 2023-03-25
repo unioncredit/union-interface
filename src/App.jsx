@@ -15,7 +15,7 @@ import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
 import Cache from "providers/Cache";
-import Header from "components/shared/Header";
+import { Header } from "components/shared";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 import useMemberListener from "hooks/useMemberListener";

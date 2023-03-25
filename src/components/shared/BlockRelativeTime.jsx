@@ -5,7 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
-export default function BlockRelativeTime({ block: blockNumber }) {
+export function BlockRelativeTime({ block: blockNumber }) {
   const [timestamp, setTimestamp] = useState(null);
   const provider = useProvider();
 

@@ -19,9 +19,7 @@ import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
 
 import format from "utils/format";
 import { ZERO, ContactsType } from "constants";
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
-import StatusBadge from "components/shared/StatusBadge";
+import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import usePagination from "hooks/usePagination";

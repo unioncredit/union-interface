@@ -18,18 +18,19 @@ import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
 import { ZERO } from "constants";
 import format from "utils/format";
-import OverdueAlert from "./OverdueAlert";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { items, contextMenuItems } from "config/navigation";
-import ConnectButton from "components/shared/ConnectButton";
+import {
+  ConnectButton,
+  HeaderMobileMenu,
+  NetworkSelect,
+} from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
-import NetworkSelect from "components/shared/NetworkSelect";
-import HeaderMobileMenu from "components/shared/HeaderMobileMenu";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
 
-export default function Header({ loading, showNav = true }) {
+export function Header({ loading, showNav = true }) {
   const mobileNavBreakpoint = 900;
   const { open } = useModals();
   const { pathname } = useLocation();
@@ -140,7 +141,6 @@ export default function Header({ loading, showNav = true }) {
           </Grid>
         </Layout.Columned>
       </Layout.Header>
-      <OverdueAlert />
 
       {menuOpen && width <= mobileNavBreakpoint && (
         <HeaderMobileMenu

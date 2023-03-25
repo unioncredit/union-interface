@@ -17,7 +17,7 @@ import { min } from "utils/numbers";
 import { StakeType } from "constants";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
-import Approval from "components/shared/Approval";
+import { Approval } from "components/shared";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";

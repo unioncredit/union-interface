@@ -19,13 +19,12 @@ import {
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 
 import { useModals } from "providers/ModalManager";
-import Avatar from "components/shared/Avatar";
 import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
 import { Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";

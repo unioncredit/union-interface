@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { percent } from "utils/numbers";
 import { StatusColorMap } from "constants";
 import { useGovernance } from "providers/GovernanceData";
-import BlockRelativeTime from "components/shared/BlockRelativeTime";
+import { BlockRelativeTime } from "components/shared";
 
 const maxStrLength = 46;
 

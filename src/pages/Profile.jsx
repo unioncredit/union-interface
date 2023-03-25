@@ -28,8 +28,7 @@ import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
 import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
 import { isAddress } from "ethers/lib/utils";
 import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
@@ -41,7 +40,6 @@ import { networks } from "config/networks";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
-import ConnectButton from "components/shared/ConnectButton";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 

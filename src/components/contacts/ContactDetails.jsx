@@ -13,8 +13,7 @@ import {
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
-import AddressSummary from "components/shared/AddressSummary";
-import { TransactionHistory } from "components/shared/TxHistory";
+import { AddressSummary, TransactionHistory } from "components/shared";
 import { ZERO } from "constants";
 import { ContactsType } from "constants";
 import useIsMobile from "hooks/useIsMobile";
@@ -139,7 +138,7 @@ export default function ContactDetails({ contact, setContact, type }) {
           <Grid.Col xs={4}>
             <NumericalBlock
               size="x-small"
-              label="Available"
+              title="Available"
               titleTooltip={{
                 content:
                   type === ContactsType.VOUCHERS

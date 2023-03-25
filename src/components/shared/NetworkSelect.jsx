@@ -3,7 +3,7 @@ import { NetworkSwitcher, NetworkButton } from "@unioncredit/ui";
 
 import { networks } from "config/networks";
 
-export default function NetworkSelect() {
+export function NetworkSelect() {
   const { chain, chains } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
 

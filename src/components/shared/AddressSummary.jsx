@@ -11,14 +11,12 @@ import {
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { EIP3770 } from "constants";
-import StatusBadge from "./StatusBadge";
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 
-export default function AddressSummary({ address }) {
+export function AddressSummary({ address }) {
   const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 

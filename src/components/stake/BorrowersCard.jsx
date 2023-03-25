@@ -12,12 +12,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import format from "utils/format";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import usePagination from "hooks/usePagination";
 import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
-import StatusBadge from "components/shared/StatusBadge";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 import { ZERO } from "constants";
 
 export default function BorrowersCard() {

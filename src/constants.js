@@ -50,9 +50,9 @@ export const BlockSpeed = {
 };
 
 export const BlocksPerYear = {
-  [chain.mainnet.id]: 2407328,
-  [chain.arbitrum.id]: 2407328,
-  [chain.goerli.id]: 2407328,
+  [chain.mainnet.id]: 2628333,
+  [chain.arbitrum.id]: 2628333,
+  [chain.goerli.id]: 2628333,
 };
 
 export const EIP3770 = {
@@ -107,4 +107,8 @@ export const MultiStep = {
   SELECTED: "selected",
   PENDING: "pending",
   COMPLETE: "complete",
+};
+
+export const Links = {
+  CONTACTS: "/contacts",
 };

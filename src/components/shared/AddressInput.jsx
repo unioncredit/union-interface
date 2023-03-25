@@ -5,9 +5,9 @@ import { Input, Text, Box, LoadingSpinner } from "@unioncredit/ui";
 import { ReactComponent as EnsIcon } from "@unioncredit/ui/lib/icons/ens.svg";
 
 import { Errors } from "constants";
-import Avatar from "components/shared/Avatar";
+import { Avatar } from "components/shared";
 
-export default function AddressInput(props) {
+export function AddressInput(props) {
   const [value, setValue] = useState(null);
   const [error, setError] = useState(null);
 

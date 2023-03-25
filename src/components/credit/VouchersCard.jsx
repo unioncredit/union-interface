@@ -12,11 +12,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import format from "utils/format";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel } from "components/shared";
 import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export default function VouchersCard() {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 
-export default function OverdueAlert() {
+export function OverdueAlert() {
   const { open } = useModals();
   const { data: member = {} } = useMember();
 

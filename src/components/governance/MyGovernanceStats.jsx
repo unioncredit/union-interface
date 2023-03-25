@@ -5,17 +5,13 @@ import {
   Card,
   Button,
   Grid,
-  Tooltip,
-  Text,
   NumericalBlock,
 } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
 import { Link } from "react-router-dom";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
 import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
 
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";

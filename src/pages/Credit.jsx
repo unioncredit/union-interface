@@ -1,44 +1,60 @@
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import { Box, SegmentedControl } from "@unioncredit/ui";
+import {
+  Layout,
+  AddressBookIcon,
+  IdentityIcon,
+  SegmentedControl,
+  StakeIcon,
+} from "@unioncredit/ui";
 
 import CreditStats from "components/credit/CreditStats";
-import ShareCard from "components/credit/ShareCard";
-import VouchersCard from "components/credit/VouchersCard";
-import MyTransactionHistory from "components/credit/MyTransactionHistory";
-import { useModals } from "providers/ModalManager";
-import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
+import ActivityTable from "components/credit/ActivityTable";
+import VouchersOverview from "components/credit/VouchersOverview";
+import { useVouchers } from "providers/VouchersData";
 
 export default function CreditPage() {
-  const { open } = useModals();
+  const { data: vouchers = [] } = useVouchers();
 
   return (
     <>
       <Helmet>
         <title>Credit | Union Credit Protocol</title>
       </Helmet>
-      <Box justify="center" fluid mb="24px">
+      <Layout.Columned align="center" maxw="653px">
         <SegmentedControl
-          className="ToggleMenu"
+          m="24px 0"
+          size="large"
+          variant="rounded"
           items={[
-            { id: "borrow", label: "Borrow", to: "/", as: Link },
-            { id: "stake", label: "Stake", to: "/stake", as: Link },
+            {
+              id: "borrow",
+              label: "Borrow",
+              to: "/",
+              as: Link,
+              icon: IdentityIcon,
+            },
+            {
+              id: "stake",
+              label: "Stake",
+              to: "/stake",
+              as: Link,
+              icon: StakeIcon,
+            },
+            {
+              id: "contacts",
+              label: "Contacts",
+              to: "/contacts",
+              as: Link,
+              icon: AddressBookIcon,
+            },
           ]}
-          initialActive={0}
         />
-      </Box>
-      <Box fluid justify="center" direction="vertical">
-        <CreditStats />
-        <ShareCard
-          content="Get more Union vouches to increase your total available credit."
-          buttonProps={{
-            label: "Get vouch link",
-            onClick: () => open(VOUCH_LINK_MODAL),
-          }}
-        />
-        <VouchersCard />
-        <MyTransactionHistory />
-      </Box>
+
+        <CreditStats vouchers={vouchers} />
+        <VouchersOverview vouchers={vouchers} displayCount={6} />
+        <ActivityTable />
+      </Layout.Columned>
     </>
   );
 }

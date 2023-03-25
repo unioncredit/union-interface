@@ -13,8 +13,7 @@ import { useMember } from "providers/MemberData";
 import { compareAddresses } from "utils/compare";
 import { Errors, ZERO_ADDRESS } from "constants";
 import { useModals } from "providers/ModalManager";
-import AddressInput from "components/shared/AddressInput";
-import AddressLabelBox from "components/shared/AddressLabelBox";
+import { AddressInput, AddressLabelBox } from "components/shared";
 
 export const DELEGATE_MODAL = "delegate-modal";
 
