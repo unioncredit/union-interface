@@ -1,4 +1,5 @@
 export * from "./TransactionHistory";
+export * from "./AddressesAvatarBadgeRow";
 export * from "./AddressInput";
 export * from "./AddressLabelBox";
 export * from "./AddressSummary";

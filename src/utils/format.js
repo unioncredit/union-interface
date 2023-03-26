@@ -6,7 +6,7 @@ export default function format(n, digits = 2, rounded = true) {
 }
 
 export const formattedNumber = (n, digits = 2, rounded = true) => {
-  return parseFloat(format(n, digits, rounded));
+  return parseFloat(format(n, digits, rounded).replace(",", ""));
 };
 
 function commify(num, digits, rounded = true) {

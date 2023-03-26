@@ -39,7 +39,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const userManagerContract = useContract("userManager");
 
   const initialActiveIndex = toggleMenuOptions.findIndex(
-    ({ id }) => id === type
+    ({ id }) => id === initialType
   );
 
   const {

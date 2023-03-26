@@ -42,9 +42,9 @@ export default function BorrowersCard() {
   } = usePagination(borrowers);
 
   return (
-    <Card mt="24px">
+    <Card mt="24px" w="100%" maxw="none">
       <Card.Header
-        title={`Active borrowers · ${borrowers.length}`}
+        title="Active borrowers"
         subTitle="Contacts actively borrowing against your stake"
       />
       <Box mt="16px" />
@@ -70,10 +70,10 @@ export default function BorrowersCard() {
               </TableCell>
               <TableCell>
                 <Box direction="vertical">
-                  <Text grey={700} m={0}>
+                  <Text grey={800} m={0} size="medium" weight="medium">
                     <PrimaryLabel address={address} />
                   </Text>
-                  <Text size="small" grey={400} m={0}>
+                  <Text grey={500} m={0} size="small" weight="medium">
                     {truncateAddress(address)}
                   </Text>
                 </Box>

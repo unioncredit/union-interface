@@ -1,0 +1,10 @@
+@import "@unioncredit/ui/src/variables";
+
+.RewardStats {
+  &__bonus .NumericalBlock__value {
+    color: $violet500 !important;
+  }
+  &__penalty .NumericalBlock__value {
+    color: $red500 !important;
+  }
+}

@@ -1,4 +1,4 @@
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext, useEffect, useRef } from "react";
 
 import {
@@ -7,6 +7,8 @@ import {
   DUST_THRESHOLD,
   ZERO,
   ZERO_ADDRESS,
+  BlocksPerYear,
+  WAD,
 } from "constants";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
@@ -43,11 +45,15 @@ const MemberContext = createContext({});
 export const useMember = () => useContext(MemberContext);
 
 function usePollMemberData(address, chainId) {
+  const { chain: connectedChain } = useNetwork();
+
   const timer = useRef(null);
 
-  const daiContract = useContract("dai", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
+  const id = chainId || connectedChain?.id;
+  const daiContract = useContract("dai", id);
+  const uTokenContract = useContract("uToken", id);
+  const comptrollerContract = useContract("comptroller", id);
+  const blocksPerDay = Math.floor(BlocksPerYear[id] / 365);
 
   const contracts = address
     ? [
@@ -66,16 +72,51 @@ function usePollMemberData(address, chainId) {
           functionName: "calculatingInterest",
           args: [address],
         },
+        {
+          ...comptrollerContract,
+          functionName: "calculateRewardsByBlocks",
+          args: [address, daiContract.addressOrName, blocksPerDay],
+        },
+        {
+          ...comptrollerContract,
+          functionName: "getRewardsMultiplier",
+          args: [address, daiContract.addressOrName],
+        },
       ]
     : [];
 
   const resp = useContractReads({
     enabled: false,
-    select: (data) => ({
-      unclaimedRewards: data[0] || ZERO,
-      owed: data[1] || ZERO,
-      interest: data[2] || ZERO,
-    }),
+    select: (data) => {
+      const unclaimedRewards = data[0] || ZERO;
+      const rewardsMultiplier = data[4] || ZERO;
+
+      // The estimated number of unclaimed rewards in 1 day
+      const estimatedTotalRewards = data[3] || ZERO;
+      const estimatedDailyTotal = estimatedTotalRewards.sub(unclaimedRewards);
+      const estimatedDailyBase = estimatedDailyTotal
+        .mul(WAD)
+        .div(rewardsMultiplier);
+      const dailyDifference = estimatedDailyTotal.sub(estimatedDailyBase);
+
+      return {
+        unclaimedRewards: unclaimedRewards, // todo: refactor and remove this
+        owed: data[1] || ZERO,
+        interest: data[2] || ZERO,
+        rewards: {
+          unclaimed: unclaimedRewards,
+          multiplier: rewardsMultiplier,
+          estimatedDailyBase: estimatedDailyBase,
+          estimatedDailyTotal: estimatedDailyTotal,
+          estimatedDailyBonus: dailyDifference.gt(ZERO)
+            ? dailyDifference
+            : ZERO,
+          estimatedDailyPenalty: dailyDifference.lt(ZERO)
+            ? dailyDifference
+            : ZERO,
+        },
+      };
+    },
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,

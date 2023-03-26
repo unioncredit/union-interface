@@ -120,6 +120,7 @@ export default function CreditStats({ vouchers }) {
             fluid
             align="left"
             token="dai"
+            size="regular"
             title="Available"
             dotColor="blue600"
             value={format(creditLimit, 2, false)}
@@ -129,6 +130,7 @@ export default function CreditStats({ vouchers }) {
             fluid
             align="left"
             token="dai"
+            size="regular"
             title="Unavailable"
             dotColor="amber500"
             value={format(vouch.sub(creditLimit))}

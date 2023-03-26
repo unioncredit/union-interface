@@ -110,5 +110,7 @@ export const MultiStep = {
 };
 
 export const Links = {
+  CREDIT: "/",
+  STAKE: "/stake",
   CONTACTS: "/contacts",
 };

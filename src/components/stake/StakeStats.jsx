@@ -1,21 +1,23 @@
 import {
-  Stat,
   Button,
-  Grid,
   Card,
-  Dai,
-  Bar,
   NumericalBlock,
+  ButtonRow,
+  Box,
+  WithdrawIcon,
+  DepositIcon,
+  DistributionBar,
 } from "@unioncredit/ui";
 
-import format from "utils/format";
-import { WAD, ZERO } from "constants";
+import format, { formattedNumber } from "utils/format";
+import { ZERO } from "constants";
 import { reduceBnSum } from "utils/reduce";
 import { useVouchees } from "providers/VoucheesData";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { StakeType } from "constants";
+import { AddressesAvatarBadgeRow } from "components/shared";
 
 export default function StakeStats() {
   const { open } = useModals();
@@ -24,80 +26,126 @@ export default function StakeStats() {
 
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
-  const lockedPercentageBps = totalLockedStake.gt(ZERO)
-    ? totalLockedStake.mul(WAD).div(stakedBalance)
-    : ZERO;
-  const lockedPercentage = lockedPercentageBps.gt(ZERO)
-    ? Number(lockedPercentageBps.toString()) / 1e16
-    : 0;
-
-  const defaulted = vouchees
-    .map(({ isOverdue, locking }) => {
-      return isOverdue ? locking : ZERO;
-    })
+  const withdrawableStake = stakedBalance.sub(totalLockedStake);
+  const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
+  const defaultedVouchees = vouchees.filter((v) => v.isOverdue);
+  const defaulted = defaultedVouchees
+    .map((v) => v.locking)
     .reduce(reduceBnSum, ZERO);
 
   return (
-    <Card>
-      <Card.Header title="Staked Funds" align="center" />
+    <Card w="100%" maxw="none">
       <Card.Body>
-        <Grid>
-          <Grid.Row>
-            <Grid.Col xs={12}>
-              <NumericalBlock
-                title="Staked"
-                value={<Dai value={format(stakedBalance)} />}
+        <Box align="center" justify="space-between">
+          <NumericalBlock
+            token="dai"
+            align="left"
+            title="Your staked balance"
+            value={format(stakedBalance)}
+          />
+
+          <ButtonRow>
+            <Button
+              size="large"
+              label="Withdraw"
+              color="secondary"
+              variant="light"
+              icon={WithdrawIcon}
+              onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
+            />
+
+            <Button
+              size="large"
+              label="Deposit"
+              icon={DepositIcon}
+              onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
+            />
+          </ButtonRow>
+        </Box>
+
+        <DistributionBar
+          m="24px 0"
+          items={[
+            {
+              value: formattedNumber(withdrawableStake),
+              color: "blue500",
+            },
+            {
+              value: formattedNumber(totalLockedStake),
+              color: "violet500",
+            },
+            {
+              value: formattedNumber(defaulted),
+              color: "red500",
+            },
+          ]}
+        />
+
+        <Box align="center" justify="space-between">
+          <NumericalBlock
+            fluid
+            align="left"
+            token="dai"
+            size="regular"
+            title="Withdrawable"
+            dotColor="blue500"
+            value={format(withdrawableStake)}
+            after={
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={vouchees.map((v) => v.address)}
+                showLabel={!vouchees.length || vouchees.length > 6}
+                label={`Providing to ${
+                  vouchees.length ? vouchees.length : "no"
+                } contacts`}
               />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col xs={4}>
-              <NumericalBlock
-                mt="24px"
-                title="Utilized"
-                value={<Dai value={format(totalLockedStake)} />}
-                barProps={{
-                  percentage: lockedPercentage,
-                  label: `${lockedPercentage.toFixed(2)}%`,
-                }}
-              />
-            </Grid.Col>
-            <Grid.Col xs={4}>
-              <NumericalBlock
-                mt="24px"
-                title="Withdrawable"
-                value={
-                  <Dai value={format(stakedBalance.sub(totalLockedStake))} />
+            }
+          />
+
+          <NumericalBlock
+            fluid
+            align="left"
+            token="dai"
+            size="regular"
+            title="Locked"
+            dotColor="violet500"
+            value={format(totalLockedStake)}
+            after={
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={borrowingVouchees.map((v) => v.address)}
+                label={`${
+                  borrowingVouchees.length ? borrowingVouchees.length : "No"
+                } contacts borrowing`}
+                showLabel={
+                  !borrowingVouchees.length || borrowingVouchees.length > 6
                 }
               />
-            </Grid.Col>
-            <Grid.Col xs={4}>
-              <NumericalBlock
-                mt="24px"
-                title="Defaulted"
-                value={<Dai value={format(defaulted)} />}
+            }
+          />
+
+          <NumericalBlock
+            fluid
+            align="left"
+            token="dai"
+            size="regular"
+            title="Frozen"
+            dotColor="red500"
+            value={format(defaulted)}
+            after={
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={defaultedVouchees.map((v) => v.address)}
+                label={`${
+                  defaultedVouchees.length ? defaultedVouchees.length : "No"
+                } defaulters`}
+                showLabel={
+                  !defaultedVouchees.length || defaultedVouchees.length > 6
+                }
               />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col xs={6}>
-              <Button
-                mt="24px"
-                label="Deposit DAI"
-                onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
-              />
-            </Grid.Col>
-            <Grid.Col xs={6}>
-              <Button
-                mt="24px"
-                label="Withdraw DAI"
-                color="secondary"
-                variant="light"
-                onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
-              />
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+            }
+          />
+        </Box>
       </Card.Body>
     </Card>
   );
