@@ -45,7 +45,7 @@ export function Header({ loading, showNav = true }) {
 
   const navItems0 =
     isConnected && isMember
-      ? [items.credit, items.contacts, items.governance]
+      ? [items.credit, items.governance]
       : [items.getStarted, items.governance];
 
   const navItems = navItems0.map((item) => ({

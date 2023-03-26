@@ -19,11 +19,6 @@ export const items = {
     label: "Credit",
     pathname: "/",
   },
-  contacts: {
-    id: "contacts",
-    label: "Contacts",
-    pathname: "/contacts",
-  },
   governance: {
     id: "governance",
     label: "Governance",
