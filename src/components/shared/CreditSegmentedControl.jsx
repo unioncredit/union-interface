@@ -9,7 +9,7 @@ import { Links } from "constants";
 
 export const CreditSegmentedControl = ({ active }) => (
   <SegmentedControl
-    m="24px 0"
+    m="24px auto"
     size="large"
     variant="rounded"
     initialActive={active}

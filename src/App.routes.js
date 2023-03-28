@@ -13,8 +13,7 @@ import StakePage from "pages/Stake";
 export const member = [
   { path: "/",                    component: CreditPage,      props: {} },
   { path: "/stake",               component: StakePage,       props: {} },
-  { path: "/contacts",            component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
-  { path: "/contacts/trusts-you", component: ContactsPage,    props: { type: ContactsType.VOUCHERS } },
+  { path: "/contacts",            component: ContactsPage,    props: {} },
 ]
 
 // prettier-ignore

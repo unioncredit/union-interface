@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { Grid, Layout } from "@unioncredit/ui";
 
 import ContactList from "components/contacts/ContactList";
-import ContactDetails from "components/contacts/ContactDetails";
 import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl";
+import { ContactsType } from "constants";
 
-export default function ContactsPage({ type }) {
+export default function ContactsPage() {
   const [contact, setContact] = useState(null);
+  const [type, setType] = useState(ContactsType.VOUCHEES);
 
   const contactComponentProps = {
+    type,
+    setType,
     contact,
     setContact,
-    type,
   };
 
   return (
@@ -20,20 +21,10 @@ export default function ContactsPage({ type }) {
       <Helmet>
         <title>Contacts | Union Credit Protocol</title>
       </Helmet>
-      <Layout.Columned align="center" maxw="988">
-        <CreditSegmentedControl active={2} />
 
-        <Grid>
-          <Grid.Row justify="center">
-            <Grid.Col md={6}>
-              <ContactList {...contactComponentProps} />
-            </Grid.Col>
-            <Grid.Col md={6}>
-              <ContactDetails {...contactComponentProps} />
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
-      </Layout.Columned>
+      <CreditSegmentedControl active={2} />
+
+      <ContactList {...contactComponentProps} />
     </>
   );
 }

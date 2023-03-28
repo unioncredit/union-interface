@@ -1,0 +1,9 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProvidingTableRow {
+  .table-cell {
+    &--overdue {
+      color: $red500;
+    }
+  }
+}

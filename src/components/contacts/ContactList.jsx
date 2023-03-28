@@ -1,50 +1,53 @@
+import { chain, useNetwork } from "wagmi";
+import { useEffect, useMemo, useState } from "react";
 import {
   Card,
   Table,
   Pagination,
   EmptyState,
-  TableRow,
-  TableCell,
-  TableHead,
   Box,
-  Text,
-  Input,
-  Button,
   Collapse,
-  FilterIcon,
-  SearchIcon,
 } from "@unioncredit/ui";
-import { useEffect, useMemo, useState } from "react";
-import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
 
-import format from "utils/format";
-import { ZERO, ContactsType } from "constants";
-import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
+import { ZERO, ContactsType, BlockSpeed } from "constants";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
-import usePagination from "hooks/usePagination";
-import { truncateAddress } from "utils/truncateAddress";
-import { VOUCH_MODAL } from "components/modals/VouchModal";
-import { useModals } from "providers/ModalManager";
-import useContactSearch from "hooks/useContactSearch";
 import Filters, { filterFns, sortFns } from "./Filters";
+import usePagination from "hooks/usePagination";
+import useContactSearch from "hooks/useContactSearch";
 import useIsMobile from "hooks/useIsMobile";
 import { locationSearch } from "utils/location";
+import { useProtocol } from "providers/ProtocolData";
+import {
+  ContactsFilterControls,
+  ContactsTableHead,
+  ContactsTypeToggle,
+  ProvidingTableRow,
+  ReceivingTableRow,
+} from "components/contacts/ContactsTable";
 
-export default function ContactList({
-  contact,
-  setContact,
-  type = ContactsType.VOUCHEES,
-}) {
+export default function ContactList({ contact, setContact, type, setType }) {
   const isMobile = useIsMobile();
 
-  const { open } = useModals();
-  const { data: vouchees } = useVouchees();
-  const { data: vouchers } = useVouchers();
+  const { data: protocol } = useProtocol();
+  const { data: vouchees = [] } = useVouchees();
+  const { data: vouchers = [] } = useVouchers();
+  const { chain: connectedChain } = useNetwork();
 
   const [query, setQuery] = useState(null);
   const [filters, setFilters] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+
+  const { overdueBlocks = ZERO } = protocol;
+  const overdueInMilliseconds = overdueBlocks
+    .mul(
+      BlockSpeed[
+        connectedChain.id === chain.arbitrum.id
+          ? chain.mainnet.id
+          : connectedChain.id
+      ]
+    )
+    .toNumber();
 
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
@@ -108,48 +111,19 @@ export default function ContactList({
   } = usePagination(filtered);
 
   return (
-    <Card>
-      {type === ContactsType.VOUCHERS ? (
-        <Card.Header
-          title={`Accounts that trust you · ${contacts.length}`}
-          subTitle="Accounts providing you with credit"
+    <Card w="100%" maxw="none">
+      <Box p="24px 24px 0">
+        <ContactsTypeToggle type={type} setType={setType} />
+        <ContactsFilterControls
+          setQuery={setQuery}
+          setShowFilters={setShowFilters}
         />
-      ) : (
-        <Card.Header
-          title={`Accounts you trust · ${contacts.length}`}
-          subTitle="Addresses you’re currently vouching for"
-        />
-      )}
-
-      {/*--------------------------------------------------------------
-        Search and Filters 
-      *--------------------------------------------------------------*/}
-      <Box fluid p="12px">
-        <Input
-          prefix={<SearchIcon width="15px" />}
-          placeholder="Search"
-          onChange={(event) => {
-            setQuery(event.target.value);
-          }}
-        />
-        <Button
-          ml="8px"
-          fluid
-          icon={FilterIcon}
-          color="secondary"
-          variant="light"
-          onClick={() => setShowFilters((x) => !x)}
-        />
-        {type === ContactsType.VOUCHEES && (
-          <Button
-            fluid
-            ml="8px"
-            label="New vouch"
-            icon={Vouch}
-            onClick={() => open(VOUCH_MODAL)}
-          />
-        )}
       </Box>
+
+      {/*-------------------------------------------------------------
+        Search and Filters
+      *--------------------------------------------------------------*/}
+      <Box fluid p="12px"></Box>
       <Collapse active={showFilters}>
         <Filters type={type} onChange={setFilters} />
       </Collapse>
@@ -163,53 +137,45 @@ export default function ContactList({
       ) : (
         <div className="TableContainer">
           <Table>
-            <TableRow>
-              <TableHead></TableHead>
-              <TableHead>Account</TableHead>
-              {type === ContactsType.VOUCHEES ? (
-                <>
-                  <TableHead align="center">Status</TableHead>
-                  <TableHead align="right">Balance owed (DAI)</TableHead>
-                </>
-              ) : (
-                <TableHead align="right">Trust Limit (DAI)</TableHead>
-              )}
-            </TableRow>
-            {contactsPage.map((row) => {
-              const { address, locking = ZERO, trust = ZERO } = row;
+            <ContactsTableHead
+              items={
+                type === ContactsType.VOUCHEES
+                  ? [
+                      "Trust set",
+                      "Total vouch",
+                      "Stake locked",
+                      "Last payment",
+                      "Loan status",
+                    ]
+                  : [
+                      "Trust set",
+                      "Total vouch",
+                      "Real vouch",
+                      "You're locking",
+                      "Borrowable",
+                    ]
+              }
+            />
 
-              return (
-                <TableRow
-                  key={address}
-                  active={address === contact?.address}
-                  onClick={() => setContact(row)}
-                >
-                  <TableCell fixedSize>
-                    <Avatar size={24} address={address} />
-                  </TableCell>
-                  <TableCell>
-                    <Box direction="vertical">
-                      <Text grey={700} m={0}>
-                        <PrimaryLabel address={address} />
-                      </Text>
-                      <Text size="small" grey={400} m={0}>
-                        {truncateAddress(address)}
-                      </Text>
-                    </Box>
-                  </TableCell>
-                  {type === ContactsType.VOUCHEES ? (
-                    <>
-                      <TableCell align="center">
-                        <StatusBadge address={address} />
-                      </TableCell>
-                      <TableCell align="right">{format(locking)}</TableCell>
-                    </>
-                  ) : (
-                    <TableCell align="right">{format(trust)}</TableCell>
-                  )}
-                </TableRow>
-              );
-            })}
+            {contactsPage.map((row) =>
+              type === ContactsType.VOUCHEES ? (
+                <ProvidingTableRow
+                  key={row.address}
+                  data={row}
+                  setContact={setContact}
+                  chainId={connectedChain.id}
+                  overdueInMilliseconds={overdueInMilliseconds}
+                  receiving={vouchers.find((v) => v.address === row.address)}
+                />
+              ) : (
+                <ReceivingTableRow
+                  key={row.address}
+                  data={row}
+                  setContact={setContact}
+                  providing={vouchees.find((v) => v.address === row.address)}
+                />
+              )
+            )}
           </Table>
         </div>
       )}

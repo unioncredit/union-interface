@@ -5,7 +5,6 @@ export * from "./AddressLabelBox";
 export * from "./AddressSummary";
 export * from "./Approval";
 export * from "./Avatar";
-export * from "./BlockRelativeTime";
 export * from "./ConnectButton";
 export * from "./EditLabel";
 export * from "./Header";

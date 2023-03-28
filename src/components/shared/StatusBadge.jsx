@@ -31,7 +31,7 @@ export function StatusBadge({ address }) {
       ) : isMember ? (
         <Badge color="blue" label="Member" />
       ) : (
-        <Badge color="grey" label="Not a member" />
+        <Badge color="grey" label="Inactive" />
       )}
     </>
   );
