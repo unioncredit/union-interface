@@ -21,6 +21,7 @@ import GovernanceData from "providers/GovernanceData";
 import MemberData, { useMember } from "providers/MemberData";
 import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
+import useChainParams from "hooks/useChainParams";
 
 /**
  * Shim component that checks if the App is ready
@@ -37,6 +38,7 @@ function AppReadyShim({ children }) {
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
   useMemberListener();
+  useChainParams();
 
   useEffect(() => {
     if (appReady && (isDisconnected || chain?.unsupported)) {
