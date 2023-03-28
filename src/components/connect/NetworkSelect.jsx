@@ -5,17 +5,14 @@ import { Grid, Box, Button } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
-import { EIP3770Map } from "constants";
 import useNetworks from "hooks/useNetworks";
-import { locationSearch } from "utils/location";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
-  const { address } = useAccount();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { switchNetworkAsync } = useSwitchNetwork({
@@ -26,13 +23,6 @@ export default function NetworkSelect() {
   const [selected, setSelected] = useState(null);
 
   const networks = useNetworks();
-  const allNetworks = useNetworks(true);
-
-  const urlSearchParams = locationSearch();
-
-  const targetChain = urlSearchParams.has("chain")
-    ? EIP3770Map[urlSearchParams.get("chain")]
-    : chain?.id;
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
@@ -47,32 +37,6 @@ export default function NetworkSelect() {
       setSelected(oldSelection);
     }
   };
-
-  useEffect(() => {
-    (async function () {
-      if (
-        switchNetworkAsync &&
-        isConnected &&
-        targetChain &&
-        !chain?.unsupported
-      ) {
-        const toSelect = allNetworks.find(
-          (network) => network.chainId === targetChain
-        );
-        if (toSelect?.chainId !== selected?.chainId) {
-          setSelected(toSelect);
-
-          // If the current network is not he same as the selected network
-          // fire off a chain network request. This is to support the ?chain
-          // URL search param
-          if (toSelect.chainId !== chain.id) {
-            // TODO: temp remove this behaviour
-            // await switchNetworkAsync(toSelect.chainId);
-          }
-        }
-      }
-    })();
-  }, [isConnected, targetChain, allNetworks, switchNetworkAsync]);
 
   useEffect(() => {
     if (!chain?.id) return;
