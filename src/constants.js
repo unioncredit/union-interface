@@ -33,7 +33,7 @@ export const Errors = {
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
-  TRUST_LT_LOCKING: "Trust cannot be less than locking",
+  TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
   EXCEEDED_LOCK: "Amount exceeded locked value",
   IS_OVERDUE: "You cannot borrow with an overdue balance",
 };

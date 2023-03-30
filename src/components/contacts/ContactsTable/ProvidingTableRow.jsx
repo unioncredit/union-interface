@@ -5,35 +5,12 @@ import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import { ZERO } from "constants";
 import format from "utils/format";
-import { useBlockTime } from "hooks/useBlockTime";
-import { parseMilliseconds } from "utils/date";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
 import { ContactIconBadgeRow } from "components/contacts/ContactsTable/ContactIconBadgeRow";
+import { useLastRepayData } from "hooks/useLastRepayData";
 
-const formatTimestamp = (milliseconds) => {
-  if (!milliseconds) {
-    return null;
-  }
-
-  const { days, hours, minutes } = parseMilliseconds(milliseconds);
-
-  return days > 0
-    ? `${days} days`
-    : hours > 0
-    ? `${hours} hours`
-    : minutes > 0
-    ? `${minutes} minutes`
-    : null;
-};
-
-export function ProvidingTableRow({
-  data,
-  chainId,
-  setContact,
-  receiving,
-  overdueInMilliseconds,
-}) {
+export function ProvidingTableRow({ data, setContact, receiving }) {
   const {
     address,
     isOverdue,
@@ -43,19 +20,8 @@ export function ProvidingTableRow({
     lastRepay = ZERO,
   } = data;
 
-  const { timestamp: lastRepayTimestamp, formatted: lastRepayFormatted } =
-    useBlockTime(lastRepay, chainId);
-
-  const today = new Date();
-  const paymentDueTimestamp =
-    lastRepayTimestamp && lastRepayTimestamp + overdueInMilliseconds;
-  const paymentRelativeFormat =
-    paymentDueTimestamp &&
-    formatTimestamp(
-      isOverdue
-        ? today.getTime() - paymentDueTimestamp
-        : paymentDueTimestamp - today.getTime()
-    );
+  const { formatted: lastRepayFormatted, paymentDue } =
+    useLastRepayData(lastRepay);
 
   return (
     <TableRow className="ProvidingTableRow" onClick={() => setContact(data)}>
@@ -104,10 +70,10 @@ export function ProvidingTableRow({
           </Text>
 
           <Text size="small" grey={400} m={0}>
-            {paymentRelativeFormat
-              ? isOverdue
-                ? `${paymentRelativeFormat} overdue`
-                : `Next due in ${paymentRelativeFormat}`
+            {locking.gt(ZERO)
+              ? paymentDue.overdue
+                ? `${paymentDue.formatted} overdue`
+                : `Next due in ${paymentDue.formatted}`
               : "Nothing due"}
           </Text>
         </Box>

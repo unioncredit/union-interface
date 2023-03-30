@@ -1,22 +1,16 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { chain, useProvider } from "wagmi";
+import { useProvider } from "wagmi";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ZERO } from "constants";
 
 dayjs.extend(relativeTime);
 
-export function useBlockTime(
-  blockNumber,
-  chainId = undefined,
-  dateFormat = "dd LLL yyyy"
-) {
+export function useBlockTime(blockNumber, chainId, dateFormat = "dd LLL yyyy") {
   const [timestamp, setTimestamp] = useState(null);
   const provider = useProvider({
-    // For arbitrum we use mainnet to correctly calculate repays as it uses
-    // L1 block numbers.
-    chainId: chainId === chain.arbitrum.id ? chain.mainnet.id : chainId,
+    chainId: chainId,
   });
 
   useEffect(() => {

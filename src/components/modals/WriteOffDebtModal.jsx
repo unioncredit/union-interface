@@ -1,41 +1,38 @@
 import {
-  Box,
   Button,
   Dai,
-  Grid,
   Input,
   Text,
   Modal,
   ModalOverlay,
-  Stat,
   NumericalBlock,
+  NumericalLines,
 } from "@unioncredit/ui";
 
-import { ContactsType } from "constants";
-import { compareAddresses } from "utils/compare";
 import { useModals } from "providers/ModalManager";
 import { MANAGE_CONTACT_MODAL } from "./ManageContactModal";
-import { useVouchees } from "providers/VoucheesData";
+import { useVouchee, useVouchees } from "providers/VoucheesData";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { Errors } from "constants";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
+import { AddressSummary } from "components/shared";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
-export default function WriteOffDebtModal({ address }) {
+export default function WriteOffDebtModal({ address, clearContact }) {
   const { close, open } = useModals();
-  const { data: vouchees = [], refetch: refetchVouchees } = useVouchees();
+  const { refetch: refetchVouchees } = useVouchees();
 
-  const vouchee = vouchees.find((v) => compareAddresses(v.address, address));
+  const vouchee = useVouchee(address);
 
-  const { locking = ZERO, vouch = ZERO, isOverdue } = vouchee || {};
+  const { locking = ZERO, isOverdue } = vouchee;
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
-      contact: vouchee,
-      type: ContactsType.VOUCHEES,
+      address,
+      clearContact,
     });
 
   const validate = (inputs) => {
@@ -44,13 +41,12 @@ export default function WriteOffDebtModal({ address }) {
     }
   };
 
-  const {
-    register,
-    errors = {},
-    values = {},
-    setRawValue,
-    empty,
-  } = useForm({ validate });
+  const handleClose = () => {
+    clearContact?.();
+    close();
+  };
+
+  const { register, errors = {}, values = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -65,59 +61,56 @@ export default function WriteOffDebtModal({ address }) {
     },
   });
 
-  /*--------------------------------------------------------------
-    Render Component 
-   --------------------------------------------------------------*/
-
   return (
-    <ModalOverlay onClick={close}>
+    <ModalOverlay onClick={handleClose}>
       <Modal className="WriteOffDebt">
-        <Modal.Header title="Write-off debt" onClose={close} onBack={back} />
+        <Modal.Header onClose={handleClose}>
+          <AddressSummary m={0} address={address} />
+        </Modal.Header>
         <Modal.Body>
-          {/*-------------------------------------------------------------
-           * Stats
-           *-----------------------------------------------------------*/}
-          <Grid>
-            <Grid.Row>
-              <Grid.Col>
-                <NumericalBlock
-                  title="Vouch"
-                  value={<Dai value={format(vouch)} />}
-                />
-              </Grid.Col>
-              <Grid.Col>
-                <NumericalBlock
-                  title="Unpaid debt"
-                  value={<Dai value={format(locking)} />}
-                />
-              </Grid.Col>
-            </Grid.Row>
-          </Grid>
-          {/*-------------------------------------------------------------
-           * Inputs
-           *-----------------------------------------------------------*/}
-          <Input
-            type="number"
-            label="Value"
-            suffix={<Dai />}
-            error={errors.amount}
-            onChange={register("amount")}
-            onCaptionButtonClick={() => setRawValue("amount", locking)}
-            caption={`Write off max. ${format(locking)} DAI`}
-          />
-          <Box justify="space-between" mt="16px">
-            <Text size="small" m={0}>
-              New balance owed
+          <Modal.Container direction="vertical">
+            <NumericalBlock
+              align="left"
+              token="dai"
+              title="Balance owed"
+              value={format(locking)}
+            />
+
+            <Input
+              mt="16px"
+              type="number"
+              label="Amount to write-off"
+              rightLabel={`Max. ${format(locking)} DAI`}
+              suffix={<Dai />}
+              error={errors.amount}
+              onChange={register("amount")}
+            />
+
+            <NumericalLines
+              m="20px 0"
+              items={[
+                {
+                  label: "New balance owed",
+                  value: `${format(locking.sub(amount.raw))} DAI`,
+                },
+              ]}
+            />
+
+            <Button fluid label="Write-off debt" {...buttonProps} />
+            <Button
+              fluid
+              mt="8px"
+              label="Cancel"
+              color="secondary"
+              variant="light"
+              onClick={back}
+            />
+
+            <Text m="16px 0 0" grey={600}>
+              When you write-off the debt of a vouchee, your locked funds are
+              consumed and cannot be redeemed.
             </Text>
-            <Text size="small" m={0}>
-              {format(locking.sub(amount.raw))}
-            </Text>
-          </Box>
-          <Text align="center" as="p" size="small" color="red500" mt="16px">
-            When you write-off debt, your locked funds are consumed, this action
-            cannot be undone.
-          </Text>
-          <Button fluid label="Write-off debt" {...buttonProps} />
+          </Modal.Container>
         </Modal.Body>
       </Modal>
     </ModalOverlay>

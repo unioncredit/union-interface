@@ -16,7 +16,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 
-export function AddressSummary({ address }) {
+export function AddressSummary({ address, ...props }) {
   const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 
@@ -40,7 +40,7 @@ export function AddressSummary({ address }) {
   }
 
   return (
-    <Box mb="24px" align="center">
+    <Box mb="24px" align="center" {...props}>
       <Box align="center">
         <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
           <Avatar size={64} address={address} />

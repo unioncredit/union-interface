@@ -1,0 +1,10 @@
+@import "@unioncredit/ui/src/variables";
+
+.ContactDetailsTab {
+  &__stats {
+    margin: 0 -4px !important;
+  }
+  &__stat {
+    margin: 0 4px;
+  }
+}
