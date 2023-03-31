@@ -1,15 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  Card,
-  Table,
-  Pagination,
-  EmptyState,
-  Box,
-  Collapse,
-} from "@unioncredit/ui";
+import { Card, Table, Pagination, EmptyState, Box } from "@unioncredit/ui";
 
 import { ContactsType } from "constants";
-import Filters, { filterFns, sortFns } from "./Filters";
+import { filterFunctions } from "components/contacts/FiltersPopover";
 import usePagination from "hooks/usePagination";
 import useContactSearch from "hooks/useContactSearch";
 import { locationSearch } from "utils/location";
@@ -28,8 +21,7 @@ export default function ContactList({ contact, setContact, type, setType }) {
   const { data: vouchers = [] } = useVouchers();
 
   const [query, setQuery] = useState(null);
-  const [filters, setFilters] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState([]);
 
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
@@ -63,14 +55,17 @@ export default function ContactList({ contact, setContact, type, setType }) {
 
   const searched = useContactSearch(contacts, query);
 
-  const filtered = useMemo(() => {
-    const filterFn = filterFns[filters?.status];
-    const sortFn = sortFns[filters?.sort];
+  console.log(searched);
 
-    // Filter then sort
-    const d1 = filterFn ? searched.filter(filterFn) : searched;
-    return sortFn ? d1.sort(sortFn) : d1;
-  }, [filters?.sort, filters?.status, JSON.stringify(searched)]);
+  const filtered = useMemo(() => {
+    return filters
+      ? searched.filter((item) =>
+          filters
+            .map((filter) => filterFunctions[filter](item))
+            .every((x) => x === true)
+        )
+      : searched;
+  }, [filters, JSON.stringify(searched)]);
 
   const {
     data: contactsPage,
@@ -80,22 +75,16 @@ export default function ContactList({ contact, setContact, type, setType }) {
   } = usePagination(filtered);
 
   return (
-    <Card w="100%" maxw="none">
-      <Box p="24px 24px 0">
+    <Card w="100%" maxw="none" overflow="visible">
+      <Box p="24px">
         <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
+          filters={filters}
           setQuery={setQuery}
-          setShowFilters={setShowFilters}
+          setFilers={setFilters}
         />
       </Box>
 
-      {/*-------------------------------------------------------------
-        Search and Filters
-      *--------------------------------------------------------------*/}
-      <Box fluid p="12px"></Box>
-      <Collapse active={showFilters}>
-        <Filters type={type} onChange={setFilters} />
-      </Collapse>
       {/*--------------------------------------------------------------
         Contacts Table 
       *--------------------------------------------------------------*/}
