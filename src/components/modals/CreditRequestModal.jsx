@@ -39,11 +39,11 @@ export default function CreditRequestModal() {
 
   const eip3770 = EIP3770[network] || EIP3770[defaultValue.chainId] || "eth";
 
-  const url = `http://app.union.finance/profile/${eip3770}:${address}`;
+  const url = `${window.location.protocol}//${window.location.hostname}/profile/${eip3770}:${address}`;
 
-  const urlDisplay = `http://app.union.finance/profile/${eip3770}:${truncateAddress(
-    address
-  )}`;
+  const urlDisplay = `${window.location.protocol}//${
+    window.location.hostname
+  }/profile/${eip3770}:${truncateAddress(address)}`;
 
   return (
     <ModalOverlay onClick={close}>

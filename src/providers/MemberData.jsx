@@ -51,7 +51,7 @@ const selectMemberData = (data) => {
     owed,
     interest,
     lastRepay,
-    votes,
+    votes: votes || ZERO,
     delegate,
     isOverdue,
     minPayment: ZERO,
