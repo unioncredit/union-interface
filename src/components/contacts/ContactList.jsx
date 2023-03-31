@@ -79,6 +79,7 @@ export default function ContactList({ contact, setContact, type, setType }) {
       <Box p="24px">
         <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
+          type={type}
           filters={filters}
           setQuery={setQuery}
           setFilers={setFilters}

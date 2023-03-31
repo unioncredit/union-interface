@@ -2,8 +2,14 @@ import { Box, Button, Input, SearchIcon, VouchIcon } from "@unioncredit/ui";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import FiltersPopover from "components/contacts/FiltersPopover";
+import { ContactsType } from "constants";
 
-export const ContactsFilterControls = ({ filters, setQuery, setFilers }) => {
+export const ContactsFilterControls = ({
+  type,
+  filters,
+  setQuery,
+  setFilers,
+}) => {
   const { open } = useModals();
 
   return (
@@ -16,7 +22,11 @@ export const ContactsFilterControls = ({ filters, setQuery, setFilers }) => {
           setQuery(event.target.value);
         }}
       />
-      <FiltersPopover filters={filters} setFilters={setFilers} />
+
+      {type === ContactsType.VOUCHEES && (
+        <FiltersPopover filters={filters} setFilters={setFilers} />
+      )}
+
       <Button
         fluid
         ml="8px"
