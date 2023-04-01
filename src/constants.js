@@ -89,8 +89,8 @@ export const ProposalState = [
 
 export const StatusColorMap = {
   executed: "green",
-  active: "purple",
-  canceled: "blue",
+  active: "blue",
+  canceled: "purple",
   defeated: "red",
 };
 
@@ -113,4 +113,7 @@ export const Links = {
   CREDIT: "/",
   STAKE: "/stake",
   CONTACTS: "/contacts",
+  GOVERNANCE: "/governance",
+  PROTOCOL: "/dao/protocol",
+  LEADERBOARD: "/dao/leaderboard",
 };

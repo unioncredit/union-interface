@@ -71,8 +71,6 @@ export default function CreditStats({ vouchers }) {
 
   return (
     <Card
-      w="100%"
-      maxw="none"
       className={cn("CreditStats", {
         "CreditStats--overdue": isOverdue,
       })}
@@ -138,11 +136,7 @@ export default function CreditStats({ vouchers }) {
         </Box>
       </Card.Body>
 
-      <Box
-        align="center"
-        justify="space-between"
-        className="CreditStats__footer"
-      >
+      <Card.Footer align="center" justify="space-between">
         <Box direction="vertical">
           <Box align="center">
             {isOverdue && (
@@ -168,7 +162,7 @@ export default function CreditStats({ vouchers }) {
           onClick={() => open(REPAY_MODAL)}
           {...buttonProps}
         />
-      </Box>
+      </Card.Footer>
     </Card>
   );
 }

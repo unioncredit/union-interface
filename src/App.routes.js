@@ -1,4 +1,4 @@
-import { ContactsType } from "constants";
+import { ContactsType, Links } from "constants";
 
 import ContactsPage from "pages/Contacts";
 import GovernancePage from "pages/Governance";
@@ -24,7 +24,7 @@ export const nonMember = [
 // prettier-ignore
 export const general = [
   { path: "/profile/:addressOrEns",        component: ProfilePage,      props: {} },
-  { path: "/governance",                   component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
+  { path: Links.GOVERNANCE,                   component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
   { path: "/governance/proposals",         component: ProposalsPage,    props: {} },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
 ]

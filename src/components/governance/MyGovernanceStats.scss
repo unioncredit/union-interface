@@ -1,0 +1,9 @@
+@import "@unioncredit/ui/src/variables";
+
+.MyGovernanceStats {
+  &__block--dimmed {
+    .NumericalBlock__value {
+      color: $grey400 !important;
+    }
+  }
+}

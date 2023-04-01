@@ -9,8 +9,7 @@ import { ZERO_ADDRESS } from "constants";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
 import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
-import VotingCard from "components/governance/VotingCard";
-import NetworkNotice from "components/governance/NetworkNotice";
+import ProposalVotes from "components/governance/ProposalVotes";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -49,13 +48,22 @@ export default function ProposalPage() {
          * ---------------------------------------------- */}
         <Grid.Row>
           <Grid.Col>
-            <Box mb="30px">
-              <Link to="/governance/proposals">
+            <Box m="30px 0">
+              <Link to="/governance">
                 <Button
-                  variant="lite"
+                  size="pill"
+                  color="secondary"
+                  variant="light"
                   label={
                     <>
-                      <ArrowRight className="flip" width="24px" height="24px" />
+                      <ArrowRight
+                        width="24px"
+                        height="24px"
+                        className="flip"
+                        style={{
+                          marginRight: "4px",
+                        }}
+                      />
                       Back to proposals
                     </>
                   }
@@ -83,7 +91,7 @@ export default function ProposalPage() {
             </Box>
             <Box mt="16px">
               <a href="#" target="_blank" rel="noreferrer">
-                <Button variant="pill" label="View bytecode" />
+                <Button size="pill" label="View bytecode" />
               </a>
             </Box>
             <Box direction="vertical" mt="24px">
@@ -98,14 +106,15 @@ export default function ProposalPage() {
                   heading: (props) => (
                     <Text
                       size="large"
+                      weight="medium"
                       grey={800}
                       {...props}
                       mb="8px"
                       mt="24px"
                     />
                   ),
-                  paragraph: (props) => <Text {...props} mb="8px" />,
-                  listItem: (props) => <Text as="li" {...props} />,
+                  paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
+                  listItem: (props) => <Text grey={500} as="li" {...props} />,
                 }}
               >
                 {description}
@@ -135,7 +144,7 @@ export default function ProposalPage() {
                       as="a"
                       w="100%"
                       m={0}
-                      grey={800}
+                      grey={500}
                       href={"#"}
                       target="_blank"
                       rel="noreferrer"
@@ -143,7 +152,11 @@ export default function ProposalPage() {
                     >
                       Contract: {target}
                     </Text>
-                    <Text w="100%" style={{ wordWrap: "break-word" }}>
+                    <Text
+                      w="100%"
+                      weight="medium"
+                      style={{ wordWrap: "break-word" }}
+                    >
                       Function: {signature.replace(/(\(=?)(.*)$/, "")}(
                       {argumentString})
                     </Text>
@@ -153,8 +166,7 @@ export default function ProposalPage() {
             </Box>
           </Grid.Col>
           <Grid.Col md={4}>
-            <VotingCard data={proposal} />
-            <NetworkNotice lite />
+            <ProposalVotes data={proposal} />
             <ProposalHistoryCard data={history} />
           </Grid.Col>
         </Grid.Row>

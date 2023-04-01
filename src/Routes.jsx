@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 import * as routes from "./App.routes";
 import { useMember } from "providers/MemberData";
 
-import ErrorPage from "pages/Error";
 import LoadingPage from "pages/Loading";
 
 export default function Routes() {
@@ -31,19 +30,19 @@ export default function Routes() {
 
   const memberRoutes = routes.member.map(
     ({ path, component: Component, props }) => (
-      <Route path={path} element={getElement(Component, props)} />
+      <Route key={path} path={path} element={getElement(Component, props)} />
     )
   );
 
   const nonMemberRoutes = routes.nonMember.map(
     ({ path, component: Component, props }) => (
-      <Route path={path} element={getElement(Component, props)} />
+      <Route key={path} path={path} element={getElement(Component, props)} />
     )
   );
 
   const generalRoutes = routes.general.map(
     ({ path, component: Component, props }) => (
-      <Route path={path} element={<Component {...props} />} />
+      <Route key={path} path={path} element={<Component {...props} />} />
     )
   );
 

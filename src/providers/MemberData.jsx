@@ -100,7 +100,7 @@ function usePollMemberData(address, chainId) {
       const dailyDifference = estimatedDailyTotal.sub(estimatedDailyBase);
 
       return {
-        unclaimedRewards: unclaimedRewards, // todo: refactor and remove this
+        unclaimedRewards: unclaimedRewards, // todo: refactor and remove this in favor of rewards object below
         owed: data[1] || ZERO,
         interest: data[2] || ZERO,
         rewards: {

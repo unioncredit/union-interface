@@ -1,9 +1,10 @@
+import assetManagerAbi from "abis/assetManager.json";
+import bridgedTokenAbi from "abis/bridgedToken.json";
+import comptrollerAbi from "abis/comptroller.json";
+import erc20Abi from "abis/erc20.json";
+import unionAbi from "abis/union.json";
 import userManagerAbi from "abis/userManager.json";
 import uTokenAbi from "abis/uToken.json";
-import unionAbi from "abis/union.json";
-import erc20Abi from "abis/erc20.json";
-import comptrollerAbi from "abis/comptroller.json";
-import assetManagerAbi from "../../abis/assetManager.json";
 
 export const userManagerContract = {
   addressOrName: "0xb71F3D4342AaE0b8D531E14D2CF2F45d6e458A5F",
@@ -33,4 +34,9 @@ export const comptrollerContract = {
 export const assetManagerContract = {
   addressOrName: "0x7Aecd107Cb022e1DFd42cC43E9BA94C38BC83275",
   contractInterface: assetManagerAbi,
+};
+
+export const bridgedTokenContract = {
+  addressOrName: "0x6DBDe0E7e563E34A53B1130D6B779ec8eD34B4B9",
+  contractInterface: bridgedTokenAbi,
 };

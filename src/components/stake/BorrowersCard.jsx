@@ -42,7 +42,7 @@ export default function BorrowersCard() {
   } = usePagination(borrowers);
 
   return (
-    <Card mt="24px" w="100%" maxw="none">
+    <Card mt="24px">
       <Card.Header
         title="Active borrowers"
         subTitle="Contacts actively borrowing against your stake"

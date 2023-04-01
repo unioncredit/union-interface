@@ -26,6 +26,7 @@ import {
   daiContract as ARBITRUM_daiContract,
   comptrollerContract as ARBITRUM_comptrollerContract,
   assetManagerContract as ARBITRUM_assetManagerContract,
+  bridgedTokenContract as ARBITRUM_bridgedTokenContract,
 } from "config/contracts/arbitrum";
 
 export default function useContract(name, chainId) {
@@ -56,6 +57,7 @@ export default function useContract(name, chainId) {
       dai: ARBITRUM_daiContract,
       comptroller: ARBITRUM_comptrollerContract,
       assetManager: ARBITRUM_assetManagerContract,
+      bridgedToken: ARBITRUM_bridgedTokenContract,
     },
   }[chainId || connectedChain?.id]?.[name];
 }

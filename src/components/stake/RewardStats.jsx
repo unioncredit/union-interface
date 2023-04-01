@@ -25,7 +25,7 @@ export default function RewardStats() {
   });
 
   return (
-    <Card mt="24px" w="100%" maxw="none" className="RewardStats">
+    <Card mt="24px" className="RewardStats">
       <Card.Body>
         <Box align="center" justify="space-between">
           <NumericalBlock

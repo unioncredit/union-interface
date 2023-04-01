@@ -29,6 +29,7 @@ import {
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
+import cn from "classnames";
 
 export function Header({ loading, showNav = true }) {
   const mobileNavBreakpoint = 900;
@@ -45,8 +46,8 @@ export function Header({ loading, showNav = true }) {
 
   const navItems0 =
     isConnected && isMember
-      ? [items.credit, items.governance]
-      : [items.getStarted, items.governance];
+      ? [items.credit, items.dao]
+      : [items.getStarted, items.dao];
 
   const navItems = navItems0.map((item) => ({
     ...item,
@@ -91,7 +92,9 @@ export function Header({ loading, showNav = true }) {
                   <Box
                     fluid
                     justify="center"
-                    className={{ "Header__Box--loading": loading }}
+                    className={cn({
+                      "Header__Box--loading": loading,
+                    })}
                   >
                     {navigation}
                   </Box>
@@ -116,7 +119,7 @@ export function Header({ loading, showNav = true }) {
                       label={format(unclaimedRewards.add(unionBalance))}
                     />
                   )}
-                  <ConnectButton buttonProps={{ packed: true }} />
+                  <ConnectButton />
                   {width > mobileNavBreakpoint ? (
                     <ContextMenu
                       className="Header__context-menu"

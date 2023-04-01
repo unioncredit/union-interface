@@ -24,7 +24,6 @@ export const NetworkSelectOption = ({
   return (
     <Card
       my="6px"
-      packed
       maxw="100%"
       key={value}
       onClick={onClick}

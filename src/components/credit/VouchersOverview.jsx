@@ -57,7 +57,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
   }
 
   return (
-    <Card mt="24px" w="100%" maxw="none" className="VouchersOverview">
+    <Card mt="24px" className="VouchersOverview">
       <Card.Body>
         <Box>
           <PieChart

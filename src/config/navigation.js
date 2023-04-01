@@ -6,6 +6,7 @@ import {
   SpeakerIcon,
   SpeechIcon,
 } from "@unioncredit/ui";
+import { Links } from "constants";
 
 export const items = {
   getStarted: {
@@ -19,10 +20,10 @@ export const items = {
     label: "Credit",
     pathname: "/",
   },
-  governance: {
+  dao: {
     id: "governance",
-    label: "Governance",
-    pathname: "/governance",
+    label: "DAO",
+    pathname: Links.GOVERNANCE,
   },
 };
 

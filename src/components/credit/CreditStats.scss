@@ -1,15 +1,7 @@
 @import "@unioncredit/ui/src/variables";
 
-.CreditStats {
-
-  &__footer {
-    padding: 24px;
-    background: $grey100;
-  }
-}
-
 .CreditStats--overdue {
-  .CreditStats__footer {
+  .Card__footer {
     background: $red50;
 
     p {

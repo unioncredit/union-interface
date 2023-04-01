@@ -34,7 +34,7 @@ export default function StakeStats() {
     .reduce(reduceBnSum, ZERO);
 
   return (
-    <Card w="100%" maxw="none">
+    <Card>
       <Card.Body>
         <Box align="center" justify="space-between">
           <NumericalBlock

@@ -1,109 +1,181 @@
+import "./MyGovernanceStats.scss";
+
 import {
   Box,
-  Badge,
-  Heading,
   Card,
   Button,
-  Grid,
+  Text,
   NumericalBlock,
+  Alert,
+  WarningIcon,
+  SwitchIcon,
+  ArbitrumIcon,
+  IconBadge,
+  MouseClickIcon,
 } from "@unioncredit/ui";
-import { useAccount } from "wagmi";
-import { Link } from "react-router-dom";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/externalinline.svg";
+import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
-import { Avatar, PrimaryLabel } from "components/shared";
-import { truncateAddress } from "utils/truncateAddress";
+import { AddressLabelBox } from "components/shared";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
 import { ZERO_ADDRESS } from "constants";
 import { useModals } from "providers/ModalManager";
 import { DELEGATE_MODAL } from "components/modals/DelegateModal";
+import { useBalance } from "hooks/useBalance";
 
 export default function MyGovernanceStats() {
   const { open } = useModals();
   const { address } = useAccount();
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain: connectedChain } = useNetwork();
   const { data: member = {} } = useMember();
+  const { data: arbUnionBalance = ZERO } = useBalance(
+    address,
+    "bridgedToken",
+    chain.arbitrum.id
+  );
 
-  const { unionBalance = ZERO, votes = ZERO, delegate = ZERO_ADDRESS } = member;
+  const {
+    unionBalance = ZERO,
+    votes = ZERO,
+    delegate = ZERO_ADDRESS,
+    rewards,
+  } = member;
+  const { unclaimed = ZERO } = rewards || {};
 
   const votesDelegated = votes.sub(unionBalance);
 
+  const isMainnet = connectedChain.id === chain.mainnet.id;
   const isVotingConfigured = delegate !== ZERO_ADDRESS;
   const isDelegatingToSelf = delegate === address;
+
+  const governanceStats = [
+    {
+      title: "Your voting power",
+      value: isMainnet ? format(votes) : "--",
+      subtitleTooltip: {
+        shrink: true,
+        content: "TODO",
+      },
+      subtitle: isVotingConfigured
+        ? isDelegatingToSelf
+          ? "Wallet + Delegation"
+          : "Delegated to 3rd part"
+        : "Not delegated",
+      className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
+    },
+    {
+      token: "union",
+      title: "Wallet balance",
+      value: format(unionBalance),
+      subtitle: `${format(unclaimed)} unclaimed`,
+    },
+    {
+      title: "Delegated to you",
+      value: isMainnet ? format(votesDelegated) : "--",
+      subtitle: "From other addresses",
+      className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
+    },
+  ];
+
+  const buttonProps = !isMainnet
+    ? {
+        icon: SwitchIcon,
+        label: "Switch to Ethereum",
+        onClick: () => switchNetwork(chain.mainnet.id),
+      }
+    : isVotingConfigured
+    ? {
+        color: "secondary",
+        variant: "light",
+        icon: SwitchIcon,
+        label: "Change voting delegate",
+        onClick: () => open(DELEGATE_MODAL),
+      }
+    : {
+        icon: MouseClickIcon,
+        label: "Setup voting",
+        onClick: () => open(DELEGATE_MODAL),
+      };
+
+  const balances = [
+    {
+      icon: ArbitrumIcon,
+      label: "Arbitrum Balance",
+      balance: arbUnionBalance,
+      token: "arbUNION",
+    },
+  ];
 
   return (
     <Card>
       <Card.Body>
-        <Grid>
-          <Grid.Row>
-            <Grid.Col xs={12}>
-              <Box align="center" mb="24px">
-                <Avatar size={54} address={address} />
-                <Box direction="vertical" mx="16px">
-                  <Heading level={2} mb="4px">
-                    <PrimaryLabel address={address} />
-                  </Heading>
-                  <Badge color="grey" label={truncateAddress(address)} />
-                </Box>
-              </Box>
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col>
-              <NumericalBlock title="Total Votes" value={format(votes, 0)} />
-            </Grid.Col>
-            <Grid.Col>
-              <NumericalBlock
-                title="Union Balance"
-                value={format(unionBalance)}
-              />
-            </Grid.Col>
-            <Grid.Col>
-              <NumericalBlock
-                title="From others"
-                titleTooltip={{
-                  content:
-                    "If other users delegate their votes to you, they’ll appear here.",
-                }}
-                value={format(votesDelegated, 0)}
-              />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col>
-              <NumericalBlock
-                mt="28px"
-                title="DELEGATING TO"
-                value={
-                  !isVotingConfigured ? (
-                    "Not configured"
-                  ) : isDelegatingToSelf ? (
-                    "Self"
-                  ) : (
-                    <Link to={`/profile/${delegate}`}>
-                      <PrimaryLabel address={delegate} />
-                      <External width="24px" height="24px" />
-                    </Link>
-                  )
-                }
-              />
-            </Grid.Col>
-            <Grid.Col>
-              <Box ml="auto">
-                <Button
-                  mt="28px"
-                  variant="secondary"
-                  onClick={() => open(DELEGATE_MODAL)}
-                  label={
-                    isVotingConfigured ? "Delegate votes" : "Set up voting"
-                  }
-                />
-              </Box>
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+        <Box align="center" justify="space-between">
+          {governanceStats.map((stat) => (
+            <NumericalBlock
+              fluid
+              key={stat.title}
+              align="left"
+              size="regular"
+              {...stat}
+            />
+          ))}
+        </Box>
+
+        {isVotingConfigured ? (
+          <AddressLabelBox
+            mt="16px"
+            label={
+              isDelegatingToSelf
+                ? "Your votes are self delegated"
+                : "You're voting via a third party delegate"
+            }
+            address={delegate}
+          />
+        ) : (
+          <Alert
+            mt="16px"
+            justify="space-between"
+            align="left"
+            icon={WarningIcon}
+            iconPosition="right"
+            variant="warning"
+            label={
+              isMainnet
+                ? "Your votes have not been delegated"
+                : "Switch to Ethereum Mainnet to manage your votes"
+            }
+          />
+        )}
+
+        <Button fluid mt="8px" size="large" {...buttonProps} />
       </Card.Body>
+
+      <Card.Footer>
+        {balances.map(({ icon, label, balance, token }) => (
+          <Box key={token} align="center" justify="space-between" fluid>
+            <Box align="center">
+              <IconBadge
+                mr="4px"
+                size="large"
+                iconSize="large"
+                borderColor="#BFDBFE"
+                backgroundColor="white"
+                icon={icon}
+              />
+
+              <Text m={0} grey={500} size="medium" weight="medium">
+                {label}
+              </Text>
+            </Box>
+
+            <Text m={0} grey={700} size="medium" weight="medium">
+              {`${format(balance)} ${token}`}
+            </Text>
+          </Box>
+        ))}
+      </Card.Footer>
     </Card>
   );
 }

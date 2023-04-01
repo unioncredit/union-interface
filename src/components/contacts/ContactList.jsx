@@ -55,8 +55,6 @@ export default function ContactList({ contact, setContact, type, setType }) {
 
   const searched = useContactSearch(contacts, query);
 
-  console.log(searched);
-
   const filtered = useMemo(() => {
     return filters
       ? searched.filter((item) =>
@@ -75,7 +73,7 @@ export default function ContactList({ contact, setContact, type, setType }) {
   } = usePagination(filtered);
 
   return (
-    <Card w="100%" maxw="none" overflow="visible">
+    <Card overflow="visible">
       <Box p="24px">
         <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls

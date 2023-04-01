@@ -4,7 +4,7 @@ import { AvatarBadgeRow } from "@unioncredit/ui";
 export const AddressesAvatarBadgeRow = ({ addresses, ...props }) => (
   <AvatarBadgeRow {...props}>
     {addresses.map((address) => (
-      <Avatar address={address} />
+      <Avatar key={address} address={address} />
     ))}
   </AvatarBadgeRow>
 );

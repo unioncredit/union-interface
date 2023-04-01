@@ -67,6 +67,7 @@ export default function FiltersPopover({ filters, setFilters }) {
               return (
                 <Control
                   id={id}
+                  key={id}
                   label={label}
                   type="checkbox"
                   checked={active}

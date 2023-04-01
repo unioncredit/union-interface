@@ -10,6 +10,5 @@ export * from "./EditLabel";
 export * from "./Header";
 export * from "./HeaderMobileMenu";
 export * from "./NetworkSelect";
-export * from "./OverdueAlert";
 export * from "./PrimaryLabel";
 export * from "./StatusBadge";

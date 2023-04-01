@@ -1,10 +1,6 @@
 import "./NetworkSelect.scss";
 
-import {
-  Box,
-  Button,
-  WalletIcon,
-} from "@unioncredit/ui";
+import { Box, Button, WalletIcon } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -91,6 +87,7 @@ export default function NetworkSelect() {
       >
         {networks.map((network) => (
           <NetworkSelectOption
+            key={network.id}
             address={address}
             network={network}
             disabled={!isConnected}

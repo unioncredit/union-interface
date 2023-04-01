@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Box, SegmentedControl } from "@unioncredit/ui";
 
 import ProposalsCard from "components/governance/ProposalsCard";
-import NetworkNotice from "components/governance/NetworkNotice";
 
 export default function ProposalsPage() {
   return (
@@ -27,7 +26,6 @@ export default function ProposalsPage() {
         />
       </Box>
       <Box fluid justify="center" direction="vertical">
-        <NetworkNotice />
         <ProposalsCard
           showAction={false}
           title="All Proposals"

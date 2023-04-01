@@ -6,8 +6,10 @@ export function ContactsTableHead({ items }) {
       <TableHead></TableHead>
       <TableHead>Account</TableHead>
 
-      {items.map((text) => (
-        <TableHead align="right">{text}</TableHead>
+      {items.map((text, index) => (
+        <TableHead key={index} align="right">
+          {text}
+        </TableHead>
       ))}
     </TableRow>
   );

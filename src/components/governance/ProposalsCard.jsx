@@ -1,6 +1,5 @@
 import {
   Card,
-  Button,
   Box,
   Table,
   Badge,
@@ -8,45 +7,30 @@ import {
   TableCell,
   TableRow,
   Text,
+  TableHead,
 } from "@unioncredit/ui";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { percent } from "utils/numbers";
 import { StatusColorMap } from "constants";
 import { useGovernance } from "providers/GovernanceData";
+import { useBlockTime } from "hooks/useBlockTime";
+import { useNetwork } from "wagmi";
 
 const maxStrLength = 46;
 
 export default function ProposalsCard({
   filter,
-  title = "Recent Proposals",
-  subTitle = "Most recent proposals",
+  title = "Proposal History",
   emptyLabel = "There are no proposals",
-  showAction = true,
 }) {
-  const navigate = useNavigate();
+  const { chain } = useNetwork();
   const { proposals: allProposals } = useGovernance();
 
   const proposals = filter ? allProposals.filter(filter) : allProposals;
 
   return (
     <Card mt="24px">
-      <Card.Header
-        title={title}
-        subTitle={subTitle}
-        action={
-          showAction && (
-            <Link to="/governance/proposals">
-              <Button
-                color="secondary"
-                variant="light"
-                label="View all"
-                inline
-              />
-            </Link>
-          )
-        }
-      />
+      <Card.Header title={title} />
       {proposals.length <= 0 ? (
         <Card.Body>
           <Box fluid>
@@ -56,40 +40,60 @@ export default function ProposalsCard({
       ) : (
         <Box mt="24px">
           <Table>
-            {proposals.map(
-              ({ hash, status, description, percentageFor, startBlock }) => {
-                const title =
-                  String(description)
-                    ?.replace(/\\{1,2}n/g, "\n")
-                    ?.split("\n")
-                    ?.filter(Boolean)[0] || "Untitled";
+            <TableRow>
+              <TableHead>Title</TableHead>
+              <TableHead align="center">ID</TableHead>
+              <TableHead align="right">Status</TableHead>
+            </TableRow>
 
-                return (
-                  <TableRow
-                    onClick={() => navigate(`/governance/proposals/${hash}`)}
-                  >
-                    <TableCell>
-                      <Text mb="4px">
-                        {title.slice(0, maxStrLength)}
-                        {title.length > maxStrLength && "..."}
-                      </Text>
-                      <Text color="grey500">
-                        <Badge
-                          color={StatusColorMap[status] || "blue"}
-                          label={status}
-                          mr="8px"
-                        />
-                        {percent(percentageFor)} yes &bull;{" "}
-                        {/*<BlockRelativeTime block={startBlock} />*/}
-                      </Text>
-                    </TableCell>
-                  </TableRow>
-                );
-              }
-            )}
+            {proposals.map((data) => (
+              <ProposalRow key={data.hash} chainId={chain.id} {...data} />
+            ))}
           </Table>
         </Box>
       )}
     </Card>
+  );
+}
+
+function ProposalRow({ chainId, hash, status, description, startBlock }) {
+  const navigate = useNavigate();
+  const { relative: relativeProposalEndsTime } = useBlockTime(
+    startBlock,
+    chainId
+  );
+
+  const id = description.split(":")[0];
+  const title =
+    String(description)
+      ?.replace(/\\{1,2}n/g, "\n")
+      ?.split("\n")
+      ?.filter(Boolean)[0] || "Untitled";
+
+  return (
+    <TableRow onClick={() => navigate(`/governance/proposals/${hash}`)}>
+      <TableCell>
+        <Text mb="4px">
+          {title.slice(0, maxStrLength)}
+          {title.length > maxStrLength && "..."}
+        </Text>
+        <Text color="grey500">
+          {status === "pending" || status === "active"
+            ? "Voting ends "
+            : "Ended "}
+          {relativeProposalEndsTime}
+        </Text>
+      </TableCell>
+      <TableCell align="center">
+        <Badge color="grey" label={id} />
+      </TableCell>
+      <TableCell align="right">
+        <Badge
+          label={status}
+          className="capitalizeFirst"
+          color={StatusColorMap[status] || "blue"}
+        />
+      </TableCell>
+    </TableRow>
   );
 }
