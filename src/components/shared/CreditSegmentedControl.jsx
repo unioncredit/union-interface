@@ -9,6 +9,7 @@ import { Links } from "constants";
 
 export const CreditSegmentedControl = ({ active }) => (
   <SegmentedControl
+    fluid
     m="24px auto"
     size="large"
     variant="rounded"

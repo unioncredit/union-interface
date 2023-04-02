@@ -115,5 +115,5 @@ export const Links = {
   CONTACTS: "/contacts",
   GOVERNANCE: "/governance",
   PROTOCOL: "/dao/protocol",
-  LEADERBOARD: "/dao/leaderboard",
+  LEADERBOARD: "/leaderboard",
 };

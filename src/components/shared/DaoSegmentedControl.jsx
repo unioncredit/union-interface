@@ -1,3 +1,5 @@
+import "./DaoSegmentedControl.scss";
+
 import { Link } from "react-router-dom";
 import {
   LeaderboardIcon,
@@ -9,10 +11,12 @@ import { Links } from "constants";
 
 export const DaoSegmentedControl = ({ active }) => (
   <SegmentedControl
+    fluid
     m="24px auto"
     size="large"
     variant="rounded"
     initialActive={active}
+    className="DaoSegmentedControl"
     items={[
       {
         id: "voting",

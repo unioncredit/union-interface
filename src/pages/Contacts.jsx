@@ -6,6 +6,7 @@ import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl
 import { ContactsType } from "constants";
 import { useModals } from "providers/ModalManager";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
+import { Layout } from "@unioncredit/ui";
 
 export default function ContactsPage() {
   const { open } = useModals();
@@ -35,7 +36,9 @@ export default function ContactsPage() {
         <title>Contacts | Union Credit Protocol</title>
       </Helmet>
 
-      <CreditSegmentedControl active={2} />
+      <Layout.Columned maxw="653px">
+        <CreditSegmentedControl active={2} />
+      </Layout.Columned>
 
       <ContactList {...contactComponentProps} />
     </>

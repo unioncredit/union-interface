@@ -9,6 +9,11 @@ export const formattedNumber = (n, digits = 2, rounded = true) => {
   return parseFloat(format(n, digits, rounded).replace(",", ""));
 };
 
+export const compactFormattedNumber = (n) => {
+  const formatter = Intl.NumberFormat("en", { notation: "compact" });
+  return formatter.format(formatUnits(n));
+};
+
 function commify(num, digits, rounded = true) {
   num = Number(num);
   num = num <= 0 ? 0 : num;

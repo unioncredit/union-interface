@@ -8,6 +8,7 @@ import ProfilePage from "pages/Profile";
 import RegisterPage from "pages/Register";
 import CreditPage from "pages/Credit";
 import StakePage from "pages/Stake";
+import LeaderboardPage from "pages/Leaderboard";
 
 // prettier-ignore
 export const member = [
@@ -24,7 +25,8 @@ export const nonMember = [
 // prettier-ignore
 export const general = [
   { path: "/profile/:addressOrEns",        component: ProfilePage,      props: {} },
-  { path: Links.GOVERNANCE,                   component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
+  { path: Links.GOVERNANCE,                component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
   { path: "/governance/proposals",         component: ProposalsPage,    props: {} },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
+  { path: Links.LEADERBOARD,               component: LeaderboardPage,  props: {} },
 ]
