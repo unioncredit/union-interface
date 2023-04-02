@@ -1,11 +1,10 @@
-import { chain, useNetwork } from "wagmi";
+import { chain } from "wagmi";
 import { useEffect, useState } from "react";
 
 import { useCache } from "providers/Cache";
 import fetchVoteCasts from "fetchers/fetchVoteCasts";
 
 export default function useVoteCasts() {
-  const { chain: connectedChain } = useNetwork();
   const { cache, cached } = useCache();
   const [data, setData] = useState([]);
 
@@ -20,14 +19,14 @@ export default function useVoteCasts() {
         return;
       }
 
-      const voteCasts = await fetchVoteCasts(connectedChain.id);
+      const voteCasts = await fetchVoteCasts(chain.mainnet.id);
 
       cache(cacheKey, voteCasts);
       setData(voteCasts);
     }
 
-    connectedChain.id === chain.mainnet.id && loadData();
-  }, [connectedChain.id]);
+    loadData();
+  }, []);
 
   return { data };
 }
