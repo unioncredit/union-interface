@@ -5,6 +5,7 @@ import erc20Abi from "abis/erc20.json";
 import comptrollerAbi from "abis/comptroller.json";
 import governorAbi from "abis/governor.json";
 import assetManagerAbi from "abis/assetManager.json";
+import timelockAbi from "abis/timelock.json";
 
 export const userManagerContract = {
   addressOrName: "0x49c910Ba694789B58F53BFF80633f90B8631c195",
@@ -39,4 +40,9 @@ export const governorContract = {
 export const assetManagerContract = {
   addressOrName: "0xb91a874D9AA8fF7E478bA61286ECc77c1A3E384d",
   contractInterface: assetManagerAbi,
+};
+
+export const timelockContract = {
+  addressOrName: "0xBBD3321f377742c4b3fe458b270c2F271d3294D8",
+  contractInterface: timelockAbi,
 };

@@ -1,0 +1,11 @@
+.ProtocolData {
+  .Card__header {
+    &__content {
+      display: flex;
+      align-items: center;
+    }
+    &__action {
+      min-width: 200px;
+    }
+  }
+}

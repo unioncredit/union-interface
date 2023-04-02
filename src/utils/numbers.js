@@ -16,6 +16,13 @@ export const bnPercent = (n, d) => {
   return Number(bps.toString()) / 10000;
 };
 
+export const toPercent = (number, digits = 0) =>
+  Number(number).toLocaleString(undefined, {
+    style: "percent",
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
+  });
+
 // Converts scientific notation to a decimal formatted string
 // https://stackoverflow.com/a/66072001
 export function toFixed(x) {

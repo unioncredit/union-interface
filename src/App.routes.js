@@ -2,13 +2,13 @@ import { ContactsType, Links } from "constants";
 
 import ContactsPage from "pages/Contacts";
 import GovernancePage from "pages/Governance";
-import ProposalsPage from "pages/Proposals";
 import ProposalPage from "pages/Proposal";
 import ProfilePage from "pages/Profile";
 import RegisterPage from "pages/Register";
 import CreditPage from "pages/Credit";
 import StakePage from "pages/Stake";
 import LeaderboardPage from "pages/Leaderboard";
+import ProtocolPage from "pages/Protocol";
 
 // prettier-ignore
 export const member = [
@@ -26,7 +26,7 @@ export const nonMember = [
 export const general = [
   { path: "/profile/:addressOrEns",        component: ProfilePage,      props: {} },
   { path: Links.GOVERNANCE,                component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
-  { path: "/governance/proposals",         component: ProposalsPage,    props: {} },
+  { path: Links.PROTOCOL,                  component: ProtocolPage,     props: {} },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
   { path: Links.LEADERBOARD,               component: LeaderboardPage,  props: {} },
 ]

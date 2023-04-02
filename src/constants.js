@@ -114,6 +114,6 @@ export const Links = {
   STAKE: "/stake",
   CONTACTS: "/contacts",
   GOVERNANCE: "/governance",
-  PROTOCOL: "/dao/protocol",
+  PROTOCOL: "/protocol",
   LEADERBOARD: "/leaderboard",
 };

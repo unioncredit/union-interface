@@ -17,6 +17,7 @@ import {
   comptrollerContract as MAINNET_comptrollerContract,
   assetManagerContract as MAINNET_assetManagerContract,
   governorContract,
+  timelockContract,
 } from "config/contracts/mainnet";
 
 import {
@@ -43,6 +44,7 @@ export default function useContract(name, chainId) {
     },
     [chain.mainnet.id]: {
       governor: governorContract,
+      timelock: timelockContract,
       userManager: MAINNET_userManagerContract,
       uToken: MAINNET_uTokenContract,
       union: MAINNET_unionContract,
