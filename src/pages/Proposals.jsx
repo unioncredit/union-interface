@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import { Box, SegmentedControl } from "@unioncredit/ui";
 
-import ProposalsCard from "components/governance/ProposalsCard";
+import ProposalsCard from "components/dao/ProposalsCard";
 
 export default function ProposalsPage() {
   return (

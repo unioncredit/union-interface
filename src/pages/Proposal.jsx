@@ -8,8 +8,8 @@ import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRig
 import { ZERO_ADDRESS } from "constants";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
-import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
-import ProposalVotes from "components/governance/ProposalVotes";
+import ProposalHistoryCard from "components/dao/ProposalHistoryCard";
+import ProposalVotes from "components/dao/ProposalVotes";
 
 export default function ProposalPage() {
   const { hash } = useParams();
