@@ -13,7 +13,7 @@ const VoucheesContext = createContext({});
 export const useVouchees = () => useContext(VoucheesContext);
 
 export const useVouchee = (address) =>
-  useVouchees().data.find((v) => compareAddresses(v.address, address));
+  (useVouchees()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
 const selectVouchee = (data) => ({
   isMember: data[0],

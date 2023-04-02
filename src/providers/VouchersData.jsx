@@ -14,7 +14,7 @@ const VouchersContext = createContext({});
 export const useVouchers = () => useContext(VouchersContext);
 
 export const useVoucher = (address) =>
-  useVouchers().data.find((v) => compareAddresses(v.address, address));
+  (useVouchers()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
 const selectVoucher = (data) => ({
   checkIsMember: data[0],
