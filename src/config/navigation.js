@@ -1,10 +1,10 @@
 import links from "config/links";
 import {
   BlogIcon,
-  BookIcon,
-  SheetIcon,
-  SpeakerIcon,
-  SpeechIcon,
+  TermsIcon,
+  CopyIcon,
+  MarketingIcon,
+  DiscordIcon,
 } from "@unioncredit/ui";
 import { Links } from "constants";
 
@@ -29,16 +29,21 @@ export const items = {
 
 export const contextMenuItems = [
   { icon: BlogIcon, label: "Blog", target: "_blank", href: links.blog },
-  { icon: SheetIcon, label: "Docs", target: "_blank", href: links.docs },
+  { icon: CopyIcon, label: "Docs", target: "_blank", href: links.docs },
   {
-    icon: SpeakerIcon,
+    icon: MarketingIcon,
     label: "Twitter",
     target: "_blank",
     href: links.twitter,
   },
-  { icon: SpeechIcon, label: "Discord", target: "_blank", href: links.discord },
   {
-    icon: BookIcon,
+    icon: DiscordIcon,
+    label: "Discord",
+    target: "_blank",
+    href: links.discord,
+  },
+  {
+    icon: TermsIcon,
     label: "Terms & Conditions",
     target: "_blank",
     href: links.github,

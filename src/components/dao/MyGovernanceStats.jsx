@@ -6,12 +6,11 @@ import {
   Button,
   Text,
   NumericalBlock,
-  Alert,
   WarningIcon,
   SwitchIcon,
   ArbitrumIcon,
   IconBadge,
-  MouseClickIcon,
+  SetupIcon,
 } from "@unioncredit/ui";
 import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
@@ -94,7 +93,7 @@ export default function MyGovernanceStats() {
         onClick: () => open(DELEGATE_MODAL),
       }
     : {
-        icon: MouseClickIcon,
+        icon: SetupIcon,
         label: "Setup voting",
         onClick: () => open(DELEGATE_MODAL),
       };

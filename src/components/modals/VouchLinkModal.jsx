@@ -7,8 +7,8 @@ import {
   Select,
   Input,
   LinkIcon,
-  TwitterFilledIcon,
-  TelegramFilledIcon,
+  TwitterIcon,
+  TelegramIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
@@ -68,7 +68,7 @@ export default function VouchLinkModal() {
                 size="large"
                 color="secondary"
                 variant="light"
-                icon={TwitterFilledIcon}
+                icon={TwitterIcon}
                 href={generateTwitterLink(profileUrl)}
                 as="a"
                 target="_blank"
@@ -78,7 +78,7 @@ export default function VouchLinkModal() {
                 size="large"
                 color="secondary"
                 variant="light"
-                icon={TelegramFilledIcon}
+                icon={TelegramIcon}
                 href={generateTelegramLink(profileUrl)}
                 as="a"
                 target="_blank"

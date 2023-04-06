@@ -1,5 +1,4 @@
-import { Grid, Tooltip, Text, NumericalBlock } from "@unioncredit/ui";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/tooltip.svg";
+import { Grid, NumericalBlock } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
 import format from "utils/format";

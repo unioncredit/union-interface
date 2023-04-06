@@ -2,10 +2,10 @@ import "./DaoSegmentedControl.scss";
 
 import { Link } from "react-router-dom";
 import {
+  GovernanceIcon,
   LeaderboardIcon,
   ProtocolIcon,
   SegmentedControl,
-  VotingIcon,
 } from "@unioncredit/ui";
 import { Links } from "constants";
 
@@ -23,7 +23,7 @@ export const DaoSegmentedControl = ({ active }) => (
         label: "Voting",
         to: Links.GOVERNANCE,
         as: Link,
-        icon: VotingIcon,
+        icon: GovernanceIcon,
       },
       {
         id: "protocol",

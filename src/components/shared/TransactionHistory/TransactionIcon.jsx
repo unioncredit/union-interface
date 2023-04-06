@@ -4,7 +4,7 @@ import {
   NewMemberIcon,
   NewVouchIcon,
   NewVouchReceivedIcon,
-  RepaymentIcon,
+  RepayIcon,
 } from "@unioncredit/ui";
 
 import { TransactionTypes } from "constants";
@@ -25,7 +25,7 @@ export const TransactionIcon = ({ type, borrower, staker, applicant }) => {
       return <BorrowIcon fill="#3b82f6" width="24px" className="fillPath" />;
 
     case TransactionTypes.REPAY:
-      return <RepaymentIcon fill="#22c55e" width="24px" className="fillPath" />;
+      return <RepayIcon fill="#22c55e" width="24px" className="fillPath" />;
 
     default:
       return (

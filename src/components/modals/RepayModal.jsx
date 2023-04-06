@@ -15,7 +15,7 @@ import {
   Button,
   EditIcon,
   Divider,
-  PresetIcon,
+  ListIcon,
 } from "@unioncredit/ui";
 
 import useForm from "hooks/useForm";
@@ -177,7 +177,7 @@ export default function RepayModal() {
             fluid
             mt="8px"
             size="small"
-            icon={paymentType === PaymentType.CUSTOM ? PresetIcon : EditIcon}
+            icon={paymentType === PaymentType.CUSTOM ? ListIcon : EditIcon}
             color="secondary"
             variant="light"
             label={

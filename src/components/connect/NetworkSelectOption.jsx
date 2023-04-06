@@ -1,12 +1,5 @@
 import "./NetworkSelectOption.scss";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CheckAlternativeIcon,
-  Text,
-} from "@unioncredit/ui";
+import { Avatar, Box, Button, Card, CheckIcon, Text } from "@unioncredit/ui";
 import cn from "classnames";
 import format from "utils/format";
 import useMemberSummary from "hooks/useMemberSummary";
@@ -49,7 +42,7 @@ export const NetworkSelectOption = ({
 
             <Box align="center">
               {data.isMember && (
-                <CheckAlternativeIcon className="NetworkSelectOption__check" />
+                <CheckIcon className="NetworkSelectOption__check" />
               )}
 
               <Text grey={600} m={0} pr="8px" size="small">

@@ -7,8 +7,8 @@
     line-height: 32px;
     margin-top: 48px;
 
-    @media screen and (max-width: $mobileWidth) {
-      margin-top: 0;
+    @media screen and (max-width: $breakpoint-mobile) {
+      margin-top: 24px;
     }
   }
   &__col {
@@ -21,6 +21,10 @@
     padding: 40px 24px;
     border-radius: 12px;
     background: $grey50;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 24px;
+    }
   }
   &__fee {
     padding: 8px 12px;

@@ -6,9 +6,9 @@ import {
   Box,
   BadgeRow,
   Skeleton,
-  AvatarFilledIcon,
+  ProfileIcon,
+  LinkOutIcon,
 } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { EIP3770 } from "constants";
 import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
@@ -66,11 +66,11 @@ export function AddressSummary({ address, ...props }) {
             </BadgeRow>
 
             <a href="#">
-              <AvatarFilledIcon width="20px" style={{ marginLeft: "6px" }} />
+              <ProfileIcon width="20px" style={{ marginLeft: "6px" }} />
             </a>
 
             <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-              <External
+              <LinkOutIcon
                 width="16px"
                 fill="#44403c"
                 className="fillPath"

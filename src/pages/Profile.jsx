@@ -11,7 +11,7 @@ import {
   Text,
   Avatar as UiAvatar,
   BadgeRow,
-  NumericalBlock,
+  NumericalBlock, LinkOutIcon
 } from "@unioncredit/ui";
 import {
   chain,
@@ -22,11 +22,6 @@ import {
 } from "wagmi";
 import { Helmet } from "react-helmet";
 import { Link as RouterLink } from "react-router-dom";
-import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
-import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
-import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
-import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
 import { isAddress } from "ethers/lib/utils";
@@ -112,7 +107,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <External width="12px" />
+                <LinkOutIcon width="12px" />
               </a>
             </Box>
             {/*--------------------------------------------------------------

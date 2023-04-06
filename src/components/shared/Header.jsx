@@ -7,14 +7,13 @@ import {
   Box,
   ContextMenu,
   Button,
-  HamburgerIcon,
+  ListIcon,
   CloseIcon,
+  UnionIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
-import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
-import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -78,7 +77,7 @@ export function Header({ loading, showNav = true }) {
               <Grid.Col>
                 <Box align="center">
                   <Link to="/">
-                    <Logo width="32px" style={{ marginRight: "8px" }} />
+                    <UnionIcon width="32px" style={{ marginRight: "8px" }} />
                   </Link>
 
                   {isConnected && <NetworkSelect />}
@@ -105,7 +104,7 @@ export function Header({ loading, showNav = true }) {
                   {isConnected && (
                     <Button
                       mr="4px"
-                      icon={Union}
+                      icon={UnionIcon}
                       iconProps={{
                         style: {
                           width: "24px",
@@ -131,7 +130,7 @@ export function Header({ loading, showNav = true }) {
                       color="secondary"
                       variant="light"
                       className="Header__hamburger"
-                      icon={menuOpen ? CloseIcon : HamburgerIcon}
+                      icon={menuOpen ? CloseIcon : ListIcon}
                       onClick={() => {
                         setScrollLock(!menuOpen);
                         setMenuOpen(!menuOpen);

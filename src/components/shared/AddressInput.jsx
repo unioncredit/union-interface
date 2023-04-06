@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { isAddress } from "ethers/lib/utils";
 import { useEnsName, useEnsAddress } from "wagmi";
 import { Input, Text, Box, LoadingSpinner } from "@unioncredit/ui";
-import { ReactComponent as EnsIcon } from "@unioncredit/ui/lib/icons/ens.svg";
 
 import { Errors } from "constants";
 import { Avatar } from "components/shared";

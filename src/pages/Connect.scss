@@ -1,5 +1,11 @@
+@import "@unioncredit/ui/src/variables";
+
 .Connect {
   &__container {
     padding: 48px 0;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 48px 2.5%;
+    }
   }
 }

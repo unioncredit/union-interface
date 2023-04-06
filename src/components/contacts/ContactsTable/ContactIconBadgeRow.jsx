@@ -1,14 +1,14 @@
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  AvatarIcon,
   CheckIcon,
+  ProfileIcon,
   IconBadge,
   IconBadgeRow,
 } from "@unioncredit/ui";
 
 export function ContactIconBadgeRow({ providing, receiving }) {
-  const leftIcon = providing && receiving ? CheckIcon : AvatarIcon;
+  const leftIcon = providing && receiving ? CheckIcon : ProfileIcon;
   const rightIcon =
     providing && receiving
       ? CheckIcon

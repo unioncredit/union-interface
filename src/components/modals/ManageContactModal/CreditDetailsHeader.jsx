@@ -2,7 +2,7 @@ import "./CreditDetailsHeader.scss";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  AvatarIcon,
+  ProfileIcon,
   Box,
   Text,
   IconBadge,
@@ -18,7 +18,7 @@ export function CreditDetailsHeader({ type, title }) {
     <Box className="CreditDetailsHeader" align="center">
       <IconBadgeRow>
         <IconBadge
-          icon={AvatarIcon}
+          icon={ProfileIcon}
           color="white"
           variant="filled"
           borderSize={2}

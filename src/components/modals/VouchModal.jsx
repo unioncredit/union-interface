@@ -10,7 +10,7 @@ import {
   WarningIcon,
   Text,
   ButtonReveal,
-  PlusIcon,
+  AddIcon,
   NumericalLines,
   VouchIcon,
 } from "@unioncredit/ui";
@@ -91,7 +91,7 @@ export default function VouchModal({
                   buttonProps={{
                     w: "100%",
                     h: "40px",
-                    icon: PlusIcon,
+                    icon: AddIcon,
                     size: "small",
                     color: "secondary",
                     variant: "light",

@@ -6,7 +6,7 @@ import VouchLinkModal, {
 import ManageContactModal, {
   MANAGE_CONTACT_MODAL,
 } from "components/modals/ManageContactModal";
-import VouchModal, { VOUCH_MODAL } from "components/modals/VouchModal";
+import VouchModal from "components/modals/VouchModal";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
 import WalletModal, { WALLET_MODAL } from "components/modals/WalletModal";
@@ -17,9 +17,6 @@ import EditVouchModal, { EDIT_VOUCH_MODAL } from "components/modals/EditVouch";
 import WriteOffDebtModal, {
   WRITE_OFF_DEBT_MODAL,
 } from "components/modals/WriteOffDebtModal";
-import PaymentReminderModal, {
-  PAYMENT_REMINDER_MODAL,
-} from "components/modals/PaymentReminderModal";
 import WelcomeModal, { WELCOME_MODAL } from "components/modals/WelcomeModal";
 
 const ModalContext = createContext({});
@@ -32,7 +29,6 @@ const modals = {
   [DELEGATE_MODAL]: DelegateModal,
   [EDIT_VOUCH_MODAL]: EditVouchModal,
   [MANAGE_CONTACT_MODAL]: ManageContactModal,
-  [PAYMENT_REMINDER_MODAL]: PaymentReminderModal,
   [REPAY_MODAL]: RepayModal,
   [STAKE_MODAL]: StakeModal,
   [VOUCH_LINK_MODAL]: VouchLinkModal,

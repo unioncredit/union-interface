@@ -5,5 +5,10 @@
     padding: 24px;
     border-radius: 12px;
     background: $grey50;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 0;
+      background: white;
+    }
   }
 }

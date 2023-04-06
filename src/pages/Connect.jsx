@@ -2,7 +2,7 @@ import "./Connect.scss";
 import { useEffect } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
-import { Heading, Text, Box, Alert, WarningIcon } from "@unioncredit/ui";
+import { Heading, Text, Box, InfoBanner, WarningIcon } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Banner from "components/connect/Banner";
@@ -41,7 +41,7 @@ export default function ConnectPage() {
           maxw="485px"
         >
           {chain?.unsupported && (
-            <Alert
+            <InfoBanner
               mb="16px"
               align="center"
               icon={WarningIcon}

@@ -7,8 +7,8 @@ import {
   Text,
   Divider,
   Button,
+  LinkOutIcon,
 } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
@@ -85,7 +85,7 @@ export default function WalletModal() {
             // variant="light"
             label="Union Governance"
             href="#"
-            icon={External}
+            icon={LinkOutIcon}
             iconPosition="end"
             iconProps={{
               style: {

@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
 import { Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
-import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
 
 import { ZERO_ADDRESS } from "constants";
 import { Avatar, PrimaryLabel } from "components/shared";

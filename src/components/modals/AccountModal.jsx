@@ -10,7 +10,7 @@ import {
   ButtonRow,
   Divider,
   Text,
-  ExternalIcon,
+  LinkOutIcon,
   DisconnectWalletIcon,
   IdentityIcon,
   SuccessIcon,
@@ -65,7 +65,7 @@ export default function AccountModal() {
               />
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                <ExternalIcon width="12px" />
+                <LinkOutIcon width="12px" />
               </a>
             </Box>
           </Box>
@@ -142,7 +142,7 @@ export default function AccountModal() {
                       {format(value)}
                     </Text>
                     <a href="#" target="_blank">
-                      <ExternalIcon width="16px" />
+                      <LinkOutIcon width="16px" />
                     </a>
                   </Box>
                 </Box>

@@ -6,8 +6,7 @@ import {
   Button,
   ModalOverlay,
   Heading,
-  ButtonRow,
-  TwitterCircledIcon,
+  TwitterIcon,
   ConfettiIcon,
 } from "@unioncredit/ui";
 import React, { useEffect, useRef } from "react";
@@ -96,7 +95,7 @@ export default function WelcomeModal() {
                 href={twitterUrl}
                 target="_blank"
                 rel="noopener"
-                icon={TwitterCircledIcon}
+                icon={TwitterIcon}
                 size="small"
                 color="primary"
                 label="Share on Twitter"

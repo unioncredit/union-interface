@@ -10,7 +10,7 @@ import {
   DistributionBar,
   BorrowIcon,
   Badge,
-  RepaymentIcon,
+  RepayIcon,
   WarningIcon,
 } from "@unioncredit/ui";
 
@@ -158,7 +158,7 @@ export default function CreditStats({ vouchers }) {
         <Button
           size="large"
           label="Make a payment"
-          icon={RepaymentIcon}
+          icon={RepayIcon}
           onClick={() => open(REPAY_MODAL)}
           {...buttonProps}
         />

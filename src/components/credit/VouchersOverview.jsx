@@ -8,7 +8,7 @@ import {
   Dot,
   ButtonRow,
   Button,
-  IncreaseIcon,
+  IncreaseVouchIcon,
 } from "@unioncredit/ui";
 import { reduceBnSum } from "utils/reduce";
 import { Links, ZERO } from "constants";
@@ -122,7 +122,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
           <Button
             fluid
             size="large"
-            icon={IncreaseIcon}
+            icon={IncreaseVouchIcon}
             label="Increase credit limit"
             onClick={() => open(VOUCH_LINK_MODAL)}
           />

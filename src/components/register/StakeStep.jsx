@@ -12,9 +12,9 @@ import {
   WarningIcon,
   DepositIcon,
   WithdrawIcon,
-  CheckFilledIcon,
-  PlayFilledIcon,
-  PauseFilledIcon,
+  CheckIcon,
+  PlayIcon,
+  PauseIcon,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
 
@@ -63,7 +63,7 @@ export default function StakeStep() {
   const progressBarProps = () => {
     if (unionEarned.gte(WAD)) {
       return {
-        icon: CheckFilledIcon,
+        icon: CheckIcon,
         label: "Membership fee earned",
       };
     }
@@ -71,13 +71,13 @@ export default function StakeStep() {
     if (unionEarned.gt(ZERO)) {
       if (stakedBalance.gt(ZERO)) {
         return {
-          icon: PlayFilledIcon,
+          icon: PlayIcon,
           label: `${percentage}% Earned`,
         };
       }
 
       return {
-        icon: PauseFilledIcon,
+        icon: PauseIcon,
         label: `Paused · ${percentage}%`,
         paused: true,
       };

@@ -1,7 +1,6 @@
 import "./VouchersStep.scss";
 
 import { useAccount, useNetwork } from "wagmi";
-import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 import {
   Table,
   TableRow,
@@ -14,8 +13,9 @@ import {
   TableCell,
   EmptyState,
   Heading,
-  TwitterFilledIcon,
-  TelegramFilledIcon,
+  TwitterIcon,
+  TelegramIcon,
+  LinkIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -109,7 +109,7 @@ export default function VouchersStep() {
               fluid
               size="large"
               color="primary"
-              icon={Link}
+              icon={LinkIcon}
               label="Get vouch link"
               onClick={() => open(VOUCH_LINK_MODAL)}
             />
@@ -117,7 +117,7 @@ export default function VouchersStep() {
               size="large"
               color="secondary"
               variant="light"
-              icon={TwitterFilledIcon}
+              icon={TwitterIcon}
               as="a"
               href={generateTwitterLink(profileUrl)}
               target="_blank"
@@ -126,7 +126,7 @@ export default function VouchersStep() {
               size="large"
               color="secondary"
               variant="light"
-              icon={TelegramFilledIcon}
+              icon={TelegramIcon}
               as="a"
               href={generateTelegramLink(profileUrl)}
               target="_blank"
