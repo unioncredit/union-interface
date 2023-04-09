@@ -7,3 +7,21 @@
     }
   }
 }
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .MyGovernanceStats {
+    &__top {
+      flex-wrap: wrap;
+
+      .NumericalBlock__value {
+        font-size: 22px !important;
+        line-height: 28px !important;
+      }
+
+      .NumericalBlock:first-of-type {
+        flex: 0 100%;
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

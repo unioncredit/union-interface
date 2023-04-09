@@ -6,7 +6,7 @@ import {
   Modal,
   ModalOverlay,
   NumericalBlock,
-  NumericalLines,
+  NumericalRows,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -86,7 +86,7 @@ export default function WriteOffDebtModal({ address, clearContact }) {
               onChange={register("amount")}
             />
 
-            <NumericalLines
+            <NumericalRows
               m="20px 0"
               items={[
                 {

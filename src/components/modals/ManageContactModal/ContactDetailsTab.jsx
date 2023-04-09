@@ -7,7 +7,7 @@ import {
   Button,
   Modal,
   NumericalBlock,
-  NumericalLines,
+  NumericalRows,
   Text,
   VouchIcon,
 } from "@unioncredit/ui";
@@ -82,7 +82,7 @@ const VoucherDetails = ({ voucher }) => {
   const { trust = ZERO, vouch = ZERO, locked = ZERO } = voucher;
 
   return (
-    <NumericalLines
+    <NumericalRows
       items={[
         {
           label: "Trust",
@@ -185,7 +185,7 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
         ))}
       </Box>
 
-      <NumericalLines
+      <NumericalRows
         m="24px 0 0"
         items={[
           {

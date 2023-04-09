@@ -11,6 +11,7 @@ import {
   ArbitrumIcon,
   IconBadge,
   SetupIcon,
+  InfoBanner,
 } from "@unioncredit/ui";
 import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
@@ -110,7 +111,7 @@ export default function MyGovernanceStats() {
   return (
     <Card>
       <Card.Body>
-        <Box align="center" justify="space-between">
+        <Box className="MyGovernanceStats__top" justify="space-between">
           {governanceStats.map((stat) => (
             <NumericalBlock
               fluid
@@ -133,7 +134,7 @@ export default function MyGovernanceStats() {
             address={delegate}
           />
         ) : (
-          <Alert
+          <InfoBanner
             mt="16px"
             justify="space-between"
             align="left"

@@ -5,7 +5,7 @@ import {
   Dai,
   Input,
   NumericalBlock,
-  NumericalLines,
+  NumericalRows,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -84,7 +84,7 @@ export default function EditVouchModal({ address, clearContact }) {
               placeholder="0"
             />
 
-            <NumericalLines
+            <NumericalRows
               m="20px 0"
               items={[
                 {

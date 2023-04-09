@@ -21,16 +21,23 @@
   }
 }
 
-.Header__context-menu .context-menu-button,
+.Header__context-menu .PopoverMenu__button,
 .Header__hamburger {
-  width: 40px;
+  width: 40px !important;
   height: 40px;
   min-height: 0;
   margin-left: 4px;
 }
+.Header__hamburger {
+  padding: 11px !important;
+
+  &.active {
+    padding: 8px !important;
+  }
+}
 
 .Header__context-menu {
-  .context-menu-button {
+  .PopoverMenu__button {
     border: 1px solid $grey200;
     border-radius: 8px;
     box-sizing: border-box;

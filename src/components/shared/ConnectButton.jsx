@@ -30,7 +30,6 @@ export function ConnectButton({ connectedElement, buttonProps }) {
 
         return (
           <Button
-            size="thin"
             color="secondary"
             variant="light"
             label="Connect Wallet"

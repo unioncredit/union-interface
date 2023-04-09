@@ -23,6 +23,10 @@
 
     &__voucher {
       flex: 0 50%;
+
+      @media screen and (max-width: $breakpoint-mobile) {
+        flex: 0 100%;
+      }
     }
   }
 
@@ -31,5 +35,15 @@
     padding: 32px 16px;
     border-radius: 12px;
     background: $grey100;
+  }
+
+  .button-row {
+    @media screen and (max-width: $breakpoint-mobile) {
+      display: block;
+
+      .button + .button {
+        margin-top: 4px;
+      }
+    }
   }
 }

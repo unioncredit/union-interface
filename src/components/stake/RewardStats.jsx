@@ -27,7 +27,11 @@ export default function RewardStats() {
   return (
     <Card mt="24px" className="RewardStats">
       <Card.Body>
-        <Box align="center" justify="space-between">
+        <Box
+          className="RewardStats__top"
+          align="center"
+          justify="space-between"
+        >
           <NumericalBlock
             align="left"
             token="union"
@@ -44,7 +48,12 @@ export default function RewardStats() {
           />
         </Box>
 
-        <Box mt="24px" align="center" justify="space-between">
+        <Box
+          mt="24px"
+          align="center"
+          justify="space-between"
+          className="RewardStats__bottom"
+        >
           <NumericalBlock
             fluid
             size="medium"

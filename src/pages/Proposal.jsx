@@ -2,7 +2,14 @@ import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
+import {
+  ArrowRightIcon,
+  Box,
+  Button,
+  Grid,
+  Heading,
+  Text,
+} from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
 import { Avatar, PrimaryLabel } from "components/shared";
@@ -55,7 +62,7 @@ export default function ProposalPage() {
                   variant="light"
                   label={
                     <>
-                      <ArrowRight
+                      <ArrowRightIcon
                         width="24px"
                         height="24px"
                         className="flip"

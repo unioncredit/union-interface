@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   NumericalBlock,
   OptionSelect,
-  NumericalLines,
+  NumericalRows,
   Button,
   EditIcon,
   Divider,
@@ -200,7 +200,7 @@ export default function RepayModal() {
           {/*--------------------------------------------------------------
             Stats After 
           *--------------------------------------------------------------*/}
-          <NumericalLines
+          <NumericalRows
             m="24px 0"
             items={[
               {

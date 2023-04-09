@@ -1,5 +1,5 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
-import { Box, NumericalLines } from "@unioncredit/ui";
+import { Box, NumericalRows } from "@unioncredit/ui";
 import { BlockSpeed, ZERO } from "constants";
 import { commify } from "utils/format";
 import { chain } from "wagmi";
@@ -33,7 +33,7 @@ export function ProposalStages({ protocol, ...props }) {
         subTitle="Stages in the governance and voting process"
       />
 
-      <NumericalLines
+      <NumericalRows
         mt="24px"
         items={[
           {

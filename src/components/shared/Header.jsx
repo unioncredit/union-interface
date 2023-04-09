@@ -5,11 +5,12 @@ import {
   Grid,
   Layout,
   Box,
-  ContextMenu,
+  PopoverMenu,
   Button,
-  ListIcon,
   CloseIcon,
   UnionIcon,
+  UnionNavIcon,
+  HamburgerIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -77,7 +78,7 @@ export function Header({ loading, showNav = true }) {
               <Grid.Col>
                 <Box align="center">
                   <Link to="/">
-                    <UnionIcon width="32px" style={{ marginRight: "8px" }} />
+                    <UnionNavIcon width="40px" style={{ marginRight: "8px" }} />
                   </Link>
 
                   {isConnected && <NetworkSelect />}
@@ -120,7 +121,7 @@ export function Header({ loading, showNav = true }) {
                   )}
                   <ConnectButton />
                   {width > mobileNavBreakpoint ? (
-                    <ContextMenu
+                    <PopoverMenu
                       className="Header__context-menu"
                       position="left"
                       items={contextMenuItems}
@@ -129,8 +130,10 @@ export function Header({ loading, showNav = true }) {
                     <Button
                       color="secondary"
                       variant="light"
-                      className="Header__hamburger"
-                      icon={menuOpen ? CloseIcon : ListIcon}
+                      className={cn("Header__hamburger", {
+                        active: menuOpen,
+                      })}
+                      icon={menuOpen ? CloseIcon : HamburgerIcon}
                       onClick={() => {
                         setScrollLock(!menuOpen);
                         setMenuOpen(!menuOpen);

@@ -9,9 +9,9 @@ import {
   ExpandingInfo,
   WarningIcon,
   Text,
-  ButtonReveal,
+  HiddenInput,
   AddIcon,
-  NumericalLines,
+  NumericalRows,
   VouchIcon,
 } from "@unioncredit/ui";
 
@@ -85,7 +85,7 @@ export default function VouchModal({
               />
 
               <Box fluid mt="16px">
-                <ButtonReveal
+                <HiddenInput
                   w="100%"
                   title="Contact alias"
                   buttonProps={{
@@ -99,10 +99,10 @@ export default function VouchModal({
                   }}
                 >
                   <Input error={errors.name} onChange={register("name")} />
-                </ButtonReveal>
+                </HiddenInput>
               </Box>
 
-              <NumericalLines
+              <NumericalRows
                 mt="24px"
                 items={[
                   {

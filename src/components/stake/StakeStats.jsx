@@ -1,3 +1,5 @@
+import "./StakeStats.scss";
+
 import {
   Button,
   Card,
@@ -34,9 +36,14 @@ export default function StakeStats() {
     .reduce(reduceBnSum, ZERO);
 
   return (
-    <Card>
+    <Card className="StakeStats">
       <Card.Body>
-        <Box align="center" justify="space-between">
+        <Box
+          fluid
+          align="center"
+          justify="space-between"
+          className="StakeStats__top"
+        >
           <NumericalBlock
             token="dai"
             align="left"
@@ -81,7 +88,11 @@ export default function StakeStats() {
           ]}
         />
 
-        <Box align="center" justify="space-between">
+        <Box
+          align="center"
+          justify="space-between"
+          className="StakeStats__bottom"
+        >
           <NumericalBlock
             fluid
             align="left"

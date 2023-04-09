@@ -8,7 +8,7 @@ import {
   ModalOverlay,
   NumericalBlock,
   BorrowIcon,
-  NumericalLines,
+  NumericalRows,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
 
@@ -130,7 +130,7 @@ export default function BorrowModal() {
           {/*--------------------------------------------------------------
             Stats After 
           *--------------------------------------------------------------*/}
-          <NumericalLines
+          <NumericalRows
             mt="16px"
             items={[
               {

@@ -5,7 +5,7 @@ import {
   ModalOverlay,
   Box,
   SegmentedControl,
-  NumericalLines,
+  NumericalRows,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -113,7 +113,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             />
           </Box>
 
-          <NumericalLines
+          <NumericalRows
             m="24px 0"
             items={[
               {

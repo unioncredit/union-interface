@@ -1,0 +1,33 @@
+@import "@unioncredit/ui/src/variables";
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .StakeStats {
+    &__top {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+
+      .button {
+        flex: 1 !important;
+      }
+      .button-row {
+        width: 100%;
+        margin-top: 16px;
+      }
+    }
+
+    &__bottom {
+      .heading {
+        font-size: 13px !important;
+      }
+      .NumericalBlock__value {
+        font-size: 18px !important;
+        line-height: 24px !important;
+      }
+      .AvatarBadgeRow .text {
+        margin: 0 4px !important;
+        font-size: 8px !important
+      }
+    }
+  }
+}
+
