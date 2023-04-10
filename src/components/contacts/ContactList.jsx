@@ -1,5 +1,7 @@
+import "./ContactList.scss";
+
 import { useEffect, useMemo, useState } from "react";
-import { Card, Table, Pagination, EmptyState, Box } from "@unioncredit/ui";
+import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
 
 import { ContactsType } from "constants";
 import { filterFunctions } from "components/contacts/FiltersPopover";
@@ -8,15 +10,16 @@ import useContactSearch from "hooks/useContactSearch";
 import { locationSearch } from "utils/location";
 import {
   ContactsFilterControls,
-  ContactsTableHead,
   ContactsTypeToggle,
-  ProvidingTableRow,
-  ReceivingTableRow,
 } from "components/contacts/ContactsTable";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
+import { DesktopContactsTable } from "components/contacts/ContactsTable/DesktopContactsTable";
+import useResponsive from "hooks/useResponsive";
+import { MobileContactsTable } from "components/contacts/ContactsTable/MobileContactsTable";
 
 export default function ContactList({ contact, setContact, type, setType }) {
+  const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
@@ -73,8 +76,8 @@ export default function ContactList({ contact, setContact, type, setType }) {
   } = usePagination(filtered);
 
   return (
-    <Card overflow="visible">
-      <Box p="24px">
+    <Card className="ContactList" overflow="visible">
+      <Box className="ContactList__header" p="24px">
         <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
           type={type}
@@ -93,45 +96,19 @@ export default function ContactList({ contact, setContact, type, setType }) {
         </Card.Body>
       ) : (
         <div className="TableContainer">
-          <Table>
-            <ContactsTableHead
-              items={
-                type === ContactsType.VOUCHEES
-                  ? [
-                      "Trust set",
-                      "Total vouch",
-                      "Stake locked",
-                      "Last payment",
-                      "Loan status",
-                    ]
-                  : [
-                      "Trust set",
-                      "Total vouch",
-                      "Real vouch",
-                      "You're locking",
-                      "Borrowable",
-                    ]
-              }
+          {isMobile ? (
+            <MobileContactsTable
+              type={type}
+              data={contactsPage}
+              setContact={setContact}
             />
-
-            {contactsPage.map((row) =>
-              type === ContactsType.VOUCHEES ? (
-                <ProvidingTableRow
-                  key={row.address}
-                  data={row}
-                  setContact={setContact}
-                  receiving={vouchers.find((v) => v.address === row.address)}
-                />
-              ) : (
-                <ReceivingTableRow
-                  key={row.address}
-                  data={row}
-                  setContact={setContact}
-                  providing={vouchees.find((v) => v.address === row.address)}
-                />
-              )
-            )}
-          </Table>
+          ) : (
+            <DesktopContactsTable
+              type={type}
+              data={contactsPage}
+              setContact={setContact}
+            />
+          )}
         </div>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />

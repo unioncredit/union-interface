@@ -22,8 +22,11 @@ function useWindowSize() {
   return windowSize;
 }
 
-export default function useIsMobile() {
+export default function useResponsive() {
   const { width } = useWindowSize();
-  const isMobile = !width || width <= 767;
-  return isMobile;
+
+  return {
+    isMobile: !width || width <= 580,
+    isTablet: !width || width <= 767,
+  };
 }

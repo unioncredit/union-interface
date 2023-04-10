@@ -10,10 +10,81 @@ import {
   DimmableTableCell,
 } from "components/contacts/ContactsTable";
 
-export function ReceivingTableRow({ data, setContact, providing }) {
+export const COLUMNS = {
+  TRUST_SET: {
+    id: "trust-set",
+    label: "Trust set",
+  },
+  TOTAL_VOUCH: {
+    id: "total-vouch",
+    label: "Total vouch",
+  },
+  REAL_VOUCH: {
+    id: "real-vouch",
+    label: "Real vouch",
+  },
+  LOCKING: {
+    id: "locking",
+    label: "You're locking",
+  },
+  BORROWABLE: {
+    id: "borrowable",
+    label: "Borrowable",
+  },
+};
+
+export function ReceivingTableRow({ data, active, setContact, providing }) {
   const { address, locked = ZERO, trust = ZERO, vouch = ZERO } = data;
 
   const borrowable = vouch.sub(locked);
+
+  const columns = [
+    {
+      ...COLUMNS.TRUST_SET,
+      value: (
+        <DimmableTableCell
+          dimmed={trust.eq(ZERO)}
+          value={`${format(trust)} DAI`}
+        />
+      ),
+    },
+    {
+      ...COLUMNS.TOTAL_VOUCH,
+      value: (
+        <DimmableTableCell
+          dimmed={vouch.eq(ZERO)}
+          value={`${format(vouch)} DAI`}
+        />
+      ),
+    },
+    {
+      ...COLUMNS.REAL_VOUCH,
+      value: (
+        <DimmableTableCell
+          dimmed={vouch.eq(ZERO)}
+          value={`${format(vouch)} DAI`}
+        />
+      ),
+    },
+    {
+      ...COLUMNS.LOCKING,
+      value: (
+        <DimmableTableCell
+          dimmed={locked.eq(ZERO)}
+          value={`${format(locked)} DAI`}
+        />
+      ),
+    },
+    {
+      ...COLUMNS.BORROWABLE,
+      value: (
+        <DimmableTableCell
+          dimmed={borrowable.eq(ZERO)}
+          value={`${format(borrowable)} DAI`}
+        />
+      ),
+    },
+  ];
 
   return (
     <TableRow className="ProvidingTableRow" onClick={() => setContact(data)}>
@@ -37,30 +108,7 @@ export function ReceivingTableRow({ data, setContact, providing }) {
         </Box>
       </TableCell>
 
-      <DimmableTableCell
-        dimmed={trust.eq(ZERO)}
-        value={`${format(trust)} DAI`}
-      />
-
-      <DimmableTableCell
-        dimmed={vouch.eq(ZERO)}
-        value={`${format(vouch)} DAI`}
-      />
-
-      <DimmableTableCell
-        dimmed={vouch.eq(ZERO)}
-        value={`${format(vouch)} DAI`}
-      />
-
-      <DimmableTableCell
-        dimmed={locked.eq(ZERO)}
-        value={`${format(locked)} DAI`}
-      />
-
-      <DimmableTableCell
-        dimmed={borrowable.eq(ZERO)}
-        value={`${format(borrowable)} DAI`}
-      />
+      {columns.map(({ id, value }) => (!active || active.id === id) && value)}
     </TableRow>
   );
 }

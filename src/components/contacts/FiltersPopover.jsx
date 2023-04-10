@@ -30,6 +30,7 @@ export default function FiltersPopover({ filters, setFilters }) {
 
   return (
     <Popover
+      stickyMobile
       position="left"
       className="FiltersPopover"
       button={(toggleOpen) => (

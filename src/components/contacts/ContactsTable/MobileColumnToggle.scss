@@ -1,0 +1,47 @@
+@import "@unioncredit/ui/src/variables";
+
+.MobileColumnToggle {
+  .Card__body {
+    padding: 12px !important;
+  }
+  .modalHeader {
+    height: auto !important;
+    padding: 16px 24px !important;
+  }
+  &__toggle {
+    height: 32px;
+    font-size: 12px;
+    line-height: 24px;
+    padding: 6px 8px;
+  }
+
+  .control-group {
+    & > .box {
+      margin: 0 !important;
+    }
+
+    .box, .Control__wrapper {
+      width: 100%;
+    }
+
+    .Control--radio {
+      display: none;
+    }
+    .Control--radio + .Control__label {
+      width: 100%;
+      margin: 0 !important;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 16px;
+      line-height: 24px;
+      cursor: pointer;
+      color: $grey700;
+      font-weight: 500;
+    }
+    .Control--radio.Control--checked + .Control__label {
+      background: $blue100;
+      color: $blue600;
+    }
+  }
+}

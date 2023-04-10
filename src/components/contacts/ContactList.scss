@@ -1,0 +1,46 @@
+@import "@unioncredit/ui/src/variables";
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .ContactList {
+    &__header {
+      padding: 16px !important;
+      flex-direction: column !important;
+
+      .SegmentedControl {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      input {
+        height: 40px;
+        font-size: 14px;
+      }
+      .button {
+        height: 40px;
+        padding-left: 8px !important;
+        padding-right: 12px !important;
+        font-size: 14px !important;
+
+        &--noLabel {
+          width: 40px;
+          padding: 0 !important;
+
+          svg {
+            width: 20px;
+          }
+        }
+      }
+    }
+
+    .table-head {
+      padding: 3px 4px;
+    }
+    .table-head:first-of-type,
+    .table-cell:first-of-type {
+      padding-left: 16px;
+    }
+    .table-head:last-of-type,
+    .table-cell:last-of-type {
+      padding-right: 16px;
+    }
+  }
+}

@@ -3,6 +3,7 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import FiltersPopover from "components/contacts/FiltersPopover";
 import { ContactsType } from "constants";
+import useResponsive from "hooks/useResponsive";
 
 export const ContactsFilterControls = ({
   type,
@@ -11,13 +12,14 @@ export const ContactsFilterControls = ({
   setFilers,
 }) => {
   const { open } = useModals();
+  const { isMobile } = useResponsive();
 
   return (
     <Box>
       <Input
         maxw="285px"
         prefix={<SearchIcon width="15px" />}
-        placeholder="Filter by address or ENS"
+        placeholder={isMobile ? "Address or ENS" : "Filter by address or ENS"}
         onChange={(event) => {
           setQuery(event.target.value);
         }}
