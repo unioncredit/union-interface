@@ -48,14 +48,14 @@ export const BlockSpeed = {
   [mainnet.id]: 12e3,
   [arbitrum.id]: 12e3,
   [goerli.id]: 12e3,
-  [optimismGoerli.id]: 2e3,
+  [optimismGoerli.id]: 12e3, //use goerli block speed
 };
 
 export const BlocksPerYear = {
   [mainnet.id]: 2407328,
   [arbitrum.id]: 2407328,
   [goerli.id]: 2407328,
-  [optimismGoerli.id]: 14443968,
+  [optimismGoerli.id]: 2407328, //use goer blocks per year
 };
 
 export const EIP3770 = {
