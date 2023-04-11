@@ -2,7 +2,7 @@ import { Box, Divider, Text } from "@unioncredit/ui";
 
 export function ProtocolDataHeader({ title, subTitle, ...props }) {
   return (
-    <Box direction="vertical" {...props}>
+    <Box fluid direction="vertical" {...props}>
       <Divider />
 
       <Box mt="16px" direction="vertical">
