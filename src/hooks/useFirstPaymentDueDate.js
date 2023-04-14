@@ -1,7 +1,7 @@
 import { useNetwork } from "wagmi";
-import { useProtocol } from "../providers/ProtocolData";
+import { useProtocol } from "providers/ProtocolData";
 import { BlockSpeed, ZERO } from "constants";
-import { formatDueDate } from "utils/dueDate";
+import { format } from "date-fns";
 
 export default function useFirstPaymentDueDate() {
   const { chain } = useNetwork();
@@ -12,9 +12,5 @@ export default function useFirstPaymentDueDate() {
   let date = new Date();
   date.setSeconds(date.getSeconds() + milliseconds / 1000);
 
-  return date.toLocaleDateString("en-us", {
-    year: "2-digit",
-    month: "short",
-    day: "numeric",
-  });
+  return format(date, "LLL d, yy");
 }

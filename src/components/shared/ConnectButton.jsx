@@ -35,7 +35,11 @@ export function ConnectButton({ connectedElement, buttonProps }) {
             label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}
-            style={{ height: "40px", fontSize: "16px" }}
+            style={{
+              height: "40px",
+              fontSize: "16px",
+              backgroundColor: "transparent",
+            }}
             {...buttonProps}
           />
         );

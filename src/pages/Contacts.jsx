@@ -3,16 +3,15 @@ import { Helmet } from "react-helmet";
 
 import ContactList from "components/contacts/ContactList";
 import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl";
-import { ContactsType } from "constants";
 import { useModals } from "providers/ModalManager";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import { Layout } from "@unioncredit/ui";
 
-export default function ContactsPage() {
+export default function ContactsPage({ type: initialType }) {
   const { open } = useModals();
 
   const [contact, setContact] = useState(null);
-  const [type, setType] = useState(ContactsType.VOUCHEES);
+  const [type, setType] = useState(initialType);
 
   const contactComponentProps = {
     type,

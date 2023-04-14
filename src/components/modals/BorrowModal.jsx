@@ -179,6 +179,7 @@ export default function BorrowModal() {
           <Button
             fluid
             mt="16px"
+            size="large"
             icon={BorrowIcon}
             label={`Borrow ${amount.display} DAI`}
             disabled={amount.raw.lte(ZERO)}

@@ -19,11 +19,13 @@ export const items = {
     id: "credit",
     label: "Credit",
     pathname: "/",
+    childPaths: ["/stake", "/contacts/providing", "/contacts/receiving"],
   },
   dao: {
     id: "governance",
     label: "DAO",
     pathname: Links.GOVERNANCE,
+    childPaths: ["/protocol", "/leaderboard"],
   },
 };
 

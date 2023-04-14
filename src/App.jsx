@@ -83,7 +83,7 @@ export default function App() {
         <Layout.Main>
           <Grid style={{ display: "flex", flexGrow: 1 }}>
             <Grid.Row style={{ width: "100%", margin: 0 }}>
-              <Grid.Col>
+              <Grid.Col noPadding>
                 <Header showNav={false} />
                 <ErrorBoundary FallbackComponent={ErrorPage}>
                   <ConnectPage />

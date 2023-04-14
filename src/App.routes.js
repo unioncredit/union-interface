@@ -14,7 +14,9 @@ import ProtocolPage from "pages/Protocol";
 export const member = [
   { path: "/",                    component: CreditPage,      props: {} },
   { path: "/stake",               component: StakePage,       props: {} },
-  { path: "/contacts",            component: ContactsPage,    props: {} },
+  { path: "/contacts",            component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
+  { path: "/contacts/providing",  component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
+  { path: "/contacts/receiving",  component: ContactsPage,    props: { type: ContactsType.VOUCHERS } },
 ]
 
 // prettier-ignore

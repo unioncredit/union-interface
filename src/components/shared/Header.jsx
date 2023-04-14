@@ -51,12 +51,7 @@ export function Header({ loading, showNav = true }) {
 
   const navItems = navItems0.map((item) => ({
     ...item,
-    active:
-      item.pathname === "/"
-        ? item.pathname === pathname
-        : item.id === "credit"
-        ? pathname.match(/\/(stake|credit)/)
-        : pathname.startsWith(item.pathname),
+    active: item.pathname === pathname || item.childPaths?.includes(pathname),
   }));
 
   const navigation = (
@@ -108,8 +103,8 @@ export function Header({ loading, showNav = true }) {
                       icon={UnionIcon}
                       iconProps={{
                         style: {
-                          width: "24px",
-                          height: "24px",
+                          width: "28px",
+                          height: "28px",
                         },
                       }}
                       color="secondary"

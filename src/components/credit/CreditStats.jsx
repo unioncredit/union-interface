@@ -88,7 +88,9 @@ export default function CreditStats({ vouchers }) {
           <Button
             size="large"
             label="Borrow"
-            color="secondary"
+            color={
+              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "primary" : "secondary"
+            }
             variant="light"
             icon={BorrowIcon}
             onClick={() => open(BORROW_MODAL)}

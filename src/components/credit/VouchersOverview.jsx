@@ -61,6 +61,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
       <Card.Body>
         <Box>
           <PieChart
+            startAngle={-90}
             lineWidth={35}
             className="VouchersOverview__chart"
             data={

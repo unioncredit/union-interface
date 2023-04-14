@@ -24,7 +24,12 @@ export default function ContactList({ contact, setContact, type, setType }) {
   const { data: vouchers = [] } = useVouchers();
 
   const [query, setQuery] = useState(null);
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState(() => {
+    const urlSearchParams = locationSearch();
+    return urlSearchParams.has("filters")
+      ? urlSearchParams.get("filters").split(",")
+      : [];
+  });
 
   const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
 
@@ -78,7 +83,11 @@ export default function ContactList({ contact, setContact, type, setType }) {
   return (
     <Card className="ContactList" overflow="visible">
       <Box className="ContactList__header" p="24px">
-        <ContactsTypeToggle type={type} setType={setType} />
+        <ContactsTypeToggle
+          type={type}
+          setType={setType}
+          clearFilters={() => setFilters([])}
+        />
         <ContactsFilterControls
           type={type}
           filters={filters}

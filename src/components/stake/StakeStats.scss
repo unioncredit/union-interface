@@ -1,5 +1,16 @@
 @import "@unioncredit/ui/src/variables";
 
+.StakeStats {
+  .AvatarBadgeRow {
+    &:hover {
+      background: $grey100;
+    }
+    &:active {
+      background: $grey200;
+    }
+  }
+}
+
 @media screen and (max-width: $breakpoint-mobile) {
   .StakeStats {
     &__top {
@@ -23,7 +34,7 @@
         font-size: 18px !important;
         line-height: 24px !important;
       }
-      .AvatarBadgeRow .text {
+      .button--size-pill {
         margin: 0 4px !important;
         font-size: 8px !important
       }

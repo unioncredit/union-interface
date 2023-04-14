@@ -20,6 +20,7 @@ import { useModals } from "providers/ModalManager";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { StakeType } from "constants";
 import { AddressesAvatarBadgeRow } from "components/shared";
+import { Link } from "react-router-dom";
 
 export default function StakeStats() {
   const { open } = useModals();
@@ -102,14 +103,16 @@ export default function StakeStats() {
             dotColor="blue500"
             value={format(withdrawableStake)}
             after={
-              <AddressesAvatarBadgeRow
-                mt="8px"
-                addresses={vouchees.map((v) => v.address)}
-                showLabel={!vouchees.length || vouchees.length > 6}
-                label={`Providing to ${
-                  vouchees.length ? vouchees.length : "no"
-                } contacts`}
-              />
+              <Link to="/contacts/providing">
+                <AddressesAvatarBadgeRow
+                  mt="8px"
+                  addresses={vouchees.map((v) => v.address)}
+                  showLabel={!vouchees.length || vouchees.length > 6}
+                  label={`Providing to ${
+                    vouchees.length ? vouchees.length : "no"
+                  } contacts`}
+                />
+              </Link>
             }
           />
 
@@ -122,16 +125,18 @@ export default function StakeStats() {
             dotColor="violet500"
             value={format(totalLockedStake)}
             after={
-              <AddressesAvatarBadgeRow
-                mt="8px"
-                addresses={borrowingVouchees.map((v) => v.address)}
-                label={`${
-                  borrowingVouchees.length ? borrowingVouchees.length : "No"
-                } contacts borrowing`}
-                showLabel={
-                  !borrowingVouchees.length || borrowingVouchees.length > 6
-                }
-              />
+              <Link to="/contacts/receiving">
+                <AddressesAvatarBadgeRow
+                  mt="8px"
+                  addresses={borrowingVouchees.map((v) => v.address)}
+                  label={`${
+                    borrowingVouchees.length ? borrowingVouchees.length : "No"
+                  } contacts borrowing`}
+                  showLabel={
+                    !borrowingVouchees.length || borrowingVouchees.length > 6
+                  }
+                />
+              </Link>
             }
           />
 
@@ -144,16 +149,18 @@ export default function StakeStats() {
             dotColor="red500"
             value={format(defaulted)}
             after={
-              <AddressesAvatarBadgeRow
-                mt="8px"
-                addresses={defaultedVouchees.map((v) => v.address)}
-                label={`${
-                  defaultedVouchees.length ? defaultedVouchees.length : "No"
-                } defaulters`}
-                showLabel={
-                  !defaultedVouchees.length || defaultedVouchees.length > 6
-                }
-              />
+              <Link to="/contacts/providing?filters=overdue">
+                <AddressesAvatarBadgeRow
+                  mt="8px"
+                  addresses={defaultedVouchees.map((v) => v.address)}
+                  label={`${
+                    defaultedVouchees.length ? defaultedVouchees.length : "No"
+                  } defaulters`}
+                  showLabel={
+                    !defaultedVouchees.length || defaultedVouchees.length > 6
+                  }
+                />
+              </Link>
             }
           />
         </Box>
