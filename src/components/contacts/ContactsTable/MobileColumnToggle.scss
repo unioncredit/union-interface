@@ -24,9 +24,11 @@
       width: 100%;
     }
 
+    .Control--checkbox,
     .Control--radio {
       display: none;
     }
+    .Control--checkbox + .Control__label,
     .Control--radio + .Control__label {
       width: 100%;
       margin: 0 !important;
@@ -39,6 +41,7 @@
       color: $grey700;
       font-weight: 500;
     }
+    .Control--checkbox.Control--checked + .Control__label,
     .Control--radio.Control--checked + .Control__label {
       background: $blue100;
       color: $blue600;

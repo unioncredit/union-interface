@@ -1,15 +1,21 @@
 import { TableHead, TableRow } from "@unioncredit/ui";
+import { SortableTableHead } from "components/shared/SortableTableHead";
 
-export function ContactsTableHead({ items }) {
+export function ContactsTableHead({ items, sort, setSortType }) {
   return (
     <TableRow>
       <TableHead></TableHead>
       <TableHead>Account</TableHead>
 
-      {items.map((text, index) => (
-        <TableHead key={index} align="right">
-          {text}
-        </TableHead>
+      {items.map(({ id, label }, index) => (
+        <SortableTableHead
+          key={index}
+          align="right"
+          order={sort.type === id && sort.order}
+          onClick={() => setSortType(id)}
+        >
+          {label}
+        </SortableTableHead>
       ))}
     </TableRow>
   );

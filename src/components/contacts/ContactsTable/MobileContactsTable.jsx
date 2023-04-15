@@ -1,9 +1,8 @@
-import { ContactsTableHead } from "components/contacts/ContactsTable/ContactsTableHead";
 import {
   COLUMNS as PROVIDING_COLUMNS,
   ProvidingTableRow,
 } from "components/contacts/ContactsTable/ProvidingTableRow";
-import { Table } from "@unioncredit/ui";
+import { Table, TableHead, TableRow } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import MobileColumnToggle from "components/contacts/ContactsTable/MobileColumnToggle";
 import { ContactsType } from "constants";
@@ -14,29 +13,34 @@ import {
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 
-export function MobileContactsTable({ type, data, setContact }) {
+export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
   const [selectedColumn, setSelectedColumn] = useState(
     type === ContactsType.VOUCHEES
-      ? PROVIDING_COLUMNS.TRUST_SET
+      ? PROVIDING_COLUMNS.LOAN_STATUS
       : RECEIVING_COLUMNS.TRUST_SET
   );
 
   useEffect(() => {
     setSelectedColumn(
       type === ContactsType.VOUCHEES
-        ? PROVIDING_COLUMNS.TRUST_SET
+        ? PROVIDING_COLUMNS.LOAN_STATUS
         : RECEIVING_COLUMNS.TRUST_SET
     );
   }, [type]);
 
   return (
     <Table>
-      <ContactsTableHead
-        items={[
+      <TableRow>
+        <TableHead></TableHead>
+        <TableHead>Account</TableHead>
+
+        <TableHead align="right">
           <MobileColumnToggle
+            sort={sort}
+            setSort={setSort}
             columns={Object.values(
               type === ContactsType.VOUCHEES
                 ? PROVIDING_COLUMNS
@@ -44,9 +48,9 @@ export function MobileContactsTable({ type, data, setContact }) {
             )}
             active={selectedColumn}
             setSelectedColumn={setSelectedColumn}
-          />,
-        ]}
-      />
+          />
+        </TableHead>
+      </TableRow>
 
       {data.map((row) =>
         type === ContactsType.VOUCHEES ? (

@@ -117,3 +117,8 @@ export const Links = {
   PROTOCOL: "/protocol",
   LEADERBOARD: "/leaderboard",
 };
+
+export const SortOrder = {
+  ASC: "ascending",
+  DESC: "descending",
+};

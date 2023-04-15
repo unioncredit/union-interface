@@ -1,33 +1,47 @@
 import { ContactsTableHead } from "components/contacts/ContactsTable/ContactsTableHead";
 import { ContactsType } from "constants";
-import { ProvidingTableRow } from "components/contacts/ContactsTable/ProvidingTableRow";
-import { ReceivingTableRow } from "components/contacts/ContactsTable/ReceivingTableRow";
+import {
+  ProvidingTableRow,
+  COLUMNS as PROVIDING_COLUMNS,
+} from "components/contacts/ContactsTable/ProvidingTableRow";
+import {
+  ReceivingTableRow,
+  COLUMNS as RECEIVING_COLUMNS,
+} from "components/contacts/ContactsTable/ReceivingTableRow";
 import { Table } from "@unioncredit/ui";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 
-export function DesktopContactsTable({ type, data, setContact }) {
+export function DesktopContactsTable({
+  type,
+  data,
+  setContact,
+  sort,
+  setSortType,
+}) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
   return (
     <Table>
       <ContactsTableHead
+        sort={sort}
+        setSortType={setSortType}
         items={
           type === ContactsType.VOUCHEES
             ? [
-                "Trust set",
-                "Total vouch",
-                "Stake locked",
-                "Last payment",
-                "Loan status",
+                PROVIDING_COLUMNS.TRUST_SET,
+                PROVIDING_COLUMNS.TOTAL_VOUCH,
+                PROVIDING_COLUMNS.STAKE_LOCKED,
+                PROVIDING_COLUMNS.LAST_PAYMENT,
+                PROVIDING_COLUMNS.LOAN_STATUS,
               ]
             : [
-                "Trust set",
-                "Total vouch",
-                "Real vouch",
-                "You're locking",
-                "Borrowable",
+                RECEIVING_COLUMNS.TRUST_SET,
+                RECEIVING_COLUMNS.TOTAL_VOUCH,
+                RECEIVING_COLUMNS.REAL_VOUCH,
+                RECEIVING_COLUMNS.LOCKING,
+                RECEIVING_COLUMNS.BORROWABLE,
               ]
         }
       />

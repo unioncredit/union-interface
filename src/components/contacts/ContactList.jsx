@@ -3,7 +3,7 @@ import "./ContactList.scss";
 import { useEffect, useMemo, useState } from "react";
 import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
 
-import { ContactsType } from "constants";
+import { ContactsType, SortOrder, ZERO } from "constants";
 import { filterFunctions } from "components/contacts/FiltersPopover";
 import usePagination from "hooks/usePagination";
 import useContactSearch from "hooks/useContactSearch";
@@ -17,6 +17,52 @@ import { useVouchers } from "providers/VouchersData";
 import { DesktopContactsTable } from "components/contacts/ContactsTable/DesktopContactsTable";
 import useResponsive from "hooks/useResponsive";
 import { MobileContactsTable } from "components/contacts/ContactsTable/MobileContactsTable";
+import { COLUMNS as PROVIDING_COLUMNS } from "components/contacts/ContactsTable/ProvidingTableRow";
+import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/ReceivingTableRow";
+
+const score = (bools) => {
+  return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
+};
+
+const sortFns = {
+  [PROVIDING_COLUMNS.TRUST_SET.id]: {
+    [SortOrder.ASC]: (a, b) => a.trust.sub(b.trust),
+    [SortOrder.DESC]: (a, b) => b.trust.sub(a.trust),
+  },
+  [PROVIDING_COLUMNS.TOTAL_VOUCH.id]: {
+    [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
+  },
+  [PROVIDING_COLUMNS.STAKE_LOCKED.id]: {
+    [SortOrder.ASC]: (a, b) => a.locking.sub(b.locking),
+    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
+  },
+  [PROVIDING_COLUMNS.LAST_PAYMENT.id]: {
+    [SortOrder.ASC]: (a, b) => a.lastRepay.sub(b.lastRepay),
+    [SortOrder.DESC]: (a, b) => b.lastRepay.sub(a.lastRepay),
+  },
+  [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
+    [SortOrder.ASC]: (a, b) =>
+      score([a.isOverdue, a.isMember, a.locking.gt(ZERO)]) -
+      score([b.isOverdue, b.isMember, b.locking.gt(ZERO)]),
+    [SortOrder.DESC]: (a, b) =>
+      score([b.isOverdue, b.isMember, b.locking.gt(ZERO)]) -
+      score([a.isOverdue, a.isMember, a.locking.gt(ZERO)]),
+  },
+  [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
+    [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
+  },
+  [RECEIVING_COLUMNS.LOCKING.id]: {
+    [SortOrder.ASC]: (a, b) => a.locked.sub(b.locked),
+    [SortOrder.DESC]: (a, b) => b.locked.sub(a.locked),
+  },
+  [RECEIVING_COLUMNS.BORROWABLE.id]: {
+    [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locked).sub(b.vouch.sub(b.locked)),
+    [SortOrder.DESC]: (a, b) =>
+      b.vouch.sub(b.locked).sub(a.vouch.sub(a.locked)),
+  },
+};
 
 export default function ContactList({ contact, setContact, type, setType }) {
   const { isMobile } = useResponsive();
@@ -24,6 +70,19 @@ export default function ContactList({ contact, setContact, type, setType }) {
   const { data: vouchers = [] } = useVouchers();
 
   const [query, setQuery] = useState(null);
+
+  const [sort, setSort] = useState(
+    type === ContactsType.VOUCHEES
+      ? {
+          type: PROVIDING_COLUMNS.LOAN_STATUS.id,
+          order: SortOrder.DESC,
+        }
+      : {
+          type: null,
+          order: null,
+        }
+  );
+
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
     return urlSearchParams.has("filters")
@@ -63,29 +122,52 @@ export default function ContactList({ contact, setContact, type, setType }) {
 
   const searched = useContactSearch(contacts, query);
 
-  const filtered = useMemo(() => {
-    return filters
+  const filteredAndSorted = useMemo(() => {
+    const filtered = filters
       ? searched.filter((item) =>
           filters
             .map((filter) => filterFunctions[filter](item))
             .every((x) => x === true)
         )
       : searched;
-  }, [filters, JSON.stringify(searched)]);
+
+    return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
+  }, [sort, filters, JSON.stringify(searched)]);
+
+  const handleSort = (sortType) => {
+    if (sort.type !== sortType) {
+      return setSort({
+        type: sortType,
+        order: SortOrder.DESC,
+      });
+    }
+
+    setSort({
+      ...sort,
+      order: !sort.order
+        ? SortOrder.DESC
+        : sort.order === SortOrder.DESC
+        ? SortOrder.ASC
+        : null,
+    });
+  };
 
   const {
     data: contactsPage,
     maxPages,
     activePage,
     onChange,
-  } = usePagination(filtered);
+  } = usePagination(filteredAndSorted);
 
   return (
     <Card className="ContactList" overflow="visible">
       <Box className="ContactList__header" p="24px">
         <ContactsTypeToggle
           type={type}
-          setType={setType}
+          setType={(t) => {
+            setSort({ type: null, order: null });
+            setType(t);
+          }}
           clearFilters={() => setFilters([])}
         />
         <ContactsFilterControls
@@ -99,7 +181,7 @@ export default function ContactList({ contact, setContact, type, setType }) {
       {/*--------------------------------------------------------------
         Contacts Table 
       *--------------------------------------------------------------*/}
-      {filtered.length <= 0 ? (
+      {filteredAndSorted.length <= 0 ? (
         <Card.Body>
           <EmptyState label="No contacts" />
         </Card.Body>
@@ -110,12 +192,16 @@ export default function ContactList({ contact, setContact, type, setType }) {
               type={type}
               data={contactsPage}
               setContact={setContact}
+              sort={sort}
+              setSort={setSort}
             />
           ) : (
             <DesktopContactsTable
               type={type}
               data={contactsPage}
               setContact={setContact}
+              sort={sort}
+              setSortType={handleSort}
             />
           )}
         </div>
