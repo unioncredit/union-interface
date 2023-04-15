@@ -19,6 +19,7 @@ import useResponsive from "hooks/useResponsive";
 import { MobileContactsTable } from "components/contacts/ContactsTable/MobileContactsTable";
 import { COLUMNS as PROVIDING_COLUMNS } from "components/contacts/ContactsTable/ProvidingTableRow";
 import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/ReceivingTableRow";
+import { compareAddresses } from "utils/compare";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -90,7 +91,42 @@ export default function ContactList({ contact, setContact, type, setType }) {
       : [];
   });
 
-  const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
+  const contacts =
+    (type === ContactsType.VOUCHEES
+      ? [
+          ...vouchees,
+          ...vouchers
+            .filter(
+              (voucher) =>
+                !vouchees.find((vouchee) =>
+                  compareAddresses(vouchee.address, voucher.address)
+                )
+            )
+            .map(({ address }) => ({
+              address,
+              isOverdue: false,
+              locking: ZERO,
+              trust: ZERO,
+              vouch: ZERO,
+              lastRepay: ZERO,
+            })),
+        ]
+      : [
+          ...vouchers,
+          ...vouchees
+            .filter(
+              (vouchee) =>
+                !vouchers.find((voucher) =>
+                  compareAddresses(voucher.address, vouchee.address)
+                )
+            )
+            .map(({ address }) => ({
+              address,
+              locked: ZERO,
+              trust: ZERO,
+              vouch: ZERO,
+            })),
+        ]) || [];
 
   useEffect(() => {
     // Get the fake search params from the end of the hash fragment
