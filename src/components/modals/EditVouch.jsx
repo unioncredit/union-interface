@@ -62,7 +62,7 @@ export default function EditVouchModal({ address, clearContact }) {
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="EditVouchModal">
-        <Modal.Header onClose={handleClose}>
+        <Modal.Header onClose={handleClose} noHeight>
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>

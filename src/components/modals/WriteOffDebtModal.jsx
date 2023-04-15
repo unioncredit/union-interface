@@ -46,9 +46,17 @@ export default function WriteOffDebtModal({ address, clearContact }) {
     close();
   };
 
-  const { register, errors = {}, values = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    errors = {},
+    values = {},
+    empty,
+  } = useForm({ validate });
 
   const amount = values.amount || empty;
+
+  console.log("amount: ", amount);
 
   const buttonProps = useWrite({
     contract: "userManager",
@@ -64,7 +72,7 @@ export default function WriteOffDebtModal({ address, clearContact }) {
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="WriteOffDebt">
-        <Modal.Header onClose={handleClose}>
+        <Modal.Header onClose={handleClose} noHeight>
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>
@@ -79,11 +87,14 @@ export default function WriteOffDebtModal({ address, clearContact }) {
             <Input
               mt="16px"
               type="number"
+              name="amount"
               label="Amount to write-off"
-              rightLabel={`Max. ${format(locking)} DAI`}
-              suffix={<Dai />}
               error={errors.amount}
+              value={amount.display}
               onChange={register("amount")}
+              rightLabel={`Max. ${format(locking)} DAI`}
+              rightLabelAction={() => setRawValue("amount", locking, false)}
+              suffix={<Dai />}
             />
 
             <NumericalRows

@@ -26,7 +26,7 @@ export default function ManageContactModal({ address, clearContact }) {
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="ManageContactModal">
-        <Modal.Header onClose={handleClose}>
+        <Modal.Header onClose={handleClose} noHeight>
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>
