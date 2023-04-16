@@ -1,16 +1,17 @@
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
-import { useMemberData } from "providers/MemberData";
 import { ZERO } from "constants";
 import { compactFormattedNumber } from "utils/format";
 
-export function LeaderboardTableRow({ address, voteCount }) {
-  const { data: member = {} } = useMemberData(address);
-
-  const { unionBalance = ZERO, votes = ZERO } = member;
-
-  const delegatedVotes = votes.sub(unionBalance);
+export function LeaderboardTableRow({ data }) {
+  const {
+    address,
+    unionBalance = ZERO,
+    votes = ZERO,
+    delegatedVotes = ZERO,
+    voteCount = 0,
+  } = data;
 
   return (
     <TableRow key={address}>
