@@ -1,8 +1,10 @@
+import "./ProtocolDataHeader.scss";
+
 import { Box, Divider, Text } from "@unioncredit/ui";
 
 export function ProtocolDataHeader({ title, subTitle, ...props }) {
   return (
-    <Box fluid direction="vertical" {...props}>
+    <Box className="ProtocolDataHeader" fluid direction="vertical" {...props}>
       <Divider />
 
       <Box mt="16px" direction="vertical">
