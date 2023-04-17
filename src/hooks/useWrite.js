@@ -70,8 +70,16 @@ export default function useWrite({
       console.log("TxButton error message:", error.message);
       console.log("TxButton error code:", error.code);
 
-      if (error.code == "ACTION_REJECTED") {
+      if (error.code == 4001) {
         // User rejected the request
+        addToast({
+          link: null,
+          variant: Status.FAILED,
+          title: "User rejected",
+          content: "User rejected the request",
+          id: `${Status.FAILED}__${method}__${Date.now()}`,
+        });
+      } else {
         addToast(parseToast(Status.FAILED, null));
       }
 
