@@ -18,6 +18,7 @@ const selectVoucher = (version) => (data) => {
 
   return {
     checkIsMember,
+    isMember: checkIsMember,
     stakedBalance,
     ...(version === Versions.V1
       ? {
