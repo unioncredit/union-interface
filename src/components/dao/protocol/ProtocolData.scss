@@ -11,6 +11,26 @@
     }
   }
 
+  &__TokenCard {
+    padding: 16px;
+    border: 0.5px solid $grey200;
+    background: $grey50;
+    border-radius: 16px;
+
+    &__union {
+      width: 28px;
+      height: 28px;
+      background: $grey100;
+      padding: 6px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    p {
+      white-space: nowrap;
+    }
+  }
+
   @media screen and (max-width: $breakpoint-mobile) {
     .Card__header {
       display: flex;
