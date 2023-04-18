@@ -238,7 +238,7 @@ export default function RepayModal() {
               label: `Repay ${displayAmount} DAI`,
             }}
             approvalLabel="Approve Union to spend your DAI"
-            approvalCompleteLabel="You can now stake your DAI"
+            approvalCompleteLabel="You can now repay"
           />
         </Modal.Body>
       </Modal>
