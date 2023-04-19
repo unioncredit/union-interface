@@ -1,10 +1,9 @@
 import { useContractReads, useNetwork } from "wagmi";
 import { useEffect, useRef } from "react";
 
-import { CACHE_TIME, WAD, ZERO } from "constants";
+import { CACHE_TIME, ZERO, BlocksPerYear, WAD } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
-import { BlocksPerYear, WAD } from "constants";
 
 export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
