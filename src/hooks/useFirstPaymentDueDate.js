@@ -1,7 +1,7 @@
 import { useNetwork } from "wagmi";
-import { useProtocol } from "../providers/ProtocolData";
+import { useProtocol } from "providers/ProtocolData";
 import { BlockSpeed, ZERO } from "constants";
-import { formatDueDate } from "utils/dueDate";
+import { format } from "date-fns";
 
 export default function useFirstPaymentDueDate() {
   const { chain } = useNetwork();
@@ -9,5 +9,8 @@ export default function useFirstPaymentDueDate() {
   const { overdueBlocks = ZERO } = { ...protocol };
   const milliseconds = overdueBlocks.mul(BlockSpeed[chain.id]);
 
-  return formatDueDate(Number(milliseconds.toString()));
+  let date = new Date();
+  date.setSeconds(date.getSeconds() + milliseconds / 1000);
+
+  return format(date, "LLL d, yy");
 }

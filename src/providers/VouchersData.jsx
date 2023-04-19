@@ -7,10 +7,14 @@ import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME } from "constants";
 import { STALE_TIME } from "constants";
+import { compareAddresses } from "utils/compare";
 
 const VouchersContext = createContext({});
 
 export const useVouchers = () => useContext(VouchersContext);
+
+export const useVoucher = (address) =>
+  (useVouchers()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
 const selectVoucher = (data) => ({
   checkIsMember: data[0],

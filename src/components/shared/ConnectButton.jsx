@@ -1,12 +1,12 @@
 import { Button, Wallet } from "@unioncredit/ui";
 import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
 
-import Avatar from "components/shared/Avatar";
+import { Avatar } from "components/shared";
 import { useModals } from "providers/ModalManager";
 import { truncateAddress } from "utils/truncateAddress";
 import { ACCOUNT_MODAL } from "components/modals/AccountModal";
 
-export default function ConnectButton({ connectedElement, buttonProps }) {
+export function ConnectButton({ connectedElement, buttonProps }) {
   const { open } = useModals();
 
   return (
@@ -30,9 +30,16 @@ export default function ConnectButton({ connectedElement, buttonProps }) {
 
         return (
           <Button
+            color="secondary"
+            variant="light"
             label="Connect Wallet"
             className="ConnectButton"
             onClick={openConnectModal}
+            style={{
+              height: "40px",
+              fontSize: "16px",
+              backgroundColor: "transparent",
+            }}
             {...buttonProps}
           />
         );

@@ -6,10 +6,14 @@ import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
 import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
+import { compareAddresses } from "utils/compare";
 
 const VoucheesContext = createContext({});
 
 export const useVouchees = () => useContext(VoucheesContext);
+
+export const useVouchee = (address) =>
+  (useVouchees()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
 const selectVouchee = (data) => ({
   isMember: data[0],

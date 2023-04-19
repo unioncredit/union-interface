@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Label, Layout, Grid } from "@unioncredit/ui";
+import { Box, Text, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 import Routes from "./Routes";
 
@@ -14,10 +15,12 @@ import GovernanceData from "providers/GovernanceData";
 import ConnectPage from "pages/Connect";
 import { useAppNetwork } from "providers/Network";
 import Cache from "providers/Cache";
-import Header from "components/shared/Header";
+import { Header } from "components/shared";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 import useMemberListener from "hooks/useMemberListener";
+
+import ErrorPage from "pages/Error";
 
 /**
  * Shim component that checks if the App is ready
@@ -78,8 +81,11 @@ export default function App() {
         <Layout.Main>
           <Grid style={{ display: "flex", flexGrow: 1 }}>
             <Grid.Row style={{ width: "100%", margin: 0 }}>
-              <Grid.Col>
-                <ConnectPage />
+              <Grid.Col noPadding>
+                <Header showNav={false} />
+                <ErrorBoundary FallbackComponent={ErrorPage}>
+                  <ConnectPage />
+                </ErrorBoundary>
               </Grid.Col>
             </Grid.Row>
           </Grid>
@@ -94,7 +100,7 @@ export default function App() {
       <Layout.Main>
         <Grid style={{ display: "flex", flexGrow: 1 }}>
           <Grid.Row style={{ width: "100%", margin: 0 }}>
-            <Grid.Col>
+            <Grid.Col noPadding>
               <Cache>
                 <ProtocolData>
                   <GovernanceData>
@@ -103,10 +109,14 @@ export default function App() {
                         <VoucheesData>
                           <ModalManager>
                             <AppReadyShim>
+                              <Header />
                               {appReady ? (
                                 <>
-                                  <Header />
-                                  <Routes />
+                                  <ErrorBoundary FallbackComponent={ErrorPage}>
+                                    <Layout.Columned>
+                                      <Routes />
+                                    </Layout.Columned>
+                                  </ErrorBoundary>
                                 </>
                               ) : (
                                 <ConnectPage />
@@ -124,9 +134,9 @@ export default function App() {
         </Grid>
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
-            <Label as="p" size="small" grey={300} align="center">
+            <Text size="small" grey={300} align="center">
               Build: {process.env.REACT_APP_VERSION}
-            </Label>
+            </Text>
           </Box>
         </Box>
       </Layout.Main>

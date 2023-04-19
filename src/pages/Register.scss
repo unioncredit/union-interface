@@ -1,17 +1,41 @@
 @import "../variables.scss";
+@import "@unioncredit/ui/src/variables";
 
 .Register {
   &__heading {
+    font-size: 24px;
+    line-height: 32px;
     margin-top: 48px;
 
-    @media screen and (max-width: $mobileWidth) {
-      margin-top: 0;
+    @media screen and (max-width: $breakpoint-mobile) {
+      margin-top: 24px;
     }
   }
   &__col {
     @media screen and (max-width: $mobileWidth) {
       padding-left: 0 !important;
       padding-right: 0 !important;
+    }
+  }
+  &__container {
+    padding: 40px 24px;
+    border-radius: 12px;
+    background: $grey50;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 24px;
+    }
+  }
+  &__fee {
+    padding: 8px 12px;
+    background: white;
+    border: 0.5px solid $grey200;
+    border-radius: 12px;
+
+    p {
+      font-size: 30px;
+      line-height: 36px;
+      margin-right: 4px !important;
     }
   }
 }

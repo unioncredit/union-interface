@@ -1,4 +1,12 @@
 import links from "config/links";
+import {
+  BlogIcon,
+  TermsIcon,
+  CopyIcon,
+  MarketingIcon,
+  DiscordIcon,
+} from "@unioncredit/ui";
+import { Links } from "constants";
 
 export const items = {
   getStarted: {
@@ -11,32 +19,35 @@ export const items = {
     id: "credit",
     label: "Credit",
     pathname: "/",
+    childPaths: ["/stake", "/contacts/providing", "/contacts/receiving"],
   },
-  contacts: {
-    id: "contacts",
-    label: "Contacts",
-    pathname: "/contacts",
-  },
-  governance: {
+  dao: {
     id: "governance",
-    label: "Governance",
-    pathname: "/governance",
+    label: "DAO",
+    pathname: Links.GOVERNANCE,
+    childPaths: ["/protocol", "/leaderboard"],
   },
 };
 
 export const contextMenuItems = [
+  { icon: BlogIcon, label: "Blog", target: "_blank", href: links.blog },
+  { icon: CopyIcon, label: "Docs", target: "_blank", href: links.docs },
   {
-    label: "Docs",
-    target: "_blank",
-    href: links.docs,
-  },
-  { label: "Blog", target: "_blank", href: links.blog },
-  {
+    icon: MarketingIcon,
     label: "Twitter",
     target: "_blank",
     href: links.twitter,
   },
-  { label: "Discord", target: "_blank", href: links.discord },
-  { label: "Github", target: "_blank", href: links.github },
-  { label: "Stats", target: "_blank", href: links.data },
+  {
+    icon: DiscordIcon,
+    label: "Discord",
+    target: "_blank",
+    href: links.discord,
+  },
+  {
+    icon: TermsIcon,
+    label: "Terms & Conditions",
+    target: "_blank",
+    href: links.github,
+  },
 ];

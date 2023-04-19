@@ -5,18 +5,17 @@ import {
   EmptyState,
   TableRow,
   TableHead,
-  Label,
+  Text,
   TableCell,
   Box,
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
 
 import format from "utils/format";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel } from "components/shared";
 import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
 
 export default function VouchersCard() {
   const navigate = useNavigate();
@@ -66,12 +65,12 @@ export default function VouchersCard() {
                 </TableCell>
                 <TableCell>
                   <Box direction="vertical">
-                    <Label grey={700} m={0}>
+                    <Text grey={700} m={0}>
                       <PrimaryLabel address={address} />
-                    </Label>
-                    <Label size="small" grey={400} m={0}>
+                    </Text>
+                    <Text size="small" grey={400} m={0}>
                       {truncateAddress(address)}
-                    </Label>
+                    </Text>
                   </Box>
                 </TableCell>
                 <TableCell align="right">{format(vouch)}</TableCell>

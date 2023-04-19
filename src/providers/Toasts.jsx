@@ -2,7 +2,7 @@ import "./Toasts.scss";
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 
-import { Label, Notification, NotificationStack } from "@unioncredit/ui";
+import { Text, Notification, NotificationStack } from "@unioncredit/ui";
 
 const ToastsContext = createContext({});
 
@@ -52,7 +52,7 @@ export default function Toasts({ children }) {
             variant={toast.variant}
             onClose={() => closeToast(toast.id)}
           >
-            <Label as="p" size="small">
+            <Text size="small">
               {toast.link ? (
                 <a href={toast.link} target="_blank" rel="noreferrer">
                   {toast.content}
@@ -60,7 +60,7 @@ export default function Toasts({ children }) {
               ) : (
                 toast.content
               )}
-            </Label>
+            </Text>
           </Notification>
         ))}
       </NotificationStack>

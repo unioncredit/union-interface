@@ -1,17 +1,22 @@
 import { useNetwork } from "wagmi";
 import { Link } from "react-router-dom";
-import { Heading, Badge, Box, BadgeRow, Skeleton } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
+import {
+  Heading,
+  Badge,
+  Box,
+  BadgeRow,
+  Skeleton,
+  ProfileIcon,
+  LinkOutIcon,
+} from "@unioncredit/ui";
 
 import { EIP3770 } from "constants";
-import StatusBadge from "./StatusBadge";
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 
-export default function AddressSummary({ address }) {
+export function AddressSummary({ address, ...props }) {
   const { chain } = useNetwork();
   const [copied, copy] = useCopyToClipboard();
 
@@ -35,10 +40,10 @@ export default function AddressSummary({ address }) {
   }
 
   return (
-    <Box mb="24px" align="center">
+    <Box mb="24px" align="center" {...props}>
       <Box align="center">
         <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
-          <Avatar size={54} address={address} />
+          <Avatar size={64} address={address} />
         </Link>
 
         <Box direction="vertical" mx="12px">
@@ -49,19 +54,28 @@ export default function AddressSummary({ address }) {
               </Heading>
             </Box>
           </Link>
-          <Box>
+          <Box align="center">
             <BadgeRow>
               <Badge
                 mr="4px"
                 color="grey"
                 onClick={() => copy(address)}
-                label={copied ? "Copied!" : truncateAddress(address)}
+                label={copied ? "Copied" : truncateAddress(address)}
               />
               <StatusBadge address={address} />
             </BadgeRow>
 
+            <a href="#">
+              <ProfileIcon width="20px" style={{ marginLeft: "6px" }} />
+            </a>
+
             <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-              <External width="24px" />
+              <LinkOutIcon
+                width="16px"
+                fill="#44403c"
+                className="fillPath"
+                style={{ marginLeft: "10px" }}
+              />
             </a>
           </Box>
         </Box>

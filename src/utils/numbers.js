@@ -1,4 +1,4 @@
-import { BlocksPerYear, ZERO } from "constants";
+import { BlocksPerYear, WAD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
@@ -15,6 +15,13 @@ export const bnPercent = (n, d) => {
   const bps = n.mul(10000).div(d);
   return Number(bps.toString()) / 10000;
 };
+
+export const toPercent = (number, digits = 0) =>
+  Number(number).toLocaleString(undefined, {
+    style: "percent",
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
+  });
 
 // Converts scientific notation to a decimal formatted string
 // https://stackoverflow.com/a/66072001
@@ -60,4 +67,17 @@ export const calculateMinPayment = (interest) => {
 
 export const calculateInterestRate = (borrowRatePerBlock, chainId) => {
   return borrowRatePerBlock.mul(BlocksPerYear[chainId]);
+};
+
+export const calculateExpectedMinimumPayment = (
+  borrowAmount,
+  borrowRatePerBlock,
+  overdueBlocks
+) => {
+  const floor = parseEther("0.1");
+  const minimumPayment = borrowAmount
+    .mul(borrowRatePerBlock)
+    .mul(overdueBlocks)
+    .div(WAD);
+  return minimumPayment.lt(floor) ? floor : minimumPayment;
 };

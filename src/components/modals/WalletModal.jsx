@@ -4,11 +4,11 @@ import {
   Box,
   Union,
   Heading,
-  Label,
+  Text,
   Divider,
   Button,
+  LinkOutIcon,
 } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
@@ -48,27 +48,23 @@ export default function WalletModal() {
               {format(unionBalance.add(unclaimedRewards), 4)}
               <Union />
             </Heading>
-            <Label m={0} grey={400}>
+            <Text m={0} grey={400}>
               Total Balance
-            </Label>
+            </Text>
           </Box>
 
           <Box justify="space-between" mt="8px">
-            <Label as="p" grey={400}>
-              Wallet
-            </Label>
-            <Label as="p" grey={700} m={0}>
+            <Text grey={400}>Wallet</Text>
+            <Text grey={700} m={0}>
               <Union value={format(unionBalance)} />
-            </Label>
+            </Text>
           </Box>
           <Divider mb="8px" />
           <Box justify="space-between" mb="18px">
-            <Label as="p" grey={400}>
-              Unclaimed
-            </Label>
-            <Label as="p" grey={700} m={0}>
+            <Text grey={400}>Unclaimed</Text>
+            <Text grey={700} m={0}>
               <Union value={format(unclaimedRewards)} />
-            </Label>
+            </Text>
           </Box>
 
           <Button
@@ -85,10 +81,18 @@ export default function WalletModal() {
             as="a"
             mt="4px"
             target="_blank"
-            variant="secondary"
+            color="secondary"
+            // variant="light"
             label="Union Governance"
             href="#"
-            icon={External}
+            icon={LinkOutIcon}
+            iconPosition="end"
+            iconProps={{
+              style: {
+                width: "12px",
+                height: "12px",
+              },
+            }}
           />
         </Modal.Body>
       </Modal>

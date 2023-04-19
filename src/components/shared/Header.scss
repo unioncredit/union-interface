@@ -1,15 +1,51 @@
+@import "@unioncredit/ui/src/variables.scss";
+
 .Header__Box--loading {
   .nav-item {
     visibility: hidden;
   }
 }
 
-.UnionWallet.button.UnionWallet.button {
-  height: 32px;
+.UnionWallet.button {
+  height: 40px;
   min-height: 0;
   padding: 8px;
+  color: $grey600;
+  font-size: 14px !important;
+}
 
-  .text {
-    font-size: 14px !important;
+.Header {
+  .UnionWallet.button,
+  .wallet.button {
+    background: $grey50;
+  }
+}
+
+.Header__context-menu .PopoverMenu__button,
+.Header__hamburger {
+  width: 40px !important;
+  height: 40px;
+  min-height: 0;
+  margin-left: 4px;
+}
+.Header__hamburger {
+  padding: 11px !important;
+
+  &.active {
+    padding: 8px !important;
+  }
+}
+
+.Header__context-menu {
+  .PopoverMenu__button {
+    border: 1px solid $grey200;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 8px;
+
+    &--open,
+    &:hover {
+      background-color: $grey100;
+    }
   }
 }

@@ -1,0 +1,56 @@
+@import "@unioncredit/ui/src/variables";
+
+.ManageContactModal {
+  .Card__body {
+    padding: 0;
+  }
+
+  .container {
+    padding: 24px;
+
+    &--no-vertical {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__tabs {
+    height: 48px;
+    padding: 0;
+    border-radius: 0;
+    background: white;
+    border-left: none;
+    border-right: none;
+
+    .SegmentedControl__wrap {
+      height: 100%;
+    }
+    .SegmentedControl__item {
+      margin: 0;
+
+      &--slider {
+        height: 2px;
+        box-sizing: border-box;
+        box-shadow: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: $blue500 !important;
+        border-radius: 0;
+        padding: 0;
+        top: auto;
+        bottom: 0;
+        z-index: 2;
+        width: 50% !important;
+      }
+
+      &:not(.SegmentedControl__item--slider) {
+        border-radius: 0;
+
+        &:hover {
+          background: white;
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ import { mainnet } from "wagmi/chains";
 import { truncateAddress } from "utils/truncateAddress";
 import useLabels from "hooks/useLabels";
 
-export default function PrimaryLabel({ address }) {
+export function PrimaryLabel({ address }) {
   const { data } = useEnsName({
     address,
     chainId: mainnet.id,

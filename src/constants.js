@@ -26,14 +26,14 @@ export const Status = {
 };
 
 export const Errors = {
-  MAX_USER_STAKE: "Max stake exceeded",
-  MAX_USER_UNSTAKE: "Max withdrawable exceeded",
+  MAX_USER_BALANCE_EXCEEDED: "Amount entered exceeds available balance",
+  MAX_STAKE_LIMIT_EXCEEDED: "Deposit size exceeds staking limit",
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
-  TRUST_LT_LOCKING: "Trust cannot be less than locking",
+  TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
   EXCEEDED_LOCK: "Amount exceeded locked value",
   IS_OVERDUE: "You cannot borrow with an overdue balance",
 };
@@ -88,8 +88,8 @@ export const ProposalState = [
 
 export const StatusColorMap = {
   executed: "green",
-  active: "purple",
-  canceled: "blue",
+  active: "blue",
+  canceled: "purple",
   defeated: "red",
 };
 
@@ -106,4 +106,18 @@ export const MultiStep = {
   SELECTED: "selected",
   PENDING: "pending",
   COMPLETE: "complete",
+};
+
+export const Links = {
+  CREDIT: "/",
+  STAKE: "/stake",
+  CONTACTS: "/contacts/providing",
+  GOVERNANCE: "/governance",
+  PROTOCOL: "/protocol",
+  LEADERBOARD: "/leaderboard",
+};
+
+export const SortOrder = {
+  ASC: "ascending",
+  DESC: "descending",
 };

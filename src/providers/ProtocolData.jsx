@@ -16,18 +16,14 @@ const buildContractConfigs = (contract, calls, chainId) =>
     chainId,
   }));
 
-export default function ProtcolData({ children }) {
-  const { chain: connectedChain } = useNetwork();
-
-  const chainId = connectedChain?.id || mainnet.id;
-
-  const isMainnet = connectedChain === mainnet.id;
-
+export const useProtocolData = (chainId) => {
+  const isMainnet = chainId === mainnet.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
   const governorContract = useContract("governor", mainnet.id);
+  const timelockContract = useContract("timelock", mainnet.id);
   const unionTokenContract = useContract("union", chainId);
   const assetManagerContract = useContract("assetManager", chainId);
 
@@ -69,7 +65,14 @@ export default function ProtcolData({ children }) {
     "gLastUpdatedBlock",
   ];
 
-  const governorFunctionsNames = ["quorumVotes"];
+  const governorFunctionsNames = [
+    "quorumVotes",
+    "proposalThreshold",
+    "votingDelay",
+    "votingPeriod",
+  ];
+
+  const timelockFunctionNames = ["getMinDelay"];
 
   const unionTokenFunctionNames = ["totalSupply"];
 
@@ -97,6 +100,13 @@ export default function ProtcolData({ children }) {
           chainId
         )
       : []),
+    ...(isMainnet
+      ? buildContractConfigs(
+          timelockContract,
+          timelockFunctionNames.map((n) => ({ functionName: n })),
+          chainId
+        )
+      : []),
     ...buildContractConfigs(
       unionTokenContract,
       unionTokenFunctionNames.map((n) => ({ functionName: n })),
@@ -113,6 +123,7 @@ export default function ProtcolData({ children }) {
         ...uTokenFunctionNames,
         ...comptrollerFunctionNames,
         ...(isMainnet ? governorFunctionsNames : []),
+        ...(isMainnet ? timelockFunctionNames : []),
         ...unionTokenFunctionNames,
       ].reduce(
         (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
@@ -139,8 +150,17 @@ export default function ProtcolData({ children }) {
 
   const data = { ...resp.data, ...resp0.data };
 
+  return { data };
+};
+
+export default function ProtcolData({ children }) {
+  const { chain: connectedChain } = useNetwork();
+  const chainId = connectedChain?.id || mainnet.id;
+
+  const { data } = useProtocolData(chainId);
+
   return (
-    <ProtocolContext.Provider value={{ ...resp, data }}>
+    <ProtocolContext.Provider value={{ data }}>
       {children}
     </ProtocolContext.Provider>
   );
