@@ -39,3 +39,19 @@
     }
   }
 }
+
+.MiniProgressListContainer {
+  position: fixed;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  display: none;
+  justify-content: center;
+  z-index: 9999;
+}
+
+@media screen and (max-width: 600px) {
+  .MiniProgressListContainer {
+    display: flex;
+  }
+}

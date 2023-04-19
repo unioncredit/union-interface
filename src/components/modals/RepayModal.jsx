@@ -234,7 +234,7 @@ export default function RepayModal() {
           <Approval
             owner={address}
             amount={amount.raw}
-            spender={uTokenContract.addressOrName}
+            spender={uTokenContract.address}
             requireApproval
             tokenContract="dai"
             actionProps={{
@@ -245,7 +245,7 @@ export default function RepayModal() {
               label: `Repay ${displayAmount} DAI`,
             }}
             approvalLabel="Approve Union to spend your DAI"
-            approvalCompleteLabel="You can now stake your DAI"
+            approvalCompleteLabel="You can now repay"
           />
         </Modal.Body>
       </Modal>

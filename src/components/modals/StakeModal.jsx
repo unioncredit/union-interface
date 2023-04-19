@@ -49,7 +49,9 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     maxStakeAmount = ZERO,
   } = { ...member, ...protocol };
 
-  const userStakeLimit = maxStakeAmount.sub(stakedBalance);
+  let userStakeLimit = maxStakeAmount.sub(stakedBalance);
+  userStakeLimit = userStakeLimit.lte(0) ? ZERO : userStakeLimit;
+
   const maxUserStake = min(userStakeLimit, daiBalance);
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
@@ -73,6 +75,8 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     values = {},
     errors = {},
     empty,
+    setRawValue,
+    reset,
     isErrored,
   } = useForm({
     validate: type === StakeType.STAKE ? validateStake : validateUnstake,
@@ -98,7 +102,10 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
           <SegmentedControl
             items={toggleMenuOptions}
             initialActive={initialActiveIndex}
-            onChange={(item) => setType(item.id)}
+            onChange={(item) => {
+              setType(item.id);
+              reset();
+            }}
           />
 
           <Box mt="24px">
@@ -107,7 +114,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               placeholder="0"
               suffix={<Dai />}
               error={errors.amount}
-              value={amount.display}
+              value={amount.formatted}
               onChange={register("amount")}
               {...inputProps}
             />
@@ -171,7 +178,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
           <Approval
             owner={address}
             amount={amount.raw}
-            spender={userManagerContract.addressOrName}
+            spender={userManagerContract.address}
             requireApproval={type === StakeType.STAKE}
             tokenContract="dai"
             actionProps={{

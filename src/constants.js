@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { chain } from "wagmi";
+import { mainnet, arbitrum, goerli } from "wagmi/chains";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -44,35 +44,34 @@ export const ContactsType = {
 };
 
 export const BlockSpeed = {
-  [chain.mainnet.id]: 12e3,
-  [chain.arbitrum.id]: 12e3,
-  [chain.goerli.id]: 12e3,
+  [mainnet.id]: 12e3,
+  [arbitrum.id]: 12e3,
+  [goerli.id]: 12e3,
 };
 
 export const BlocksPerYear = {
-  [chain.mainnet.id]: 2628333,
-  [chain.arbitrum.id]: 2628333,
-  [chain.goerli.id]: 2628333,
+  [mainnet.id]: 2628333,
+  [arbitrum.id]: 2628333,
+  [goerli.id]: 2628333,
 };
 
 export const EIP3770 = {
-  [chain.mainnet.id]: "eth",
-  [chain.arbitrum.id]: "arb1",
-  [chain.goerli.id]: "goe",
+  [mainnet.id]: "eth",
+  [arbitrum.id]: "arb1",
+  [goerli.id]: "goe",
 };
 
 export const EIP3770Map = {
-  eth: chain.mainnet.id,
-  arb1: chain.arbitrum.id,
-  goe: chain.goerli.id,
+  eth: mainnet.id,
+  arb1: arbitrum.id,
+  goe: goerli.id,
 };
 
 export const TheGraphUrls = {
-  [chain.mainnet.id]:
-    "https://api.thegraph.com/subgraphs/name/geraldhost/union",
-  [chain.arbitrum.id]:
+  [mainnet.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union",
+  [arbitrum.id]:
     "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
-  [chain.goerli.id]:
+  [goerli.id]:
     "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
 };
 

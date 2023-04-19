@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^0.7.4",
+    "@rainbow-me/rainbowkit": "^0.10.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -14,7 +14,7 @@
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.6",
     "ethereum-blockies-base64": "^1.0.2",
-    "ethers": "^5.7.1",
+    "ethers": "^5.7.2",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "js-confetti": "^0.11.0",
@@ -30,7 +30,7 @@
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
     "serve": "^14.1.2",
-    "wagmi": "^0.6.8",
+    "wagmi": "^0.11.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

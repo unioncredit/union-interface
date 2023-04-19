@@ -9,6 +9,9 @@ import {
   Text,
   Box,
   UnionIcon,
+  Divider,
+  Label,
+  MiniProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -32,6 +35,10 @@ export default function RegisterPage() {
     voucher.stakerBalance.gt(ZERO)
   );
 
+  const stakeStep = useRef();
+  const vouchStep = useRef();
+  const memberStep = useRef();
+
   const {
     isMember = false,
     unionBalance = ZERO,
@@ -54,6 +61,15 @@ export default function RegisterPage() {
     return completed;
   };
 
+  const stakeComplete = unionBalance?.add(unclaimedRewards).gt(0);
+  const vouchComplete = vouchers.length > 0;
+
+  const miniProgressListItems = [
+    { number: 1, complete: stakeComplete, scrollTo: stakeStep },
+    { number: 2, complete: vouchComplete, scrollTo: vouchStep },
+    { number: 3, complete: isMember, scrollTo: memberStep },
+  ];
+
   return (
     <>
       <Helmet>
@@ -70,21 +86,18 @@ export default function RegisterPage() {
             </Text>
 
             <ProgressList mt="24px">
-              <ProgressListItem
-                number={1}
-                complete={unionBalance?.add(unclaimedRewards).gt(0)}
-              >
-                <div ref={null}>
+              <ProgressListItem number={1} complete={stakeComplete}>
+                <div ref={stakeStep}>
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={2} complete={vouchers.length > 0}>
-                <div ref={null}>
+              <ProgressListItem number={2} complete={vouchComplete}>
+                <div ref={vouchStep}>
                   <VouchersStep />
                 </div>
               </ProgressListItem>
               <ProgressListItem number={3} complete={isMember}>
-                <div ref={null}>
+                <div ref={memberStep}>
                   <Card size="fluid" mb="24px">
                     <Card.Body>
                       <Heading level={2} size="large" grey={700}>
@@ -127,6 +140,9 @@ export default function RegisterPage() {
           </Grid.Col>
         </Grid.Row>
       </Grid>
+      <div className="MiniProgressListContainer">
+        <MiniProgressList items={miniProgressListItems} />
+      </div>
     </>
   );
 }

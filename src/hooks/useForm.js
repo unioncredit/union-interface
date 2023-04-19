@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { parseUnits } from "ethers/lib/utils";
+import { formatEther, parseUnits } from "ethers/lib/utils";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -16,8 +16,8 @@ const formatValue = (value, rounded) =>
 export default function useForm(props = {}) {
   const { validate } = props;
 
-  const [values, setValues] = useState();
-  const [errors, setErrors] = useState();
+  const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
 
   const setNumber = (name, value, type, rounded) => {
     let newValues;
@@ -25,12 +25,23 @@ export default function useForm(props = {}) {
     if (!value) {
       // If the value is empty set the raw value to 0 and
       // the display value to an empty string
-      newValues = { ...values, [name]: { raw: ZERO, display: "" } };
+      newValues = {
+        ...values,
+        [name]: { raw: ZERO, display: "", formatted: "" },
+      };
     } else {
       const parsed =
         type === "display"
-          ? { raw: parseUnits(toFixed(value)), display: value }
-          : { raw: value, display: formatValue(value, rounded) };
+          ? {
+              raw: parseUnits(toFixed(value)),
+              display: value,
+              formatted: value,
+            }
+          : {
+              raw: value,
+              display: formatValue(value, rounded),
+              formatted: formatEther(value),
+            };
 
       newValues = { ...values, [name]: parsed };
     }
@@ -64,6 +75,11 @@ export default function useForm(props = {}) {
     setValue(name, event.target.value, event.target.type);
   };
 
+  const reset = () => {
+    setValues({});
+    setErrors({});
+  };
+
   return {
     values,
     errors: errors,
@@ -71,6 +87,7 @@ export default function useForm(props = {}) {
     setRawValue,
     setSimple,
     register,
+    reset,
     empty,
     isErrored: Object.values(errors || {}).filter(Boolean).length > 0,
   };

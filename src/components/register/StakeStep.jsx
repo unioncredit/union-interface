@@ -45,7 +45,7 @@ export default function StakeStep() {
 
   const percentage = unionBalance.gte(WAD)
     ? 100
-    : Number(unionBalance.div(WAD));
+    : Number(unionBalance.mul(10000).div(WAD)) / 100;
 
   const unionEarned = unionBalance.add(unclaimedRewards);
   const effectiveTotalStake = totalStaked.sub(totalFrozen);

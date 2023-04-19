@@ -65,7 +65,9 @@ const sortFns = {
   },
 };
 
-export default function ContactList({ contact, setContact, type, setType }) {
+export default function ContactList({ contact,
+                                      setContactIndex,
+                                      contacts, type, setType }) {
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
@@ -138,16 +140,18 @@ export default function ContactList({ contact, setContact, type, setType }) {
     // it as the active address in the list
     if (!contact && urlSearchParams.has("address")) {
       const searchAddress = urlSearchParams.get("address");
-      const searchContact = contacts.find(
+      const searchContactIndex = contacts.findIndex(
         ({ address }) => address === searchAddress
       );
 
-      if (searchContact) {
+      if (!!~searchContactIndex) {
         window.history.pushState(
           history.state,
           document.title,
           window.location.href.split("?")[0]
         );
+        setContactIndex(searchContactIndex);
+        return;
       }
     }
   }, [contact, contacts[0]]);

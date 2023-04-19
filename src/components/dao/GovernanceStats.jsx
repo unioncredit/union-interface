@@ -7,7 +7,8 @@ import {
   NumericalBlock,
 } from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
-import { chain, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
+import { mainnet, arbitrum } from "wagmi/chains";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -15,9 +16,9 @@ import { calculateInterestRate } from "utils/numbers";
 
 const getAnalyticsUrl = (chainId) => {
   switch (chainId) {
-    case chain.mainnet.id:
+    case mainnet.id:
       return "https://data.union.finance/";
-    case chain.arbitrum.id:
+    case arbitrum.id:
       return "https://data.union.finance/arbitrum";
     default:
       return null;
@@ -27,12 +28,13 @@ const getAnalyticsUrl = (chainId) => {
 export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
-  const analyticsUrl = getAnalyticsUrl(chain.id);
+  const analyticsUrl = getAnalyticsUrl(chain?.id);
 
   const {
     totalStaked = ZERO,
     totalBorrows = ZERO,
     getLoanableAmount = ZERO,
+    borrowRatePerBlock = ZERO,
   } = protocol;
 
   return (
@@ -63,15 +65,12 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {protocol.borrowRatePerBlock && (
+              {chain && borrowRatePerBlock && (
                 <NumericalBlock
                   mt="32px"
                   title="Interest rate"
                   value={`${format(
-                    calculateInterestRate(
-                      protocol.borrowRatePerBlock,
-                      chain.id
-                    ).mul(100)
+                    calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
                   )}%`}
                 />
               )}
