@@ -16,22 +16,22 @@ import {
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
+import { isAddress } from "ethers/lib/utils";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
 import { isAddress } from "ethers/lib/utils";
 import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
-
 import { useMemberData } from "providers/MemberData";
-import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { EIP3770, ZERO_ADDRESS } from "constants";
-import { networks } from "config/networks";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import { blockExplorerAddress } from "utils/blockExplorer";
+import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
@@ -43,12 +43,15 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const [copied, copy] = useCopyToClipboard();
   const [copiedAddress, copyAddress] = useCopyToClipboard();
 
+  const networks = useNetworks(true);
+
   const {
-    address = ZERO_ADDRESS,
     isMember = false,
     stakerAddresses = [],
     borrowerAddresses = [],
   } = profileMember;
+
+  const address = profileMember.address || ZERO_ADDRESS;
 
   const { borrowerAddresses: connectedMemberBorrowerAddresses = [] } =
     connectedMember;
@@ -77,7 +80,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <div className="ProfileInner__avatar">
               <Avatar address={address} size={56} />
               <div className="ProfileInner__avatar__network">
-                <UiAvatar src={targetNetwork.imageSrc} size={24} />
+                <UiAvatar src={targetNetwork?.imageSrc} size={24} />
               </div>
             </div>
             <Heading mt="8px" mb={0}>
@@ -129,8 +132,8 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     mt="20px"
                     color="blue"
                     icon={Switch}
-                    label={`Switch to ${targetNetwork.label}`}
-                    onClick={() => switchNetworkAsync(targetNetwork.chainId)}
+                    label={`Switch to ${targetNetwork?.label}`}
+                    onClick={() => switchNetworkAsync(targetNetwork?.chainId)}
                   />
                 ) : alreadyVouching ? (
                   <Button
@@ -223,7 +226,7 @@ export default function Profile() {
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1):/)
+  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe):/)
     ? addressOrEnsParts
     : [EIP3770[mainnet.id], addressOrEnsParam];
 

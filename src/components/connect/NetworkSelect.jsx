@@ -1,35 +1,28 @@
 import "./NetworkSelect.scss";
 
+import cn from "classnames";
 import { Box, Button, WalletIcon } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
-import { networks } from "config/networks";
 import { useAppNetwork } from "providers/Network";
-import { EIP3770Map } from "constants";
-
-import { locationSearch } from "utils/location";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
-import cn from "classnames";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
-  const { address } = useAccount();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { switchNetworkAsync } = useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+  });
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
-  const urlSearchParams = locationSearch();
-
-  const targetChain = urlSearchParams.has("chain")
-    ? EIP3770Map[urlSearchParams.get("chain")]
-    : chain?.id;
+  const networks = useNetworks();
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
@@ -46,29 +39,10 @@ export default function NetworkSelect() {
   };
 
   useEffect(() => {
-    (async function () {
-      if (
-        switchNetworkAsync &&
-        isConnected &&
-        targetChain &&
-        !chain?.unsupported
-      ) {
-        const toSelect = networks.find(
-          (network) => network.chainId === targetChain
-        );
-        if (toSelect?.chainId !== selected?.chainId) {
-          setSelected(toSelect);
-
-          // If the current network is not he same as the selected network
-          // fire off a chain network request. This is to support the ?chain
-          // URL search param
-          if (toSelect.chainId !== chain.id) {
-            await switchNetworkAsync(toSelect.chainId);
-          }
-        }
-      }
-    })();
-  }, [isConnected, targetChain, switchNetworkAsync]);
+    if (!chain?.id) return;
+    const found = networks.find((net) => net.chainId === chain.id);
+    setSelected(found || null);
+  }, [chain?.id, JSON.stringify(networks)]);
 
   return (
     <Box

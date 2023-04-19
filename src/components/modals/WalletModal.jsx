@@ -20,7 +20,7 @@ export const WALLET_MODAL = "wallet-modal";
 
 export default function WalletModal() {
   const { close } = useModals();
-  const { data: member = {} } = useMember();
+  const { data: member = {}, refetch } = useMember();
 
   const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
@@ -32,6 +32,7 @@ export default function WalletModal() {
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unclaimedRewards.gt(0),
+    onComplete: refetch,
   });
 
   /*--------------------------------------------------------------

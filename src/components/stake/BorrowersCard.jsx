@@ -82,9 +82,9 @@ export default function BorrowersCard() {
                 <StatusBadge address={address} />
               </TableCell>
               <TableCell align="right">{format(locking)}</TableCell>
-            </TableRow>
-          ))}
-        </Table>
+              </TableRow>
+            ))}
+          </Table>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
