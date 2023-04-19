@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { isAddress } from "ethers/lib/utils";
 import { useEnsName, useEnsAddress } from "wagmi";
-import { Input, Text, Box, LoadingSpinner } from "@unioncredit/ui";
+import { Input, Text, Box, LoadingSpinner, EnsIcon } from "@unioncredit/ui";
 
 import { Errors } from "constants";
 import { Avatar } from "components/shared";
