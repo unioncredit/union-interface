@@ -11,7 +11,9 @@ import {
   Text,
   Avatar as UiAvatar,
   BadgeRow,
-  NumericalBlock, LinkOutIcon
+  NumericalBlock,
+  LinkOutIcon,
+  VouchIcon,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -154,7 +156,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   <Button
                     fluid
                     mt="20px"
-                    icon={Vouch}
+                    icon={VouchIcon}
                     onClick={() => {
                       open(VOUCH_MODAL, { address });
                     }}
@@ -170,7 +172,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <Button
               fluid
               mt="8px"
-              icon={Link}
+              icon={RouterLink}
               color="secondary"
               variant="light"
               label={copied ? "Copied" : "Copy profile link"}
