@@ -30,7 +30,7 @@ export default function RegisterPage() {
   const { data: vouchersData = [] } = useVouchers();
   const { data: member = {} } = useMember();
   const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakerBalance.gt(ZERO)
+    voucher.stakerBalance?.gt(ZERO)
   );
 
   const stakeStep = useRef();

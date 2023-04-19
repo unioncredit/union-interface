@@ -13,7 +13,6 @@ import {
 import { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
 
-import { networks } from "config/networks";
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { AddressSummary } from "components/shared";
@@ -22,6 +21,7 @@ import {
   generateTwitterLink,
   getProfileUrl,
 } from "utils/generateLinks";
+import useNetworks from "hooks/useNetworks";
 
 export const VOUCH_LINK_MODAL = "vouch-link-modal";
 
@@ -31,9 +31,13 @@ export default function VouchLinkModal() {
   const { chain: connectedChain } = useNetwork();
 
   const [copied, copy] = useCopyToClipboard();
-  const [network, setNetwork] = useState(
-    networks.find((network) => network.chainId === connectedChain.id)
-  );
+
+  const networks = useNetworks();
+  const [_network, setNetwork] = useState();
+
+  const network =
+    _network ||
+    networks.find((network) => network.chainId === connectedChain.id);
 
   const profileUrl = getProfileUrl(address, network.chainId);
 

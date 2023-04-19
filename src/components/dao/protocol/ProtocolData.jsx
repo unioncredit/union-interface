@@ -9,11 +9,14 @@ import { ProtocolLimits } from "components/dao/protocol/ProtocolLimits";
 import { ProtocolFees } from "components/dao/protocol/ProtocolFees";
 import { ProtocolPeriods } from "components/dao/protocol/ProtocolPeriods";
 import { useProtocolData } from "providers/ProtocolData";
+import { Versions } from "providers/Version";
 
 export default function ProtocolData() {
   const { chain: connectedChain } = useNetwork();
   const [network, setNetwork] = useState(
-    networks.find((network) => network.chainId === connectedChain.id)
+    [...networks[Versions.V1], ...networks[Versions.V2]].find(
+      (network) => network.chainId === connectedChain.id
+    )
   );
 
   const { data: protocol = {} } = useProtocolData(network.chainId);
@@ -24,7 +27,7 @@ export default function ProtocolData() {
         title="Protocol Data & Parameters"
         action={
           <Select
-            options={networks}
+            options={[...networks[Versions.V1], ...networks[Versions.V2]]}
             defaultValue={network}
             onChange={(option) => setNetwork(option)}
           />

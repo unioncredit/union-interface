@@ -7,6 +7,7 @@ import useContract from "hooks/useContract";
 import { CACHE_TIME, ZERO_ADDRESS } from "constants";
 import { STALE_TIME } from "constants";
 import fetchVoteCasts from "fetchers/fetchVoteCasts";
+import { useVersion } from "providers/Version";
 
 const selectVoter = (data) => ({
   unionBalance: data[0],
@@ -15,11 +16,12 @@ const selectVoter = (data) => ({
 });
 
 function useVotes() {
+  const { version } = useVersion();
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
     (async function () {
-      const data = await fetchVoteCasts(mainnet.id);
+      const data = await fetchVoteCasts(version, mainnet.id);
       setAddresses(data);
     })();
   }, []);

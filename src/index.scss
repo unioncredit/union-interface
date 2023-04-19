@@ -65,4 +65,18 @@ a {
 
 .bg-color {
   @include colors(background);
+  .context-menu {
+    width: 190px !important;
+  }
+}
+
+.v2-alert {
+  .alert {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .button {
+    padding: 4px 8px !important;
+    min-height: 0;
+  }
 }

@@ -8,6 +8,7 @@ import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME } from "constants";
 import { STALE_TIME } from "constants";
 import { compareAddresses } from "utils/compare";
+import { useVersion, Versions } from "./Version";
 
 const VouchersContext = createContext({});
 
@@ -16,17 +17,33 @@ export const useVouchers = () => useContext(VouchersContext);
 export const useVoucher = (address) =>
   (useVouchers()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
-const selectVoucher = (data) => ({
-  checkIsMember: data[0],
-  trust: data[1].trustAmount,
-  vouch: data[1].vouchingAmount,
-  locked: data[1].lockedStake,
-  stakerBalance: data[2],
-});
+const selectVoucher = (version) => (data) => {
+  const [checkIsMember = false, stakedBalance = ZERO, info = []] = data || [];
+
+  return {
+    checkIsMember,
+    stakedBalance,
+    ...(version === Versions.V1
+      ? {
+          locking: info.lockedStake,
+          trust: info.trustAmount,
+          vouch: info.vouchingAmount,
+        }
+      : {
+          locking: info.voucher.locked,
+          trust: info.voucher.trust,
+          vouch: info.voucher.vouch,
+        }),
+  };
+};
 
 export default function VouchersData({ children }) {
+  const { version } = useVersion();
   const { address } = useAccount();
   const { data: member = {} } = useMember();
+
+  const daiContract = useContract("dai");
+  const unionLensContract = useContract("unionLens");
   const userManagerContract = useContract("userManager");
 
   const { stakerAddresses } = member;
@@ -35,14 +52,20 @@ export default function VouchersData({ children }) {
     { ...userManagerContract, functionName: "checkIsMember", args: [staker] },
     {
       ...userManagerContract,
-      functionName: "getStakerAsset",
-      args: [borrower, staker],
-    },
-    {
-      ...userManagerContract,
       functionName: "getStakerBalance",
       args: [staker],
     },
+    version === Versions.V1
+      ? {
+          ...userManagerContract,
+          functionName: "getBorrowerAsset",
+          args: [staker, borrower],
+        }
+      : {
+          ...unionLensContract,
+          functionName: "getRelatedInfo",
+          args: [daiContract.address, staker, borrower],
+        },
   ];
 
   const contracts = (stakerAddresses || []).reduce(
@@ -57,7 +80,7 @@ export default function VouchersData({ children }) {
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
       return chunked.map((x, i) => ({
-        ...selectVoucher(x),
+        ...selectVoucher(version)(x),
         address: stakerAddresses[i],
       }));
     },
@@ -67,8 +90,21 @@ export default function VouchersData({ children }) {
   });
 
   useEffect(() => {
-    if (address && stakerAddresses?.length > 0) resp.refetch();
-  }, [address, stakerAddresses?.length, resp.refetch]);
+    if (
+      daiContract?.address &&
+      userManagerContract.address &&
+      address &&
+      stakerAddresses?.length > 0
+    ) {
+      resp.refetch();
+    }
+  }, [
+    daiContract?.address,
+    userManagerContract.address,
+    address,
+    stakerAddresses?.length,
+    resp.refetch,
+  ]);
 
   const data = usePopulateEns(resp.data);
 

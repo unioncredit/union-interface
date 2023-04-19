@@ -48,7 +48,7 @@ export default function MyGovernanceStats() {
   const votesDelegated = votes.sub(unionBalance);
 
   const isMainnet = connectedChain.id === mainnet.id;
-  const isVotingConfigured = delegate !== ZERO_ADDRESS;
+  const isVotingConfigured = delegate && delegate !== ZERO_ADDRESS;
   const isDelegatingToSelf = delegate === address;
 
   const governanceStats = [

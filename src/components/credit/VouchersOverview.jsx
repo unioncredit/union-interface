@@ -18,9 +18,11 @@ import { PieChart } from "react-minimal-pie-chart";
 import { sumField } from "utils/sum";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { useModals } from "providers/ModalManager";
+import { useNavigate } from "react-router-dom";
 
 export default function VouchersOverview({ vouchers, displayCount }) {
   const { open } = useModals();
+  const navigate = useNavigate();
 
   const colors = [
     "#f59e0b",
@@ -130,12 +132,11 @@ export default function VouchersOverview({ vouchers, displayCount }) {
 
           <Button
             fluid
-            as="a"
             size="large"
             color="secondary"
             variant="light"
             label="View all contacts"
-            href={Links.CONTACTS}
+            onClick={() => navigate(Links.CONTACTS)}
           />
         </ButtonRow>
       </Card.Body>
