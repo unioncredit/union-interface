@@ -2,19 +2,19 @@ import {
   Modal,
   ModalOverlay,
   Box,
-  Union,
-  Heading,
-  Label,
-  Divider,
   Button,
+  NumericalBlock,
+  NumericalRows,
+  ClaimIcon,
+  GovernanceIcon,
 } from "@unioncredit/ui";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
+import { Link } from "react-router-dom";
 
 export const WALLET_MODAL = "wallet-modal";
 
@@ -23,6 +23,8 @@ export default function WalletModal() {
   const { data: member = {}, refetch } = useMember();
 
   const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
+
+  const totalBalance = unionBalance.add(unclaimedRewards);
 
   /*--------------------------------------------------------------
     Contract Functions
@@ -44,52 +46,48 @@ export default function WalletModal() {
       <Modal className="WalletModal">
         <Modal.Header title="UNION Balance" onClose={close} />
         <Modal.Body>
-          <Box align="center" justify="center" direction="vertical">
-            <Heading grey={800} size="xlarge" m={0}>
-              {format(unionBalance.add(unclaimedRewards), 4)}
-              <Union />
-            </Heading>
-            <Label m={0} grey={400}>
-              Total Balance
-            </Label>
+          <Box justify="center">
+            <NumericalBlock
+              align="center"
+              size="large"
+              title="Total Ethereum Balance"
+              value={format(totalBalance)}
+              token="union"
+            />
           </Box>
 
-          <Box justify="space-between" mt="8px">
-            <Label as="p" grey={400}>
-              Wallet
-            </Label>
-            <Label as="p" grey={700} m={0}>
-              <Union value={format(unionBalance)} />
-            </Label>
-          </Box>
-          <Divider mb="8px" />
-          <Box justify="space-between" mb="18px">
-            <Label as="p" grey={400}>
-              Unclaimed
-            </Label>
-            <Label as="p" grey={700} m={0}>
-              <Union value={format(unclaimedRewards)} />
-            </Label>
-          </Box>
+          <NumericalRows
+            m="16px 0"
+            items={[
+              {
+                label: "Wallet",
+                value: `${format(unionBalance)} UNION`,
+              },
+              {
+                label: "Unclaimed",
+                value: `${format(unclaimedRewards)} UNION`,
+              },
+            ]}
+          />
 
           <Button
             fluid
-            label={
-              buttonProps.disabled
-                ? "No tokens to claim"
-                : `Claim ${format(unclaimedRewards)} UNION`
-            }
+            size="large"
+            icon={ClaimIcon}
+            label="Claim UNION"
             {...buttonProps}
           />
           <Button
             fluid
-            as="a"
-            mt="4px"
-            target="_blank"
-            variant="secondary"
+            as={Link}
+            mt="8px"
+            size="large"
+            color="secondary"
+            variant="light"
             label="Union Governance"
-            href="#"
-            icon={External}
+            to="/governance"
+            icon={GovernanceIcon}
+            onClick={close}
           />
         </Modal.Body>
       </Modal>

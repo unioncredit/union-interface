@@ -1,65 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
-import { Box, ToggleMenu, Grid } from "@unioncredit/ui";
 
-import { ContactsType } from "constants";
 import ContactList from "components/contacts/ContactList";
-import ContactDetails from "components/contacts/ContactDetails";
-import { useVouchers } from "providers/VouchersData";
-import { useVouchees } from "providers/VoucheesData";
+import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl";
+import { useModals } from "providers/ModalManager";
+import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
+import { Layout } from "@unioncredit/ui";
 
-export default function ContactsPage({ type }) {
-  const { data: vouchees } = useVouchees();
-  const { data: vouchers } = useVouchers();
+export default function ContactsPage({ type: initialType }) {
+  const { open } = useModals();
 
-  const [contactIndex, setContactIndex] = useState(null);
-
-  const contacts = (type === ContactsType.VOUCHEES ? vouchees : vouchers) || [];
+  const [contact, setContact] = useState(null);
+  const [type, setType] = useState(initialType);
 
   const contactComponentProps = {
-    contact: contactIndex !== null ? contacts[contactIndex] : null,
-    setContactIndex,
-    contacts,
     type,
+    setType,
+    setContact,
   };
+
+  useEffect(() => {
+    if (contact) {
+      open(MANAGE_CONTACT_MODAL, {
+        address: contact.address,
+        clearContact: () => setContact(null),
+      });
+    }
+  }, [contact]);
 
   return (
     <>
       <Helmet>
         <title>Contacts | Union Credit Protocol</title>
       </Helmet>
-      <Box justify="center" fluid mb="24px">
-        <ToggleMenu
-          className="ToggleMenu"
-          items={[
-            {
-              as: Link,
-              id: ContactsType.VOUCHEES,
-              label: "You trust",
-              to: "/contacts",
-            },
-            {
-              as: Link,
-              id: ContactsType.VOUCHERS,
-              label: "Trusts you",
-              to: "/contacts/trusts-you",
-            },
-          ]}
-          onChange={() => setContactIndex(null)}
-          initialActive={type === ContactsType.VOUCHEES ? 0 : 1}
-        />
-      </Box>
-      <Grid>
-        <Grid.Row justify="center">
-          <Grid.Col md={6}>
-            <ContactList {...contactComponentProps} />
-          </Grid.Col>
-          <Grid.Col md={6}>
-            <ContactDetails {...contactComponentProps} />
-          </Grid.Col>
-        </Grid.Row>
-      </Grid>
+
+      <Layout.Columned maxw="653px">
+        <CreditSegmentedControl active={2} />
+      </Layout.Columned>
+
+      <ContactList {...contactComponentProps} />
     </>
   );
 }

@@ -1,0 +1,60 @@
+@import "@unioncredit/ui/src/variables";
+
+.HeaderMobileMenu {
+  background: white;
+  position: fixed;
+  top: 84px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 70px);
+  z-index: 998;
+  border-top: 1px solid #d6d3d1;
+  padding: 0.5em;
+
+  &__navigation {
+    width: 100%;
+
+    a {
+      display: inline-block;
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-bottom: 4px;
+      }
+    }
+
+    .nav-item {
+      font-size: 20px !important;
+      line-height: 28px;
+
+      &:not(:hover):not(:active):not(&--active) {
+        background: white;
+      }
+    }
+  }
+
+  &__footer {
+    width: 100%;
+    padding: 15px 0;
+    border-top: 1px solid $grey300;
+
+    a {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 8px;
+
+      &:hover {
+        background: $grey100;
+      }
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+    }
+
+    svg {
+      margin-right: 8px;
+    }
+  }
+}

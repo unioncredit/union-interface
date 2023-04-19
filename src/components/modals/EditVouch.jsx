@@ -2,43 +2,46 @@ import {
   Modal,
   ModalOverlay,
   Button,
-  Grid,
-  Stat,
   Dai,
   Input,
+  NumericalBlock,
+  NumericalRows,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
 import useForm from "hooks/useForm";
 import { useModals } from "providers/ModalManager";
-import { useVouchees } from "providers/VoucheesData";
-import { compareAddresses } from "utils/compare";
+import { useVouchee, useVouchees } from "providers/VoucheesData";
 import { Errors } from "constants";
 import { MANAGE_CONTACT_MODAL } from "./ManageContactModal";
-import { ContactsType } from "constants";
 import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
+import { AddressSummary } from "components/shared";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
-export default function EditVouchModal({ address }) {
+export default function EditVouchModal({ address, clearContact }) {
   const { close, open } = useModals();
-  const { data: vouchees = [], refetch: refetchVouchees } = useVouchees();
-
-  const vouchee = vouchees.find((v) => compareAddresses(v.address, address));
+  const { refetch: refetchVouchees } = useVouchees();
+  const vouchee = useVouchee(address);
 
   const { locking = ZERO, trust = ZERO } = vouchee;
 
-  const back = (contact) =>
+  const back = () =>
     open(MANAGE_CONTACT_MODAL, {
-      contact: contact,
-      type: ContactsType.VOUCHEES,
+      address,
+      clearContact,
     });
 
   const validate = (inputs) => {
     if (inputs.amount.raw.lt(locking)) {
       return Errors.TRUST_LT_LOCKING;
     }
+  };
+
+  const handleClose = () => {
+    clearContact?.();
+    close();
   };
 
   const { register, errors = {}, values = {}, empty } = useForm({ validate });
@@ -51,59 +54,61 @@ export default function EditVouchModal({ address }) {
     args: [address, amount.raw],
     enabled: amount.raw.gte(locking),
     onComplete: async () => {
-      const response = await refetchVouchees();
-      const contact = response.data.find((c) =>
-        compareAddresses(c.address, address)
-      );
-      back(contact);
+      await refetchVouchees();
+      back();
     },
   });
 
-  /*--------------------------------------------------------------
-    Render Component 
-   --------------------------------------------------------------*/
-
   return (
-    <ModalOverlay onClick={close}>
+    <ModalOverlay onClick={handleClose}>
       <Modal className="EditVouchModal">
-        <Modal.Header title="Adjust trust" onClose={close} onBack={back} />
+        <Modal.Header onClose={handleClose} noHeight>
+          <AddressSummary m={0} address={address} />
+        </Modal.Header>
         <Modal.Body>
-          <Grid>
-            <Grid.Row>
-              <Grid.Col>
-                <Stat
-                  mb="24px"
-                  size="medium"
-                  align="center"
-                  label="Current trust"
-                  value={<Dai value={format(trust)} />}
-                />
-              </Grid.Col>
-              <Grid.Col>
-                <Stat
-                  mb="24px"
-                  size="medium"
-                  align="center"
-                  label="Unpaid debt"
-                  value={<Dai value={format(locking)} />}
-                />
-              </Grid.Col>
-            </Grid.Row>
-          </Grid>
-          <Input
-            type="number"
-            suffix={<Dai />}
-            label="New trust amount"
-            onChange={register("amount")}
-            error={errors.amount}
-          />
-          <Button
-            fluid
-            mt="18px"
-            fontSize="large"
-            label="Set new trust"
-            {...buttonProps}
-          />
+          <Modal.Container direction="vertical">
+            <NumericalBlock
+              align="left"
+              token="dai"
+              title="Trust you provide"
+              value={format(trust)}
+            />
+
+            <Input
+              mt="16px"
+              type="number"
+              suffix={<Dai />}
+              label="New trust amount"
+              onChange={register("amount")}
+              error={errors.amount}
+              placeholder="0"
+            />
+
+            <NumericalRows
+              m="20px 0"
+              items={[
+                {
+                  label: "Minimum trust",
+                  value: `${format(locking)} DAI`,
+                  tooltip: {
+                    shrink: true,
+                    content: "TODO",
+                    position: "right",
+                  },
+                },
+              ]}
+            />
+
+            <Button fluid label="Change trust" {...buttonProps} />
+            <Button
+              fluid
+              mt="8px"
+              label="Cancel"
+              color="secondary"
+              variant="light"
+              onClick={back}
+            />
+          </Modal.Container>
         </Modal.Body>
       </Modal>
     </ModalOverlay>

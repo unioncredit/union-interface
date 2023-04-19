@@ -3045,6 +3045,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
+"@types/svg-path-parser@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@types/svg-path-parser/-/svg-path-parser-1.1.3.tgz#659aca2e886071e5c593e06206b6254bcb811202"
+  integrity sha512-F1Y6lQIto5b2sKCseVUsFfY5J+8PIhhX4jrDVxpth4m7hwM2OdySh3iTLeR35lEhl/K4ZMEF+GDAwTl7yJcO5Q==
+
 "@types/testing-library__jest-dom@^5.9.1":
   version "5.14.5"
   resolved "https://registry.yarnpkg.com/@types/testing-library__jest-dom/-/testing-library__jest-dom-5.14.5.tgz#d113709c90b3c75fdb127ec338dad7d5f86c974f"
@@ -3183,10 +3188,10 @@
     "@typescript-eslint/types" "5.40.0"
     eslint-visitor-keys "^3.3.0"
 
-"@unioncredit/ui@0.3.0-beta.29":
-  version "0.3.0-beta.29"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.3.0-beta.29.tgz#672bd6ca10917611305e8f894f7c46c1b3726478"
-  integrity sha512-KA0hnq4JxoyrqbaDn63UP3/PERMgkeSjEIDAMULfZM4OYEJMtp4dL41Hn0/D051db8Rtn+6+t5SR+EwOPaCtdw==
+"@unioncredit/ui@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-0.4.7.tgz#3bf5a16654808067b4aeeffd625e2684027d47b2"
+  integrity sha512-csqg2xEHGs//LNd05LpplGEXPPjrzzn65uuudFy4ZnKq7m8v5gzcWLEa3iNiFYwQjm4HNjtGh9mKwc2585X/AA==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
@@ -5426,6 +5431,11 @@ data-urls@^2.0.0:
     abab "^2.0.3"
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.11.6:
   version "1.11.6"
@@ -10341,11 +10351,6 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
-qrcode.react@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-3.1.0.tgz#5c91ddc0340f768316fbdb8fff2765134c2aecd8"
-  integrity sha512-oyF+Urr3oAMUG/OiOuONL3HXM+53wvuH3mtIWQrYmsXoAq0DkvZp2RYUWFSMFtbdOpuS++9v+WAkzNVkMlNW6Q==
-
 qrcode@1.4.4:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/qrcode/-/qrcode-1.4.4.tgz#f0c43568a7e7510a55efc3b88d9602f71963ea83"
@@ -10526,6 +10531,13 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-error-boundary@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-3.1.4.tgz#255db92b23197108757a888b01e5b729919abde0"
+  integrity sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
 react-error-overlay@^6.0.11:
   version "6.0.11"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.11.tgz#92835de5841c5cf08ba00ddd2d677b6d17ff9adb"
@@ -10590,6 +10602,13 @@ react-markdown@5.0.3:
     unified "^9.0.0"
     unist-util-visit "^2.0.0"
     xtend "^4.0.1"
+
+react-minimal-pie-chart@^8.4.0:
+  version "8.4.0"
+  resolved "https://registry.yarnpkg.com/react-minimal-pie-chart/-/react-minimal-pie-chart-8.4.0.tgz#c784dd3dffa9aee5c5396c0cb8ece814fd02e0e8"
+  integrity sha512-A0wG+6mRjboyMxMDrzQNWp+2+GSn2ai4ERzRFHLp/OCC45PwIR1DpDVjwedawO+5AtFpzBRQKSFm3ZUxrqIEzA==
+  dependencies:
+    "@types/svg-path-parser" "^1.1.3"
 
 react-refresh@^0.11.0:
   version "0.11.0"

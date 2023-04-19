@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 import * as routes from "./App.routes";
 import { useMember } from "providers/MemberData";
 
-import ErrorPage from "pages/Error";
 import LoadingPage from "pages/Loading";
 
 export default function Routes() {
@@ -73,20 +72,10 @@ export default function Routes() {
       <Route
         path="*"
         element={
-          <>
-            <ErrorPage
-              title="Oh no! You just came across an error."
-              body="Something broke while you were using the app. Try reloading the page or use one of the helpful links below."
-            />
-            {
-              // If we are on a valid route but we have made it to the
-              // fallback we should redirect the user to the app root /
-            }
-            {matchRoutes(
-              [...routes.member, ...routes.nonMember, ...routes.general],
-              location
-            ) && <Navigate to="/" replace={true} />}
-          </>
+          matchRoutes(
+            [...routes.member, ...routes.nonMember, ...routes.general],
+            location
+          ) && <Navigate to="/" replace={true} />
         }
       />
     </ReactRoutes>

@@ -5,7 +5,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import useLabels from "hooks/useLabels";
 import { vouchFaucetContract } from "config/contracts/v2/optimismGoerli";
 
-export default function PrimaryLabel({ address }) {
+export function PrimaryLabel({ address }) {
   const { chain } = useNetwork();
   const { data } = useEnsName({
     address,

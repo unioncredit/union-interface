@@ -1,0 +1,14 @@
+@import "@unioncredit/ui/src/variables";
+
+.RepayModal {
+  &__custom {
+    padding: 12px;
+    background: $grey50;
+    border: 0.5px solid $grey200;
+    border-radius: 20px;
+
+    .divider {
+      border-bottom: 0.5px solid $grey200;
+    }
+  }
+}

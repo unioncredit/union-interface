@@ -1,31 +1,25 @@
-import { Link } from "react-router-dom";
-import { Box, Button, ButtonRow, Heading, Text } from "@unioncredit/ui";
+import "./Error.scss";
+import { Box, Button, Card, Heading, Text } from "@unioncredit/ui";
 
-import links from "config/links";
-
-export default function ErrorPage({
-  title,
-  body,
-  buttons = [
-    { label: "Back to app", href: "/", variant: "primary" },
-    { label: "Read the docs", href: links.docs, variant: "secondary" },
-  ],
-}) {
+export default function ErrorPage({ error }) {
   return (
-    <Box fluid justify="center">
-      <Box align="center" direction="vertical" maxw="440px">
-        <Heading align="center" size="xxlarge" mb="12px" mt="48px">
-          {title}
+    <Box fluid justify="center" align="center" className="ErrorPage">
+      <Card maxw="650px" p="40px">
+        <Box className="ErrorPage__emoji" justify="center">
+          🤦🏻‍♂️
+        </Box>
+
+        <Heading level={1} align="center" size="large" mt="8px" color="black">
+          Oh no, something broke
         </Heading>
-        <Text align="center">{body}</Text>
-        <ButtonRow mt="24px">
-          {buttons.map(({ label, href, variant }) => (
-            <Link to={href} key={href}>
-              <Button label={label} variant={variant} mx="4px" />
-            </Link>
-          ))}
-        </ButtonRow>
-      </Box>
+        <Text align="center" grey={500} size="medium" mt="8px">
+          We’re sorry but something broke while you were using the app. If this
+          problem persists, please let us know.
+        </Text>
+        <Box justify="center" mt="24px">
+          <Button as="a" label="Back to safety" href="/" />
+        </Box>
+      </Card>
     </Box>
   );
 }

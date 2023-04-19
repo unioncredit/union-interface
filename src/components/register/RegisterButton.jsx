@@ -1,20 +1,17 @@
-import { MultiStepButton } from "@unioncredit/ui";
+import { CheckIcon, MultiStepButton } from "@unioncredit/ui";
 import { useAccount, useContractRead } from "wagmi";
 import { useEffect, useState, useCallback } from "react";
 
 import { MultiStep, ZERO } from "constants";
-import format from "utils/format";
 import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
-import { ReactComponent as CloudCheck } from "@unioncredit/ui/lib/icons/cloudCheck.svg";
 import { useVouchers } from "providers/VouchersData";
 
-const createItems = (s1, s2, s3) => [
+const createItems = (s1, s2) => [
   { number: 1, status: s1 },
   { number: 2, status: s2 },
-  { number: 3, status: s3 },
 ];
 
 export default function RegisterButton({ onComplete }) {
@@ -34,7 +31,6 @@ export default function RegisterButton({ onComplete }) {
 
   const {
     unionBalance = ZERO,
-    unclaimedRewards = ZERO,
     isMember = false,
     newMemberFee = ZERO,
   } = { ...member, ...protocol };
@@ -54,13 +50,6 @@ export default function RegisterButton({ onComplete }) {
     }
   );
 
-  const { onClick: claim, loading: claimLoading } = useWrite({
-    contract: "userManager",
-    method: "withdrawRewards",
-    enabled: unionBalance.lt(newMemberFee),
-    onComplete: () => refetchMember(),
-  });
-
   const { onClick: approve, loading: approveLoading } = useWrite({
     contract: "union",
     method: "approve",
@@ -78,13 +67,8 @@ export default function RegisterButton({ onComplete }) {
   });
 
   /*--------------------------------------------------------------
-    Button action handlers for "Claim", "Approve" and "Register"
+    Button action handlers for "Approve" and "Register"
    --------------------------------------------------------------*/
-
-  const handleClaim = useCallback(async () => {
-    setItems(createItems(MultiStep.PENDING));
-    await claim();
-  }, [claim, refetchMember]);
 
   const handleApprove = useCallback(async () => {
     setItems(createItems(MultiStep.COMPLETE, MultiStep.PENDING));
@@ -100,27 +84,21 @@ export default function RegisterButton({ onComplete }) {
 
   /**
    * Determine which state to show the multistep button in. There are
-   * three states "Claim", "Approve" and "Register"
+   * three states "Approve" and "Register"
    */
   useEffect(() => {
-    if (unionBalance.lt(newMemberFee)) {
-      // Member UNION balance is not enough so needs to claim UNION
-      // If there is any UNION available
-      setAction({ label: "Claim UNION", onClick: handleClaim });
-      setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
-      setItems(
-        createItems(claimLoading ? MultiStep.PENDING : MultiStep.SELECTED)
-      );
-    } else if (allowance.lt(newMemberFee)) {
+    if (allowance.lt(newMemberFee)) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
-      setAction({ label: "Approve UNION", onClick: handleApprove });
+      setAction({
+        label: "Approve UNION",
+        onClick: handleApprove,
+        size: "large",
+        disabled: unionBalance.lt(newMemberFee),
+      });
       setLabel("Approving 1.00 UNION");
       setItems(
-        createItems(
-          MultiStep.COMPLETE,
-          approveLoading ? MultiStep.PENDING : MultiStep.SELECTED
-        )
+        createItems(approveLoading ? MultiStep.PENDING : MultiStep.SELECTED)
       );
     } else {
       // The member satisfies all the prerequisite and can register
@@ -130,13 +108,12 @@ export default function RegisterButton({ onComplete }) {
             ? "Receive a vouch to continue"
             : "Pay membership fee",
         onClick: handleRegister,
-        icon: vouchers.length > 0 && CloudCheck,
-        disabled: vouchers.length <= 0,
+        icon: CheckIcon,
+        size: "large",
       });
       setLabel("Paying 1.00 UNION");
       setItems(
         createItems(
-          MultiStep.COMPLETE,
           MultiStep.COMPLETE,
           registerLoading ? MultiStep.PENDING : MultiStep.SELECTED
         )
@@ -149,8 +126,6 @@ export default function RegisterButton({ onComplete }) {
     allowance,
     handleRegister,
     handleApprove,
-    handleClaim,
-    claimLoading,
     approveLoading,
     registerLoading,
   ]);

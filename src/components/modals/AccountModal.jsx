@@ -9,21 +9,22 @@ import {
   Badge,
   ButtonRow,
   Divider,
-  Label,
+  Text,
+  LinkOutIcon,
+  DisconnectWalletIcon,
+  IdentityIcon,
+  SuccessIcon,
+  FailedIcon,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
-import { ReactComponent as Success } from "@unioncredit/ui/lib/icons/success.svg";
-import { ReactComponent as Failed } from "@unioncredit/ui/lib/icons/failed.svg";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
 
 import { useModals } from "providers/ModalManager";
-import Avatar from "components/shared/Avatar";
 import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
 import { Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
@@ -55,15 +56,16 @@ export default function AccountModal() {
               <PrimaryLabel address={address} />
             </Heading>
 
-            <Box>
+            <Box align="center">
               <Badge
+                mr="5px"
                 color="grey"
                 onClick={() => copy(address)}
                 label={copied ? "Copied!" : truncateAddress(address)}
               />
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                <External width="24px" />
+                <LinkOutIcon width="12px" />
               </a>
             </Box>
           </Box>
@@ -72,13 +74,23 @@ export default function AccountModal() {
               onClick={close}
               to={`/profile/${EIP3770[chain.id]}:${address}`}
             >
-              <Button size="small" fluid label="View Profile" />
+              <Button
+                fluid
+                size="small"
+                variant="light"
+                color="secondary"
+                label="View Profile"
+                icon={IdentityIcon}
+              />
             </Link>
 
             <Button
-              size="small"
               fluid
+              size="small"
+              variant="light"
+              color="secondary"
               label="Disconnect Wallet"
+              icon={DisconnectWalletIcon}
               onClick={() => {
                 disconnect();
                 close();
@@ -87,10 +99,13 @@ export default function AccountModal() {
           </ButtonRow>
           <Divider my="24px" />
           <Box justify="space-between" align="center" mb="12px">
-            <Label grey={600}>Wallet Activity</Label>
+            <Text size="medium" weight="medium" grey={700}>
+              Wallet Activity
+            </Text>
             <Button
-              size="small"
-              variant="pill"
+              size="pill"
+              color="secondary"
+              variant="light"
               label="Clear activity"
               onClick={clearLogs}
             />
@@ -98,30 +113,36 @@ export default function AccountModal() {
 
           <Box direction="vertical">
             {logs.length <= 0 ? (
-              <Label grey={400} size="small" m={0}>
+              <Text grey={400} size="small" m={0}>
                 No activity logs
-              </Label>
+              </Text>
             ) : (
               logs.map(({ txHash, status, label, value }) => (
                 <Box key={txHash} align="center" justify="space-between" fluid>
                   <Box align="center">
                     <div className="AccountModal__Activity__statusIcon">
                       {status === Status.SUCCESS ? (
-                        <Success width="16px" />
+                        <SuccessIcon width="20px" />
                       ) : (
-                        <Failed width="16px" />
+                        <FailedIcon width="20px" />
                       )}
                     </div>
-                    <Label grey={600} m={0}>
+                    <Text size="medium" weight="medium" grey={500} m={0}>
                       {label}
-                    </Label>
+                    </Text>
                   </Box>
                   <Box align="center">
-                    <Label m={0} grey={700}>
+                    <Text
+                      size="medium"
+                      weight="medium"
+                      m={0}
+                      mr="5px"
+                      grey={700}
+                    >
                       {format(value)}
-                    </Label>
-                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank">
-                      <External width="24px" />
+                    </Text>
+                    <a href="#" target="_blank">
+                      <LinkOutIcon width="16px" />
                     </a>
                   </Box>
                 </Box>

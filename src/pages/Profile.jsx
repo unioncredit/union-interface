@@ -8,32 +8,29 @@ import {
   Divider,
   Grid,
   Heading,
-  Stat,
   Text,
   Avatar as UiAvatar,
   BadgeRow,
+  NumericalBlock,
+  LinkOutIcon,
+  VouchIcon,
+  SwitchIcon,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
 import { Link as RouterLink } from "react-router-dom";
-import { useNavigate, useParams } from "react-router-dom";
-import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
-import { ReactComponent as External } from "@unioncredit/ui/lib/icons/external.svg";
-import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
-import { ReactComponent as Vouch } from "@unioncredit/ui/lib/icons/vouch.svg";
-import { ReactComponent as Switch } from "@unioncredit/ui/lib/icons/switch.svg";
 
-import Avatar from "components/shared/Avatar";
-import PrimaryLabel from "components/shared/PrimaryLabel";
+import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
+import { isAddress } from "ethers/lib/utils";
+import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
 import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
-import ConnectButton from "components/shared/ConnectButton";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
@@ -92,7 +89,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <Heading mt="8px" mb={0}>
               <PrimaryLabel address={address} />
             </Heading>
-            <Box mt="8px">
+            <Box mt="8px" align="center">
               <BadgeRow>
                 <Badge
                   mr="4px"
@@ -111,7 +108,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <External width="24px" />
+                <LinkOutIcon width="12px" />
               </a>
             </Box>
             {/*--------------------------------------------------------------
@@ -137,7 +134,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     fluid
                     mt="20px"
                     color="blue"
-                    icon={Switch}
+                    icon={SwitchIcon}
                     label={`Switch to ${targetNetwork?.label}`}
                     onClick={() => switchNetworkAsync(targetNetwork?.chainId)}
                   />
@@ -161,7 +158,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   <Button
                     fluid
                     mt="20px"
-                    icon={Vouch}
+                    icon={VouchIcon}
                     onClick={() => {
                       open(VOUCH_MODAL, { address });
                     }}
@@ -177,8 +174,9 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <Button
               fluid
               mt="8px"
-              icon={Link}
-              variant="secondary"
+              icon={RouterLink}
+              color="secondary"
+              variant="light"
               label={copied ? "Copied" : "Copy profile link"}
               onClick={() => copy(window.location.host + window.location.hash)}
             />
@@ -191,18 +189,22 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
       <Card mb="24px">
         <Card.Body>
           <Heading mb="24px">Reputation</Heading>
-          <Text mb="12px">Wallet traits</Text>
+          <Text color="grey500" mb="12px">
+            Wallet traits
+          </Text>
           <Grid>
             <Grid.Row>
               <Grid.Col>
-                <Stat
-                  label="receiving vouches from"
+                <NumericalBlock
+                  size="x-small"
+                  title="Receiving vouches from"
                   value={`${stakerAddresses.length} accounts`}
                 />
               </Grid.Col>
               <Grid.Col>
-                <Stat
-                  label="Vouching for"
+                <NumericalBlock
+                  size="x-small"
+                  title="Vouching for"
                   value={`${borrowerAddresses.length} accounts`}
                 />
               </Grid.Col>
@@ -227,9 +229,7 @@ export default function Profile() {
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(
-    /^(eth|goe|arb1|optgoe|opt):/
-  )
+  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe|opt):/)
     ? addressOrEnsParts
     : [EIP3770[mainnet.id], addressOrEnsParam];
 

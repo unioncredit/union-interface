@@ -1,5 +1,5 @@
-import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
+import { createContext, useContext } from "react";
 
 import {
   STALE_TIME,

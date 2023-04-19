@@ -8,6 +8,7 @@ import { toFixed } from "utils/numbers";
 const empty = {
   display: "",
   raw: ZERO,
+  formatted: "",
 };
 
 const formatValue = (value, rounded) =>

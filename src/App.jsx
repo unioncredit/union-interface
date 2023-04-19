@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Label, Layout, Grid } from "@unioncredit/ui";
+import { Box, Text, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 import Routes from "./Routes";
 
 import ConnectPage from "pages/Connect";
-import Header from "components/shared/Header";
+import { Header } from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 
@@ -22,6 +23,7 @@ import MemberData, { useMember } from "providers/MemberData";
 import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
+import ErrorPage from "pages/Error";
 
 /**
  * Shim component that checks if the App is ready
@@ -49,6 +51,7 @@ function AppReadyShim({ children }) {
     }
 
     if (chain && appReady && (isDisconnected || chain?.unsupported)) {
+
       setAppReady(false);
       return;
     }
@@ -92,10 +95,13 @@ export default function App() {
         <Layout>
           <ScrollToTop />
           <Layout.Main>
+            <Header showNav={false} />
             <Grid style={{ display: "flex", flexGrow: 1 }}>
               <Grid.Row style={{ width: "100%", margin: 0 }}>
                 <Grid.Col>
-                  <ConnectPage />
+                  <ErrorBoundary FallbackComponent={ErrorPage}>
+                    <ConnectPage />
+                  </ErrorBoundary>
                 </Grid.Col>
               </Grid.Row>
             </Grid>
@@ -109,43 +115,50 @@ export default function App() {
     <Layout>
       <ScrollToTop />
       <Layout.Main>
-        <Grid style={{ display: "flex", flexGrow: 1 }}>
-          <Grid.Row style={{ width: "100%", margin: 0 }}>
-            <Grid.Col>
-              <Settings>
-                <Cache>
-                  <ProtocolData>
-                    <GovernanceData>
-                      <MemberData>
-                        <VouchersData>
-                          <VoucheesData>
-                            <ModalManager>
-                              <AppReadyShim>
+        <Settings>
+          <Cache>
+            <ProtocolData>
+              <GovernanceData>
+                <MemberData>
+                  <VouchersData>
+                    <VoucheesData>
+                      <ModalManager>
+                        <AppReadyShim>
+                          <Header />
+
+                          <Grid style={{ display: "flex", flexGrow: 1 }}>
+                            <Grid.Row style={{ width: "100%", margin: 0 }}>
+                              <Grid.Col>
                                 {appReady ? (
                                   <>
-                                    <Header />
-                                    <Routes />
+                                    <ErrorBoundary
+                                      FallbackComponent={ErrorPage}
+                                    >
+                                      <Layout.Columned>
+                                        <Routes />
+                                      </Layout.Columned>
+                                    </ErrorBoundary>
                                   </>
                                 ) : (
                                   <ConnectPage />
                                 )}
-                              </AppReadyShim>
-                            </ModalManager>
-                          </VoucheesData>
-                        </VouchersData>
-                      </MemberData>
-                    </GovernanceData>
-                  </ProtocolData>
-                </Cache>
-              </Settings>
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+                              </Grid.Col>
+                            </Grid.Row>
+                          </Grid>
+                        </AppReadyShim>
+                      </ModalManager>
+                    </VoucheesData>
+                  </VouchersData>
+                </MemberData>
+              </GovernanceData>
+            </ProtocolData>
+          </Cache>
+        </Settings>
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
-            <Label as="p" size="small" grey={300} align="center">
+            <Text size="small" grey={300} align="center">
               Build: {process.env.REACT_APP_VERSION}
-            </Label>
+            </Text>
           </Box>
         </Box>
       </Layout.Main>

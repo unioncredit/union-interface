@@ -9,10 +9,10 @@ import {
 import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "providers/Version";
 
-export default function NetworkSelect() {
+export function NetworkSelect() {
   const { settings } = useSettings();
   const { chain, chains } = useNetwork();
-  const { version, setVersion } = useVersion();
+  const { setVersion } = useVersion();
   const { switchNetworkAsync } = useSwitchNetwork();
 
   const networks = parseNetworksVersions(allNetworks).filter((network) =>

@@ -1,0 +1,53 @@
+@import "@unioncredit/ui/src/variables";
+
+.StakeStats {
+  &__item {
+    flex-direction: column !important;
+  }
+
+  .AvatarBadgeRow {
+    &:hover {
+      background: $grey100;
+    }
+    &:active {
+      background: $grey200;
+    }
+  }
+}
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .StakeStats {
+    &__top {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+
+      .button {
+        flex: 1 !important;
+      }
+      .button-row {
+        width: 100%;
+        margin-top: 16px;
+      }
+    }
+
+    &__item {
+      flex-direction: row !important;
+      justify-content: space-between;
+      align-items: center !important;
+
+      &:not(:last-of-type) {
+        margin-bottom: 8px;
+      }
+    }
+
+    &__bottom {
+      flex-direction: column !important;
+
+      .NumericalBlock__value {
+        font-size: 18px !important;
+        line-height: 24px !important;
+      }
+    }
+  }
+}
+

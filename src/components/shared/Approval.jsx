@@ -12,7 +12,7 @@ import { useMember } from "providers/MemberData";
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 const initialButtonProps = { label: "Enter an amount", disabled: true };
 
-export default function Approval({
+export function Approval({
   owner,
   amount = ZERO,
   spender,

@@ -6,7 +6,7 @@ import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import { compareAddresses } from "utils/compare";
 
-export default function StatusBadge({ address }) {
+export function StatusBadge({ address }) {
   const { data: member } = useMemberData(address);
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();

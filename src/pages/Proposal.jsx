@@ -2,16 +2,20 @@ import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Grid, Label, Heading, Text } from "@unioncredit/ui";
-import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
+import {
+  ArrowRightIcon,
+  Box,
+  Button,
+  Grid,
+  Heading,
+  Text,
+} from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
-import PrimaryLabel from "components/shared/PrimaryLabel";
-import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
-import VotingCard from "components/governance/VotingCard";
-import NetworkNotice from "components/governance/NetworkNotice";
+import ProposalHistoryCard from "components/dao/ProposalHistoryCard";
+import ProposalVotes from "components/dao/ProposalVotes";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -50,13 +54,22 @@ export default function ProposalPage() {
          * ---------------------------------------------- */}
         <Grid.Row>
           <Grid.Col>
-            <Box mb="30px">
-              <Link to="/governance/proposals">
+            <Box m="30px 0">
+              <Link to="/governance">
                 <Button
-                  variant="lite"
+                  size="pill"
+                  color="secondary"
+                  variant="light"
                   label={
                     <>
-                      <ArrowRight className="flip" width="24px" height="24px" />
+                      <ArrowRightIcon
+                        width="24px"
+                        height="24px"
+                        className="flip"
+                        style={{
+                          marginRight: "4px",
+                        }}
+                      />
                       Back to proposals
                     </>
                   }
@@ -73,9 +86,9 @@ export default function ProposalPage() {
             <Heading size="xlarge" mb="12px" grey={800}>
               {title}
             </Heading>
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               PROPOSED BY
-            </Label>
+            </Text>
             <Box>
               <Avatar address={proposer} size={24} />
               <Text mb="0" mx="8px">
@@ -84,7 +97,7 @@ export default function ProposalPage() {
             </Box>
             <Box mt="16px">
               <a href="#" target="_blank" rel="noreferrer">
-                <Button variant="pill" label="View bytecode" />
+                <Button size="pill" label="View bytecode" />
               </a>
             </Box>
             <Box direction="vertical" mt="24px">
@@ -99,14 +112,15 @@ export default function ProposalPage() {
                   heading: (props) => (
                     <Text
                       size="large"
+                      weight="medium"
                       grey={800}
                       {...props}
                       mb="8px"
                       mt="24px"
                     />
                   ),
-                  paragraph: (props) => <Text {...props} mb="8px" />,
-                  listItem: (props) => <Text as="li" {...props} />,
+                  paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
+                  listItem: (props) => <Text grey={500} as="li" {...props} />,
                 }}
               >
                 {description}
@@ -132,30 +146,33 @@ export default function ProposalPage() {
 
                 return (
                   <Fragment key={`${target}${signature}${calldata}`}>
-                    <Label
+                    <Text
                       as="a"
                       w="100%"
                       m={0}
-                      grey={800}
+                      grey={500}
                       href={"#"}
                       target="_blank"
                       rel="noreferrer"
                       style={{ wordWrap: "break-word" }}
                     >
                       Contract: {target}
-                    </Label>
-                    <Label as="p" w="100%" style={{ wordWrap: "break-word" }}>
+                    </Text>
+                    <Text
+                      w="100%"
+                      weight="medium"
+                      style={{ wordWrap: "break-word" }}
+                    >
                       Function: {signature.replace(/(\(=?)(.*)$/, "")}(
                       {argumentString})
-                    </Label>
+                    </Text>
                   </Fragment>
                 );
               })}
             </Box>
           </Grid.Col>
           <Grid.Col md={4}>
-            <VotingCard data={proposal} />
-            <NetworkNotice lite />
+            <ProposalVotes data={proposal} />
             <ProposalHistoryCard data={history} />
           </Grid.Col>
         </Grid.Row>

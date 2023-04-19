@@ -1,12 +1,11 @@
-.Connect__container {
-  .alert {
-    margin-top: 1em !important;
+@import "@unioncredit/ui/src/variables";
 
-    &:first-of-type {
-      margin-top: 2em !important;
+.Connect {
+  &__container {
+    padding: 48px 0;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 48px 2.5%;
     }
-  }
-  .alert + .heading {
-    margin-top: 1.5em !important
   }
 }

@@ -45,6 +45,7 @@ import {
   comptrollerContract as MAINNET_comptrollerContract,
   assetManagerContract as MAINNET_assetManagerContract,
   governorContract,
+  timelockContract,
 } from "config/contracts/mainnet";
 
 import {
@@ -54,6 +55,7 @@ import {
   daiContract as ARBITRUM_daiContract,
   comptrollerContract as ARBITRUM_comptrollerContract,
   assetManagerContract as ARBITRUM_assetManagerContract,
+  bridgedTokenContract as ARBITRUM_bridgedTokenContract,
 } from "config/contracts/arbitrum";
 
 import {

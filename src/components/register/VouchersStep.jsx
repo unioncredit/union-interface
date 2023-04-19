@@ -1,32 +1,32 @@
 import "./VouchersStep.scss";
+
+import { useAccount, useNetwork } from "wagmi";
 import {
   Table,
   TableRow,
   TableHead,
   Card,
-  Divider,
   Box,
   ButtonRow,
   Button,
   Text,
   TableCell,
-  Label,
   EmptyState,
+  Heading,
+  TwitterIcon,
+  TelegramIcon,
+  LinkIcon,
 } from "@unioncredit/ui";
-import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
-import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
-import { ReactComponent as Link } from "@unioncredit/ui/lib/icons/link.svg";
 
 import format from "utils/format";
-import Avatar from "components/shared/Avatar";
 import { useModals } from "providers/ModalManager";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
-import PrimaryLabel from "components/shared/PrimaryLabel";
-import { CREDIT_REQUEST_MODAL } from "components/modals/CreditRequestModal";
-import links from "config/links";
-import { useAccount, useNetwork } from "wagmi";
-import getProfileUrl, {
+import { Avatar, PrimaryLabel } from "components/shared";
+import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
+
+import {
+  getProfileUrl,
   generateTelegramLink,
   generateTwitterLink,
 } from "utils/generateLinks";
@@ -46,15 +46,24 @@ export default function VouchersStep() {
 
   return (
     <Card size="fluid" mb="24px">
-      <Card.Header
-        title="Find vouchers"
-        subTitle="Get an existing Union member to vouch for you. They’ll need to trust you, as vouching on Union puts the vouchers funds at risk if you fail to repay. The voucher must have DAI staked in order to be valid."
-      />
       <Card.Body>
-        <Divider />
-        <Box fluid mt="24px" mb="14px" direction="vertical">
-          <Text grey={700}>Vouchers · {vouchers.length}</Text>
-          <Card size="fluid">
+        <Heading level={2} size="large" grey={700}>
+          Find vouchers
+        </Heading>
+        <Text grey={500} size="medium">
+          Get an existing Union member to vouch for you. They’ll need to trust
+          you, as vouching on Union puts the vouchers funds at risk if you fail
+          to repay.
+        </Text>
+
+        <Box
+          className="VouchersStep__container"
+          fluid
+          mt="24px"
+          mb="14px"
+          direction="vertical"
+        >
+          <Card className="VouchersStep__card" size="fluid">
             {vouchers.length <= 0 ? (
               <EmptyState label={<VouchFaucetButton />} />
             ) : (
@@ -62,7 +71,7 @@ export default function VouchersStep() {
                 <TableRow>
                   <TableHead></TableHead>
                   <TableHead>Account</TableHead>
-                  <TableHead align="right">Trust limit (DAI)</TableHead>
+                  <TableHead align="right">Trust limit</TableHead>
                 </TableRow>
                 {vouchers.slice(0, 3).map(({ address, trust }) => (
                   <TableRow key={address}>
@@ -70,37 +79,46 @@ export default function VouchersStep() {
                       <Avatar address={address} />
                     </TableCell>
                     <TableCell>
-                      <Label as="p" grey={700} m={0}>
+                      <Text grey={800} size="medium" weight="medium" m={0}>
                         <PrimaryLabel address={address} />
-                      </Label>
-                      <Label as="p" size="small" grey={400} m={0}>
+                      </Text>
+                      <Text grey={500} size="small" weight="medium" m={0}>
                         {truncateAddress(address)}
-                      </Label>
+                      </Text>
                     </TableCell>
-                    <TableCell align="right">{format(trust)}</TableCell>
+                    <TableCell align="right">
+                      <Text grey={800} size="medium" weight="medium" m={0}>
+                        {format(trust)} DAI
+                      </Text>
+                    </TableCell>
                   </TableRow>
                 ))}
               </Table>
             )}
           </Card>
-          <ButtonRow fluid mt="8px" className="VouchesStep__buttons">
+          <ButtonRow fluid mt="16px" className="VouchesStep__buttons">
             <Button
               fluid
-              color="blue"
-              icon={Link}
+              size="large"
+              color="primary"
+              icon={LinkIcon}
               label="Get vouch link"
-              onClick={() => open(CREDIT_REQUEST_MODAL)}
+              onClick={() => open(VOUCH_LINK_MODAL)}
             />
             <Button
-              variant="secondary"
-              icon={Twitter}
+              size="large"
+              color="secondary"
+              variant="light"
+              icon={TwitterIcon}
               as="a"
               href={generateTwitterLink(profileUrl)}
               target="_blank"
             />
             <Button
-              variant="secondary"
-              icon={Telegram}
+              size="large"
+              color="secondary"
+              variant="light"
+              icon={TelegramIcon}
               as="a"
               href={generateTelegramLink(profileUrl)}
               target="_blank"
