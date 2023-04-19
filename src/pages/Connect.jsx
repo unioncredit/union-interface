@@ -9,6 +9,7 @@ import {
   Box,
   InfoBanner,
   WarningIcon,
+  SegmentedControl,
 } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
@@ -77,12 +78,12 @@ export default function ConnectPage() {
             where your friends and DAO’s are.
           </Text>
           <Box mb="16px" fluid>
-            {/* <ToggleMenu
+            <SegmentedControl
               fluid
               items={versionToggleItems}
               onChange={onToggleVersion}
               initialActive={initialActive}
-            /> */}
+            />
           </Box>
           <NetworkSelect />
         </Box>
