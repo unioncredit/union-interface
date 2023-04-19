@@ -1,17 +1,21 @@
-import { useContractReads } from "wagmi";
+import { useContractReads, useNetwork } from "wagmi";
 import { useEffect, useRef } from "react";
 
 import { CACHE_TIME, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
+import { BlocksPerYear } from "constants";
 
-export default function usePollMemberData(address, chainId) {
+export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
+  const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
 
+  const chainId = inputChainId || connectedChain?.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
+  const blocksPerDay = Math.floor(BlocksPerYear[chainId] / 365);
 
   const contracts = address
     ? [
