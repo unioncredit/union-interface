@@ -14,6 +14,7 @@ import {
   NumericalBlock,
   LinkOutIcon,
   VouchIcon,
+  SwitchIcon,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -132,7 +133,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     fluid
                     mt="20px"
                     color="blue"
-                    icon={Switch}
+                    icon={SwitchIcon}
                     label={`Switch to ${targetNetwork?.label}`}
                     onClick={() => switchNetworkAsync(targetNetwork?.chainId)}
                   />
