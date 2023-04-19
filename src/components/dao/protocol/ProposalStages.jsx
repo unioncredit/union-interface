@@ -2,7 +2,7 @@ import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, NumericalRows } from "@unioncredit/ui";
 import { BlockSpeed, ZERO } from "constants";
 import { commify } from "utils/format";
-import { chain } from "wagmi";
+import { mainnet } from "wagmi/chains";
 
 export function ProposalStages({ protocol, ...props }) {
   const {
@@ -12,17 +12,17 @@ export function ProposalStages({ protocol, ...props }) {
   } = protocol;
 
   const votingDelayHours = votingDelay
-    .mul(BlockSpeed[chain.mainnet.id])
+    .mul(BlockSpeed[mainnet.id])
     .div(3600000)
     .toNumber();
 
   const votingPeriodHours = votingPeriod
-    .mul(BlockSpeed[chain.mainnet.id])
+    .mul(BlockSpeed[mainnet.id])
     .div(3600000)
     .toNumber();
 
   const timelockHours = getMinDelay
-    .mul(BlockSpeed[chain.mainnet.id])
+    .mul(BlockSpeed[mainnet.id])
     .div(3600000)
     .toNumber();
 

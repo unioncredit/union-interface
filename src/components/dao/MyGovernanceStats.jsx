@@ -13,7 +13,8 @@ import {
   SetupIcon,
   InfoBanner,
 } from "@unioncredit/ui";
-import { chain, useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { mainnet, arbitrum } from "wagmi/chains";
 
 import { AddressLabelBox } from "components/shared";
 import format from "utils/format";
@@ -33,7 +34,7 @@ export default function MyGovernanceStats() {
   const { data: arbUnionBalance = ZERO } = useBalance(
     address,
     "bridgedToken",
-    chain.arbitrum.id
+    arbitrum.id
   );
 
   const {
@@ -46,7 +47,7 @@ export default function MyGovernanceStats() {
 
   const votesDelegated = votes.sub(unionBalance);
 
-  const isMainnet = connectedChain.id === chain.mainnet.id;
+  const isMainnet = connectedChain.id === mainnet.id;
   const isVotingConfigured = delegate !== ZERO_ADDRESS;
   const isDelegatingToSelf = delegate === address;
 
@@ -83,7 +84,7 @@ export default function MyGovernanceStats() {
     ? {
         icon: SwitchIcon,
         label: "Switch to Ethereum",
-        onClick: () => switchNetwork(chain.mainnet.id),
+        onClick: () => switchNetwork(mainnet.id),
       }
     : isVotingConfigured
     ? {

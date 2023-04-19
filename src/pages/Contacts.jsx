@@ -14,11 +14,9 @@ export default function ContactsPage({ type: initialType }) {
   const [type, setType] = useState(initialType);
 
   const contactComponentProps = {
-    contact: contactIndex !== null ? contacts[contactIndex] : null,
-    setContactIndex,
-    contacts,
     type,
     setType,
+    setContact,
   };
 
   useEffect(() => {

@@ -8,13 +8,13 @@ import {
   Text,
   UnionIcon,
 } from "@unioncredit/ui";
-import { chain } from "wagmi";
+import { mainnet } from "wagmi/chains";
 import { useProtocolData } from "providers/ProtocolData";
 import { ProposalData } from "components/dao/protocol/ProposalData";
 import { ProposalStages } from "components/dao/protocol/ProposalStages";
 
 export default function GovernanceOverview() {
-  const { data: protocol = {} } = useProtocolData(chain.mainnet.id);
+  const { data: protocol = {} } = useProtocolData(mainnet.id);
 
   return (
     <Card mt="24px" className="ProtocolData">

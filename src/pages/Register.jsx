@@ -9,9 +9,6 @@ import {
   Text,
   Box,
   UnionIcon,
-  Divider,
-  Label,
-  MiniProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -25,6 +22,7 @@ import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
 import { WELCOME_MODAL } from "components/modals/WelcomeModal";
+import { useRef } from "react";
 
 export default function RegisterPage() {
   const { open } = useModals();
@@ -63,12 +61,6 @@ export default function RegisterPage() {
 
   const stakeComplete = unionBalance?.add(unclaimedRewards).gt(0);
   const vouchComplete = vouchers.length > 0;
-
-  const miniProgressListItems = [
-    { number: 1, complete: stakeComplete, scrollTo: stakeStep },
-    { number: 2, complete: vouchComplete, scrollTo: vouchStep },
-    { number: 3, complete: isMember, scrollTo: memberStep },
-  ];
 
   return (
     <>
@@ -140,9 +132,6 @@ export default function RegisterPage() {
           </Grid.Col>
         </Grid.Row>
       </Grid>
-      <div className="MiniProgressListContainer">
-        <MiniProgressList items={miniProgressListItems} />
-      </div>
     </>
   );
 }

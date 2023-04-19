@@ -17,7 +17,7 @@ const buildContractConfigs = (contract, calls, chainId) =>
   }));
 
 export const useProtocolData = (chainId) => {
-  const isMainnet = chainId === chain.mainnet.id;
+  const isMainnet = chainId === mainnet.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
@@ -155,7 +155,7 @@ export const useProtocolData = (chainId) => {
 
 export default function ProtcolData({ children }) {
   const { chain: connectedChain } = useNetwork();
-  const chainId = connectedChain?.id || chain.mainnet.id;
+  const chainId = connectedChain?.id || mainnet.id;
 
   const { data } = useProtocolData(chainId);
 

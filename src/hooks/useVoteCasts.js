@@ -1,4 +1,4 @@
-import { chain } from "wagmi";
+import { mainnet } from "wagmi";
 import { useEffect, useState } from "react";
 
 import { useCache } from "providers/Cache";
@@ -19,7 +19,7 @@ export default function useVoteCasts() {
         return;
       }
 
-      const voteCasts = await fetchVoteCasts(chain.mainnet.id);
+      const voteCasts = await fetchVoteCasts(mainnet.id);
 
       cache(cacheKey, voteCasts);
       setData(voteCasts);

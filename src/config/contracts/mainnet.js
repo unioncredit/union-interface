@@ -43,6 +43,6 @@ export const assetManagerContract = {
 };
 
 export const timelockContract = {
-  addressOrName: "0xBBD3321f377742c4b3fe458b270c2F271d3294D8",
-  contractInterface: timelockAbi,
+  address: "0xBBD3321f377742c4b3fe458b270c2F271d3294D8",
+  abi: timelockAbi,
 };

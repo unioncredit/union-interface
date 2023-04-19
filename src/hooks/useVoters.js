@@ -1,6 +1,7 @@
 import chunk from "lodash/chunk";
-import { chain, useContractReads } from "wagmi";
+import { useContractReads } from "wagmi";
 import { useEffect, useState } from "react";
+import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { CACHE_TIME, ZERO_ADDRESS } from "constants";
@@ -18,7 +19,7 @@ function useVotes() {
 
   useEffect(() => {
     (async function () {
-      const data = await fetchVoteCasts(chain.mainnet.id);
+      const data = await fetchVoteCasts(mainnet.id);
       setAddresses(data);
     })();
   }, []);
@@ -28,7 +29,7 @@ function useVotes() {
 
 export default function useVoters() {
   const { data: addresses = [] } = useVotes();
-  const unionContract = useContract("union", chain.mainnet.id);
+  const unionContract = useContract("union", mainnet.id);
 
   const uniqueAddresses = addresses.filter((element, index) => {
     return addresses.indexOf(element) === index;

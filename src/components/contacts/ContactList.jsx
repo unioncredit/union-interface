@@ -1,6 +1,6 @@
 import "./ContactList.scss";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
@@ -65,9 +65,7 @@ const sortFns = {
   },
 };
 
-export default function ContactList({ contact,
-                                      setContactIndex,
-                                      contacts, type, setType }) {
+export default function ContactList({ type, setType, setContact }) {
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
@@ -129,32 +127,6 @@ export default function ContactList({ contact,
               vouch: ZERO,
             })),
         ]) || [];
-
-  useEffect(() => {
-    // Get the fake search params from the end of the hash fragment
-    const urlSearchParams = locationSearch();
-
-    // If a search param has been provided in the hash URL
-    // #/contacts?address=ADDRESS then we try and find that
-    // address in our contacts array. If we find it we set
-    // it as the active address in the list
-    if (!contact && urlSearchParams.has("address")) {
-      const searchAddress = urlSearchParams.get("address");
-      const searchContactIndex = contacts.findIndex(
-        ({ address }) => address === searchAddress
-      );
-
-      if (!!~searchContactIndex) {
-        window.history.pushState(
-          history.state,
-          document.title,
-          window.location.href.split("?")[0]
-        );
-        setContactIndex(searchContactIndex);
-        return;
-      }
-    }
-  }, [contact, contacts[0]]);
 
   /*--------------------------------------------------------------
     Search, Filter, Paginate 
