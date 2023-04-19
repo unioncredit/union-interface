@@ -125,7 +125,7 @@ export default function App() {
                           <VoucheesData>
                             <ModalManager>
                               <AppReadyShim>
-                                <Header showNav={false} />
+                                <Header />
                                 {appReady ? (
                                   <>
                                     <ErrorBoundary

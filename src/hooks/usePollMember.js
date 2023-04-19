@@ -1,7 +1,7 @@
 import { useContractReads, useNetwork } from "wagmi";
 import { useEffect, useRef } from "react";
 
-import { CACHE_TIME, ZERO } from "constants";
+import { CACHE_TIME, WAD, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
 import { BlocksPerYear } from "constants";
@@ -43,12 +43,12 @@ export default function usePollMemberData(address, inputChainId) {
         {
           ...comptrollerContract,
           functionName: "calculateRewardsByBlocks",
-          args: [address, daiContract.addressOrName, blocksPerDay],
+          args: [address, daiContract.address, blocksPerDay],
         },
         {
           ...comptrollerContract,
           functionName: "getRewardsMultiplier",
-          args: [address, daiContract.addressOrName],
+          args: [address, daiContract.address],
         },
       ]
     : [];
