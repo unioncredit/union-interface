@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { CACHE_TIME, WAD, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
-import { BlocksPerYear } from "constants";
+import { BlocksPerYear, WAD } from "constants";
 
 export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
@@ -62,9 +62,9 @@ export default function usePollMemberData(address, inputChainId) {
       // The estimated number of unclaimed rewards in 1 day
       const estimatedTotalRewards = data[3] || ZERO;
       const estimatedDailyTotal = estimatedTotalRewards.sub(unclaimedRewards);
-      const estimatedDailyBase = estimatedDailyTotal
-        .mul(WAD)
-        .div(rewardsMultiplier);
+      const estimatedDailyBase = rewardsMultiplier.gt(ZERO)
+        ? estimatedDailyTotal.mul(WAD).div(rewardsMultiplier)
+        : ZERO;
       const dailyDifference = estimatedDailyTotal.sub(estimatedDailyBase);
 
       return {
