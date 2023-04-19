@@ -7,7 +7,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Routes from "./Routes";
 
 import ConnectPage from "pages/Connect";
-import Header from "components/shared/Header";
+import { Header } from "components/shared/Header";
 import { general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 
@@ -124,19 +124,20 @@ export default function App() {
                           <VoucheesData>
                             <ModalManager>
                               <AppReadyShim>
-                              <Header />
-                              {appReady ? (
-                                <>
-                                  <ErrorBoundary FallbackComponent={ErrorPage}>
-                                    <Layout.Columned>
-                                      <Routes />
-                                    </Layout.Columned>
-                                  </ErrorBoundary>
-                                </>
-                              ) : (
-                                <ConnectPage />
-                              )}
-                            </AppReadyShim>
+                                {appReady ? (
+                                  <>
+                                    <ErrorBoundary
+                                      FallbackComponent={ErrorPage}
+                                    >
+                                      <Layout.Columned>
+                                        <Routes />
+                                      </Layout.Columned>
+                                    </ErrorBoundary>
+                                  </>
+                                ) : (
+                                  <ConnectPage />
+                                )}
+                              </AppReadyShim>
                             </ModalManager>
                           </VoucheesData>
                         </VouchersData>

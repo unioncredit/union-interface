@@ -7,14 +7,12 @@ import {
   Dai,
   Button,
   Box,
-  ExpandingInfo,
   WarningIcon,
   Text,
   HiddenInput,
   AddIcon,
   NumericalRows,
   VouchIcon,
-  Text,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -25,7 +23,6 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
-import { useVersion } from "providers/Version";
 
 export const VOUCH_MODAL = "vouch-modal";
 

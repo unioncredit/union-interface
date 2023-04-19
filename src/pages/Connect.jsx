@@ -2,7 +2,14 @@ import "./Connect.scss";
 import { useEffect } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
-import { Heading, Text, Box, InfoBanner, WarningIcon } from "@unioncredit/ui";
+import {
+  ToggleMenu,
+  Heading,
+  Text,
+  Box,
+  InfoBanner,
+  WarningIcon,
+} from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Banner from "components/connect/Banner";
@@ -70,12 +77,12 @@ export default function ConnectPage() {
             where your friends and DAO’s are.
           </Text>
           <Box mb="16px" fluid>
-            <ToggleMenu
+            {/* <ToggleMenu
               fluid
               items={versionToggleItems}
               onChange={onToggleVersion}
               initialActive={initialActive}
-            />
+            /> */}
           </Box>
           <NetworkSelect />
         </Box>

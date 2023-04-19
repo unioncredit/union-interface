@@ -65,8 +65,9 @@ a {
 
 .bg-color {
   @include colors(background);
-.context-menu {
-  width: 190px !important;
+  .context-menu {
+    width: 190px !important;
+  }
 }
 
 .v2-alert {

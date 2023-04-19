@@ -9,6 +9,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
+import useNetworks from "hooks/useNetworks";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();

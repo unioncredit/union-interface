@@ -16,7 +16,6 @@ import {
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
-import { isAddress } from "ethers/lib/utils";
 import { Link as RouterLink } from "react-router-dom";
 
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
