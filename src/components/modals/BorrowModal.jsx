@@ -10,7 +10,7 @@ import {
   BorrowIcon,
   NumericalRows,
 } from "@unioncredit/ui";
-import { useNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 import format from "utils/format";
 import useForm from "hooks/useForm";
@@ -24,12 +24,15 @@ import {
   calculateExpectedMinimumPayment,
   calculateInterestRate,
 } from "utils/numbers";
+import { useVersion, Versions } from "providers/Version";
 
 export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
   const { chain } = useNetwork();
   const { close } = useModals();
+  const { version } = useVersion();
+  const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
   const firstPaymentDueDate = useFirstPaymentDueDate();
@@ -72,7 +75,7 @@ export default function BorrowModal() {
   const buttonProps = useWrite({
     contract: "uToken",
     method: "borrow",
-    args: [amount.raw],
+    args: version === Versions.V1 ? [amount.raw] : [address, amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
     onComplete: async () => {
       await refetchMember();
