@@ -87,12 +87,12 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          caption: `Balance: ${format(maxUserStake)} DAI`,
+          caption: `Balance: ${format(maxUserStake, 2, false)} DAI`,
           onCaptionButtonClick: () => setRawValue("amount", maxUserStake),
         }
       : {
           label: "Amount to unstake",
-          caption: `Withdrawable: ${format(maxUserUnstake)} DAI`,
+          caption: `Withdrawable: ${format(maxUserUnstake, 2, false)} DAI`,
           onCaptionButtonClick: () => setRawValue("amount", maxUserUnstake),
         };
 
