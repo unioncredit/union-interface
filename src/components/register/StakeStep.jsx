@@ -37,7 +37,7 @@ export default function StakeStep() {
     totalStaked = ZERO,
     totalFrozen = ZERO,
     newMemberFee = ZERO,
-    inflationPerBlock = ZERO,
+    inflationPerSecond = ZERO,
     unclaimedRewards = ZERO,
   } = { ...protocol, ...member };
 
@@ -49,7 +49,7 @@ export default function StakeStep() {
   const effectiveTotalStake = totalStaked.sub(totalFrozen);
 
   const dailyEarnings = effectiveTotalStake.gt(ZERO)
-    ? inflationPerBlock
+    ? inflationPerSecond
         .mul(WAD)
         .div(effectiveTotalStake)
         .mul(stakedBalance)

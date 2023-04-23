@@ -48,26 +48,26 @@ export default function ProtcolData({ children }) {
 
   const uTokenFunctionNames = [
     "reserveFactorMantissa",
-    "accrualBlockNumber",
+    "accrualTimestamp",
     "borrowIndex",
     "totalBorrows",
     "totalReserves",
     "totalRedeemable",
-    "overdueBlocks",
+    "overdueTime",
     "originationFee",
     "debtCeiling",
     "maxBorrow",
     "minBorrow",
     "getRemainingDebtCeiling",
-    "borrowRatePerBlock",
-    "supplyRatePerBlock",
+    "borrowRatePerSecond",
+    "supplyRatePerSecond",
     "exchangeRateStored",
   ];
 
   const comptrollerFunctionNames = [
     "halfDecayPoint",
     "gInflationIndex",
-    "gLastUpdatedBlock",
+    "gLastUpdated",
   ];
 
   const governorFunctionsNames = ["quorumVotes"];
@@ -127,12 +127,12 @@ export default function ProtcolData({ children }) {
   const resp0 = useContractReads({
     enabled: totalStaked.gt(ZERO),
     select: (data) => ({
-      inflationPerBlock: data[0],
+      inflationPerSecond: data[0],
     }),
     contracts: [
       {
         ...comptrollerContract,
-        functionName: "inflationPerBlock",
+        functionName: "inflationPerSecond",
         args: [totalStaked.sub(totalFrozen)],
       },
     ],
