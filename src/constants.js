@@ -55,7 +55,7 @@ export const BlocksPerYear = {
   [mainnet.id]: 2407328,
   [arbitrum.id]: 2407328,
   [goerli.id]: 2407328,
-  [optimismGoerli.id]: 31536000, //second per year
+  [optimismGoerli.id]: 15770000,
 };
 
 export const EIP3770 = {
