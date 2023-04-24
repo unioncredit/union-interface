@@ -48,7 +48,7 @@ export const BlockSpeed = {
   [mainnet.id]: 12e3,
   [arbitrum.id]: 12e3,
   [goerli.id]: 12e3,
-  [optimismGoerli.id]: 2e3,
+  [optimismGoerli.id]: 1e3,
 };
 
 export const BlocksPerYear = {

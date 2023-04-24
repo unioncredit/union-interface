@@ -98,7 +98,7 @@ export default function Header({ loading, showNav = true }) {
                     onClick={() => open(WALLET_MODAL)}
                     label={
                       <Text mb="0" ml="4px">
-                        {format(unclaimedRewards.add(unionBalance))}
+                        {format((unclaimedRewards || ZERO).add(unionBalance))}
                       </Text>
                     }
                   />

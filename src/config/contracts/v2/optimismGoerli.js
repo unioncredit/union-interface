@@ -8,17 +8,17 @@ import unionLensAbi from "abis/v2/unionLens.json";
 import vouchFaucetAbi from "abis/vouchFaucet.json";
 
 export const userManagerContract = {
-  address: "0x55a095033FFECcF4E8f712ebda0850c7f3dF2E25",
+  address: "0xe2732f6E7306908697D111A53806C5883eaf0fc5",
   abi: userManagerAbi,
 };
 
 export const uTokenContract = {
-  address: "0x10f35722588571BB109820Be6F515634336512Ec",
+  address: "0xDe16E91e6EF17D29F4f5e6DAA5E7827A3CaA6F29",
   abi: uTokenAbi,
 };
 
 export const unionContract = {
-  address: "0x457E066FC7D6c7567f21Fc96E7a713d02cE58D61",
+  address: "0xa5DaCCAf7E72Be629fc0F52cD55d500Fd6fa7677",
   abi: unionAbi,
 };
 
@@ -28,21 +28,21 @@ export const daiContract = {
 };
 
 export const comptrollerContract = {
-  address: "0x1c970FAC1D3BDcB9Bc984A2f39Df769760AeE0ac",
+  address: "0x4A89d70e17F9e765077dfF246c84B47c1181c473",
   abi: comptrollerAbi,
 };
 
 export const assetManagerContract = {
-  address: "0x099a2B3f5A62053D6Aa032A9AeC410f7d51713e3",
+  address: "0x8E92930536764DF03ee26079e8D8A57a9f3a833b",
   abi: assetManagerAbi,
 };
 
 export const unionLensContract = {
-  address: "0x38FE97157C531a677b7cF86b75ddE40d6B1bb7F0",
+  address: "0x680A9943A5EB8371986cd6E6F4E14c61A305A672",
   abi: unionLensAbi,
 };
 
 export const vouchFaucetContract = {
-  address: "0xA36A707ebb8a41c50875cE76d44C1E21A1fd7556",
+  address: "",
   abi: vouchFaucetAbi,
 };

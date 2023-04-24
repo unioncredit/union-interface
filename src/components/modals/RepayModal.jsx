@@ -23,7 +23,6 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import { useState } from "react";
 import { Errors } from "constants";
-import { ethers } from "ethers";
 import { useVersion, Versions } from "providers/Version";
 
 export const REPAY_MODAL = "repay-modal";
@@ -74,8 +73,11 @@ export default function RepayModal() {
   let newOwed = owed.sub(amount.raw);
   newOwed = newOwed.lt(ZERO) ? ZERO : newOwed;
 
-  const displayAmount = amount.raw.eq(ethers.constants.MaxUint256)
-    ? format(maxRepay)
+  // Factor in a 1% margin for the max repay as we can no longer use MaxUint256
+  const owedMargin = owed.add(owed.div(100));
+
+  const displayAmount = amount.raw.eq(owedMargin)
+    ? format(owed)
     : amount.display;
 
   const options = [
@@ -89,7 +91,7 @@ export default function RepayModal() {
     },
     {
       display: format(daiBalance.lt(owed) ? daiBalance : owed),
-      value: daiBalance.lt(owed) ? daiBalance : ethers.constants.MaxUint256,
+      value: daiBalance.lt(owed) ? daiBalance : owedMargin,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
         ? "Pay-off entire loan"
