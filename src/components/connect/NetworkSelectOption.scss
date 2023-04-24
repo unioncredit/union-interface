@@ -2,6 +2,7 @@
 
 .NetworkSelectOption {
   cursor: pointer;
+  border-radius: 12px;
 
   &--active {
     background: $blue50;

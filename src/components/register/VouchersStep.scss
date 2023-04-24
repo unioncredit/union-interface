@@ -38,5 +38,10 @@
     @media screen and (max-width: 360px) {
       padding: 12px 6px !important;
     }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 }

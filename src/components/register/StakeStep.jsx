@@ -17,6 +17,7 @@ import {
   PauseIcon,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
+import { useCallback } from "react";
 
 import { WAD } from "constants";
 import format from "utils/format";
@@ -61,7 +62,7 @@ export default function StakeStep() {
         .div(365)
     : ZERO;
 
-  const progressBarProps = () => {
+  const progressBarProps = useCallback(() => {
     if (unionEarned.gte(WAD)) {
       return {
         icon: CheckIcon,
@@ -88,7 +89,7 @@ export default function StakeStep() {
       icon: WarningIcon,
       label: "Deposit DAI to start earning",
     };
-  };
+  }, [unionEarned, stakedBalance, percentage]);
 
   return (
     <Card size="fluid" mb="24px">
@@ -110,6 +111,7 @@ export default function StakeStep() {
         >
           <Box justify="space-between" fluid>
             <NumericalBlock
+              fluid
               align="left"
               token="dai"
               size="regular"
@@ -117,6 +119,7 @@ export default function StakeStep() {
               value={format(stakedBalance)}
             />
             <NumericalBlock
+              fluid
               align="left"
               token="union"
               size="regular"
@@ -124,6 +127,7 @@ export default function StakeStep() {
               value={format(dailyEarnings)}
             />
             <NumericalBlock
+              fluid
               align="left"
               token="union"
               size="regular"

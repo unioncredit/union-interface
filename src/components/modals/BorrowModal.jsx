@@ -23,6 +23,7 @@ import { useProtocol } from "providers/ProtocolData";
 import {
   calculateExpectedMinimumPayment,
   calculateInterestRate,
+  calculateMaxBorrow,
 } from "utils/numbers";
 import { useVersion, Versions } from "providers/Version";
 
@@ -56,9 +57,17 @@ export default function BorrowModal() {
     }
   };
 
-  const { register, values = {}, errors = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    values = {},
+    errors = {},
+    empty,
+  } = useForm({ validate });
 
   const amount = values.amount || empty;
+
+  const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
   const fee = amount.raw.mul(originationFee).div(WAD);
 
@@ -123,6 +132,8 @@ export default function BorrowModal() {
               type="number"
               name="amount"
               label="Amount to borrow"
+              rightLabel={`Max. ${format(maxBorrow)} DAI`}
+              rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
               suffix={<Dai />}
               placeholder="0.0"
               error={errors.amount}

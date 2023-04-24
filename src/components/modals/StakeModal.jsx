@@ -89,9 +89,12 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
       ? {
           label: "Amount to stake",
           rightLabel: `Max. ${format(daiBalance)} DAI`,
+          rightLabelAction: () => setRawValue("amount", daiBalance, false),
         }
       : {
           label: "Amount to unstake",
+          rightLabel: `Max. ${format(stakedBalance)} DAI`,
+          rightLabelAction: () => setRawValue("amount", stakedBalance, false),
         };
 
   return (
