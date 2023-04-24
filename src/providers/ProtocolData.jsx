@@ -4,7 +4,7 @@ import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
-import { Versions } from "./Version";
+import { useVersion, Versions } from "./Version";
 
 const ProtocolContext = createContext({});
 
@@ -23,6 +23,10 @@ export default function ProtcolData({ children }) {
   const chainId = connectedChain?.id || mainnet.id;
 
   const isMainnet = connectedChain === mainnet.id;
+
+  const { version } = useVersion();
+
+  const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
@@ -48,26 +52,26 @@ export default function ProtcolData({ children }) {
 
   const uTokenFunctionNames = [
     "reserveFactorMantissa",
-    "accrualTimestamp",
+    versioned("accrualBlockNumber", "accrualTimestamp"),
     "borrowIndex",
     "totalBorrows",
     "totalReserves",
     "totalRedeemable",
-    "overdueTime",
+    versioned("overdueBlocks", "overdueTime"),
     "originationFee",
     "debtCeiling",
     "maxBorrow",
     "minBorrow",
     "getRemainingDebtCeiling",
-    "borrowRatePerSecond",
-    "supplyRatePerSecond",
+    versioned("borrowRatePerBlock", "borrowRatePerSecond"),
+    versioned("supplyRatePerBlock", "supplyRatePerSecond"),
     "exchangeRateStored",
   ];
 
   const comptrollerFunctionNames = [
     "halfDecayPoint",
     "gInflationIndex",
-    "gLastUpdated",
+    versioned("gLastUpdatedBlock", "gLastUpdated"),
   ];
 
   const governorFunctionsNames = ["quorumVotes"];
@@ -128,11 +132,12 @@ export default function ProtcolData({ children }) {
     enabled: totalStaked.gt(ZERO),
     select: (data) => ({
       inflationPerSecond: data[0],
+      inflationPerBlock: data[0],
     }),
     contracts: [
       {
         ...comptrollerContract,
-        functionName: "inflationPerSecond",
+        functionName: versioned("inflationPerBlock", "inflationPerSecond"),
         args: [totalStaked.sub(totalFrozen)],
       },
     ],

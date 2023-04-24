@@ -29,7 +29,10 @@ export default function GovernaceStats() {
     totalBorrows = ZERO,
     getLoanableAmount = ZERO,
     borrowRatePerSecond = ZERO,
+    borrowRatePerBlock = ZERO,
   } = protocol;
+
+  const borrowRatePerUnit = borrowRatePerSecond || borrowRatePerBlock;
 
   return (
     <Card mb="24px">
@@ -62,15 +65,13 @@ export default function GovernaceStats() {
               />
             </Grid.Col>
             <Grid.Col xs={6}>
-              {borrowRatePerSecond && (
+              {borrowRatePerUnit && (
                 <Stat
                   mt="32px"
                   align="center"
                   label="Interest rate"
                   value={`${format(
-                    calculateInterestRate(borrowRatePerSecond, chain.id).mul(
-                      100
-                    )
+                    calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
                   )}%`}
                 />
               )}
