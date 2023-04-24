@@ -123,7 +123,7 @@ export default function BorrowModal() {
               error={errors.amount}
               value={amount.formatted}
               onChange={register("amount")}
-              caption={`Max. ${format(maxBorrow)} DAI`}
+              caption={`Max. ${format(maxBorrow, 18, false, true)} DAI`}
               onCaptionButtonClick={() =>
                 setRawValue("amount", maxBorrow, false)
               }
