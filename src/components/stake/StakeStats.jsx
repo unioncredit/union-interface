@@ -94,75 +94,77 @@ export default function StakeStats() {
           justify="space-between"
           className="StakeStats__bottom"
         >
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Withdrawable"
-            dotColor="blue500"
-            value={format(withdrawableStake)}
-            after={
-              <Link to="/contacts/providing">
-                <AddressesAvatarBadgeRow
-                  mt="8px"
-                  addresses={vouchees.map((v) => v.address)}
-                  showLabel={!vouchees.length || vouchees.length > 6}
-                  label={`Providing to ${
-                    vouchees.length ? vouchees.length : "no"
-                  } contacts`}
-                />
-              </Link>
-            }
-          />
+          <Box fluid className="StakeStats__item">
+            <NumericalBlock
+              align="left"
+              token="dai"
+              size="regular"
+              title="Withdrawable"
+              dotColor="blue500"
+              value={format(withdrawableStake)}
+            />
 
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Locked"
-            dotColor="violet500"
-            value={format(totalLockedStake)}
-            after={
-              <Link to="/contacts/receiving">
-                <AddressesAvatarBadgeRow
-                  mt="8px"
-                  addresses={borrowingVouchees.map((v) => v.address)}
-                  label={`${
-                    borrowingVouchees.length ? borrowingVouchees.length : "No"
-                  } contacts borrowing`}
-                  showLabel={
-                    !borrowingVouchees.length || borrowingVouchees.length > 6
-                  }
-                />
-              </Link>
-            }
-          />
+            <Link to="/contacts/providing">
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={vouchees.map((v) => v.address)}
+                showLabel={!vouchees.length || vouchees.length > 6}
+                label={`Providing to ${
+                  vouchees.length ? vouchees.length : "no"
+                } contacts`}
+              />
+            </Link>
+          </Box>
 
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Frozen"
-            dotColor="red500"
-            value={format(defaulted)}
-            after={
-              <Link to="/contacts/providing?filters=overdue">
-                <AddressesAvatarBadgeRow
-                  mt="8px"
-                  addresses={defaultedVouchees.map((v) => v.address)}
-                  label={`${
-                    defaultedVouchees.length ? defaultedVouchees.length : "No"
-                  } defaulters`}
-                  showLabel={
-                    !defaultedVouchees.length || defaultedVouchees.length > 6
-                  }
-                />
-              </Link>
-            }
-          />
+          <Box fluid className="StakeStats__item">
+            <NumericalBlock
+              fluid
+              align="left"
+              token="dai"
+              size="regular"
+              title="Locked"
+              dotColor="violet500"
+              value={format(totalLockedStake)}
+            />
+
+            <Link to="/contacts/receiving">
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={borrowingVouchees.map((v) => v.address)}
+                label={`${
+                  borrowingVouchees.length ? borrowingVouchees.length : "No"
+                } contacts borrowing`}
+                showLabel={
+                  !borrowingVouchees.length || borrowingVouchees.length > 6
+                }
+              />
+            </Link>
+          </Box>
+
+          <Box fluid className="StakeStats__item">
+            <NumericalBlock
+              fluid
+              align="left"
+              token="dai"
+              size="regular"
+              title="Frozen"
+              dotColor="red500"
+              value={format(defaulted)}
+            />
+
+            <Link to="/contacts/providing?filters=overdue">
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                addresses={defaultedVouchees.map((v) => v.address)}
+                label={`${
+                  defaultedVouchees.length ? defaultedVouchees.length : "No"
+                } defaulters`}
+                showLabel={
+                  !defaultedVouchees.length || defaultedVouchees.length > 6
+                }
+              />
+            </Link>
+          </Box>
         </Box>
       </Card.Body>
     </Card>

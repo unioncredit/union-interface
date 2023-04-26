@@ -67,6 +67,7 @@ export default function MobileColumnToggle({
 
         <Modal.Body>
           <ControlGroup
+            className="MobileColumnToggle__columns"
             initialSelected={active.id}
             items={columns.map((column) => ({
               ...column,

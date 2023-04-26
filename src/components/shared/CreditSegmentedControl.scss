@@ -1,0 +1,15 @@
+@import "@unioncredit/ui/src/variables";
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .CreditSegmentedControl {
+    .SegmentedControl__item {
+      font-size: 14px !important;
+      line-height: 20px !important;
+
+      svg {
+        max-width: 24px !important;
+        max-height: 24px !important;
+      }
+    }
+  }
+}

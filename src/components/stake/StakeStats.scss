@@ -1,6 +1,10 @@
 @import "@unioncredit/ui/src/variables";
 
 .StakeStats {
+  &__item {
+    flex-direction: column !important;
+  }
+
   .AvatarBadgeRow {
     &:hover {
       background: $grey100;
@@ -26,17 +30,22 @@
       }
     }
 
-    &__bottom {
-      .heading {
-        font-size: 13px !important;
+    &__item {
+      flex-direction: row !important;
+      justify-content: space-between;
+      align-items: center !important;
+
+      &:not(:last-of-type) {
+        margin-bottom: 8px;
       }
+    }
+
+    &__bottom {
+      flex-direction: column !important;
+
       .NumericalBlock__value {
         font-size: 18px !important;
         line-height: 24px !important;
-      }
-      .button--size-pill {
-        margin: 0 4px !important;
-        font-size: 8px !important
       }
     }
   }

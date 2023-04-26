@@ -47,4 +47,22 @@
       color: $blue600;
     }
   }
+
+  &__columns {
+    .Control--checked + .Control__label {
+      position: relative;
+
+      &::after {
+        content: ' ';
+        display: block;
+        width: 24px;
+        height: 24px;
+        background: url("../../../../public/images/CheckIcon.svg");
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
 }

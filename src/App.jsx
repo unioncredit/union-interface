@@ -93,10 +93,10 @@ export default function App() {
         <Layout>
           <ScrollToTop />
           <Layout.Main>
+            <Header showNav={false} />
             <Grid style={{ display: "flex", flexGrow: 1 }}>
               <Grid.Row style={{ width: "100%", margin: 0 }}>
                 <Grid.Col>
-                  <Header showNav={false} />
                   <ErrorBoundary FallbackComponent={ErrorPage}>
                     <ConnectPage />
                   </ErrorBoundary>
@@ -113,19 +113,20 @@ export default function App() {
     <Layout>
       <ScrollToTop />
       <Layout.Main>
-        <Grid style={{ display: "flex", flexGrow: 1 }}>
-          <Grid.Row style={{ width: "100%", margin: 0 }}>
-            <Grid.Col>
-              <Settings>
-                <Cache>
-                  <ProtocolData>
-                    <GovernanceData>
-                      <MemberData>
-                        <VouchersData>
-                          <VoucheesData>
-                            <ModalManager>
-                              <AppReadyShim>
-                                <Header />
+        <Settings>
+          <Cache>
+            <ProtocolData>
+              <GovernanceData>
+                <MemberData>
+                  <VouchersData>
+                    <VoucheesData>
+                      <ModalManager>
+                        <AppReadyShim>
+                          <Header />
+
+                          <Grid style={{ display: "flex", flexGrow: 1 }}>
+                            <Grid.Row style={{ width: "100%", margin: 0 }}>
+                              <Grid.Col>
                                 {appReady ? (
                                   <>
                                     <ErrorBoundary
@@ -139,18 +140,18 @@ export default function App() {
                                 ) : (
                                   <ConnectPage />
                                 )}
-                              </AppReadyShim>
-                            </ModalManager>
-                          </VoucheesData>
-                        </VouchersData>
-                      </MemberData>
-                    </GovernanceData>
-                  </ProtocolData>
-                </Cache>
-              </Settings>
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+                              </Grid.Col>
+                            </Grid.Row>
+                          </Grid>
+                        </AppReadyShim>
+                      </ModalManager>
+                    </VoucheesData>
+                  </VouchersData>
+                </MemberData>
+              </GovernanceData>
+            </ProtocolData>
+          </Cache>
+        </Settings>
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
             <Text size="small" grey={300} align="center">
