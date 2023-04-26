@@ -15,6 +15,7 @@ import {
   CheckIcon,
   PlayIcon,
   PauseIcon,
+  ClaimIcon,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
 import { useCallback } from "react";
@@ -28,11 +29,12 @@ import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { BlocksPerYear } from "constants";
+import useWrite from "hooks/useWrite";
 
 export default function StakeStep() {
   const { open } = useModals();
   const { chain } = useNetwork();
-  const { data: member = {} } = useMember();
+  const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
 
   const {
@@ -42,6 +44,7 @@ export default function StakeStep() {
     totalFrozen = ZERO,
     inflationPerBlock = ZERO,
     unclaimedRewards = ZERO,
+    newMemberFee = ZERO,
   } = { ...protocol, ...member };
 
   const virtualBalance = unionBalance.add(unclaimedRewards);
@@ -61,6 +64,13 @@ export default function StakeStep() {
         .mul(BlocksPerYear[chain.id])
         .div(365)
     : ZERO;
+
+  const claimTokensButtonProps = useWrite({
+    contract: "userManager",
+    method: "withdrawRewards",
+    enabled: unionBalance.lt(newMemberFee),
+    onComplete: () => refetchMember(),
+  });
 
   const progressBarProps = useCallback(() => {
     if (unionEarned.gte(WAD)) {
@@ -136,11 +146,20 @@ export default function StakeStep() {
             />
           </Box>
 
-          <ProgressBar
-            m="16px 0"
-            percentage={percentage}
-            {...progressBarProps()}
-          />
+          <Box fluid m="16px 0" className="StakeStep__progress-container">
+            <ProgressBar
+              fluid
+              percentage={percentage}
+              {...progressBarProps()}
+            />
+            <Button
+              ml="8px"
+              icon={ClaimIcon}
+              size="large"
+              label="Claim Tokens"
+              {...claimTokensButtonProps}
+            />
+          </Box>
 
           <ButtonRow w="100%">
             <Button

@@ -12,9 +12,18 @@
     }
   }
   &__col {
-    @media screen and (max-width: $mobileWidth) {
+
+    @media screen and (max-width: $breakpoint-small) {
       padding-left: 0 !important;
       padding-right: 0 !important;
+    }
+    @media screen and (max-width: $breakpoint-small) and (min-width: $breakpoint-tablet) {
+      width: 75% !important;
+      flex: 0 75% !important;
+      max-width: none !important;
+    }
+    @media screen and (max-width: $breakpoint-tablet) {
+      overflow: hidden;
     }
   }
   &__container {
