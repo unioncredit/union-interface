@@ -24,7 +24,6 @@ import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
-import links from "config/links";
 
 import {
   getProfileUrl,

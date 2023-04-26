@@ -99,7 +99,6 @@ export function Header({ loading, showNav = true }) {
                 <Box justify="flex-end" align="center">
                   {isConnected && (
                     <Button
-                      mr="4px"
                       icon={UnionIcon}
                       iconProps={{
                         style: {

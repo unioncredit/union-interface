@@ -17,8 +17,6 @@ export default function VouchFaucetButton() {
     onComplete: refetchVouchers,
   });
 
-  console.log(onClick, loading, onClick);
-
   if (![goerli.id, optimismGoerli.id].includes(chain.id)) {
     return (
       <>

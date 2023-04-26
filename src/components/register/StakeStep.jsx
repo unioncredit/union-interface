@@ -15,8 +15,10 @@ import {
   CheckIcon,
   PlayIcon,
   PauseIcon,
+  ClaimIcon,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
+import { useCallback } from "react";
 
 import { WAD } from "constants";
 import format from "utils/format";
@@ -27,11 +29,12 @@ import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { BlocksPerYear } from "constants";
+import useWrite from "hooks/useWrite";
 
 export default function StakeStep() {
   const { open } = useModals();
   const { chain } = useNetwork();
-  const { data: member = {} } = useMember();
+  const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
 
   const {
@@ -41,6 +44,7 @@ export default function StakeStep() {
     totalFrozen = ZERO,
     inflationPerBlock = ZERO,
     unclaimedRewards = ZERO,
+    newMemberFee = ZERO,
   } = { ...protocol, ...member };
 
   const virtualBalance = unionBalance.add(unclaimedRewards);
@@ -61,7 +65,14 @@ export default function StakeStep() {
         .div(365)
     : ZERO;
 
-  const progressBarProps = () => {
+  const claimTokensButtonProps = useWrite({
+    contract: "userManager",
+    method: "withdrawRewards",
+    enabled: unionBalance.lt(newMemberFee),
+    onComplete: () => refetchMember(),
+  });
+
+  const progressBarProps = useCallback(() => {
     if (unionEarned.gte(WAD)) {
       return {
         icon: CheckIcon,
@@ -88,7 +99,7 @@ export default function StakeStep() {
       icon: WarningIcon,
       label: "Deposit DAI to start earning",
     };
-  };
+  }, [unionEarned, stakedBalance, percentage]);
 
   return (
     <Card size="fluid" mb="24px">
@@ -110,6 +121,7 @@ export default function StakeStep() {
         >
           <Box justify="space-between" fluid>
             <NumericalBlock
+              fluid
               align="left"
               token="dai"
               size="regular"
@@ -117,6 +129,7 @@ export default function StakeStep() {
               value={format(stakedBalance)}
             />
             <NumericalBlock
+              fluid
               align="left"
               token="union"
               size="regular"
@@ -124,6 +137,7 @@ export default function StakeStep() {
               value={format(dailyEarnings)}
             />
             <NumericalBlock
+              fluid
               align="left"
               token="union"
               size="regular"
@@ -132,11 +146,20 @@ export default function StakeStep() {
             />
           </Box>
 
-          <ProgressBar
-            m="16px 0"
-            percentage={percentage}
-            {...progressBarProps()}
-          />
+          <Box fluid m="16px 0" className="StakeStep__progress-container">
+            <ProgressBar
+              fluid
+              percentage={percentage}
+              {...progressBarProps()}
+            />
+            <Button
+              ml="8px"
+              icon={ClaimIcon}
+              size="large"
+              label="Claim Tokens"
+              {...claimTokensButtonProps}
+            />
+          </Box>
 
           <ButtonRow w="100%">
             <Button

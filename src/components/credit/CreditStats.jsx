@@ -46,6 +46,8 @@ export default function CreditStats({ vouchers }) {
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
+  const unavailableBalance = vouch.sub(creditLimit).sub(owed);
+
   const {
     relative: relativeDueDate,
     absolute: absoluteDueDate,
@@ -91,7 +93,9 @@ export default function CreditStats({ vouchers }) {
             color={
               owed.eq(ZERO) && creditLimit.gt(ZERO) ? "primary" : "secondary"
             }
-            variant="light"
+            variant={
+              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "regular" : "light"
+            }
             icon={BorrowIcon}
             onClick={() => open(BORROW_MODAL)}
           />
@@ -109,7 +113,7 @@ export default function CreditStats({ vouchers }) {
               color: "blue600",
             },
             {
-              value: formattedNumber(vouch.sub(creditLimit)),
+              value: formattedNumber(unavailableBalance),
               color: "amber500",
             },
           ]}
@@ -133,7 +137,7 @@ export default function CreditStats({ vouchers }) {
             size="regular"
             title="Unavailable"
             dotColor="amber500"
-            value={format(vouch.sub(creditLimit))}
+            value={format(unavailableBalance)}
           />
         </Box>
       </Card.Body>

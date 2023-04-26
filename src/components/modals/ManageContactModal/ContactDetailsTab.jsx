@@ -147,7 +147,7 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
       value: format(locking),
       buttonProps: {
         label: "Write-off",
-        disabled: locking.lte(ZERO) || !isOverdue,
+        disabled: locking.lte(ZERO),
         onClick: () => {
           clearContact();
           open(WRITE_OFF_DEBT_MODAL, { address, clearContact });

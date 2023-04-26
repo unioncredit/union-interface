@@ -7,8 +7,10 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
-import { ContactIconBadgeRow } from "components/contacts/ContactsTable/ContactIconBadgeRow";
 import { useLastRepayData } from "hooks/useLastRepayData";
+
+import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
+import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
 
 export const COLUMNS = {
   TRUST_SET: {
@@ -45,6 +47,8 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
 
   const { formatted: lastRepayFormatted, paymentDue } =
     useLastRepayData(lastRepay);
+
+  const Icon = receiving ? BothRow : ProvidingRow;
 
   const columns = [
     {
@@ -120,7 +124,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
               <PrimaryLabel address={address} />
             </Text>
 
-            <ContactIconBadgeRow providing={true} receiving={receiving} />
+            <Icon className="ProvidingTableRow__icon" />
           </Box>
 
           <Text size="small" grey={500} m={0} weight="medium">

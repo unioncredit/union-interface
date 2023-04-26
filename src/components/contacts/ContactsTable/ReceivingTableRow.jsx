@@ -5,10 +5,10 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import { ZERO } from "constants";
 import format from "utils/format";
-import {
-  ContactIconBadgeRow,
-  DimmableTableCell,
-} from "components/contacts/ContactsTable";
+import { DimmableTableCell } from "components/contacts/ContactsTable";
+
+import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
+import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
 
 export const COLUMNS = {
   TRUST_SET: {
@@ -37,6 +37,8 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
   const { address, locked = ZERO, trust = ZERO, vouch = ZERO } = data;
 
   const borrowable = vouch.sub(locked);
+
+  const Icon = providing ? BothRow : ReceivingRow;
 
   const columns = [
     {
@@ -99,7 +101,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
               <PrimaryLabel address={address} />
             </Text>
 
-            <ContactIconBadgeRow providing={providing} receiving={true} />
+            <Icon className="ProvidingTableRow__icon" />
           </Box>
 
           <Text size="small" grey={500} m={0} weight="medium">

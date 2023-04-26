@@ -1,6 +1,18 @@
+@import "@unioncredit/ui/src/variables";
+
 .DaoSegmentedControl {
   .SegmentedControl__item {
     padding-left: 35px;
     padding-right: 35px;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      font-size: 13px !important;
+      line-height: 20px !important;
+
+      svg {
+        max-width: 20px !important;
+        max-height: 20px !important;
+      }
+    }
   }
 }

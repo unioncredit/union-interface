@@ -15,9 +15,29 @@
 }
 
 .Header {
+  width: 100%;
+  box-sizing: border-box;
+
+  .UnionWallet.button,
+  .wallet.button,
+  .Header__context-menu .PopoverMenu__button,
+  .Header__hamburger {
+    margin-left: 4px
+  }
+
+  .grid-row {
+    margin: 0 !important;
+  }
+
   .UnionWallet.button,
   .wallet.button {
     background: $grey50;
+    border-radius: 8px;
+  }
+  .wallet.button {
+    @media screen and (max-width: $breakpoint-mobile) {
+      width: 40px;
+    }
   }
 }
 
@@ -26,10 +46,15 @@
   width: 40px !important;
   height: 40px;
   min-height: 0;
-  margin-left: 4px;
+  border-radius: 8px;
 }
 .Header__hamburger {
   padding: 11px !important;
+  background: #fafaf9 !important;
+
+  svg {
+    height: 24px;
+  }
 
   &.active {
     padding: 8px !important;

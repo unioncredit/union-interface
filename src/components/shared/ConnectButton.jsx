@@ -36,6 +36,7 @@ export function ConnectButton({ connectedElement, buttonProps }) {
             className="ConnectButton"
             onClick={openConnectModal}
             style={{
+              borderRadius: "8px",
               height: "40px",
               fontSize: "16px",
               backgroundColor: "transparent",

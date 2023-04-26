@@ -11,4 +11,16 @@
       background: white;
     }
   }
+
+  @media screen and (max-width: $breakpoint-mobile) {
+    &__progress-container {
+      flex-direction: column !important;
+
+      .button {
+        width: 100% !important;
+        margin: 16px 0 0 !important;
+      }
+    }
+
+  }
 }

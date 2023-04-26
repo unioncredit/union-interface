@@ -59,7 +59,7 @@ export default function RegisterPage() {
     return completed;
   };
 
-  const stakeComplete = unionBalance?.add(unclaimedRewards).gt(0);
+  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(1);
   const vouchComplete = vouchers.length > 0;
 
   return (

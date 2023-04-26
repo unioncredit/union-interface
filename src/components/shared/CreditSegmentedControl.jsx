@@ -1,3 +1,5 @@
+import "./CreditSegmentedControl.scss";
+
 import { Link } from "react-router-dom";
 import {
   AddressBookIcon,
@@ -14,6 +16,7 @@ export const CreditSegmentedControl = ({ active }) => (
     size="large"
     variant="rounded"
     initialActive={active}
+    className="CreditSegmentedControl"
     items={[
       {
         id: "borrow",
