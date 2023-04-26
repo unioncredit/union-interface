@@ -8,8 +8,10 @@ import {
   ContextMenu,
   Text,
   Button,
+  Alert,
 } from "@unioncredit/ui";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchNetwork, useNetwork } from "wagmi";
+import { optimismGoerli } from "wagmi/chains";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/logo.svg";
 import { ReactComponent as Union } from "@unioncredit/ui/lib/icons/union.svg";
@@ -23,12 +25,17 @@ import { items, contextMenuItems } from "config/navigation";
 import ConnectButton from "components/shared/ConnectButton";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import NetworkSelect from "components/shared/NetworkSelect";
+import SettingToggle from "./SettingToggle";
+import { useAppReadyState } from "providers/AppReadyState";
 
 export default function Header({ loading, showNav = true }) {
   const { open } = useModals();
+  const { chain } = useNetwork();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
+  const { switchNetworkAsync } = useSwitchNetwork();
+  const { appReady } = useAppReadyState();
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
@@ -69,8 +76,8 @@ export default function Header({ loading, showNav = true }) {
             {showNav && (
               <Grid.Col align="center" className="hide-lt-850">
                 {/*--------------------------------------------------------------
-                Desktop Navigation 
-              *--------------------------------------------------------------*/}
+                  Desktop Navigation 
+                *--------------------------------------------------------------*/}
                 <Box
                   fluid
                   justify="center"
@@ -91,13 +98,26 @@ export default function Header({ loading, showNav = true }) {
                     onClick={() => open(WALLET_MODAL)}
                     label={
                       <Text mb="0" ml="4px">
-                        {format(unclaimedRewards.add(unionBalance))}
+                        {format((unclaimedRewards || ZERO).add(unionBalance))}
                       </Text>
                     }
                   />
                 )}
                 <ConnectButton buttonProps={{ packed: true }} />
-                <ContextMenu position="left" items={contextMenuItems} />
+                <ContextMenu
+                  position="left"
+                  items={[
+                    ...contextMenuItems,
+                    {
+                      as: () => (
+                        <SettingToggle
+                          settingKey="showTestnets"
+                          label="Test networks"
+                        />
+                      ),
+                    },
+                  ]}
+                />
               </Box>
             </Grid.Col>
           </Grid.Row>

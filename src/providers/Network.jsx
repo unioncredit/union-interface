@@ -11,16 +11,23 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 import { WagmiConfig, createClient, configureChains } from "wagmi";
-import { mainnet, arbitrum, goerli } from "wagmi/chains";
+import {
+  mainnet,
+  arbitrum,
+  goerli,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
+import { useAppReadyState } from "./AppReadyState";
 
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
 const { chains, provider } = configureChains(
-  [mainnet, arbitrum, goerli],
+  [mainnet, arbitrum, goerli, optimismGoerli, optimism],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
     publicProvider(),
@@ -47,7 +54,7 @@ const wagmiClient = createClient({
 });
 
 export default function Network({ children }) {
-  const [appReady, setAppReady] = useState(null);
+  const { appReady, setAppReady } = useAppReadyState();
 
   return (
     <NetworkContext.Provider value={{ appReady, setAppReady }}>

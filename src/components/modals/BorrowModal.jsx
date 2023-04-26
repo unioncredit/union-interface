@@ -1,3 +1,4 @@
+import { useAccount } from "wagmi";
 import {
   Box,
   Button,
@@ -26,6 +27,7 @@ export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
   const { close } = useModals();
+  const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
   const firstPaymentDueDate = useFirstPaymentDueDate();
@@ -68,7 +70,7 @@ export default function BorrowModal() {
   const buttonProps = useWrite({
     contract: "uToken",
     method: "borrow",
-    args: [amount.raw],
+    args: [address, amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
     onComplete: async () => {
       await refetchMember();
@@ -121,7 +123,7 @@ export default function BorrowModal() {
               error={errors.amount}
               value={amount.formatted}
               onChange={register("amount")}
-              caption={`Max. ${format(maxBorrow)} DAI`}
+              caption={`Max. ${format(maxBorrow, 18, false, true)} DAI`}
               onCaptionButtonClick={() =>
                 setRawValue("amount", maxBorrow, false)
               }

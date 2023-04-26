@@ -31,6 +31,7 @@ import getProfileUrl, {
   generateTwitterLink,
 } from "utils/generateLinks";
 import { ZERO } from "constants";
+import VouchFaucetButton from "components/VouchFaucetButton";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
@@ -38,8 +39,9 @@ export default function VouchersStep() {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const profileUrl = getProfileUrl(address, chain.id);
+
   const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakerBalance.gt(ZERO)
+    voucher.stakedBalance.gt(ZERO)
   );
 
   return (
@@ -54,16 +56,7 @@ export default function VouchersStep() {
           <Text grey={700}>Vouchers · {vouchers.length}</Text>
           <Card size="fluid">
             {vouchers.length <= 0 ? (
-              <EmptyState
-                label={
-                  <>
-                    No frens?{" "}
-                    <a href={links.discord} target="_blank">
-                      Try Discord
-                    </a>
-                  </>
-                }
-              />
+              <EmptyState label={<VouchFaucetButton />} />
             ) : (
               <Table className="VouchersStep__table">
                 <TableRow>

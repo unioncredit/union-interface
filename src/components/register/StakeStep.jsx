@@ -37,18 +37,22 @@ export default function StakeStep() {
     totalStaked = ZERO,
     totalFrozen = ZERO,
     newMemberFee = ZERO,
+    inflationPerSecond = ZERO,
     inflationPerBlock = ZERO,
     unclaimedRewards = ZERO,
   } = { ...protocol, ...member };
 
-  const percentage = unionBalance.gte(WAD)
+  const inflationPerUnit = inflationPerSecond || inflationPerBlock;
+
+  const virtualBalance = unionBalance.add(unclaimedRewards);
+  const percentage = virtualBalance.gte(WAD)
     ? 100
-    : Number(unionBalance.mul(10000).div(WAD)) / 100;
+    : Number(virtualBalance.mul(10000).div(WAD)) / 100;
 
   const effectiveTotalStake = totalStaked.sub(totalFrozen);
 
   const dailyEarnings = effectiveTotalStake.gt(ZERO)
-    ? inflationPerBlock
+    ? inflationPerUnit
         .mul(WAD)
         .div(effectiveTotalStake)
         .mul(stakedBalance)

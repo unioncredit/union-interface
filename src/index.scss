@@ -53,3 +53,32 @@ a {
     margin-bottom: 0;
   }
 }
+
+.context-menu {
+  width: 190px !important;
+}
+
+.v2-alert {
+  .alert {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .button {
+    padding: 4px 8px !important;
+    min-height: 0;
+  }
+}
+
+.networkSwitcher--optimism {
+  background: #fee2e2 !important;
+
+  svg path {
+    fill: #ef4444;
+  }
+
+  &:hover {
+    border-color: #fca5a5;
+  }
+
+  color: #ef4444;
+}

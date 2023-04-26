@@ -1,7 +1,17 @@
+import {
+  mainnet,
+  goerli,
+  arbitrum,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
+
 const urls = {
-  1: "https://etherscan.io",
-  5: "https://goerli.etherscan.io",
-  42161: "https://arbiscan.io",
+  [mainnet.id]: "https://etherscan.io",
+  [goerli.id]: "https://goerli.etherscan.io",
+  [arbitrum.id]: "https://arbiscan.io",
+  [optimismGoerli.id]: "https://goerli-optimism.etherscan.io",
+  [optimism.id]: "https://optimism.etherscan.io",
 };
 
 export function blockExplorerTx(chainId, hash) {

@@ -55,38 +55,41 @@ export default function BorrowersCard() {
           <EmptyState label="No borrowers" />
         </Card.Body>
       ) : (
-        <Table>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead>Account</TableHead>
-            <TableHead align="center">Status</TableHead>
-            <TableHead align="right">Balance owed (DAI)</TableHead>
-          </TableRow>
-          {borrowersPage.map(({ address, locking }) => (
-            <TableRow
-              key={address}
-              onClick={() => navigate(`/contacts?address=${address}`)}
-            >
-              <TableCell fixedSize>
-                <Avatar size={24} address={address} />
-              </TableCell>
-              <TableCell>
-                <Box direction="vertical">
-                  <Label grey={700} m={0}>
-                    <PrimaryLabel address={address} />
-                  </Label>
-                  <Label size="small" grey={400} m={0}>
-                    {truncateAddress(address)}
-                  </Label>
-                </Box>
-              </TableCell>
-              <TableCell align="center">
-                <StatusBadge address={address} />
-              </TableCell>
-              <TableCell align="right">{format(locking)}</TableCell>
+        <>
+          <Box mt="16px" />
+          <Table>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Account</TableHead>
+              <TableHead align="center">Status</TableHead>
+              <TableHead align="right">Balance owed (DAI)</TableHead>
             </TableRow>
-          ))}
-        </Table>
+            {borrowersPage.map(({ address, locking }) => (
+              <TableRow
+                key={address}
+                onClick={() => navigate(`/contacts?address=${address}`)}
+              >
+                <TableCell fixedSize>
+                  <Avatar size={24} address={address} />
+                </TableCell>
+                <TableCell>
+                  <Box direction="vertical">
+                    <Label grey={700} m={0}>
+                      <PrimaryLabel address={address} />
+                    </Label>
+                    <Label size="small" grey={400} m={0}>
+                      {truncateAddress(address)}
+                    </Label>
+                  </Box>
+                </TableCell>
+                <TableCell align="center">
+                  <StatusBadge address={address} />
+                </TableCell>
+                <TableCell align="right">{format(locking)}</TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>

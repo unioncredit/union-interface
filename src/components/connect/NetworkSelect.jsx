@@ -1,33 +1,32 @@
-import { Grid, Box, Button } from "@unioncredit/ui";
-import { useEffect, useState } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-
-import { networks } from "config/networks";
-import { useAppNetwork } from "providers/Network";
-import { EIP3770Map } from "constants";
-
 import "./NetworkSelect.scss";
-import { locationSearch } from "utils/location";
+
+import { useEffect, useState } from "react";
+import { Grid, Box, Button } from "@unioncredit/ui";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+
+import useNetworks from "hooks/useNetworks";
+import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
+import { optimismGoerli, goerli } from "wagmi/chains";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
-  const { address } = useAccount();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { switchNetworkAsync } = useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+  });
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
-  const urlSearchParams = locationSearch();
-
-  const targetChain = urlSearchParams.has("chain")
-    ? EIP3770Map[urlSearchParams.get("chain")]
-    : chain?.id;
+  const allNetworks = useNetworks();
+  const networks = allNetworks.filter((x) =>
+    ![optimismGoerli.id, goerli.id].includes(x.chainId)
+  );
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
@@ -44,29 +43,10 @@ export default function NetworkSelect() {
   };
 
   useEffect(() => {
-    (async function () {
-      if (
-        switchNetworkAsync &&
-        isConnected &&
-        targetChain &&
-        !chain?.unsupported
-      ) {
-        const toSelect = networks.find(
-          (network) => network.chainId === targetChain
-        );
-        if (toSelect?.chainId !== selected?.chainId) {
-          setSelected(toSelect);
-
-          // If the current network is not he same as the selected network
-          // fire off a chain network request. This is to support the ?chain
-          // URL search param
-          if (toSelect.chainId !== chain.id) {
-            await switchNetworkAsync(toSelect.chainId);
-          }
-        }
-      }
-    })();
-  }, [isConnected, targetChain, switchNetworkAsync]);
+    if (!chain?.id) return;
+    const found = networks.find((net) => net.chainId === chain.id);
+    setSelected(found || null);
+  }, [chain?.id, JSON.stringify(networks)]);
 
   return (
     <Grid>
@@ -75,6 +55,7 @@ export default function NetworkSelect() {
           <Box fluid align="center" direction="vertical" mb="6px">
             {networks.map((network) => (
               <NetworkSelectOption
+                key={network.id}
                 address={address}
                 network={network}
                 disabled={!isConnected}
@@ -85,17 +66,23 @@ export default function NetworkSelect() {
           </Box>
           <Button
             fluid
-            disabled={chain?.unsupported}
+            disabled={chain?.unsupported || (!selected && isConnected)}
             label={
               isConnected
-                ? chain?.unsupported
+                ? chain?.unsupported || !selected
                   ? "Select a Supported Network"
                   : member.isMember
                   ? "Open Union Dashboard"
                   : "Begin Membership Process"
                 : "Connect Wallet"
             }
-            onClick={isConnected ? () => setAppReady(true) : openConnectModal}
+            onClick={() => {
+              if (isConnected) {
+                setAppReady(true);
+              } else {
+                openConnectModal();
+              }
+            }}
           />
 
           <a

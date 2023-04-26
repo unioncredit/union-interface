@@ -1,11 +1,16 @@
 import { formatUnits } from "ethers/lib/utils";
 
-export default function format(n, digits = 2, rounded = true) {
+export default function format(
+  n,
+  digits = 2,
+  rounded = true,
+  stripTrailingZeros = false
+) {
   if (!n) n = "0";
-  return commify(Number(formatUnits(n)), digits, rounded);
+  return commify(Number(formatUnits(n)), digits, rounded, stripTrailingZeros);
 }
 
-function commify(num, digits, rounded = true) {
+function commify(num, digits, rounded = true, stripTrailingZeros = false) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 
@@ -23,12 +28,19 @@ function commify(num, digits, rounded = true) {
   }
 
   const parts = numStr.split(".");
+  let lhs = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  let rhs = parts[1];
 
-  const lhs = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (digits > 0 && stripTrailingZeros) {
+    if (rhs) {
+      rhs = rhs.padEnd(digits, "0");
+      rhs = rhs.replace(/0+$/, "");
+    } else {
+      rhs = "".padEnd(digits, "0");
+    }
 
-  if (digits > 0 && parts[1]) {
-    return `${lhs}.${parts[1]}`;
+    return `${lhs}${rhs.length > 0 ? "." : ""}${rhs}`;
   }
 
-  return lhs;
+  return rhs ? `${lhs}.${rhs}` : lhs;
 }

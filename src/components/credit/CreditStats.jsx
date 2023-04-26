@@ -22,7 +22,7 @@ export default function CreditStats() {
   const { data: vouchers = [] } = useVouchers();
   const { data: protocol = {} } = useProtocol();
   const { data: blockNumber } = useBlockNumber({
-    chainId: mainnet.id,
+    chainId: connectedChain.id,
   });
 
   const {
