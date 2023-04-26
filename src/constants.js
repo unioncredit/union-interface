@@ -1,6 +1,12 @@
 import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
-import { mainnet, arbitrum, goerli, optimismGoerli } from "wagmi/chains";
+import {
+  mainnet,
+  arbitrum,
+  goerli,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -49,6 +55,7 @@ export const BlockSpeed = {
   [arbitrum.id]: 12e3,
   [goerli.id]: 12e3,
   [optimismGoerli.id]: 1e3,
+  [optimism.id]: 1e3,
 };
 
 export const BlocksPerYear = {
@@ -56,6 +63,7 @@ export const BlocksPerYear = {
   [arbitrum.id]: 2407328,
   [goerli.id]: 2407328,
   [optimismGoerli.id]: 31540000,
+  [optimism.id]: 31540000,
 };
 
 export const EIP3770 = {
@@ -63,6 +71,7 @@ export const EIP3770 = {
   [arbitrum.id]: "arb1",
   [goerli.id]: "goe",
   [optimismGoerli.id]: "optgoe",
+  [optimism.id]: "opt",
 };
 
 export const EIP3770Map = {
@@ -83,6 +92,8 @@ export const TheGraphUrls = {
   [Versions.V2]: {
     [optimismGoerli.id]:
       "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
+    [optimism.id]:
+      "https://api.thegraph.com/subgraphs/name/geraldhost/union-optimism",
   },
 };
 

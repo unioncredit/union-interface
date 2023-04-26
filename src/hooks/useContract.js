@@ -1,5 +1,11 @@
 import { useNetwork } from "wagmi";
-import { mainnet, arbitrum, goerli, optimismGoerli } from "wagmi/chains";
+import {
+  mainnet,
+  arbitrum,
+  goerli,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
 
 import {
   userManagerContract as GOERLI_userManagerContract,
@@ -49,6 +55,17 @@ import {
   comptrollerContract as ARBITRUM_comptrollerContract,
   assetManagerContract as ARBITRUM_assetManagerContract,
 } from "config/contracts/arbitrum";
+
+import {
+  userManagerContract as OPTIMISM_V2_userManagerContract,
+  uTokenContract as OPTIMISM_V2_uTokenContract,
+  unionContract as OPTIMISM_V2_unionContract,
+  daiContract as OPTIMISM_V2_daiContract,
+  comptrollerContract as OPTIMISM_V2_comptrollerContract,
+  assetManagerContract as OPTIMISM_V2_assetManagerContract,
+  unionLensContract as OPTIMISM_V2_unionLensContract,
+  vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
+} from "config/contracts/v2/optimism";
 
 import { useVersion, Versions } from "providers/Version";
 
@@ -103,6 +120,16 @@ export default function useContract(name, chainId, forceVersion) {
       assetManager: OPTIMISM_GOERLI_V2_assetManagerContract,
       unionLens: OPTIMISM_GOERLI_V2_unionLensContract,
       vouchFaucet: OPTIMISM_GOERLI_V2_vouchFaucet,
+    },
+    [optimism.id]: {
+      userManager: OPTIMISM_V2_userManagerContract,
+      uToken: OPTIMISM_V2_uTokenContract,
+      union: OPTIMISM_V2_unionContract,
+      dai: OPTIMISM_V2_daiContract,
+      comptroller: OPTIMISM_V2_comptrollerContract,
+      assetManager: OPTIMISM_V2_assetManagerContract,
+      unionLens: OPTIMISM_V2_unionLensContract,
+      vouchFaucet: OPTIMISM_V2_vouchFaucet,
     },
   };
 

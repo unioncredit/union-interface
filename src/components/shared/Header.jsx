@@ -134,29 +134,6 @@ export default function Header({ loading, showNav = true }) {
         </Grid>
       </Layout.Header>
       <OverdueAlert />
-      {chain?.id !== optimismGoerli.id && appReady && (
-        <Box
-          w="100%"
-          maxw="445px"
-          mb="24px"
-          align="center"
-          justify="center"
-          ml="auto"
-          mr="auto"
-          className="v2-alert"
-        >
-          <Alert
-            packed
-            size="small"
-            variant="info"
-            label="Union V2 is available to try on Optimism Goerli"
-            action={{
-              label: "Go To Testnet",
-              onClick: () => switchNetworkAsync(optimismGoerli.id),
-            }}
-          />
-        </Box>
-      )}
     </>
   );
 }
