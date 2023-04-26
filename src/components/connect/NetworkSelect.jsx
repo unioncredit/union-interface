@@ -9,6 +9,7 @@ import useNetworks from "hooks/useNetworks";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
+import { optimismGoerli, goerli } from "wagmi/chains";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -22,7 +23,10 @@ export default function NetworkSelect() {
 
   const [selected, setSelected] = useState(null);
 
-  const networks = useNetworks();
+  const allNetworks = useNetworks();
+  const networks = allNetworks.filter((x) =>
+    ![optimismGoerli.id, goerli.id].includes(x.chainId)
+  );
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;

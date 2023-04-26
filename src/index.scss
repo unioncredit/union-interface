@@ -68,3 +68,15 @@ a {
     min-height: 0;
   }
 }
+
+.networkSwitcher--optimism {
+  background: #fee2e2 !important;
+
+  svg path {
+    fill: #ef4444;
+  }
+
+  &:hover {
+    border-color: #fca5a5;
+  }
+}
