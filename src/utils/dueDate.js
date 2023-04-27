@@ -47,5 +47,7 @@ export default function dueDate(
     .sub(blockNumber)
     .mul(BlockSpeed[chainId]);
 
+  console.log(milliseconds);
+
   return formatDueDate(Number(milliseconds.toString()));
 }
