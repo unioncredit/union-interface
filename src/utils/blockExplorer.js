@@ -11,7 +11,7 @@ const urls = {
   [goerli.id]: "https://goerli.etherscan.io",
   [arbitrum.id]: "https://arbiscan.io",
   [optimismGoerli.id]: "https://goerli-optimism.etherscan.io",
-  [optimism.id]: "https://optimism.etherscan.io",
+  [optimism.id]: "https://optimistic.etherscan.io",
 };
 
 export function blockExplorerTx(chainId, hash) {
