@@ -10,7 +10,7 @@ import {
   ModalOverlay,
   Modal,
 } from "@unioncredit/ui";
-import { useBlockNumber, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
 import { ReactComponent as Manage } from "@unioncredit/ui/lib/icons/manage.svg";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 
@@ -24,6 +24,8 @@ import { useEffect } from "react";
 import format from "utils/format";
 import dueDate from "utils/dueDate";
 import { useProtocol } from "providers/ProtocolData";
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
+import { useVersion } from "providers/Version";
 
 function NoScrollModal(props) {
   useEffect(() => {
@@ -38,13 +40,14 @@ function NoScrollModal(props) {
 export default function ContactDetails({ contact, setContactIndex, type }) {
   const isMobile = useIsMobile();
   const { open } = useModals();
+  const { isV2 } = useVersion();
   const { data: protocol = {} } = useProtocol();
   const { chain: connectedChain } = useNetwork();
-  const { data: blockNumber } = useBlockNumber({
+  const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
   });
 
-  const { overdueBlocks } = protocol;
+  const { overdueTime, overdueBlocks } = protocol;
 
   /*----------------------------------------------------
    * Hide on mobile when no contact
@@ -187,7 +190,7 @@ export default function ContactDetails({ contact, setContactIndex, type }) {
                   <Label as="p" grey={700} m={0}>
                     {dueDate(
                       lastRepay,
-                      overdueBlocks,
+                      isV2 ? overdueTime : overdueBlocks,
                       blockNumber,
                       connectedChain.id
                     )}
