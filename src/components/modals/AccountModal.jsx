@@ -26,7 +26,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import PrimaryLabel from "components/shared/PrimaryLabel";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { blockExplorerAddress } from "utils/blockExplorer";
+import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -120,7 +120,7 @@ export default function AccountModal() {
                     <Label m={0} grey={700}>
                       {format(value)}
                     </Label>
-                    <a href="#" target="_blank">
+                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank">
                       <External width="24px" />
                     </a>
                   </Box>
