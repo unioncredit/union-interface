@@ -9,23 +9,26 @@ import {
 } from "@unioncredit/ui";
 import { useMemo } from "react";
 import makeUrls from "add-event-to-calendar";
-import { mainnet, useBlockNumber, useNetwork } from "wagmi";
+import { mainnet, useNetwork } from "wagmi";
 import { ReactComponent as Calendar } from "@unioncredit/ui/lib/icons/calendar.svg";
 
-import format from "utils/format";
 import dueDate from "utils/dueDate";
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
 import { useModals } from "providers/ModalManager";
+import { useVersion } from "providers/Version";
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
+import { ZERO } from "constants";
 
 export const PAYMENT_REMINDER_MODAL = "payment-reminder-modal";
 
 export default function PaymentReminderModal() {
+  const { isV2 } = useVersion();
   const { close } = useModals();
   const { chain: connectedChain } = useNetwork();
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
-  const { data: blockNumber } = useBlockNumber({
+  const { data: blockNumber } = useVersionBlockNumber({
     chainId: mainnet.id,
   });
 
@@ -46,8 +49,8 @@ export default function PaymentReminderModal() {
   const urls = makeUrls(calendarData);
 
   const {
-    interest = ZERO,
     lastRepay = ZERO,
+    overdueTime = ZERO,
     overdueBlocks = ZERO,
   } = { ...member, ...protocol };
 
@@ -64,14 +67,6 @@ export default function PaymentReminderModal() {
             Save your payment due date to your calendar to avoid entering a
             defaulted state on your loan.
           </Text>
-          <Box justify="space-between" mt="24px">
-            <Label as="p" size="small" grey={400}>
-              First payment amount
-            </Label>
-            <Label as="p" size="small" grey={400}>
-              {format(interest)} DAI
-            </Label>
-          </Box>
           <Box justify="space-between" mt="4px">
             <Label as="p" size="small" grey={400}>
               First payment due
@@ -79,7 +74,7 @@ export default function PaymentReminderModal() {
             <Label as="p" size="small" grey={400}>
               {dueDate(
                 lastRepay,
-                overdueBlocks,
+                isV2 ? overdueTime : overdueBlocks,
                 blockNumber,
                 connectedChain.id
               )}
