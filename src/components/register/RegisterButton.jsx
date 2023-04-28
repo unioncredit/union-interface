@@ -9,6 +9,7 @@ import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
 import { ReactComponent as CloudCheck } from "@unioncredit/ui/lib/icons/cloudCheck.svg";
+import { useVouchers } from "providers/VouchersData";
 
 const createItems = (s1, s2, s3) => [
   { number: 1, status: s1 },
@@ -24,7 +25,12 @@ export default function RegisterButton({ onComplete }) {
   const [label, setLabel] = useState(null);
 
   const { data: member, refetch: refetchMember } = useMember();
+  const { data: vouchersData = [] } = useVouchers();
   const { data: protocol } = useProtocol();
+
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakerBalance?.gt(ZERO)
+  );
 
   const {
     unionBalance = ZERO,
@@ -119,9 +125,13 @@ export default function RegisterButton({ onComplete }) {
     } else {
       // The member satisfies all the prerequisite and can register
       setAction({
-        label: "Pay Membership Fee",
+        label:
+          vouchers.length <= 0
+            ? "Receive a vouch to continue"
+            : "Pay membership fee",
         onClick: handleRegister,
-        icon: CloudCheck,
+        icon: vouchers.length > 0 && CloudCheck,
+        disabled: vouchers.length <= 0,
       });
       setLabel("Paying 1.00 UNION");
       setItems(
