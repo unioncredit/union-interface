@@ -1,4 +1,4 @@
-import { useBlockNumber, useNetwork, mainnet } from "wagmi";
+import { useNetwork } from "wagmi";
 import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
 import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
 
@@ -13,15 +13,18 @@ import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { PAYMENT_REMINDER_MODAL } from "components/modals/PaymentReminderModal";
+import { useVersion } from "providers/Version";
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 
 export default function CreditStats() {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
+  const { isV2 } = useVersion();
 
   const { data: member = {} } = useMember();
   const { data: vouchers = [] } = useVouchers();
   const { data: protocol = {} } = useProtocol();
-  const { data: blockNumber } = useBlockNumber({
+  const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
   });
 
@@ -31,13 +34,14 @@ export default function CreditStats() {
     owed = ZERO,
     lastRepay = ZERO,
     overdueBlocks = ZERO,
+    overdueTime = ZERO,
   } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const dueDateDisplay = dueDate(
     lastRepay,
-    overdueBlocks,
+    isV2 ? overdueTime : overdueBlocks,
     blockNumber,
     connectedChain.id
   );
