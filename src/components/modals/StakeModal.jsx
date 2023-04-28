@@ -186,6 +186,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             tokenContract="dai"
             actionProps={{
               args: [amount.raw],
+              permitArgs: [amount.raw],
               enabled: !isErrored,
               contract: "userManager",
               method: type === StakeType.STAKE ? "stake" : "unstake",
@@ -193,8 +194,6 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
                 amount.display
               } DAI`,
             }}
-            approvalLabel="Approve Union to spend your DAI"
-            approvalCompleteLabel="You can now stake your DAI"
           />
         </Modal.Body>
       </Modal>

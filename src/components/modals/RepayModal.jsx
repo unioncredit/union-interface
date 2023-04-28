@@ -242,6 +242,7 @@ export default function RepayModal() {
             actionProps={{
               args:
                 version === Versions.V1 ? [amount.raw] : [address, amount.raw],
+              permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
