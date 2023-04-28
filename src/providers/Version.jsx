@@ -1,5 +1,11 @@
 import { useAccount, useNetwork } from "wagmi";
-import { mainnet, goerli, arbitrum, optimismGoerli } from "wagmi/chains";
+import {
+  mainnet,
+  goerli,
+  arbitrum,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const VersionContext = createContext({});
@@ -13,7 +19,7 @@ export const Versions = {
 
 const versionSupport = {
   [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [optimismGoerli.id],
+  [Versions.V2]: [optimismGoerli.id, optimism.id],
 };
 
 export function isVersionSupported(version, chainId) {
