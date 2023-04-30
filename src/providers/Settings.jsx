@@ -37,7 +37,7 @@ export default function Settings({ children }) {
     if ([goerli.id, optimismGoerli.id].includes(chain.id)) {
       setSetting("showTestnets", true);
     }
-  }, [chain.id]);
+  }, [chain?.id]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings, setSetting }}>
