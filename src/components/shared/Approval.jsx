@@ -10,6 +10,7 @@ import { useModals } from "providers/ModalManager";
 import { useMember } from "providers/MemberData";
 import usePermit from "hooks/usePermit";
 import { getPermitMethod } from "utils/permits";
+import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
 
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 const initialButtonProps = { label: "Enter an amount", disabled: true };
@@ -25,10 +26,11 @@ export function Approval({
   const { close } = useModals();
   const { refetch: refetchMember } = useMember();
   const { chain } = useNetwork();
+  const { settings, setSetting } = useSettings();
   const [items, setItems] = useState(initialItems);
   const [action, setAction] = useState(initialButtonProps);
   const [showSteps, setShowSteps] = useState(false);
-  const [gasless, setGasless] = useState(false);
+  const [gasless, setGasless] = useState(settings[GASLESS_APPROVALS] || false);
   const [permitArgs, setPermitArgs] = useState(null);
 
   const tokenConfig = useContract(tokenContract);
@@ -85,6 +87,7 @@ export function Approval({
         onChange={() => {
           setGasless(!gasless);
           setPermitArgs(null);
+          setSetting(GASLESS_APPROVALS, !gasless);
         }}
       />
     );

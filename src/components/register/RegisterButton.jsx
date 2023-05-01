@@ -9,16 +9,18 @@ import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
 import usePermit from "hooks/usePermit";
 import { getPermitMethod } from "utils/permits";
+import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
 
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 
 export default function RegisterButton({ onComplete }) {
   const { address } = useAccount();
   const { chain } = useNetwork();
+  const { settings, setSetting } = useSettings();
 
   const [action, setAction] = useState(null);
   const [items, setItems] = useState(null);
-  const [gasless, setGasless] = useState(false);
+  const [gasless, setGasless] = useState(settings[GASLESS_APPROVALS] || false);
   const [permitArgs, setPermitArgs] = useState(null);
 
   const { data: member } = useMember();
@@ -82,9 +84,9 @@ export default function RegisterButton({ onComplete }) {
         label="Gasless approval"
         labelPosition="end"
         onChange={() => {
-          console.log("gasless toglge");
           setGasless(!gasless);
           setPermitArgs(null);
+          setSetting(GASLESS_APPROVALS, !gasless);
         }}
       />
     );

@@ -15,6 +15,8 @@ const SettingsContext = createContext({
   setSetting: () => {},
 });
 
+export const GASLESS_APPROVALS = "gasless-approvals";
+
 export const useSettings = () => useContext(SettingsContext);
 
 export default function Settings({ children }) {
