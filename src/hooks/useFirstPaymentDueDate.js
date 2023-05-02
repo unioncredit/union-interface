@@ -10,8 +10,6 @@ export default function useFirstPaymentDueDate() {
   const { data: protocol } = useProtocol();
   const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
-  console.log(protocol);
-
   const milliseconds = (isV2 ? overdueTime : overdueBlocks).mul(
     BlockSpeed[chain.id]
   );
