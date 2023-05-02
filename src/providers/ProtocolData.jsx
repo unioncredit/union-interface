@@ -22,14 +22,14 @@ export const useProtocolData = (chainId) => {
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
   const isMainnet = chainId === mainnet.id;
-  const daiContract = useContract("dai", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const userManagerContract = useContract("userManager", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
-  const governorContract = useContract("governor", mainnet.id);
-  const timelockContract = useContract("timelock", mainnet.id);
-  const unionTokenContract = useContract("union", chainId);
-  const assetManagerContract = useContract("assetManager", chainId);
+  const daiContract = useContract("dai", chainId, version);
+  const uTokenContract = useContract("uToken", chainId, version);
+  const userManagerContract = useContract("userManager", chainId, version);
+  const comptrollerContract = useContract("comptroller", chainId, version);
+  const governorContract = useContract("governor", mainnet.id, Versions.V1);
+  const timelockContract = useContract("timelock", mainnet.id, version.V1);
+  const unionTokenContract = useContract("union", chainId, version);
+  const assetManagerContract = useContract("assetManager", chainId, version);
 
   const assetManagerCalls = [
     {

@@ -17,16 +17,6 @@ import {
 } from "config/contracts/goerli";
 
 import {
-  userManagerContract as GOERLI_V2_userManagerContract,
-  uTokenContract as GOERLI_V2_uTokenContract,
-  unionContract as GOERLI_V2_unionContract,
-  daiContract as GOERLI_V2_daiContract,
-  comptrollerContract as GOERLI_V2_comptrollerContract,
-  assetManagerContract as GOERLI_V2_assetManagerContract,
-  unionLensContract as GOERLI_V2_unionLensContract,
-} from "config/contracts/v2/goerli";
-
-import {
   userManagerContract as OPTIMISM_GOERLI_V2_userManagerContract,
   uTokenContract as OPTIMISM_GOERLI_V2_uTokenContract,
   unionContract as OPTIMISM_GOERLI_V2_unionContract,
@@ -68,11 +58,11 @@ import {
   vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
 } from "config/contracts/v2/optimism";
 
-import { getVersion, Versions } from "providers/Version";
+import { useVersion, Versions } from "providers/Version";
 
 export default function useContract(name, chainId, forceVersion) {
   const { chain: connectedChain } = useNetwork();
-  const version = getVersion(chainId);
+  const { version } = useVersion();
 
   const v1Contracts = {
     [goerli.id]: {
@@ -104,15 +94,6 @@ export default function useContract(name, chainId, forceVersion) {
   };
 
   const v2Contracts = {
-    [goerli.id]: {
-      userManager: GOERLI_V2_userManagerContract,
-      uToken: GOERLI_V2_uTokenContract,
-      union: GOERLI_V2_unionContract,
-      dai: GOERLI_V2_daiContract,
-      comptroller: GOERLI_V2_comptrollerContract,
-      assetManager: GOERLI_V2_assetManagerContract,
-      unionLens: GOERLI_V2_unionLensContract,
-    },
     [optimismGoerli.id]: {
       userManager: OPTIMISM_GOERLI_V2_userManagerContract,
       uToken: OPTIMISM_GOERLI_V2_uTokenContract,
