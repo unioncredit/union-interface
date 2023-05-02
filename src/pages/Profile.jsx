@@ -20,11 +20,9 @@ import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
-import { isAddress } from "ethers/lib/utils";
-import { useNavigate, useParams } from "react-router-dom";
 import { truncateAddress } from "utils/truncateAddress";
 import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
@@ -229,7 +227,9 @@ export default function Profile() {
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe|opt):/)
+  const [tag, addressOrEns] = addressOrEnsParam.match(
+    /^(eth|goe|arb1|optgoe|opt):/
+  )
     ? addressOrEnsParts
     : [EIP3770[mainnet.id], addressOrEnsParam];
 

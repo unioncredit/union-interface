@@ -34,7 +34,6 @@ import cn from "classnames";
 export function Header({ loading, showNav = true }) {
   const mobileNavBreakpoint = 900;
   const { open } = useModals();
-  const { chain } = useNetwork();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();

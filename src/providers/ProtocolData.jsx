@@ -4,7 +4,7 @@ import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
-import { useVersion, Versions } from "./Version";
+import { getVersion, Versions } from "./Version";
 
 const ProtocolContext = createContext({});
 
@@ -17,22 +17,16 @@ const buildContractConfigs = (contract, calls, chainId) =>
     chainId,
   }));
 
-export default function ProtcolData({ children }) {
-  const { chain: connectedChain } = useNetwork();
-
-  const chainId = connectedChain?.id || mainnet.id;
-
-  const isMainnet = connectedChain === mainnet.id;
-
-  const { version } = useVersion();
-
+export const useProtocolData = (chainId) => {
+  const version = getVersion(chainId);
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
+  const isMainnet = chainId === mainnet.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const userManagerContract = useContract("userManager", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
-  const governorContract = useContract("governor", mainnet.id, Versions.V1);
+  const governorContract = useContract("governor", mainnet.id);
   const timelockContract = useContract("timelock", mainnet.id);
   const unionTokenContract = useContract("union", chainId);
   const assetManagerContract = useContract("assetManager", chainId);
@@ -107,14 +101,14 @@ export default function ProtcolData({ children }) {
       ? buildContractConfigs(
           governorContract,
           governorFunctionsNames.map((n) => ({ functionName: n })),
-          chainId
+          mainnet.id
         )
       : []),
     ...(isMainnet
       ? buildContractConfigs(
           timelockContract,
           timelockFunctionNames.map((n) => ({ functionName: n })),
-          chainId
+          mainnet.id
         )
       : []),
     ...buildContractConfigs(
@@ -164,7 +158,7 @@ export default function ProtcolData({ children }) {
   return { data };
 };
 
-export default function ProtcolData({ children }) {
+export default function ProtocolData({ children }) {
   const { chain: connectedChain } = useNetwork();
   const chainId = connectedChain?.id || mainnet.id;
 

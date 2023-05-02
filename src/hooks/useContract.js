@@ -55,7 +55,6 @@ import {
   daiContract as ARBITRUM_daiContract,
   comptrollerContract as ARBITRUM_comptrollerContract,
   assetManagerContract as ARBITRUM_assetManagerContract,
-  bridgedTokenContract as ARBITRUM_bridgedTokenContract,
 } from "config/contracts/arbitrum";
 
 import {
@@ -69,11 +68,11 @@ import {
   vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
 } from "config/contracts/v2/optimism";
 
-import { useVersion, Versions } from "providers/Version";
+import { getVersion, Versions } from "providers/Version";
 
 export default function useContract(name, chainId, forceVersion) {
   const { chain: connectedChain } = useNetwork();
-  const { version } = useVersion();
+  const version = getVersion(chainId);
 
   const v1Contracts = {
     [goerli.id]: {
@@ -86,6 +85,7 @@ export default function useContract(name, chainId, forceVersion) {
     },
     [mainnet.id]: {
       governor: governorContract,
+      timelock: timelockContract,
       userManager: MAINNET_userManagerContract,
       uToken: MAINNET_uTokenContract,
       union: MAINNET_unionContract,

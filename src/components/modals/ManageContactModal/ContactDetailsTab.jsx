@@ -161,6 +161,7 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
       <Box className="ContactDetailsTab__stats">
         {stats.map(({ title, value, buttonProps }) => (
           <Modal.Container
+            key={title}
             fluid
             p="12px"
             align="flex-end"

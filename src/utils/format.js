@@ -19,7 +19,12 @@ export const compactFormattedNumber = (n) => {
   return formatter.format(formatUnits(n));
 };
 
-export function commify(num, digits, rounded = true) {
+export function commify(
+  num,
+  digits,
+  rounded = true,
+  stripTrailingZeros = false
+) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 
@@ -52,21 +57,4 @@ export function commify(num, digits, rounded = true) {
   }
 
   return rhs ? `${lhs}.${rhs}` : lhs;
-}
-
-export function formatDetailed(number, unit = null, decimals = 4) {
-  if (number === null || number === undefined) return "NaN";
-  const fullNumber = Number(number);
-  const fixedNumber = Number(fullNumber.toFixed(decimals));
-  const integerPart = Number(fullNumber.toFixed(0));
-  const fixedDecimalPart = fixedNumber - integerPart;
-  const fullDecimalPart = fullNumber - integerPart;
-
-  let result = fixedNumber;
-  // if the decimal part is being rounded to zero then set lowest decimal as 1
-  if (fixedDecimalPart == 0 && fullDecimalPart > 0) {
-    result += Math.pow(10, -1 * decimals);
-  }
-
-  return commify(result, 2) + (unit ? " " + unit : "");
 }

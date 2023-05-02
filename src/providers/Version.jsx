@@ -26,6 +26,10 @@ export function isVersionSupported(version, chainId) {
   return versionSupport[version].includes(chainId);
 }
 
+export function getVersion(chainId) {
+  return isVersionSupported(Versions.V2, chainId) ? Versions.V2 : Versions.V1;
+}
+
 export default function Version({ children }) {
   const { isDisconnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
