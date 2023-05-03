@@ -45,6 +45,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       ...COLUMNS.TRUST_SET,
       value: (
         <DimmableTableCell
+          key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
           value={`${format(trust)} DAI`}
         />
@@ -54,6 +55,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       ...COLUMNS.TOTAL_VOUCH,
       value: (
         <DimmableTableCell
+          key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
           value={`${format(vouch)} DAI`}
         />
@@ -63,6 +65,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       ...COLUMNS.REAL_VOUCH,
       value: (
         <DimmableTableCell
+          key={COLUMNS.REAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
           value={`${format(vouch)} DAI`}
         />
@@ -72,6 +75,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       ...COLUMNS.LOCKING,
       value: (
         <DimmableTableCell
+          key={COLUMNS.LOCKING.id}
           dimmed={locked.eq(ZERO)}
           value={`${format(locked)} DAI`}
         />
@@ -81,6 +85,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       ...COLUMNS.BORROWABLE,
       value: (
         <DimmableTableCell
+          key={COLUMNS.BORROWABLE.id}
           dimmed={borrowable.eq(ZERO)}
           value={`${format(borrowable)} DAI`}
         />

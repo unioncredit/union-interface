@@ -1,5 +1,5 @@
-import { useAccount, useContractReads, useNetwork } from "wagmi";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { useAccount, useContractReads } from "wagmi";
+import { createContext, useContext } from "react";
 
 import {
   STALE_TIME,
@@ -7,8 +7,6 @@ import {
   DUST_THRESHOLD,
   ZERO,
   ZERO_ADDRESS,
-  BlocksPerYear,
-  WAD,
 } from "constants";
 import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";

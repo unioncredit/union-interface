@@ -23,16 +23,18 @@ import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
-import useRepayBlockNumber from "hooks/useRepayBlockNumber";
+import { useVersion } from "providers/Version";
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import cn from "classnames";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
+  const { isV2 } = useVersion();
 
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
-  const { data: blockNumber } = useRepayBlockNumber({
+  const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
   });
 
@@ -42,6 +44,7 @@ export default function CreditStats({ vouchers }) {
     owed = ZERO,
     lastRepay = ZERO,
     overdueBlocks = ZERO,
+    overdueTime = ZERO,
   } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
@@ -54,7 +57,7 @@ export default function CreditStats({ vouchers }) {
     overdue: isOverdue,
   } = dueOrOverdueDate(
     lastRepay,
-    overdueBlocks,
+    isV2 ? overdueTime : overdueBlocks,
     blockNumber,
     connectedChain.id
   );

@@ -5,8 +5,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useMember } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
-import { CACHE_TIME } from "constants";
-import { STALE_TIME } from "constants";
+import { STALE_TIME, CACHE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
 import { useVersion, Versions } from "./Version";
 

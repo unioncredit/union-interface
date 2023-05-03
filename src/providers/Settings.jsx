@@ -36,10 +36,10 @@ export default function Settings({ children }) {
   useEffect(() => {
     // If the user is already connected to a testnet then
     // just automatically toggle showTestnets on
-    if ([goerli.id, optimismGoerli.id].includes(chain.id)) {
+    if ([goerli.id, optimismGoerli.id].includes(chain?.id)) {
       setSetting("showTestnets", true);
     }
-  }, [chain.id]);
+  }, [chain?.id]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings, setSetting }}>

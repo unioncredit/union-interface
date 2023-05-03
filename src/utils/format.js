@@ -1,8 +1,13 @@
 import { formatUnits } from "ethers/lib/utils";
 
-export default function format(n, digits = 2, rounded = true) {
+export default function format(
+  n,
+  digits = 2,
+  rounded = true,
+  stripTrailingZeros = false
+) {
   if (!n) n = "0";
-  return commify(Number(formatUnits(n)), digits, rounded);
+  return commify(Number(formatUnits(n)), digits, rounded, stripTrailingZeros);
 }
 
 export const formattedNumber = (n, digits = 2, rounded = true) => {
@@ -14,7 +19,12 @@ export const compactFormattedNumber = (n) => {
   return formatter.format(formatUnits(n));
 };
 
-export function commify(num, digits, rounded = true) {
+export function commify(
+  num,
+  digits,
+  rounded = true,
+  stripTrailingZeros = false
+) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 
@@ -32,29 +42,19 @@ export function commify(num, digits, rounded = true) {
   }
 
   const parts = numStr.split(".");
+  let lhs = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  let rhs = parts[1];
 
-  const lhs = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (digits > 0 && stripTrailingZeros) {
+    if (rhs) {
+      rhs = rhs.padEnd(digits, "0");
+      rhs = rhs.replace(/0+$/, "");
+    } else {
+      rhs = "".padEnd(digits, "0");
+    }
 
-  if (digits > 0 && parts[1]) {
-    return `${lhs}.${parts[1]}`;
+    return `${lhs}${rhs.length > 0 ? "." : ""}${rhs}`;
   }
 
-  return lhs;
-}
-
-export function formatDetailed(number, unit = null, decimals = 4) {
-  if (number === null || number === undefined) return "NaN";
-  const fullNumber = Number(number);
-  const fixedNumber = Number(fullNumber.toFixed(decimals));
-  const integerPart = Number(fullNumber.toFixed(0));
-  const fixedDecimalPart = fixedNumber - integerPart;
-  const fullDecimalPart = fullNumber - integerPart;
-
-  let result = fixedNumber;
-  // if the decimal part is being rounded to zero then set lowest decimal as 1
-  if (fixedDecimalPart == 0 && fullDecimalPart > 0) {
-    result += Math.pow(10, -1 * decimals);
-  }
-
-  return commify(result, 2) + (unit ? " " + unit : "");
+  return rhs ? `${lhs}.${rhs}` : lhs;
 }

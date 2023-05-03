@@ -10,6 +10,7 @@ import { useProtocol } from "providers/ProtocolData";
 import usePermit from "hooks/usePermit";
 import { getPermitMethod } from "utils/permits";
 import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
+import { useVouchers } from "providers/VouchersData";
 
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 
@@ -24,7 +25,12 @@ export default function RegisterButton({ onComplete }) {
   const [permitArgs, setPermitArgs] = useState(null);
 
   const { data: member } = useMember();
+  const { data: vouchersData = [] } = useVouchers();
   const { data: protocol } = useProtocol();
+
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakedBalance?.gt(ZERO)
+  );
 
   const {
     unionBalance = ZERO,

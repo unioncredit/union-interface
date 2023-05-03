@@ -71,6 +71,11 @@
   },
   {
     "inputs": [],
+    "name": "MintFeeError",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "NotPaused",
     "type": "error"
   },
@@ -170,6 +175,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "account",
@@ -227,6 +245,25 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "oldRate",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "LogMintFeeRateChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "oldInterestRateModel",
         "type": "address"
@@ -273,6 +310,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "amountOut",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "uTokenAmount",
         "type": "uint256"
       },
       {
@@ -426,6 +469,19 @@
   },
   {
     "inputs": [],
+    "name": "MIN_MINT_AMOUNT",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "WAD",
     "outputs": [
       {
@@ -440,77 +496,76 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "admin_",
-        "type": "address"
-      }
-    ],
-    "name": "__Controller_init",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "name_",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "symbol_",
-        "type": "string"
-      },
-      {
-        "internalType": "address",
-        "name": "underlying_",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialExchangeRateMantissa_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "reserveFactorMantissa_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "originationFee_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "originationFeeMax_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "debtCeiling_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxBorrow_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minBorrow_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "overdueBlocks_",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "admin_",
-        "type": "address"
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "underlying",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "initialExchangeRateMantissa",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "reserveFactorMantissa",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "originationFee",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "originationFeeMax",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "debtCeiling",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxBorrow",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "minBorrow",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "overdueTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "admin",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "mintFeeRate",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct UToken.InitParams",
+        "name": "params",
+        "type": "tuple"
       }
     ],
     "name": "__UToken_init",
@@ -527,7 +582,7 @@
   },
   {
     "inputs": [],
-    "name": "accrualBlockNumber",
+    "name": "accrualTimestamp",
     "outputs": [
       {
         "internalType": "uint256",
@@ -728,7 +783,7 @@
   },
   {
     "inputs": [],
-    "name": "borrowRatePerBlock",
+    "name": "borrowRatePerSecond",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1051,6 +1106,19 @@
   },
   {
     "inputs": [],
+    "name": "mintFeeRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "name",
     "outputs": [
       {
@@ -1109,7 +1177,7 @@
   },
   {
     "inputs": [],
-    "name": "overdueBlocks",
+    "name": "overdueTime",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1210,6 +1278,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1269,80 +1350,9 @@
         "internalType": "address",
         "name": "borrower",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "v",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "r",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "s",
-        "type": "bytes32"
-      }
-    ],
-    "name": "repayBorrowWithERC20Permit",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
       }
     ],
     "name": "repayInterest",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "borrower",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "v",
-        "type": "uint8"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "r",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "s",
-        "type": "bytes32"
-      }
-    ],
-    "name": "repayInterestWithPermit",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1442,6 +1452,19 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "newRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMintFeeRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "originationFee_",
         "type": "uint256"
       }
@@ -1455,11 +1478,11 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "overdueBlocks_",
+        "name": "overdueTime_",
         "type": "uint256"
       }
     ],
-    "name": "setOverdueBlocks",
+    "name": "setOverdueTime",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1505,7 +1528,7 @@
   },
   {
     "inputs": [],
-    "name": "supplyRatePerBlock",
+    "name": "supplyRatePerSecond",
     "outputs": [
       {
         "internalType": "uint256",
@@ -1585,7 +1608,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -1609,12 +1632,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sender",
+        "name": "from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {

@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
 import {
-  ToggleMenu,
   Heading,
   Text,
   Box,

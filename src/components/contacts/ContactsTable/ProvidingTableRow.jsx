@@ -55,6 +55,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
       ...COLUMNS.TRUST_SET,
       value: (
         <DimmableTableCell
+          key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
           value={`${format(trust)} DAI`}
         />
@@ -64,6 +65,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
       ...COLUMNS.TOTAL_VOUCH,
       value: (
         <DimmableTableCell
+          key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
           value={`${format(vouch)} DAI`}
         />
@@ -73,6 +75,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
       ...COLUMNS.STAKE_LOCKED,
       value: (
         <DimmableTableCell
+          key={COLUMNS.STAKE_LOCKED.id}
           dimmed={locking.eq(ZERO)}
           value={`${format(locking)} DAI`}
           className={cn({
@@ -84,7 +87,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
     {
       ...COLUMNS.LAST_PAYMENT,
       value: (
-        <TableCell align="right" weight="medium">
+        <TableCell key={COLUMNS.LAST_PAYMENT.id} align="right" weight="medium">
           <Box direction="vertical" align="flex-end">
             <Text grey={800} m={0} size="medium" weight="medium">
               {lastRepayFormatted ?? "---"}
@@ -104,7 +107,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
     {
       ...COLUMNS.LOAN_STATUS,
       value: (
-        <TableCell align="right">
+        <TableCell key={COLUMNS.LOAN_STATUS.id} align="right">
           <StatusBadge address={address} />
         </TableCell>
       ),

@@ -65,8 +65,21 @@ export const calculateMinPayment = (interest) => {
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };
 
-export const calculateInterestRate = (borrowRatePerBlock, chainId) => {
-  return borrowRatePerBlock.mul(BlocksPerYear[chainId]);
+export const calculateInterestRate = (borrowRatePerUnit, chainId) => {
+  return borrowRatePerUnit.mul(BlocksPerYear[chainId]);
+};
+
+export const calculateExpectedMinimumPayment = (
+  borrowAmount,
+  borrowRatePerBlock,
+  overdueBlocks
+) => {
+  const floor = parseEther("0.1");
+  const minimumPayment = borrowAmount
+    .mul(borrowRatePerBlock)
+    .mul(overdueBlocks)
+    .div(WAD);
+  return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
 
 export const calculateExpectedMinimumPayment = (

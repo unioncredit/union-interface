@@ -10,6 +10,8 @@ export default function usePollMemberData(address, inputChainId) {
   const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
 
+  const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
+
   const chainId = inputChainId || connectedChain?.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
@@ -20,10 +22,10 @@ export default function usePollMemberData(address, inputChainId) {
     ? [
         {
           ...comptrollerContract,
-          functionName:
-            version === Versions.V1
-              ? "calculateRewardsByBlocks"
-              : "calculateRewards",
+          functionName: versioned(
+            "calculateRewardsByBlocks",
+            "calculateRewards"
+          ),
           args:
             version === Versions.V1
               ? [address, daiContract.address, ZERO]
@@ -41,7 +43,10 @@ export default function usePollMemberData(address, inputChainId) {
         },
         {
           ...comptrollerContract,
-          functionName: "calculateRewardsByBlocks",
+          functionName: versioned(
+            "calculateRewardsByBlocks",
+            "calculateRewards"
+          ),
           args: [address, daiContract.address, blocksPerDay],
         },
         {

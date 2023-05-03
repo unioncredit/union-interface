@@ -1,5 +1,4 @@
 import assetManagerAbi from "abis/assetManager.json";
-import bridgedTokenAbi from "abis/bridgedToken.json";
 import comptrollerAbi from "abis/comptroller.json";
 import erc20Abi from "abis/erc20.json";
 import unionAbi from "abis/union.json";
@@ -34,9 +33,4 @@ export const comptrollerContract = {
 export const assetManagerContract = {
   address: "0x7Aecd107Cb022e1DFd42cC43E9BA94C38BC83275",
   abi: assetManagerAbi,
-};
-
-export const bridgedTokenContract = {
-  addressOrName: "0x6DBDe0E7e563E34A53B1130D6B779ec8eD34B4B9",
-  contractInterface: bridgedTokenAbi,
 };

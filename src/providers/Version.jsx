@@ -1,5 +1,11 @@
 import { useAccount, useNetwork } from "wagmi";
-import { mainnet, goerli, arbitrum, optimismGoerli } from "wagmi/chains";
+import {
+  mainnet,
+  goerli,
+  arbitrum,
+  optimismGoerli,
+  optimism,
+} from "wagmi/chains";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const VersionContext = createContext({});
@@ -13,11 +19,15 @@ export const Versions = {
 
 const versionSupport = {
   [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [optimismGoerli.id],
+  [Versions.V2]: [optimismGoerli.id, optimism.id],
 };
 
 export function isVersionSupported(version, chainId) {
   return versionSupport[version].includes(chainId);
+}
+
+export function getVersion(chainId) {
+  return isVersionSupported(Versions.V2, chainId) ? Versions.V2 : Versions.V1;
 }
 
 export default function Version({ children }) {
@@ -54,7 +64,9 @@ export default function Version({ children }) {
   };
 
   return (
-    <VersionContext.Provider value={{ version, setVersion }}>
+    <VersionContext.Provider
+      value={{ isV2: version === Versions.V2, version, setVersion }}
+    >
       {children}
     </VersionContext.Provider>
   );

@@ -23,7 +23,6 @@ import MemberData, { useMember } from "providers/MemberData";
 import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
-
 import ErrorPage from "pages/Error";
 
 /**
@@ -44,7 +43,15 @@ function AppReadyShim({ children }) {
   useChainParams();
 
   useEffect(() => {
-    if (appReady && (isDisconnected || chain?.unsupported)) {
+    // If we are viewing a general route such as governance or
+    // a member profile then we skip the ready (connect) page
+    if (isGeneralRoute) {
+      !appReady && setAppReady(true);
+      return;
+    }
+
+    if (chain && appReady && (isDisconnected || chain?.unsupported)) {
+
       setAppReady(false);
       return;
     }
@@ -60,18 +67,13 @@ function AppReadyShim({ children }) {
         return;
       }
     }
-
-    // If we are viewing a general route such as governance or
-    // a member profile then we skip the ready (connect) page
-    if (!appReady && isGeneralRoute) {
-      setAppReady(true);
-    }
   }, [
     appReady,
     member?.isMember,
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
+    JSON.stringify(chain),
   ]);
 
   return <>{children}</>;

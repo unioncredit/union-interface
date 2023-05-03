@@ -38,15 +38,17 @@ export default function StakeStep() {
   const { data: protocol } = useProtocol();
 
   const {
-    isMember = false,
     unionBalance = ZERO,
     stakedBalance = ZERO,
     totalStaked = ZERO,
     totalFrozen = ZERO,
+    inflationPerSecond = ZERO,
     inflationPerBlock = ZERO,
     unclaimedRewards = ZERO,
     newMemberFee = ZERO,
   } = { ...protocol, ...member };
+
+  const inflationPerUnit = inflationPerSecond || inflationPerBlock;
 
   const virtualBalance = unionBalance.add(unclaimedRewards);
   const percentage = virtualBalance.gte(WAD)
@@ -57,7 +59,7 @@ export default function StakeStep() {
   const effectiveTotalStake = totalStaked.sub(totalFrozen);
 
   const dailyEarnings = effectiveTotalStake.gt(ZERO)
-    ? inflationPerBlock
+    ? inflationPerUnit
         .mul(WAD)
         .div(effectiveTotalStake)
         .mul(stakedBalance)
@@ -74,7 +76,7 @@ export default function StakeStep() {
   });
 
   const progressBarProps = useCallback(() => {
-    if (isMember || unionEarned.gte(WAD)) {
+    if (unionEarned.gte(WAD)) {
       return {
         icon: CheckIcon,
         label: "Membership fee earned",
@@ -153,15 +155,13 @@ export default function StakeStep() {
               percentage={percentage}
               {...progressBarProps()}
             />
-            {!isMember && unionEarned.gte(WAD) && (
-              <Button
-                ml="8px"
-                icon={ClaimIcon}
-                size="large"
-                label="Claim Tokens"
-                {...claimTokensButtonProps}
-              />
-            )}
+            <Button
+              ml="8px"
+              icon={ClaimIcon}
+              size="large"
+              label="Claim Tokens"
+              {...claimTokensButtonProps}
+            />
           </Box>
 
           <ButtonRow w="100%">

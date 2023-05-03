@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { StatusColorMap } from "constants";
 import { useGovernance } from "providers/GovernanceData";
 import { useBlockTime } from "hooks/useBlockTime";
-import { useNetwork } from "wagmi";
+import { mainnet } from "wagmi/chains";
 
 const maxStrLength = 46;
 
@@ -23,7 +23,6 @@ export default function ProposalsCard({
   title = "Proposal History",
   emptyLabel = "There are no proposals",
 }) {
-  const { chain } = useNetwork();
   const { proposals: allProposals } = useGovernance();
 
   const proposals = filter ? allProposals.filter(filter) : allProposals;
@@ -47,7 +46,7 @@ export default function ProposalsCard({
             </TableRow>
 
             {proposals.map((data) => (
-              <ProposalRow key={data.hash} chainId={chain.id} {...data} />
+              <ProposalRow key={data.hash} chainId={mainnet.id} {...data} />
             ))}
           </Table>
         </Box>

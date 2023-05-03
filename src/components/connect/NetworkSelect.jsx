@@ -1,15 +1,16 @@
 import "./NetworkSelect.scss";
 
-import cn from "classnames";
-import { Box, Button, WalletIcon } from "@unioncredit/ui";
+import { optimismGoerli, goerli } from "wagmi/chains";
 import { useEffect, useState } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { WalletIcon, Box, Button } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
+import useNetworks from "hooks/useNetworks";
 import { useAppNetwork } from "providers/Network";
 import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
-import useNetworks from "hooks/useNetworks";
+import cn from "classnames";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -23,7 +24,10 @@ export default function NetworkSelect() {
 
   const [selected, setSelected] = useState(null);
 
-  const networks = useNetworks();
+  const allNetworks = useNetworks();
+  const networks = allNetworks.filter(
+    (x) => ![optimismGoerli.id, goerli.id].includes(x.chainId)
+  );
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;

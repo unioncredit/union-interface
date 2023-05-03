@@ -34,8 +34,11 @@ export default function GovernaceStats() {
     totalStaked = ZERO,
     totalBorrows = ZERO,
     getLoanableAmount = ZERO,
+    borrowRatePerSecond = ZERO,
     borrowRatePerBlock = ZERO,
   } = protocol;
+
+  const borrowRatePerUnit = borrowRatePerSecond || borrowRatePerBlock;
 
   return (
     <Card mb="24px">
@@ -70,7 +73,7 @@ export default function GovernaceStats() {
                   mt="32px"
                   title="Interest rate"
                   value={`${format(
-                    calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
+                    calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
                   )}%`}
                 />
               )}

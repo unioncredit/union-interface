@@ -8,37 +8,37 @@ import unionLensAbi from "abis/v2/unionLens.json";
 import vouchFaucetAbi from "abis/vouchFaucet.json";
 
 export const userManagerContract = {
-  address: "0xe2732f6E7306908697D111A53806C5883eaf0fc5",
+  address: "0x8E195D65b9932185Fcc76dB5144534e0f3597628",
   abi: userManagerAbi,
 };
 
 export const uTokenContract = {
-  address: "0xDe16E91e6EF17D29F4f5e6DAA5E7827A3CaA6F29",
+  address: "0xE478b5e7A423d7CDb224692d0a816CA146A744b2",
   abi: uTokenAbi,
 };
 
 export const unionContract = {
-  address: "0xa5DaCCAf7E72Be629fc0F52cD55d500Fd6fa7677",
+  address: "0xB025ee78b54B5348BD638Fe4a6D77Ec2F813f4f9",
   abi: unionAbi,
 };
 
 export const daiContract = {
-  address: "0xD9662ae38fB577a3F6843b6b8EB5af3410889f3A",
+  address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
   abi: erc20Abi,
 };
 
 export const comptrollerContract = {
-  address: "0x4A89d70e17F9e765077dfF246c84B47c1181c473",
+  address: "0x06a31efa04453C5F9C0A711Cdb96075308C9d6E3",
   abi: comptrollerAbi,
 };
 
 export const assetManagerContract = {
-  address: "0x8E92930536764DF03ee26079e8D8A57a9f3a833b",
+  address: "0xE4ADdfdf5641EB4e15F60a81F63CEd4884B49823",
   abi: assetManagerAbi,
 };
 
 export const unionLensContract = {
-  address: "0x680A9943A5EB8371986cd6E6F4E14c61A305A672",
+  address: "0x376F47C5966dcDA5c3d54B8cBF8B918777b8FF13",
   abi: unionLensAbi,
 };
 

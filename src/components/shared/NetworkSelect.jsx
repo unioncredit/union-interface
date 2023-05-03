@@ -12,7 +12,7 @@ import { useVersion, Versions } from "providers/Version";
 export function NetworkSelect() {
   const { settings } = useSettings();
   const { chain, chains } = useNetwork();
-  const { version, setVersion } = useVersion();
+  const { setVersion } = useVersion();
   const { switchNetworkAsync } = useSwitchNetwork();
 
   const networks = parseNetworksVersions(allNetworks).filter((network) =>

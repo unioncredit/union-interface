@@ -34,7 +34,8 @@ export default function VouchFaucetButton() {
       onClick={onClick}
       loading={loading}
       label="Claim a testnet vouch"
-      variant="secondary"
+      color="secondary"
+      variant="light"
     />
   );
 }

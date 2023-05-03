@@ -27,7 +27,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { blockExplorerAddress } from "utils/blockExplorer";
+import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
