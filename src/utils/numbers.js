@@ -81,16 +81,3 @@ export const calculateExpectedMinimumPayment = (
     .div(WAD);
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
-
-export const calculateExpectedMinimumPayment = (
-  borrowAmount,
-  borrowRatePerBlock,
-  overdueBlocks
-) => {
-  const floor = parseEther("0.1");
-  const minimumPayment = borrowAmount
-    .mul(borrowRatePerBlock)
-    .mul(overdueBlocks)
-    .div(WAD);
-  return minimumPayment.lt(floor) ? floor : minimumPayment;
-};
