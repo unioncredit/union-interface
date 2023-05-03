@@ -1,6 +1,6 @@
 import { CheckIcon, MultiStepButton, Toggle } from "@unioncredit/ui";
 import { useAccount, useContractRead, useNetwork } from "wagmi";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { MultiStep, ZERO } from "constants";
 import useWrite from "hooks/useWrite";
@@ -61,7 +61,7 @@ export default function RegisterButton({ onComplete }) {
     value: newMemberFee,
     spender: userManagerConfig.address,
     tokenAddress: unionConfig.address,
-    onComplete: (args) => setPermitArgs(args),
+    onComplete: useCallback((args) => setPermitArgs(args), []),
   });
 
   const transactionApproveProps = useWrite({
@@ -110,10 +110,16 @@ export default function RegisterButton({ onComplete }) {
         setAction({
           ...permitApproveProps,
           size: "large",
-          label: permitApproveProps.loading
-            ? "Approving..."
-            : "Gasless Approve UNION",
-          disabled: unionBalance.lt(newMemberFee) || permitApproveProps.loading,
+          label:
+            vouchers.length <= 0
+              ? "You must receive a vouch"
+              : permitApproveProps.loading
+              ? "Approving..."
+              : "Gasless Approve UNION",
+          disabled:
+            vouchers.length <= 0 ||
+            unionBalance.lt(newMemberFee) ||
+            permitApproveProps.loading,
         });
       } else {
         setAction({

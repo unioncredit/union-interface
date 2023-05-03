@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useContractRead, useNetwork } from "wagmi";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MultiStepButton, Toggle } from "@unioncredit/ui";
 
 import { MultiStep, ZERO } from "constants";
@@ -50,11 +50,12 @@ export function Approval({
 
   const permitApproveProps = usePermit({
     type: permit.type,
+    domain: permit.domain,
     args: actionProps.permitArgs ? actionProps.permitArgs : actionProps.args,
     value: amount,
     spender: spender,
     tokenAddress: tokenConfig.address,
-    onComplete: (args) => setPermitArgs(args),
+    onComplete: useCallback((args) => setPermitArgs(args), []),
   });
 
   const transactionApproveProps = useWrite({

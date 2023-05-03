@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { signDaiPermit, signERC2612Permit } from "eth-permit";
-import { useAccount, useNetwork, useSigner } from "wagmi";
+import { useAccount, useSigner } from "wagmi";
 import { PermitType } from "utils/permits";
 
 export default function usePermit({
@@ -10,34 +10,61 @@ export default function usePermit({
   spender,
   tokenAddress,
   onComplete,
+  domain = null,
 }) {
   const { address } = useAccount();
   const { data: signer } = useSigner();
-  const { chain: connectedChain } = useNetwork();
   const [loading, setLoading] = useState(false);
 
   const createDaiPermit = useCallback(async () => {
     const permit = await signDaiPermit(
       signer.provider,
-      tokenAddress,
+      domain
+        ? {
+            ...domain,
+            verifyingContract: tokenAddress,
+          }
+        : tokenAddress,
       address,
       spender
     );
 
     return [...args, permit.nonce, permit.expiry, permit.v, permit.r, permit.s];
-  }, [signer, tokenAddress, address, spender]);
+  }, [
+    signDaiPermit,
+    signer?.provider,
+    tokenAddress,
+    address,
+    spender,
+    JSON.stringify(domain),
+    JSON.stringify(args),
+  ]);
 
   const createERC2612Permit = useCallback(async () => {
     const permit = await signERC2612Permit(
       signer.provider,
-      tokenAddress,
+      domain
+        ? {
+            ...domain,
+            verifyingContract: tokenAddress,
+          }
+        : tokenAddress,
       address,
       spender,
       value.toString()
     );
 
     return [...args, permit.deadline, permit.v, permit.r, permit.s];
-  }, [signer, tokenAddress, address, spender, value]);
+  }, [
+    signERC2612Permit,
+    signer?.provider,
+    tokenAddress,
+    address,
+    spender,
+    value,
+    JSON.stringify(domain),
+    JSON.stringify(args),
+  ]);
 
   const onClick = useCallback(async () => {
     setLoading(true);
@@ -57,14 +84,7 @@ export default function usePermit({
     } finally {
       setLoading(false);
     }
-  }, [
-    createERC2612Permit,
-    createDaiPermit,
-    connectedChain.id,
-    address,
-    spender,
-    value,
-  ]);
+  }, [createERC2612Permit, createDaiPermit, onComplete]);
 
   return useMemo(
     () => ({
