@@ -77,8 +77,8 @@ export default function RepayModal() {
   let newOwed = owed.sub(amount.raw);
   newOwed = newOwed.lt(ZERO) ? ZERO : newOwed;
 
-  // Factor in a 1% margin for the max repay as we can no longer use MaxUint256
-  const owedMargin = owed.add(owed.div(100));
+  // Factor in a 5% margin for the max repay as we can no longer use MaxUint256
+  const owedMargin = owed.add(owed.div(100).mul(5));
 
   const displayAmount = amount.raw.eq(owedMargin)
     ? format(owed)
@@ -237,14 +237,14 @@ export default function RepayModal() {
           *--------------------------------------------------------------*/}
           <Approval
             owner={address}
-            amount={amount.raw}
+            amount={owedMargin}
             spender={uTokenContract.address}
             requireApproval
             tokenContract="dai"
             actionProps={{
               args:
-                version === Versions.V1 ? [amount.raw] : [address, amount.raw],
-              permitArgs: [address, amount.raw],
+                version === Versions.V1 ? [owedMargin] : [address, owedMargin],
+              permitArgs: [address, owedMargin],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
