@@ -127,7 +127,7 @@ export default function StakeStats() {
               value={format(totalLockedStake)}
             />
 
-            <Link to="/contacts/receiving">
+            <Link to="/contacts/providing?filters=borrowing">
               <AddressesAvatarBadgeRow
                 mt="8px"
                 addresses={borrowingVouchees.map((v) => v.address)}
