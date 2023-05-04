@@ -1,6 +1,6 @@
 import "./ContactList.scss";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
@@ -90,6 +90,18 @@ export default function ContactList({ type, setType, setContact }) {
       ? urlSearchParams.get("filters").split(",")
       : [];
   });
+
+  useEffect(() => {
+    const urlSearchParams = locationSearch();
+    if (urlSearchParams.has("address")) {
+      const searchAddress = urlSearchParams.get("address");
+      const contact = (
+        type === ContactsType.VOUCHEES ? vouchees : vouchers
+      ).find((v) => compareAddresses(v.address, searchAddress));
+
+      contact && setContact(contact);
+    }
+  }, []);
 
   const contacts =
     (type === ContactsType.VOUCHEES

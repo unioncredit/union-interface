@@ -63,7 +63,7 @@ export default function BorrowersCard() {
           {borrowersPage.map(({ address, locking }) => (
             <TableRow
               key={address}
-              onClick={() => navigate(`/contacts?address=${address}`)}
+              onClick={() => navigate(`/contacts/providing?address=${address}`)}
             >
               <TableCell fixedSize>
                 <Avatar size={24} address={address} />
@@ -82,9 +82,9 @@ export default function BorrowersCard() {
                 <StatusBadge address={address} />
               </TableCell>
               <TableCell align="right">{format(locking)}</TableCell>
-              </TableRow>
-            ))}
-          </Table>
+            </TableRow>
+          ))}
+        </Table>
       )}
       <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
     </Card>
