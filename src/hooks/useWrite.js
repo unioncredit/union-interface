@@ -16,6 +16,7 @@ export default function useWrite({
   enabled,
   contract,
   onComplete,
+  overrides = undefined,
 }) {
   const { version } = useVersion();
   const { chain } = useNetwork();
@@ -31,6 +32,7 @@ export default function useWrite({
     functionName: method,
     args: memoisedArgs,
     enabled,
+    overrides,
   });
 
   const { writeAsync } = useContractWrite(config);
