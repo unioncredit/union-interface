@@ -68,27 +68,24 @@ export default function RepayModal() {
     setRawValue("amount", option.amount);
   };
 
-  const maxRepay = daiBalance.gte(owed) ? owed : daiBalance;
-
   const amount = values.amount || empty;
-
+  const newOwed = owed.sub(amount.raw);
   const isCustomSelected = paymentType === PaymentType.CUSTOM;
 
-  let newOwed = owed.sub(amount.raw);
-  newOwed = newOwed.lt(ZERO) ? ZERO : newOwed;
+  // Factor in a 0.01% margin for the max repay as we can no longer use MaxUint256
+  const owedBalanceWithMargin = owed.add(owed.div(1000));
 
-  // Factor in a 5% margin for the max repay as we can no longer use MaxUint256
-  const owedMargin = owed.add(owed.div(100).mul(5));
-
-  const displayAmount = amount.raw.eq(owedMargin)
-    ? format(owed)
-    : amount.display;
+  // The maximum amount the user can repay, either their total DAI balance
+  // or their balance owed + 0.01% margin
+  const maxRepay = daiBalance.gte(owedBalanceWithMargin)
+    ? owedBalanceWithMargin
+    : daiBalance;
 
   const options = [
     {
       token: "dai",
-      value: format(daiBalance.lt(owed) ? daiBalance : owed),
-      amount: daiBalance.lt(owed) ? daiBalance : owed,
+      value: format(maxRepay),
+      amount: maxRepay,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
         ? "Pay-off entire loan"
@@ -223,7 +220,7 @@ export default function RepayModal() {
               },
               {
                 label: "New balanced owed",
-                value: `${format(newOwed)} DAI`,
+                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} DAI`,
                 tooltip: {
                   shrink: true,
                   content: "TODO",
@@ -237,18 +234,18 @@ export default function RepayModal() {
           *--------------------------------------------------------------*/}
           <Approval
             owner={address}
-            amount={owedMargin}
+            amount={amount.raw}
             spender={uTokenContract.address}
             requireApproval
             tokenContract="dai"
             actionProps={{
               args:
-                version === Versions.V1 ? [owedMargin] : [address, owedMargin],
-              permitArgs: [address, owedMargin],
+                version === Versions.V1 ? [amount.raw] : [address, amount.raw],
+              permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
-              label: `Repay ${displayAmount} DAI`,
+              label: `Repay ${amount.display} DAI`,
             }}
             approvalLabel="Approve Union to spend your DAI"
             approvalCompleteLabel="You can now repay"
