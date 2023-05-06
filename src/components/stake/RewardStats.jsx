@@ -36,7 +36,7 @@ export default function RewardStats() {
             align="left"
             token="union"
             title="Unclaimed Rewards"
-            value={format(unclaimed)}
+            value={format(unclaimed, 4)}
           />
           <Button
             size="large"

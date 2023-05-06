@@ -16,21 +16,24 @@ export default function ProfileGovernanceStats({ address, chainId }) {
       <Grid.Row>
         <Grid.Col>
           <NumericalBlock
-            size="x-small"
+            align="left"
+            size="small"
             title="Total Votes"
             value={format(votes, 0)}
           />
         </Grid.Col>
         <Grid.Col>
           <NumericalBlock
-            size="x-small"
+            align="left"
+            size="small"
             title="Union Balance"
             value={format(unionBalance, 0)}
           />
         </Grid.Col>
         <Grid.Col>
           <NumericalBlock
-            size="x-small"
+            align="left"
+            size="small"
             title="From others"
             titleTooltip={{
               position: "left",

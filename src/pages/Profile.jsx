@@ -14,7 +14,7 @@ import {
   NumericalBlock,
   LinkOutIcon,
   VouchIcon,
-  SwitchIcon,
+  SwitchIcon, Layout
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -106,7 +106,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 target="_blank"
                 rel="noreferrer"
               >
-                <LinkOutIcon width="12px" />
+                <LinkOutIcon width="24px" />
               </a>
             </Box>
             {/*--------------------------------------------------------------
@@ -194,14 +194,16 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <Grid.Row>
               <Grid.Col>
                 <NumericalBlock
-                  size="x-small"
+                  align="left"
+                  size="small"
                   title="Receiving vouches from"
                   value={`${stakerAddresses.length} accounts`}
                 />
               </Grid.Col>
               <Grid.Col>
                 <NumericalBlock
-                  size="x-small"
+                  align="left"
+                  size="small"
                   title="Vouching for"
                   value={`${borrowerAddresses.length} accounts`}
                 />
@@ -251,11 +253,13 @@ export default function Profile() {
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
-      <ProfileInner
-        chainId={chainId}
-        profileMember={profileMember}
-        connectedMember={connectedMember}
-      />
+      <Layout.Columned mt="24px" maxw="653px">
+        <ProfileInner
+          chainId={chainId}
+          profileMember={profileMember}
+          connectedMember={connectedMember}
+        />
+      </Layout.Columned>
     </>
   );
 }

@@ -35,6 +35,8 @@ export default function Version({ children }) {
   const { chain: connectedChain } = useNetwork();
   const [version, setVersionState] = useState(null);
 
+  const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
+
   useEffect(() => {
     if (!connectedChain?.id || version) return;
 
@@ -65,7 +67,7 @@ export default function Version({ children }) {
 
   return (
     <VersionContext.Provider
-      value={{ isV2: version === Versions.V2, version, setVersion }}
+      value={{ isV2: version === Versions.V2, version, setVersion, versioned }}
     >
       {children}
     </VersionContext.Provider>

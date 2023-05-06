@@ -1,35 +1,36 @@
 import chunk from "lodash/chunk";
-import { useContractReads } from "wagmi";
+import { useContractReads, useNetwork } from "wagmi";
 import { useEffect, useState } from "react";
 import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
-import { CACHE_TIME, ZERO_ADDRESS } from "constants";
+import { CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { STALE_TIME } from "constants";
 import fetchVoteCasts from "fetchers/fetchVoteCasts";
-import { useVersion } from "providers/Version";
+import { getVersion, useVersion, Versions } from "providers/Version";
 
 const selectVoter = (data) => ({
-  unionBalance: data[0],
-  votes: data[1],
-  delegatedVotes: data[1].sub(data[0]),
+  unionBalance: data[0] || ZERO,
+  votes: data[1] || ZERO,
+  delegatedVotes: data[1] ? data[1].sub(data[0]) : ZERO,
 });
 
 function useVotes() {
-  const { version } = useVersion();
+  const { chain } = useNetwork();
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
     (async function () {
-      const data = await fetchVoteCasts(version, mainnet.id);
+      const data = await fetchVoteCasts(getVersion(chain.id), chain.id);
       setAddresses(data);
     })();
-  }, []);
+  }, [chain.id]);
 
   return { data: addresses };
 }
 
 export default function useVoters() {
+  const { chain } = useNetwork();
   const { data: addresses = [] } = useVotes();
   const unionContract = useContract("union", mainnet.id);
 
@@ -38,8 +39,8 @@ export default function useVoters() {
   });
 
   const buildVoterQueries = (address) => [
-    { ...unionContract, functionName: "balanceOf", args: [address] },
-    { ...unionContract, functionName: "getCurrentVotes", args: [address] },
+    { ...unionContract, functionName: "balanceOf", args: [address], chainId: mainnet.id },
+    { ...unionContract, functionName: "getCurrentVotes", args: [address], chainId: mainnet.id },
   ];
 
   const contracts = uniqueAddresses.reduce(
@@ -64,8 +65,8 @@ export default function useVoters() {
   });
 
   useEffect(() => {
-    if (uniqueAddresses?.length > 0) resp.refetch();
-  }, [uniqueAddresses?.length, resp.refetch]);
+    if (chain.id === mainnet.id && uniqueAddresses?.length > 0) resp.refetch();
+  }, [chain.id, uniqueAddresses?.length, resp.refetch]);
 
   return {
     data: resp.data?.map((item) => ({

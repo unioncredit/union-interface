@@ -27,7 +27,7 @@ export const useProtocolData = (chainId) => {
   const userManagerContract = useContract("userManager", chainId, version);
   const comptrollerContract = useContract("comptroller", chainId, version);
   const governorContract = useContract("governor", mainnet.id, Versions.V1);
-  const timelockContract = useContract("timelock", mainnet.id, version.V1);
+  const timelockContract = useContract("timelock", mainnet.id, Versions.V1);
   const unionTokenContract = useContract("union", chainId, version);
   const assetManagerContract = useContract("assetManager", chainId, version);
 

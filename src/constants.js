@@ -21,6 +21,12 @@ export const STALE_TIME = 30_000; // 30 seconds
 
 export const DUST_THRESHOLD = "10000000000000000";
 
+export const SECONDS_PER_HOUR = 3600;
+
+export const SECONDS_PER_DAY = 86400;
+
+export const SECONDS_PER_YEAR = 31540000;
+
 export const StakeType = {
   STAKE: "stake",
   UNSTAKE: "unstake",

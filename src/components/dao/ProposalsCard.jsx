@@ -25,7 +25,11 @@ export default function ProposalsCard({
 }) {
   const { proposals: allProposals } = useGovernance();
 
-  const proposals = filter ? allProposals.filter(filter) : allProposals;
+  const proposals = (
+    filter
+      ? allProposals.filter(filter)
+      : allProposals
+  ).sort((a, b) => b.startBlock.toNumber() - a.startBlock.toNumber());
 
   return (
     <Card mt="24px">

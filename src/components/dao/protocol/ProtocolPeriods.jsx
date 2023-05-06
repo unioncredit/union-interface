@@ -1,19 +1,21 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
-import { BlockSpeed, ZERO } from "constants";
+import { BlockSpeed, SECONDS_PER_DAY, SECONDS_PER_HOUR, ZERO } from "constants";
 import { commify } from "utils/format";
+import { getVersion, Versions } from "providers/Version";
 
 export function ProtocolPeriods({ protocol, chainId, ...props }) {
-  const { overdueBlocks = ZERO } = protocol;
+  const { overdueBlocks = ZERO, overdueTime = ZERO } = protocol;
+  const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
 
-  const overdueHours = overdueBlocks
-    .mul(BlockSpeed[chainId])
-    .div(3600000)
+  const overdueHours = versioned(overdueBlocks, overdueTime.mul(1000))
+    .mul(versioned(BlockSpeed[chainId], 1))
+    .div(SECONDS_PER_HOUR * 1000)
     .toNumber();
 
-  const overdueDays = overdueBlocks
-    .mul(BlockSpeed[chainId])
-    .div(86400000)
+  const overdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
+    .mul(versioned(BlockSpeed[chainId], 1))
+    .div(SECONDS_PER_DAY * 1000)
     .toNumber();
 
   const overdueFormatted =
@@ -22,7 +24,10 @@ export function ProtocolPeriods({ protocol, chainId, ...props }) {
   const periods = [
     {
       title: "Payment",
-      value: `${commify(overdueBlocks, 0)} Blocks`,
+      value: versioned(
+        `${commify(overdueBlocks, 0)} Blocks`,
+        `${commify(overdueTime, 0)} Seconds`
+      ),
       subtitle: `~${overdueFormatted}`,
     },
     {
