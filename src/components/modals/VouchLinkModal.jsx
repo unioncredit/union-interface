@@ -1,3 +1,5 @@
+import "./VouchLinkModal.scss";
+
 import {
   Modal,
   ModalOverlay,
@@ -77,6 +79,7 @@ export default function VouchLinkModal() {
                 as="a"
                 target="_blank"
                 rel="noopener"
+                className="VouchLinkModal__social"
               />
               <Button
                 size="large"
@@ -87,6 +90,7 @@ export default function VouchLinkModal() {
                 as="a"
                 target="_blank"
                 rel="noopener"
+                className="VouchLinkModal__social"
               />
             </ButtonRow>
           </Box>

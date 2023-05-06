@@ -122,7 +122,7 @@ export default function StakeStep() {
           direction="vertical"
           className="StakeStep__container"
         >
-          <Box justify="space-between" fluid>
+          <Box className="StakeStep__stats" justify="space-between" fluid>
             <NumericalBlock
               fluid
               align="left"

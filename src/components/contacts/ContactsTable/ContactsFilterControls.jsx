@@ -12,14 +12,14 @@ export const ContactsFilterControls = ({
   setFilers,
 }) => {
   const { open } = useModals();
-  const { isMobile } = useResponsive();
+  const { isMicro, isMobile } = useResponsive();
 
   return (
     <Box>
       <Input
         maxw="285px"
         prefix={<SearchIcon width="15px" />}
-        placeholder={isMobile ? "Address or ENS" : "Filter by address or ENS"}
+        placeholder={isMicro ? "Search" : isMobile ? "Address or ENS" : "Filter by address or ENS"}
         onChange={(event) => {
           setQuery(event.target.value);
         }}

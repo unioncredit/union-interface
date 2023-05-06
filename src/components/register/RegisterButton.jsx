@@ -38,10 +38,11 @@ export default function RegisterButton({ onComplete }) {
     newMemberFee = ZERO,
   } = { ...member, ...protocol };
 
+  const permit = getPermitMethod(chain.id, "registerMember");
+  const readyToBurn = vouchers.length > 0 && unionBalance.gte(newMemberFee);
+
   const unionConfig = useContract("union");
   const userManagerConfig = useContract("userManager");
-
-  const permit = getPermitMethod(chain.id, "registerMember");
 
   /*--------------------------------------------------------------
     Contract Functions
@@ -89,6 +90,7 @@ export default function RegisterButton({ onComplete }) {
         color="primary"
         label="Gasless approval"
         labelPosition="end"
+        disabled={!readyToBurn}
         onChange={() => {
           setGasless(!gasless);
           setPermitArgs(null);
@@ -106,20 +108,20 @@ export default function RegisterButton({ onComplete }) {
     if (allowance.lt(newMemberFee) && !permitArgs) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
-      if (gasless) {
+      if (!readyToBurn) {
+        setAction({
+          size: "large",
+          label: "Complete the previous steps",
+          disabled: true,
+        })
+      } else if (gasless) {
         setAction({
           ...permitApproveProps,
           size: "large",
-          label:
-            vouchers.length <= 0
-              ? "You must receive a vouch"
-              : permitApproveProps.loading
+          label: permitApproveProps.loading
               ? "Approving..."
-              : "Gasless Approve UNION",
-          disabled:
-            vouchers.length <= 0 ||
-            unionBalance.lt(newMemberFee) ||
-            permitApproveProps.loading,
+              : "Approve UNION",
+          disabled: permitApproveProps.loading,
         });
       } else {
         setAction({

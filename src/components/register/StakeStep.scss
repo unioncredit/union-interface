@@ -10,6 +10,16 @@
       padding: 0;
       background: white;
     }
+
+  }
+  &__stats {
+    @media screen and (max-width: 480px) {
+      flex-direction: column !important;
+
+      .NumericalBlock:not(:last-of-type) {
+        margin-bottom: 12px;
+      }
+    }
   }
 
   @media screen and (max-width: $breakpoint-mobile) {

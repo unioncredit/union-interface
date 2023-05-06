@@ -1,3 +1,5 @@
+@import "@unioncredit/ui/src/variables";
+
 .AccountModal {
   &__Activity {
     &__statusIcon {
@@ -12,6 +14,15 @@
       width: 100%;
       flex: 0 50%;
       margin-right: 10px;
+
+      @media screen and (max-width: $breakpoint-micro) {
+        max-height: 40px !important;
+        margin-top: 8px !important;
+      }
+    }
+
+    @media screen and (max-width: $breakpoint-micro) {
+      flex-direction: column !important;
     }
   }
 }

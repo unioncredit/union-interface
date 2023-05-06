@@ -26,6 +26,7 @@ export default function useResponsive() {
   const { width } = useWindowSize();
 
   return {
+    isMicro: !width || width <= 480,
     isMobile: !width || width <= 580,
     isTablet: !width || width <= 767,
   };

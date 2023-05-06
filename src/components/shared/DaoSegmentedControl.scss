@@ -14,5 +14,14 @@
         max-height: 20px !important;
       }
     }
+    @media screen and (max-width: 420px) {
+      font-size: 12px !important;
+      line-height: 20px !important;
+
+      svg {
+        max-width: 16px !important;
+        max-height: 18px !important;
+      }
+    }
   }
 }

@@ -101,25 +101,20 @@ export function Approval({
   useEffect(() => {
     if (amount.gt(0)) {
       if (requireApproval && amount.gt(allowance) && !permitArgs) {
+        const buttonProps = gasless
+          ? permitApproveProps
+          : transactionApproveProps;
+
         // The amount is more than the allowance so we
         // need to prompt the user to approve this contract
-        if (gasless) {
-          setAction({
-            ...permitApproveProps,
-            label: permitApproveProps.loading
-              ? "Approving..."
-              : "Gasless Approve",
-            loading: false,
-            disabled: permitApproveProps.loading,
-          });
-        } else {
-          setAction({
-            ...transactionApproveProps,
-            label: transactionApproveProps.loading ? "Approving..." : "Approve",
-            loading: false,
-            disabled: transactionApproveProps.loading,
-          });
-        }
+        setAction({
+          ...buttonProps,
+          label: buttonProps.loading
+            ? "Approving..."
+            : "Approve",
+          loading: false,
+          disabled: buttonProps.loading,
+        });
 
         setShowSteps(true);
       } else {

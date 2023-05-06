@@ -37,7 +37,7 @@ export default function ProposalsCard({
           </Box>
         </Card.Body>
       ) : (
-        <Box mt="24px">
+        <Box mt="24px" style={{ overflowX: "scroll" }}>
           <Table>
             <TableRow>
               <TableHead>Title</TableHead>

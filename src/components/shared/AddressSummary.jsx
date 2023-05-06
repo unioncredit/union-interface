@@ -15,6 +15,7 @@ import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
+import { getProfileUrl } from "utils/generateLinks";
 
 export function AddressSummary({ address, ...props }) {
   const { chain } = useNetwork();
@@ -65,16 +66,16 @@ export function AddressSummary({ address, ...props }) {
               <StatusBadge address={address} />
             </BadgeRow>
 
-            <a href="#">
-              <ProfileIcon width="20px" style={{ marginLeft: "6px" }} />
+            <a href={getProfileUrl(address, chain.id)}>
+              <ProfileIcon width="24px" style={{ marginLeft: "4px" }} />
             </a>
 
             <a href={blockExplorerLink} target="_blank" rel="noreferrer">
               <LinkOutIcon
-                width="16px"
+                width="24px"
                 fill="#44403c"
                 className="fillPath"
-                style={{ marginLeft: "10px" }}
+                style={{ marginLeft: "4px" }}
               />
             </a>
           </Box>
