@@ -22,10 +22,12 @@ import { calculateMaxBorrow } from "utils/numbers";
 import { WAD } from "constants";
 import useWrite from "hooks/useWrite";
 import useFirstPaymentDueDate from "../../hooks/useFirstPaymentDueDate";
+import { useVersion } from "providers/Version";
 
 export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
+  const { isV2 } = useVersion();
   const { close } = useModals();
   const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
@@ -70,7 +72,7 @@ export default function BorrowModal() {
   const buttonProps = useWrite({
     contract: "uToken",
     method: "borrow",
-    args: [address, amount.raw],
+    args: isV2 ? [address, amount.raw] : [amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
     onComplete: async () => {
       await refetchMember();
