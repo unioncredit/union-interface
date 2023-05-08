@@ -51,6 +51,7 @@ export default function Approval({
       close();
       refetchMember();
     },
+    overrides: actionProps.overrides,
   });
 
   const approveButtonProps = useWrite({
