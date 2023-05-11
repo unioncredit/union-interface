@@ -32,7 +32,7 @@ export default function Version({ children }) {
   const [version, setVersionState] = useState(null);
 
   useEffect(() => {
-    if (!connectedChain?.id || version) return;
+    if (!connectedChain?.id) return;
 
     const checkVersion = (_version) =>
       isVersionSupported(_version, connectedChain.id) && version !== _version;
