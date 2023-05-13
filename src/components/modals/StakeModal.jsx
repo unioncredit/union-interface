@@ -170,7 +170,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               args: [amount.raw],
               enabled: !isErrored,
               contract: "userManager",
-              overrides: { gasLimit: 5_000_001 },
+              overrides: { gasLimit: 1_500_001 },
               method: type === StakeType.STAKE ? "stake" : "unstake",
               label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${
                 amount.display
