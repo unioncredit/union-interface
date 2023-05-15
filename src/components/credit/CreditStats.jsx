@@ -131,6 +131,9 @@ export default function CreditStats({ vouchers }) {
             title="Available"
             dotColor="blue600"
             value={format(creditLimit, 2, false)}
+            titleTooltip={{
+              content: "The amount of DAI currently available to borrow",
+            }}
           />
 
           <NumericalBlock
@@ -141,6 +144,9 @@ export default function CreditStats({ vouchers }) {
             title="Unavailable"
             dotColor="amber500"
             value={format(unavailableBalance)}
+            titleTooltip={{
+              content: "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time. This could be you borrowing or your vouchers vouched for someone who is borrowing",
+            }}
           />
         </Box>
       </Card.Body>
