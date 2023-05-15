@@ -4,12 +4,12 @@ import { CreditDetailsHeader } from "components/modals/ManageContactModal/Credit
 import { ContactsType, ZERO } from "constants";
 import {
   Box,
-  Button,
+  Button, CancelIcon,
   Modal,
   NumericalBlock,
   NumericalRows,
-  Text,
-  VouchIcon,
+  Text, Tooltip,
+  VouchIcon
 } from "@unioncredit/ui";
 import { EDIT_VOUCH_MODAL } from "components/modals/EditVouch";
 import format from "utils/format";
@@ -20,6 +20,9 @@ import { useVouchee } from "providers/VoucheesData";
 import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
+import useWrite from "hooks/useWrite";
+import { useAccount } from "wagmi";
+import { useNavigate } from "react-router-dom";
 
 export function ContactDetailsTab({ address, clearContact }) {
   const { open } = useModals();
@@ -79,40 +82,71 @@ export function ContactDetailsTab({ address, clearContact }) {
 }
 
 const VoucherDetails = ({ voucher }) => {
-  const { trust = ZERO, vouch = ZERO, locked = ZERO } = voucher;
+  const navigate = useNavigate();
+
+  const { address: borrowerAddress } = useAccount();
+  const { address: stakerAddress, trust = ZERO, vouch = ZERO, locking = ZERO } = voucher;
+
+  const cancelVouchButtonProps = useWrite({
+    contract: "userManager",
+    method: "cancelVouch",
+    args: [stakerAddress, borrowerAddress], // staker, borrower
+    enabled: locking.lte(ZERO),
+    onComplete: async () => {
+      navigate(0); // reload page
+    },
+  });
 
   return (
-    <NumericalRows
-      items={[
-        {
-          label: "Trust",
-          value: `${format(trust)} DAI`,
-          tooltip: {
-            shrink: true,
-            content: "TODO",
-            position: "right",
+    <>
+      <NumericalRows
+        items={[
+          {
+            label: "Trust",
+            value: `${format(trust)} DAI`,
+            tooltip: {
+              shrink: true,
+              content: "TODO",
+              position: "right",
+            },
           },
-        },
-        {
-          label: "Vouch you receive",
-          value: `${format(vouch)} DAI`,
-          tooltip: {
-            shrink: true,
-            content: "TODO",
-            position: "right",
+          {
+            label: "Vouch you receive",
+            value: `${format(vouch)} DAI`,
+            tooltip: {
+              shrink: true,
+              content: "TODO",
+              position: "right",
+            },
           },
-        },
-        {
-          label: "Available to you",
-          value: `${format(vouch.sub(locked))} DAI`,
-          tooltip: {
-            shrink: true,
-            content: "TODO",
-            position: "right",
+          {
+            label: "Available to you",
+            value: `${format(vouch.sub(locking))} DAI`,
+            tooltip: {
+              shrink: true,
+              content: "TODO",
+              position: "right",
+            },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+
+      <Tooltip
+        w="100%"
+        enabled={locking.gt(ZERO)}
+        title="Cannot be cancelled"
+        content="A received vouch cannot be cancelled if there is outstanding debt"
+      >
+        <Button
+          fluid
+          mt="16px"
+          color="red"
+          icon={CancelIcon}
+          label="Cancel vouch"
+          {...cancelVouchButtonProps}
+        />
+      </Tooltip>
+    </>
   );
 };
 
@@ -232,6 +266,8 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
           },
         ]}
       />
+
+
     </>
   );
 };
