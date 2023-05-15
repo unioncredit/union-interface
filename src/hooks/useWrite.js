@@ -1,5 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, usePrepareContractWrite, useNetwork } from "wagmi";
+import {
+  useContractWrite,
+  usePrepareContractWrite,
+  useNetwork,
+  useSigner,
+} from "wagmi";
 
 import { Status } from "constants";
 import praseAppLog from "utils/praseAppLog";
@@ -8,6 +13,7 @@ import useContract from "hooks/useContract";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
+import { Contract } from "ethers";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -18,6 +24,7 @@ export default function useWrite({
   onComplete,
   overrides = undefined,
 }) {
+  const { data: signer } = useSigner();
   const { version } = useVersion();
   const { chain } = useNetwork();
   const { addLog } = useAppLogs();
@@ -35,7 +42,10 @@ export default function useWrite({
     overrides,
   });
 
-  const { writeAsync } = useContractWrite(config);
+  const { writeAsync } = useContractWrite({
+    ...config,
+    mode: "recklesslyUnprepared",
+  });
 
   /**
    * onClick is just the name of the action function for this
@@ -45,12 +55,28 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, args, chain.id, version);
+    const parseToast = createParseToast(
+      method,
+      memoisedArgs,
+      chain.id,
+      version
+    );
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
     try {
-      const tx = await writeAsync();
+      const contract = new Contract(
+        contractConfig.address,
+        contractConfig.abi,
+        signer
+      );
+
+      const gas = await contract.estimateGas[method](...memoisedArgs);
+      const gasLimit = gas.mul(110).div(100).toNumber();
+
+      const tx = await writeAsync({
+        recklesslySetUnpreparedOverrides: { gasLimit },
+      });
 
       // Replace current pending toast with a new pending toast
       // that links out to etherscan
@@ -61,7 +87,7 @@ export default function useWrite({
 
       onComplete && (await onComplete());
 
-      addLog(praseAppLog(Status.SUCCESS, method, args, tx));
+      addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
       addToast(
         parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx)
       );
@@ -90,7 +116,14 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [writeAsync, method, JSON.stringify(args), chain.id]);
+  }, [
+    writeAsync,
+    method,
+    memoisedArgs,
+    chain.id,
+    signer,
+    JSON.stringify(contractConfig),
+  ]);
 
   /*--------------------------------------------------------------
     Return  
