@@ -72,14 +72,14 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export function useMemberData(address, chainId) {
+export function useMemberData(address, chainId, forceVersion) {
   const { version } = useVersion();
 
-  const daiContract = useContract("dai", chainId);
-  const unionContract = useContract("union", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const userManagerContract = useContract("userManager", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
+  const daiContract = useContract("dai", chainId, forceVersion);
+  const unionContract = useContract("union", chainId, forceVersion);
+  const uTokenContract = useContract("uToken", chainId, forceVersion);
+  const userManagerContract = useContract("userManager", chainId, forceVersion);
+  const comptrollerContract = useContract("comptroller", chainId, forceVersion);
 
   const contracts = address
     ? [
