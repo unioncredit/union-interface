@@ -1,7 +1,8 @@
 import { useBlockNumber } from "wagmi";
 import { useVersion } from "providers/Version";
 
-export function useVersionBlockNumber({ chainId }) {
+export function useVersionBlockNumber(props = {}) {
+  const { chainId } = props;
   const { isV2 } = useVersion();
   const { data: blockNumber } = useBlockNumber({
     chainId,
