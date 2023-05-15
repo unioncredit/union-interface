@@ -71,7 +71,7 @@ export default function useWrite({
         signer
       );
 
-      const gas = await contract.estimateGas[method](...memoisedArgs);
+      const gas = await contract.estimateGas[method](...(memoisedArgs || []));
       const gasLimit = gas.mul(110).div(100).toNumber();
 
       const tx = await writeAsync({
