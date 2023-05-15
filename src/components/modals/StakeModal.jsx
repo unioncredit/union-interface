@@ -130,18 +130,14 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
                 label: "Currently staked",
                 value: `${format(stakedBalance)} DAI`,
                 tooltip: {
-                  shrink: true,
-                  content: "TODO",
-                  position: "right",
+                  content: "Amount of DAI you have staked in the protocol",
                 },
               },
               {
                 label: "Your locked stake",
                 value: `${format(totalLockedStake)} DAI`,
                 tooltip: {
-                  shrink: true,
-                  content: "TODO",
-                  position: "right",
+                  content: "This is DAI you cant withdraw because it is currently underwriting a Borrow you vouched for",
                 },
               },
               type === StakeType.STAKE
@@ -149,30 +145,18 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
                     label: "Available to stake",
                     value: `${format(daiBalance)} DAI`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
-                    tooltip: {
-                      shrink: true,
-                      content: "TODO",
-                      position: "right",
-                    },
                   }
                 : {
                     label: "Available to unstake",
                     value: `${format(maxUserUnstake)} DAI`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
-                    tooltip: {
-                      shrink: true,
-                      content: "TODO",
-                      position: "right",
-                    },
                   },
               type === StakeType.STAKE && {
                 label: "Staking limit",
                 value: `${format(maxStakeAmount)} DAI`,
                 error: errors.amount === Errors.MAX_STAKE_LIMIT_EXCEEDED,
                 tooltip: {
-                  shrink: true,
-                  content: "TODO",
-                  position: "right",
+                  content: "A contract defined maximum any one account can stake in the protocol",
                 },
               },
             ]}
