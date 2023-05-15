@@ -25,7 +25,7 @@ export default function NetworkNotice({ lite }) {
               Union Governance on Ethereum
             </Heading>
             <Text align="center" mb="24px">
-              Voting on proposals isn’t supported on Arbitrum. Switch to
+              Voting on proposals isn’t supported on this network. Switch to
               Ethereum’s Mainnet in order to take part in Union Governance.
             </Text>
           </>
