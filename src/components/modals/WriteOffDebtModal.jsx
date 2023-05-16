@@ -67,8 +67,6 @@ export default function WriteOffDebtModal({
 
   const amount = values.amount || empty;
 
-  console.log("amount: ", amount);
-
   const buttonProps = useWrite({
     contract: "userManager",
     method: "debtWriteOff",
