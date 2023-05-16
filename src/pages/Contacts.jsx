@@ -1,33 +1,10 @@
-import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import ContactList from "components/contacts/ContactList";
 import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl";
-import { useModals } from "providers/ModalManager";
-import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import { Layout } from "@unioncredit/ui";
 
-export default function ContactsPage({ type: initialType }) {
-  const { open } = useModals();
-
-  const [contact, setContact] = useState(null);
-  const [type, setType] = useState(initialType);
-
-  const contactComponentProps = {
-    type,
-    setType,
-    setContact,
-  };
-
-  useEffect(() => {
-    if (contact) {
-      open(MANAGE_CONTACT_MODAL, {
-        address: contact.address,
-        clearContact: () => setContact(null),
-      });
-    }
-  }, [contact]);
-
+export default function ContactsPage({ type }) {
   return (
     <>
       <Helmet>
@@ -38,7 +15,7 @@ export default function ContactsPage({ type: initialType }) {
         <CreditSegmentedControl active={2} />
       </Layout.Columned>
 
-      <ContactList {...contactComponentProps} />
+      <ContactList initialType={type} />
     </>
   );
 }
