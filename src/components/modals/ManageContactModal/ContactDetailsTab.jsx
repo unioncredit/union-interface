@@ -5,12 +5,18 @@ import { ContactsType, ZERO } from "constants";
 import {
   Box,
   Button,
+  CancelIcon,
   Modal,
   NumericalBlock,
   NumericalRows,
   Text,
+  Tooltip,
   VouchIcon,
 } from "@unioncredit/ui";
+import useWrite from "hooks/useWrite";
+import { useAccount } from "wagmi";
+import { useNavigate } from "react-router-dom";
+
 import { EDIT_VOUCH_MODAL } from "components/modals/EditVouch";
 import format from "utils/format";
 import { WRITE_OFF_DEBT_MODAL } from "components/modals/WriteOffDebtModal";
@@ -79,34 +85,73 @@ export function ContactDetailsTab({ address, clearContact }) {
 }
 
 const VoucherDetails = ({ voucher }) => {
-  const { trust = ZERO, vouch = ZERO, locked = ZERO } = voucher;
+  const navigate = useNavigate();
+
+  const { address: borrowerAddress } = useAccount();
+  const {
+    address: stakerAddress,
+    trust = ZERO,
+    vouch = ZERO,
+    locking = ZERO,
+  } = voucher;
+
+  const cancelVouchButtonProps = useWrite({
+    contract: "userManager",
+    method: "cancelVouch",
+    args: [stakerAddress, borrowerAddress], // staker, borrower
+    enabled: locking.lte(ZERO),
+    onComplete: async () => {
+      navigate(0); // reload page
+    },
+  });
 
   return (
-    <NumericalRows
-      items={[
-        {
-          label: "Trust amount",
-          value: `${format(trust)} DAI`,
-          tooltip: {
-            content: "Trust set for you by this contact",
+    <>
+      <NumericalRows
+        items={[
+          {
+            label: "Trust amount",
+            value: `${format(trust)} DAI`,
+            tooltip: {
+              content: "Trust set for you by this contact",
+            },
           },
-        },
-        {
-          label: "Vouch you receive",
-          value: `${format(vouch)} DAI`,
-          tooltip: {
-            content: "The max vouch you would receive based on their total stake",
+          {
+            label: "Vouch you receive",
+            value: `${format(vouch)} DAI`,
+            tooltip: {
+              content:
+                "The max vouch you would receive based on their total stake",
+            },
           },
-        },
-        {
-          label: "Available to you",
-          value: `${format(vouch.sub(locked))} DAI`,
-          tooltip: {
-            content: "The amount currently available to borrow via this contacts unlocked stake",
+          {
+            label: "Available to you",
+            value: `${format(vouch.sub(locking))} DAI`,
+            tooltip: {
+              content:
+                "The amount currently available to borrow via this contacts unlocked stake",
+            },
           },
-        },
-      ]}
-    />
+        ]}
+      />
+
+      <Tooltip
+        w="100%"
+        enabled={locking.gt(ZERO)}
+        title="Cannot be cancelled"
+        content="A received vouch cannot be cancelled if there is outstanding debt"
+      >
+        <Button
+          fluid
+          mt="16px"
+          color="red"
+          icon={CancelIcon}
+          label="Cancel vouch"
+          {...cancelVouchButtonProps}
+          disabled={cancelVouchButtonProps.disabled || locking.gt(ZERO)}
+        />
+      </Tooltip>
+    </>
   );
 };
 
@@ -187,14 +232,16 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
             label: "Vouch you provide",
             value: `${format(vouch)} DAI`,
             tooltip: {
-              content: "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
+              content:
+                "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
             },
           },
           {
             label: "Available to borrow",
             value: `${format(vouch.sub(locking))} DAI`,
             tooltip: {
-              content: "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
+              content:
+                "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
             },
           },
           {

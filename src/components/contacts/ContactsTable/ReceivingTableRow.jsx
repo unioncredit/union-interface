@@ -34,9 +34,9 @@ export const COLUMNS = {
 };
 
 export function ReceivingTableRow({ data, active, setContact, providing }) {
-  const { address, locked = ZERO, trust = ZERO, vouch = ZERO } = data;
+  const { address, locking = ZERO, trust = ZERO, vouch = ZERO } = data;
 
-  const borrowable = vouch.sub(locked);
+  const borrowable = vouch.sub(locking);
 
   const Icon = providing ? BothRow : ReceivingRow;
 
@@ -76,8 +76,8 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
       value: (
         <DimmableTableCell
           key={COLUMNS.LOCKING.id}
-          dimmed={locked.eq(ZERO)}
-          value={`${format(locked)} DAI`}
+          dimmed={locking.eq(ZERO)}
+          value={`${format(locking)} DAI`}
         />
       ),
     },

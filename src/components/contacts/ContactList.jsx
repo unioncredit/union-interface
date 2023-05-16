@@ -55,13 +55,13 @@ const sortFns = {
     [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
   },
   [RECEIVING_COLUMNS.LOCKING.id]: {
-    [SortOrder.ASC]: (a, b) => a.locked.sub(b.locked),
-    [SortOrder.DESC]: (a, b) => b.locked.sub(a.locked),
+    [SortOrder.ASC]: (a, b) => a.locking.sub(b.locking),
+    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locked).sub(b.vouch.sub(b.locked)),
+    [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
     [SortOrder.DESC]: (a, b) =>
-      b.vouch.sub(b.locked).sub(a.vouch.sub(a.locked)),
+      b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking)),
   },
 };
 
