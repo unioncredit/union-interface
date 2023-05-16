@@ -87,13 +87,14 @@ export default function StakeStep() {
       if (stakedBalance.gt(ZERO)) {
         return {
           icon: PlayIcon,
-          label: `${percentage}% Earned`,
+          forceActive: true,
+          label: `${percentage || "<0.01"}% Earned`,
         };
       }
 
       return {
         icon: PauseIcon,
-        label: `Paused · ${percentage}%`,
+        label: `Paused · ${percentage || "<0.01"}%`,
         paused: true,
       };
     }
