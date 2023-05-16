@@ -35,7 +35,7 @@ export function AddressInput(props) {
       setValue("");
       setError(null);
       props.onChange(null);
-    } else {
+    } else if (value.startsWith("0x") && value.length >= 42) {
       // Input value is not an address OR ENS so set an error
       setError(Errors.INVALID_ADDRESS_OR_ENS);
     }

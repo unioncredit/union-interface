@@ -117,10 +117,16 @@ export default function VouchModal({
                   {
                     label: "Time to default",
                     value: "30 days",
+                    tooltip: {
+                      content: "How long an account can go without making at least a minimum payment",
+                    }
                   },
                   {
                     label: "Time to write-off",
                     value: "90 days",
+                    tooltip: {
+                      content: "Time an account can be in default until it can be publicly written-off",
+                    }
                   },
                 ]}
               />

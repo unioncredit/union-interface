@@ -153,36 +153,28 @@ export default function BorrowModal() {
                   calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
                 )}% APR`,
                 tooltip: {
-                  content: "TODO",
-                  position: "right",
-                  shrink: true,
+                  content: "The interest rate accrued over a 12 month borrow period",
                 },
               },
               {
                 label: "Total incl. origination fee",
                 value: `${format(borrow)} DAI`,
                 tooltip: {
-                  content: "TODO",
-                  position: "right",
-                  shrink: true,
+                  content: "Total amount borrowed including fee",
                 },
               },
               {
                 label: "New balance owed",
                 value: `${format(newOwed)} DAI`,
                 tooltip: {
-                  content: "TODO",
-                  position: "right",
-                  shrink: true,
+                  content: "The total amount you will owe if this borrow transaction is successful",
                 },
               },
               {
                 label: "Payment due",
                 value: `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
                 tooltip: {
-                  content: "TODO",
-                  position: "right",
-                  shrink: true,
+                  content: "The amount and date of your next minimum payment in order to not enter a default state",
                 },
               },
             ]}

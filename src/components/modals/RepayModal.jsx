@@ -209,9 +209,7 @@ export default function RepayModal() {
                 value: `${format(daiBalance)} DAI`,
                 error: errors.amount === Errors.INSUFFICIENT_BALANCE,
                 tooltip: {
-                  shrink: true,
-                  content: "TODO",
-                  position: "right",
+                  content: "How much DAI you have in your connected wallet",
                 },
               },
               {
@@ -219,12 +217,10 @@ export default function RepayModal() {
                 value: `${format(minPayment)} DAI`,
               },
               {
-                label: "New balanced owed",
+                label: "New balance owed",
                 value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} DAI`,
                 tooltip: {
-                  shrink: true,
-                  content: "TODO",
-                  position: "right",
+                  content: "The total amount you will owe if this payment transaction is successful",
                 },
               },
             ]}
