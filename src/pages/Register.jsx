@@ -12,7 +12,7 @@ import {
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
-import { ZERO } from "constants";
+import { WAD, ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
@@ -59,8 +59,9 @@ export default function RegisterPage() {
     return completed;
   };
 
-  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(1);
   const vouchComplete = vouchers.length > 0;
+  const stakeComplete =
+    isMember || unionBalance?.add(unclaimedRewards).gte(WAD);
 
   return (
     <>
