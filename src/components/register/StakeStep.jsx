@@ -156,13 +156,15 @@ export default function StakeStep() {
               percentage={percentage}
               {...progressBarProps()}
             />
-            <Button
-              ml="8px"
-              icon={ClaimIcon}
-              size="large"
-              label="Claim Tokens"
-              {...claimTokensButtonProps}
-            />
+            {unionEarned.gte(WAD) && (
+              <Button
+                ml="8px"
+                icon={ClaimIcon}
+                size="large"
+                label="Claim Tokens"
+                {...claimTokensButtonProps}
+              />
+            )}
           </Box>
 
           <ButtonRow w="100%">
