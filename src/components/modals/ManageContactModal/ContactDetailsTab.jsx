@@ -11,7 +11,7 @@ import {
   NumericalRows,
   Text,
   Tooltip,
-  VouchIcon
+  VouchIcon,
 } from "@unioncredit/ui";
 import useWrite from "hooks/useWrite";
 import { useAccount } from "wagmi";
@@ -88,7 +88,12 @@ const VoucherDetails = ({ voucher }) => {
   const navigate = useNavigate();
 
   const { address: borrowerAddress } = useAccount();
-  const { address: stakerAddress, trust = ZERO, vouch = ZERO, locking = ZERO } = voucher;
+  const {
+    address: stakerAddress,
+    trust = ZERO,
+    vouch = ZERO,
+    locking = ZERO,
+  } = voucher;
 
   const cancelVouchButtonProps = useWrite({
     contract: "userManager",
@@ -115,14 +120,16 @@ const VoucherDetails = ({ voucher }) => {
             label: "Vouch you receive",
             value: `${format(vouch)} DAI`,
             tooltip: {
-              content: "The max vouch you would receive based on their total stake",
+              content:
+                "The max vouch you would receive based on their total stake",
             },
           },
           {
             label: "Available to you",
             value: `${format(vouch.sub(locking))} DAI`,
             tooltip: {
-              content: "The amount currently available to borrow via this contacts unlocked stake",
+              content:
+                "The amount currently available to borrow via this contacts unlocked stake",
             },
           },
         ]}
@@ -141,6 +148,7 @@ const VoucherDetails = ({ voucher }) => {
           icon={CancelIcon}
           label="Cancel vouch"
           {...cancelVouchButtonProps}
+          disabled={cancelVouchButtonProps.disabled || locking.gt(ZERO)}
         />
       </Tooltip>
     </>
@@ -224,14 +232,16 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
             label: "Vouch you provide",
             value: `${format(vouch)} DAI`,
             tooltip: {
-              content: "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
+              content:
+                "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
             },
           },
           {
             label: "Available to borrow",
             value: `${format(vouch.sub(locking))} DAI`,
             tooltip: {
-              content: "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
+              content:
+                "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
             },
           },
           {

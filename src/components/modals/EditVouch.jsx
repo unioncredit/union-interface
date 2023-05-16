@@ -7,7 +7,8 @@ import {
   NumericalBlock,
   NumericalRows,
   Tooltip,
-  Toggle, Text
+  Toggle,
+  Text,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -130,17 +131,25 @@ export default function EditVouchModal({ address, clearContact }) {
                 disabled={locking.gt(ZERO)}
                 label="Revoke vouch you provide"
                 labelPosition="end"
-                onChange={() => setRevokeVouch(v => !v)}
+                onChange={() => setRevokeVouch((v) => !v)}
               />
             </Tooltip>
 
             {revokeVouch && (
               <Text m="0 0 8px" size="small" grey={600}>
-                Revoking a vouch sets the trust you provide to zero and completely cancels the vouch this contact receives from you.
+                Revoking a vouch sets the trust you provide to zero and
+                completely cancels the vouch this contact receives from you.
               </Text>
             )}
 
-            <Button mt="4px" fluid label="Update trust" {...(revokeVouch ? cancelVouchButtonProps : updateTrustButtonProps)} />
+            <Button
+              fluid
+              mt="4px"
+              label="Update trust"
+              {...(revokeVouch
+                ? cancelVouchButtonProps
+                : updateTrustButtonProps)}
+            />
 
             <Button
               fluid
