@@ -1,22 +1,19 @@
 import "./RewardStats.scss";
 
 import { Box, Button, Card, ClaimIcon, NumericalBlock } from "@unioncredit/ui";
-import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
 import format from "utils/format";
 import useWrite from "hooks/useWrite";
+import useRewards from "hooks/useRewards";
 
 export default function RewardStats() {
-  const { data: member = {} } = useMember();
-
-  const { rewards = {} } = member;
   const {
     unclaimed = ZERO,
     estimatedDailyBase = ZERO,
     estimatedDailyTotal = ZERO,
     estimatedDailyBonus = ZERO,
     estimatedDailyPenalty = ZERO,
-  } = rewards;
+  } = useRewards();
 
   const buttonProps = useWrite({
     contract: "userManager",
