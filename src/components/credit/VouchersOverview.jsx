@@ -41,7 +41,9 @@ export default function VouchersOverview({ vouchers, displayCount }) {
     .map((voucher) => ({
       vouch: voucher.vouch,
       label: voucher.ens ? voucher.ens : truncateAddress(voucher.address),
-      percentage: Number(voucher.vouch.mul(10000).div(vouch).toString()) / 100,
+      percentage: vouch.gt(ZERO)
+        ? Number(voucher.vouch.mul(10000).div(vouch).toString()) / 100
+        : 0,
     }));
 
   // If we have more than displayCount vouchers, collapse into "others" item
