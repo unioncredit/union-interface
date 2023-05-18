@@ -5,8 +5,6 @@ import { Box, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "components/shared";
 
 export function AddressLabelBox({ label, address, ...props }) {
-  console.log("address: ", address);
-
   return (
     <Box className="AddressLabelBox" justify="space-between" {...props}>
       <Text m={0} size="medium" color="blue600" weight="medium">

@@ -1,6 +1,5 @@
 export const parseMilliseconds = (milliseconds) => {
   if (typeof milliseconds !== "number") {
-    console.log(milliseconds);
     throw new TypeError("Expected a number, got: " + typeof milliseconds);
   }
 

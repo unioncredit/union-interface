@@ -1,6 +1,16 @@
 import "./ManageContactModal.scss";
 
-import { Modal, ModalOverlay, SegmentedControl } from "@unioncredit/ui";
+import {
+  Text,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  Box,
+  Button,
+  CloseIcon,
+  Modal,
+  ModalOverlay,
+  SegmentedControl,
+} from "@unioncredit/ui";
 import { AddressSummary, TransactionHistory } from "components/shared";
 
 import { ContactDetailsTab } from "components/modals/ManageContactModal/ContactDetailsTab";
@@ -14,7 +24,14 @@ const TABS = {
   ACTIVITY: "activity",
 };
 
-export default function ManageContactModal({ address, clearContact }) {
+export default function ManageContactModal({
+  address,
+  nextContact,
+  prevContact,
+  contactIndex,
+  contactsCount,
+  clearContact,
+}) {
   const { close } = useModals();
   const [activeTab, setActiveTab] = useState(TABS.CONTACT_DETAILS);
 
@@ -27,6 +44,32 @@ export default function ManageContactModal({ address, clearContact }) {
     <ModalOverlay onClick={handleClose}>
       <Modal className="ManageContactModal">
         <Modal.Header onClose={handleClose} noHeight>
+          <Box
+            fluid
+            justify="space-between"
+            className="ManageContactModal__navigation"
+          >
+            <Box>
+              <Button onClick={handleClose} icon={CloseIcon} />
+              <Text>
+                Contact · {contactIndex + 1} of {contactsCount}
+              </Text>
+            </Box>
+
+            <Box>
+              <Button
+                icon={ArrowLeftIcon}
+                onClick={prevContact}
+                disabled={contactIndex <= 0}
+              />
+              <Button
+                onClick={nextContact}
+                icon={ArrowRightIcon}
+                disabled={contactIndex + 1 >= contactsCount}
+              />
+            </Box>
+          </Box>
+
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>
@@ -40,7 +83,14 @@ export default function ManageContactModal({ address, clearContact }) {
           />
 
           {activeTab === TABS.CONTACT_DETAILS && (
-            <ContactDetailsTab address={address} clearContact={clearContact} />
+            <ContactDetailsTab
+              address={address}
+              nextContact={nextContact}
+              prevContact={prevContact}
+              contactIndex={contactIndex}
+              contactsCount={contactsCount}
+              clearContact={clearContact}
+            />
           )}
 
           {activeTab === TABS.ACTIVITY && (

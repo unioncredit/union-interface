@@ -26,7 +26,14 @@ import { useNavigate } from "react-router-dom";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
-export default function EditVouchModal({ address, clearContact }) {
+export default function EditVouchModal({
+  address,
+  nextContact,
+  prevContact,
+  contactIndex,
+  contactsCount,
+  clearContact,
+}) {
   const [revokeVouch, setRevokeVouch] = useState(false);
 
   const navigate = useNavigate();
@@ -40,6 +47,10 @@ export default function EditVouchModal({ address, clearContact }) {
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
       address,
+      nextContact,
+      prevContact,
+      contactIndex,
+      contactsCount,
       clearContact,
     });
 

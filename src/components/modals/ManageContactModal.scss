@@ -1,6 +1,12 @@
 @import "@unioncredit/ui/src/variables";
 
 .ManageContactModal {
+  overflow: visible;
+
+  .modalHeader {
+    position: relative;
+  }
+
   .Card__body {
     padding: 0;
   }
@@ -11,6 +17,39 @@
     &--no-vertical {
       padding-top: 0;
       padding-bottom: 0;
+    }
+  }
+
+  &__navigation {
+    position: absolute;
+    top: -8px;
+    left: 0;
+    padding: 8px;
+    transform: translateY(-100%);
+
+    p {
+      color: white;
+      font-weight: 500;
+      height: 32px;
+      padding: 6px 12px;
+      background: #5C5958;
+      margin: 0;
+      box-sizing: border-box;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .button {
+      width: 32px;
+      height: 32px;
+      padding: 5px !important;
+      border-radius: 50%;
+      background: #5C5958;
+    }
+
+    .button + * {
+      margin-left: 4px;
     }
   }
 

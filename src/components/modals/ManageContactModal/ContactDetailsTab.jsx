@@ -27,7 +27,14 @@ import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 
-export function ContactDetailsTab({ address, clearContact }) {
+export function ContactDetailsTab({
+  address,
+  nextContact,
+  prevContact,
+  contactIndex,
+  contactsCount,
+  clearContact,
+}) {
   const { open } = useModals();
 
   const vouchee = useVouchee(address);
@@ -41,7 +48,15 @@ export function ContactDetailsTab({ address, clearContact }) {
       />
       <div className="container">
         {vouchee ? (
-          <VoucheeDetails vouchee={vouchee} clearContact={clearContact} />
+          <VoucheeDetails
+            vouchee={vouchee}
+            address={address}
+            nextContact={nextContact}
+            prevContact={prevContact}
+            contactIndex={contactIndex}
+            contactsCount={contactsCount}
+            clearContact={clearContact}
+          />
         ) : (
           <Modal.Container align="center" direction="vertical">
             <Text m={0} grey={500}>
@@ -155,10 +170,18 @@ const VoucherDetails = ({ voucher }) => {
   );
 };
 
-const VoucheeDetails = ({ vouchee, clearContact }) => {
-  const { address } = vouchee;
+const VoucheeDetails = ({
+  vouchee,
+  address,
+  nextContact,
+  prevContact,
+  contactIndex,
+  contactsCount,
+  clearContact,
+}) => {
+  const { address: voucheeAddress } = vouchee;
   const { open } = useModals();
-  const { data: memberData = {} } = useMemberData(address);
+  const { data: memberData = {} } = useMemberData(voucheeAddress);
 
   const {
     locking = ZERO,
@@ -178,7 +201,15 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
       value: format(trust),
       buttonProps: {
         label: "Change",
-        onClick: () => open(EDIT_VOUCH_MODAL, { address, clearContact }),
+        onClick: () =>
+          open(EDIT_VOUCH_MODAL, {
+            address,
+            nextContact,
+            prevContact,
+            contactIndex,
+            contactsCount,
+            clearContact,
+          }),
       },
     },
     {
@@ -189,7 +220,14 @@ const VoucheeDetails = ({ vouchee, clearContact }) => {
         disabled: locking.lte(ZERO),
         onClick: () => {
           clearContact();
-          open(WRITE_OFF_DEBT_MODAL, { address, clearContact });
+          open(WRITE_OFF_DEBT_MODAL, {
+            address,
+            nextContact,
+            prevContact,
+            contactIndex,
+            contactsCount,
+            clearContact,
+          });
         },
       },
     },

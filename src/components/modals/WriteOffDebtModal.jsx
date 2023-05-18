@@ -21,7 +21,14 @@ import { AddressSummary } from "components/shared";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
-export default function WriteOffDebtModal({ address, clearContact }) {
+export default function WriteOffDebtModal({
+  address,
+  nextContact,
+  prevContact,
+  contactIndex,
+  contactsCount,
+  clearContact,
+}) {
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
 
@@ -32,6 +39,10 @@ export default function WriteOffDebtModal({ address, clearContact }) {
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
       address,
+      nextContact,
+      prevContact,
+      contactIndex,
+      contactsCount,
       clearContact,
     });
 
@@ -55,8 +66,6 @@ export default function WriteOffDebtModal({ address, clearContact }) {
   } = useForm({ validate });
 
   const amount = values.amount || empty;
-
-  console.log("amount: ", amount);
 
   const buttonProps = useWrite({
     contract: "userManager",

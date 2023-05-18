@@ -20,6 +20,8 @@ import { MobileContactsTable } from "components/contacts/ContactsTable/MobileCon
 import { COLUMNS as PROVIDING_COLUMNS } from "components/contacts/ContactsTable/ProvidingTableRow";
 import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/ReceivingTableRow";
 import { compareAddresses } from "utils/compare";
+import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
+import { useModals } from "providers/ModalManager";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -59,18 +61,22 @@ const sortFns = {
     [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
+    [SortOrder.ASC]: (a, b) =>
+      a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
     [SortOrder.DESC]: (a, b) =>
       b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking)),
   },
 };
 
-export default function ContactList({ type, setType, setContact }) {
+export default function ContactList({ initialType }) {
+  const { open } = useModals();
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
+  const [contactIndex, setContactIndex] = useState(null);
   const [query, setQuery] = useState(null);
+  const [type, setType] = useState(initialType);
 
   const [sort, setSort] = useState(
     type === ContactsType.VOUCHEES
@@ -91,17 +97,53 @@ export default function ContactList({ type, setType, setContact }) {
       : [];
   });
 
+  const setContact = (contact) => {
+    setContactIndex(
+      filteredAndSorted.findIndex((c) =>
+        compareAddresses(contact.address, c.address)
+      )
+    );
+  };
+
+  const nextContact = () => {
+    if (contactIndex + 1 < filteredAndSorted.length) {
+      setContactIndex((index) => index + 1);
+    }
+  };
+
+  const prevContact = () => {
+    if (contactIndex > 0) {
+      setContactIndex((index) => index - 1);
+    }
+  };
+
   useEffect(() => {
     const urlSearchParams = locationSearch();
     if (urlSearchParams.has("address")) {
       const searchAddress = urlSearchParams.get("address");
-      const contact = (
-        type === ContactsType.VOUCHEES ? vouchees : vouchers
-      ).find((v) => compareAddresses(v.address, searchAddress));
 
-      contact && setContact(contact);
+      setContactIndex(
+        (type === ContactsType.VOUCHEES ? vouchees : vouchers).findIndex((v) =>
+          compareAddresses(v.address, searchAddress)
+        )
+      );
     }
   }, []);
+
+  useEffect(() => {
+    const contact = filteredAndSorted[contactIndex];
+
+    if (contact) {
+      open(MANAGE_CONTACT_MODAL, {
+        nextContact,
+        prevContact,
+        contactIndex,
+        contactsCount: filteredAndSorted.length,
+        address: contact.address,
+        clearContact: () => setContactIndex(null),
+      });
+    }
+  }, [contactIndex]);
 
   const contacts =
     (type === ContactsType.VOUCHEES
