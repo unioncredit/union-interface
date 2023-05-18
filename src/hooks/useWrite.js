@@ -72,7 +72,7 @@ export default function useWrite({
       );
 
       const gas = await contract.estimateGas[method](...(memoisedArgs || []));
-      const gasLimit = gas.mul(110).div(100).toNumber();
+      const gasLimit = gas.mul(120).div(100).toNumber();
 
       const tx = await writeAsync({
         recklesslySetUnpreparedOverrides: { gasLimit },
