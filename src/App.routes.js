@@ -1,22 +1,20 @@
 import { ContactsType, Links } from "constants";
 
-import ContactsPage from "pages/Contacts";
 import GovernancePage from "pages/Governance";
 import ProposalPage from "pages/Proposal";
 import ProfilePage from "pages/Profile";
 import RegisterPage from "pages/Register";
-import CreditPage from "pages/Credit";
-import StakePage from "pages/Stake";
 import LeaderboardPage from "pages/Leaderboard";
 import ProtocolPage from "pages/Protocol";
+import CreditPages, { PAGES } from "pages/CreditPages";
 
 // prettier-ignore
 export const member = [
-  { path: "/",                    component: CreditPage,      props: {} },
-  { path: "/stake",               component: StakePage,       props: {} },
-  { path: "/contacts",            component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
-  { path: "/contacts/providing",  component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
-  { path: "/contacts/receiving",  component: ContactsPage,    props: { type: ContactsType.VOUCHERS } },
+  { path: "/",                    component: CreditPages,     props: { page: PAGES.BORROW } },
+  { path: "/stake",               component: CreditPages,     props: { page: PAGES.STAKE } },
+  { path: "/contacts",            component: CreditPages,     props: { page: PAGES.CONTACTS_PROVIDING } },
+  { path: "/contacts/providing",  component: CreditPages,     props: { page: PAGES.CONTACTS_PROVIDING } },
+  { path: "/contacts/receiving",  component: CreditPages,     props: { page: PAGES.CONTACTS_RECEIVING } },
 ]
 
 // prettier-ignore
