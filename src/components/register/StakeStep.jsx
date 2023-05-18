@@ -87,13 +87,14 @@ export default function StakeStep() {
       if (stakedBalance.gt(ZERO)) {
         return {
           icon: PlayIcon,
-          label: `${percentage}% Earned`,
+          forceActive: true,
+          label: `${percentage || "<0.01"}% Earned`,
         };
       }
 
       return {
         icon: PauseIcon,
-        label: `Paused · ${percentage}%`,
+        label: `Paused · ${percentage || "<0.01"}%`,
         paused: true,
       };
     }
@@ -155,13 +156,15 @@ export default function StakeStep() {
               percentage={percentage}
               {...progressBarProps()}
             />
-            <Button
-              ml="8px"
-              icon={ClaimIcon}
-              size="large"
-              label="Claim Tokens"
-              {...claimTokensButtonProps}
-            />
+            {unionEarned.gte(WAD) && (
+              <Button
+                ml="8px"
+                icon={ClaimIcon}
+                size="large"
+                label="Claim Tokens"
+                {...claimTokensButtonProps}
+              />
+            )}
           </Box>
 
           <ButtonRow w="100%">
