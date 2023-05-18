@@ -9,7 +9,7 @@ import {
 } from "@unioncredit/ui";
 import { Links } from "constants";
 
-export const DaoSegmentedControl = ({ value, initialActive, ...props }) => (
+export const DaoSegmentedControl = ({ value, ...props }) => (
   <SegmentedControl
     fluid
     value={value}
