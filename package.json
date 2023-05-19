@@ -40,7 +40,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
-    "serve": "serve build -l 3000"
+    "serve": "serve build -l 3000",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": []
@@ -56,5 +57,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-plugin-react": "^7.32.2"
   }
 }

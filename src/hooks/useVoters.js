@@ -7,12 +7,12 @@ import useContract from "hooks/useContract";
 import { CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { STALE_TIME } from "constants";
 import fetchVoteCasts from "fetchers/fetchVoteCasts";
-import { getVersion, useVersion, Versions } from "providers/Version";
+import { getVersion } from "providers/Version";
 
 const selectVoter = (data) => ({
   unionBalance: data[0] || ZERO,
   votes: data[1] || ZERO,
-  delegatedVotes: data[1] ? data[1].sub(data[0]) : ZERO,
+  delegatedVotes: data[1] ? data[1].sub(data[0]) : ZERO
 });
 
 function useVotes() {
@@ -40,7 +40,7 @@ export default function useVoters() {
 
   const buildVoterQueries = (address) => [
     { ...unionContract, functionName: "balanceOf", args: [address], chainId: mainnet.id },
-    { ...unionContract, functionName: "getCurrentVotes", args: [address], chainId: mainnet.id },
+    { ...unionContract, functionName: "getCurrentVotes", args: [address], chainId: mainnet.id }
   ];
 
   const contracts = uniqueAddresses.reduce(
@@ -56,12 +56,12 @@ export default function useVoters() {
       const chunked = chunk(data, chunkSize);
       return chunked.map((x, i) => ({
         ...selectVoter(x),
-        address: uniqueAddresses[i],
+        address: uniqueAddresses[i]
       }));
     },
     contracts: contracts,
     cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+    staleTime: STALE_TIME
   });
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function useVoters() {
   return {
     data: resp.data?.map((item) => ({
       ...item,
-      voteCount: addresses.filter((a) => a === item.address).length,
-    })),
+      voteCount: addresses.filter((a) => a === item.address).length
+    }))
   };
 }
