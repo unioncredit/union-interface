@@ -7,7 +7,7 @@ import {
   ModalOverlay,
   Heading,
   TwitterIcon,
-  ConfettiIcon,
+  ConfettiIcon
 } from "@unioncredit/ui";
 import React, { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
@@ -21,6 +21,7 @@ import { VOUCH_MODAL } from "components/modals/VouchModal";
 
 export const WELCOME_MODAL = "welcome-modal";
 
+// eslint-disable-next-line react/display-name
 const ConfettiCanvas = React.memo(() => (
   <canvas
     id="confettiCanvas"
@@ -30,7 +31,7 @@ const ConfettiCanvas = React.memo(() => (
       left: "0px",
       width: "100%",
       height: "100%",
-      pointerEvents: "none",
+      pointerEvents: "none"
     }}
   />
 ));
@@ -74,18 +75,13 @@ export default function WelcomeModal() {
       <ConfettiCanvas />
       <Modal className="WelcomeModal">
         <Modal.Body>
-          <Box
-            p="24px"
-            className="WelcomeModal__content"
-            direction="vertical"
-            align="center"
-          >
+          <Box p="24px" className="WelcomeModal__content" direction="vertical" align="center">
             <Heading color="white" size="xlarge">
               Welcome to Union
             </Heading>
             <Text m={0} size="medium" color="blue100">
-              You just joined Union's credit network on {chain.name} with a
-              starting credit line of {format(creditLimit)} DAI
+              You just joined Union's credit network on {chain.name} with a starting credit line of{" "}
+              {format(creditLimit)} DAI
             </Text>
 
             <Box fluid mt="24px">
@@ -125,7 +121,7 @@ export default function WelcomeModal() {
                 title: "Welcome a friend to Union",
                 subTitle: "Send your first vouch",
                 newMember: true,
-                onClose: () => refetchMember(),
+                onClose: () => refetchMember()
               });
             }}
           />

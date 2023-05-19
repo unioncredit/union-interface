@@ -2,20 +2,14 @@ import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import {
-  ArrowRightIcon,
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Text,
-} from "@unioncredit/ui";
+import { ArrowRightIcon, Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
 import ProposalHistoryCard from "components/dao/ProposalHistoryCard";
 import ProposalVotes from "components/dao/ProposalVotes";
+import { defaultAbiCoder } from "ethers/lib/utils";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -29,7 +23,7 @@ export default function ProposalPage() {
     targets = [],
     signatures = [],
     calldatas = [],
-    history = [],
+    history = []
   } = proposal;
 
   const title =
@@ -67,7 +61,7 @@ export default function ProposalPage() {
                         height="24px"
                         className="flip"
                         style={{
-                          marginRight: "4px",
+                          marginRight: "4px"
                         }}
                       />
                       Back to proposals
@@ -110,17 +104,10 @@ export default function ProposalPage() {
                     </Link>
                   ),
                   heading: (props) => (
-                    <Text
-                      size="large"
-                      weight="medium"
-                      grey={800}
-                      {...props}
-                      mb="8px"
-                      mt="24px"
-                    />
+                    <Text size="large" weight="medium" grey={800} {...props} mb="8px" mt="24px" />
                   ),
                   paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
-                  listItem: (props) => <Text grey={500} as="li" {...props} />,
+                  listItem: (props) => <Text grey={500} as="li" {...props} />
                 }}
               >
                 {description}
@@ -139,10 +126,8 @@ export default function ProposalPage() {
                   .replace(")", "")
                   .split(",");
 
-                const decoded =
-                  args && calldata && defaultAbiCoder.decode(args, calldata);
-                const argumentString =
-                  decoded && decoded.map((item) => item.toString()).join(",");
+                const decoded = args && calldata && defaultAbiCoder.decode(args, calldata);
+                const argumentString = decoded && decoded.map((item) => item.toString()).join(",");
 
                 return (
                   <Fragment key={`${target}${signature}${calldata}`}>
@@ -158,13 +143,8 @@ export default function ProposalPage() {
                     >
                       Contract: {target}
                     </Text>
-                    <Text
-                      w="100%"
-                      weight="medium"
-                      style={{ wordWrap: "break-word" }}
-                    >
-                      Function: {signature.replace(/(\(=?)(.*)$/, "")}(
-                      {argumentString})
+                    <Text w="100%" weight="medium" style={{ wordWrap: "break-word" }}>
+                      Function: {signature.replace(/(\(=?)(.*)$/, "")}({argumentString})
                     </Text>
                   </Fragment>
                 );

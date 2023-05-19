@@ -51,7 +51,6 @@ function AppReadyShim({ children }) {
     }
 
     if (chain && appReady && (isDisconnected || chain?.unsupported)) {
-
       setAppReady(false);
       return;
     }
@@ -64,7 +63,6 @@ function AppReadyShim({ children }) {
       // the version is set correctly can we proceed
       if (isVersionSupported(version, chain.id)) {
         setAppReady(true);
-        return;
       }
     }
   }, [
@@ -73,7 +71,7 @@ function AppReadyShim({ children }) {
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
-    JSON.stringify(chain),
+    JSON.stringify(chain)
   ]);
 
   return <>{children}</>;
@@ -131,9 +129,7 @@ export default function App() {
                               <Grid.Col>
                                 {appReady ? (
                                   <>
-                                    <ErrorBoundary
-                                      FallbackComponent={ErrorPage}
-                                    >
+                                    <ErrorBoundary FallbackComponent={ErrorPage}>
                                       <Layout.Columned>
                                         <Routes />
                                       </Layout.Columned>
@@ -157,6 +153,7 @@ export default function App() {
         <Box mt="56px" mb="24px" w="100%">
           <Box justify="center" fluid>
             <Text size="small" grey={300} align="center">
+              {/* eslint-disable-next-line no-undef */}
               Build: {process.env.REACT_APP_VERSION}
             </Text>
           </Box>

@@ -9,21 +9,14 @@ import { TransactionIcon } from "./TransactionIcon";
 // prettier-ignore
 const texts = {
   [TransactionTypes.CANCEL]:    (x) => <>Cancel vouch <Address address={x.borrower} /></>,
-  [TransactionTypes.BORROW]:    (_) => <>Borrow</>,
-  [TransactionTypes.REPAY]:     (_) => <>Repayment</>,
+  [TransactionTypes.BORROW]:    () => <>Borrow</>,
+  [TransactionTypes.REPAY]:     () => <>Repayment</>,
   [TransactionTypes.TRUST]:     (x) => <>Trusted <Address address={x.borrower} /></>,
   [TransactionTypes.TRUSTED]:   (x) => <>Trusted by <Address address={x.staker} /></>,
-  [TransactionTypes.REGISTER]:  (_) => <>Became a member</>,
+  [TransactionTypes.REGISTER]:  () => <>Became a member</>,
 };
 
-export function TransactionHistoryRow({
-  amount,
-  type,
-  staker,
-  borrower,
-  timestamp,
-  applicant,
-}) {
+export function TransactionHistoryRow({ amount, type, staker, borrower, timestamp, applicant }) {
   const text = texts[type]({ amount, staker, borrower });
 
   if (!text) return null;
@@ -31,12 +24,7 @@ export function TransactionHistoryRow({
   return (
     <TableRow>
       <TableCell fixedSize>
-        <TransactionIcon
-          type={type}
-          borrower={borrower}
-          staker={staker}
-          applicant={applicant}
-        />
+        <TransactionIcon type={type} borrower={borrower} staker={staker} applicant={applicant} />
       </TableCell>
 
       <TableCell>

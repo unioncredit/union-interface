@@ -14,7 +14,9 @@ import {
   NumericalBlock,
   LinkOutIcon,
   VouchIcon,
-  SwitchIcon, Layout
+  SwitchIcon,
+  Layout,
+  ManageIcon
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -46,16 +48,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   const networks = useNetworks(true);
 
-  const {
-    isMember = false,
-    stakerAddresses = [],
-    borrowerAddresses = [],
-  } = profileMember;
+  const { isMember = false, stakerAddresses = [], borrowerAddresses = [] } = profileMember;
 
   const address = profileMember.address || ZERO_ADDRESS;
 
-  const { borrowerAddresses: connectedMemberBorrowerAddresses = [] } =
-    connectedMember;
+  const { borrowerAddresses: connectedMemberBorrowerAddresses = [] } = connectedMember;
 
   const alreadyVouching = connectedMemberBorrowerAddresses.some((borrower) =>
     compareAddresses(borrower, address)
@@ -66,9 +63,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
     connectedMember.address || ZERO_ADDRESS
   );
 
-  const targetNetwork = networks.find(
-    (network) => network.chainId === Number(chainId)
-  );
+  const targetNetwork = networks.find((network) => network.chainId === Number(chainId));
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
@@ -101,11 +96,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   <Badge label="Not a member" color="grey" mr="4px" />
                 )}
               </BadgeRow>
-              <a
-                href={blockExplorerAddress(chainId, address)}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
                 <LinkOutIcon width="24px" />
               </a>
             </Box>
@@ -116,17 +107,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               buttonProps={{
                 fluid: true,
                 mt: "20px",
-                label: "Connect Wallet",
+                label: "Connect Wallet"
               }}
               connectedElement={
                 isSelf ? (
-                  <Button
-                    fluid
-                    to="/"
-                    mt="20px"
-                    as={RouterLink}
-                    label="Go to Dashboard"
-                  />
+                  <Button fluid to="/" mt="20px" as={RouterLink} label="Go to Dashboard" />
                 ) : connectedChain?.id !== Number(chainId) ? (
                   <Button
                     fluid
@@ -140,18 +125,12 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   <Button
                     fluid
                     mt="20px"
-                    icon={Manage}
+                    icon={ManageIcon}
                     label="Manage Contact"
                     onClick={() => navigate(`/contacts/?address=${address}`)}
                   />
                 ) : !connectedMember.isMember ? (
-                  <Button
-                    fluid
-                    to="/"
-                    mt="20px"
-                    as={RouterLink}
-                    label="Register to vouch"
-                  />
+                  <Button fluid to="/" mt="20px" as={RouterLink} label="Register to vouch" />
                 ) : (
                   <Button
                     fluid
@@ -160,11 +139,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     onClick={() => {
                       open(VOUCH_MODAL, { address });
                     }}
-                    label={
-                      targetNetwork
-                        ? `Vouch on ${targetNetwork.label}`
-                        : "Vouch"
-                    }
+                    label={targetNetwork ? `Vouch on ${targetNetwork.label}` : "Vouch"}
                   />
                 )
               }
@@ -212,10 +187,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
           </Grid>
           <Divider my="24px" />
           <Heading mb="24px">Governance</Heading>
-          <ProfileGovernanceStats
-            address={address}
-            chainId={connectedChain?.id}
-          />
+          <ProfileGovernanceStats address={address} chainId={connectedChain?.id} />
         </Card.Body>
       </Card>
     </Box>
@@ -229,15 +201,13 @@ export default function Profile() {
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(
-    /^(eth|goe|arb1|optgoe|opt):/
-  )
+  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe|opt):/)
     ? addressOrEnsParts
     : [EIP3770[mainnet.id], addressOrEnsParam];
 
   const { data: addressFromEns } = useEnsAddress({
     name: addressOrEns,
-    chainId: mainnet.id,
+    chainId: mainnet.id
   });
 
   const address = isAddress(addressOrEns) ? addressOrEns : addressFromEns;

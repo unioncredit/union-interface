@@ -1,7 +1,7 @@
 import "./Error.scss";
 import { Box, Button, Card, Heading, Text } from "@unioncredit/ui";
 
-export default function ErrorPage({ error }) {
+export default function ErrorPage() {
   return (
     <Box fluid justify="center" align="center" className="ErrorPage">
       <Card maxw="650px" p="40px">
@@ -13,8 +13,8 @@ export default function ErrorPage({ error }) {
           Oh no, something broke
         </Heading>
         <Text align="center" grey={500} size="medium" mt="8px">
-          We’re sorry but something broke while you were using the app. If this
-          problem persists, please let us know.
+          We’re sorry but something broke while you were using the app. If this problem persists,
+          please let us know.
         </Text>
         <Box justify="center" mt="24px">
           <Button as="a" label="Back to safety" href="/" />

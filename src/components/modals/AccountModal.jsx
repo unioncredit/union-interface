@@ -14,7 +14,7 @@ import {
   DisconnectWalletIcon,
   IdentityIcon,
   SuccessIcon,
-  FailedIcon,
+  FailedIcon
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 
@@ -27,7 +27,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
+import { blockExplorerAddress } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -46,10 +46,7 @@ export default function AccountModal() {
         <Modal.Header title="Wallet & Activity" onClose={close} />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
-            <Link
-              onClick={close}
-              to={`/profile/${EIP3770[chain.id]}:${address}`}
-            >
+            <Link onClick={close} to={`/profile/${EIP3770[chain.id]}:${address}`}>
               <Avatar size={56} address={address} />
             </Link>
             <Heading level={2} my="4px">
@@ -70,10 +67,7 @@ export default function AccountModal() {
             </Box>
           </Box>
           <ButtonRow mt="24px" className="AccountModal__Buttons">
-            <Link
-              onClick={close}
-              to={`/profile/${EIP3770[chain.id]}:${address}`}
-            >
+            <Link onClick={close} to={`/profile/${EIP3770[chain.id]}:${address}`}>
               <Button
                 fluid
                 size="small"
@@ -132,13 +126,7 @@ export default function AccountModal() {
                     </Text>
                   </Box>
                   <Box align="center">
-                    <Text
-                      size="medium"
-                      weight="medium"
-                      m={0}
-                      mr="5px"
-                      grey={700}
-                    >
+                    <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
                       {format(value)}
                     </Text>
                     <a href="#" target="_blank">
