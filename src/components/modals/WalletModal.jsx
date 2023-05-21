@@ -88,7 +88,7 @@ export default function WalletModal() {
             target="_blank"
             variant="secondary"
             label="Union Governance"
-            href="#"
+            href="https://www.tally.xyz/gov/union"
             icon={External}
           />
         </Modal.Body>
