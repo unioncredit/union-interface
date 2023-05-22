@@ -1,15 +1,10 @@
 import "./DaoSegmentedControl.scss";
 
 import { Link } from "react-router-dom";
-import {
-  GovernanceIcon,
-  LeaderboardIcon,
-  ProtocolIcon,
-  SegmentedControl,
-} from "@unioncredit/ui";
+import { GovernanceIcon, LeaderboardIcon, ProtocolIcon, SegmentedControl } from "@unioncredit/ui";
 import { Links } from "constants";
 
-export const DaoSegmentedControl = ({ value, ...props }) => (
+export const DaoSegmentedControl = ({ value, initialActive, ...props }) => (
   <SegmentedControl
     fluid
     value={value}
@@ -25,22 +20,22 @@ export const DaoSegmentedControl = ({ value, ...props }) => (
         label: "Voting",
         to: Links.GOVERNANCE,
         as: Link,
-        icon: GovernanceIcon,
+        icon: GovernanceIcon
       },
       {
         id: "protocol",
         label: "Protocol",
         to: Links.PROTOCOL,
         as: Link,
-        icon: ProtocolIcon,
+        icon: ProtocolIcon
       },
       {
         id: "leaderboard",
         label: "Leaderboard",
         to: Links.LEADERBOARD,
         as: Link,
-        icon: LeaderboardIcon,
-      },
+        icon: LeaderboardIcon
+      }
     ]}
   />
 );
