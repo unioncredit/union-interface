@@ -41,7 +41,7 @@
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
     "serve": "serve build -l 3000",
-    "lint": "eslint --ext .js,.jsx ."
+    "lint": "eslint --ext .js,.jsx ./src"
   },
   "eslintConfig": {
     "extends": []
