@@ -1,22 +1,18 @@
-import { ContactsType, Links } from "constants";
+import { Links } from "constants";
 
-import ContactsPage from "pages/Contacts";
-import GovernancePage from "pages/Governance";
 import ProposalPage from "pages/Proposal";
 import ProfilePage from "pages/Profile";
 import RegisterPage from "pages/Register";
-import CreditPage from "pages/Credit";
-import StakePage from "pages/Stake";
-import LeaderboardPage from "pages/Leaderboard";
-import ProtocolPage from "pages/Protocol";
+import CreditPages, { PAGES as CREDIT_PAGES } from "pages/CreditPages";
+import DaoPages, { PAGES as DAO_PAGES } from "pages/DaoPages";
 
 // prettier-ignore
 export const member = [
-  { path: "/",                    component: CreditPage,      props: {} },
-  { path: "/stake",               component: StakePage,       props: {} },
-  { path: "/contacts",            component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
-  { path: "/contacts/providing",  component: ContactsPage,    props: { type: ContactsType.VOUCHEES } },
-  { path: "/contacts/receiving",  component: ContactsPage,    props: { type: ContactsType.VOUCHERS } },
+  { path: "/",                    component: CreditPages,     props: { page: CREDIT_PAGES.BORROW } },
+  { path: "/stake",               component: CreditPages,     props: { page: CREDIT_PAGES.STAKE } },
+  { path: "/contacts",            component: CreditPages,     props: { page: CREDIT_PAGES.CONTACTS_PROVIDING } },
+  { path: "/contacts/providing",  component: CreditPages,     props: { page: CREDIT_PAGES.CONTACTS_PROVIDING } },
+  { path: "/contacts/receiving",  component: CreditPages,     props: { page: CREDIT_PAGES.CONTACTS_RECEIVING } },
 ]
 
 // prettier-ignore
@@ -27,8 +23,8 @@ export const nonMember = [
 // prettier-ignore
 export const general = [
   { path: "/profile/:addressOrEns",        component: ProfilePage,      props: {} },
-  { path: Links.GOVERNANCE,                component: GovernancePage,   props: { type: ContactsType.VOUCHERS } },
-  { path: Links.PROTOCOL,                  component: ProtocolPage,     props: {} },
+  { path: Links.GOVERNANCE,                component: DaoPages,   props: { page: DAO_PAGES.VOTING } },
+  { path: Links.PROTOCOL,                  component: DaoPages,     props: { page: DAO_PAGES.PROTOCOL } },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
-  { path: Links.LEADERBOARD,               component: LeaderboardPage,  props: {} },
+  { path: Links.LEADERBOARD,               component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD } },
 ]

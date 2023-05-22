@@ -4,11 +4,9 @@ import {
   Button,
   Card,
   InfoBanner,
-  Layout,
   SwitchIcon,
-  WarningIcon
+  WarningIcon,
 } from "@unioncredit/ui";
-import { DaoSegmentedControl } from "components/shared/DaoSegmentedControl";
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -22,10 +20,6 @@ export default function LeaderboardPage() {
       <Helmet>
         <title>Leaderboard | Union Credit Protocol</title>
       </Helmet>
-
-      <Layout.Columned maxw="653px">
-        <DaoSegmentedControl active={2} />
-      </Layout.Columned>
 
       <Card>
         <Card.Header
@@ -69,7 +63,14 @@ export default function LeaderboardPage() {
               label="Switch to Ethereum Mainnet to view the leaderboard"
             />
 
-            <Button fluid mt="8px" size="large" icon={SwitchIcon} label="Switch to Ethereum" onClick={() => switchNetwork(mainnet.id)} />
+            <Button
+              fluid
+              mt="8px"
+              size="large"
+              icon={SwitchIcon}
+              label="Switch to Ethereum"
+              onClick={() => switchNetwork(mainnet.id)}
+            />
           </Card.Body>
         )}
       </Card>
