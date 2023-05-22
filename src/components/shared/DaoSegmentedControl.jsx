@@ -9,14 +9,16 @@ import {
 } from "@unioncredit/ui";
 import { Links } from "constants";
 
-export const DaoSegmentedControl = ({ active }) => (
+export const DaoSegmentedControl = ({ value, ...props }) => (
   <SegmentedControl
     fluid
+    value={value}
+    initialActive={initialActive}
     m="24px auto"
     size="large"
     variant="rounded"
-    initialActive={active}
     className="DaoSegmentedControl"
+    {...props}
     items={[
       {
         id: "voting",

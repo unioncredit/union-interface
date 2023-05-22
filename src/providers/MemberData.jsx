@@ -30,6 +30,7 @@ const selectMemberData = (data) => {
     votes = ZERO,
     delegate = ZERO_ADDRESS,
     isOverdue = false,
+    rewardsMultiplier = ZERO,
     // Versioned values
     totalFrozenAmount = ZERO,
     borrowerAddresses = [],
@@ -55,6 +56,7 @@ const selectMemberData = (data) => {
     delegate,
     isOverdue,
     minPayment: ZERO,
+    rewardsMultiplier,
   };
 
   if (creditLimit.lt(DUST_THRESHOLD)) {
@@ -158,6 +160,11 @@ export function useMemberData(address, chainId) {
           ...uTokenContract,
           functionName: "checkIsOverdue",
           args: [address],
+        },
+        {
+          ...comptrollerContract,
+          functionName: "getRewardsMultiplier",
+          args: [address, daiContract.address],
         },
         // Versioned values
         ...(version === Versions.V1

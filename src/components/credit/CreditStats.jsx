@@ -145,7 +145,7 @@ export default function CreditStats({ vouchers }) {
             dotColor="amber500"
             value={format(unavailableBalance)}
             titleTooltip={{
-              content: "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time. This could be you borrowing or your vouchers vouched for someone who is borrowing",
+              content: "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time.",
             }}
           />
         </Box>

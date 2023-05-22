@@ -9,14 +9,15 @@ import {
 } from "@unioncredit/ui";
 import { Links } from "constants";
 
-export const CreditSegmentedControl = ({ active }) => (
+export const CreditSegmentedControl = ({ value, ...props }) => (
   <SegmentedControl
     fluid
     m="24px auto"
     size="large"
     variant="rounded"
-    initialActive={active}
+    value={value}
     className="CreditSegmentedControl"
+    {...props}
     items={[
       {
         id: "borrow",

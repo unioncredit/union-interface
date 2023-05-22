@@ -24,9 +24,8 @@ import { Link } from "react-router-dom";
 
 export default function StakeStats() {
   const { open } = useModals();
-  const { data: member } = useMember();
+  const { data: member = {} } = useMember();
   const { data: vouchees = [] } = useVouchees();
-
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
   const withdrawableStake = stakedBalance.sub(totalLockedStake);
