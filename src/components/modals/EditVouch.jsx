@@ -156,7 +156,7 @@ export default function EditVouchModal({
             <Button
               fluid
               mt="4px"
-              label="Update trust"
+              label={`${revokeVouch ? "Revoke" : "Update"} trust`}
               {...(revokeVouch
                 ? cancelVouchButtonProps
                 : updateTrustButtonProps)}
