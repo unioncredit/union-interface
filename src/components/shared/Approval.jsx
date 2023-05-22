@@ -100,7 +100,10 @@ export default function Approval({
       setItems([{ number: 1, status: MultiStep.PENDING }, { number: 2 }]);
     } else if (txButtonProps.loading) {
       // Transaction is loading
-      setItems([{ number: 1 }, { number: 2, status: MultiStep.PENDING }]);
+      setItems([
+        { number: 1, status: MultiStep.COMPLETE },
+        { number: 2, status: MultiStep.PENDING },
+      ]);
     } else if (allowance.gte(amount)) {
       // Allowance has been complete
       setItems([
