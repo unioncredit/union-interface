@@ -161,7 +161,7 @@ const VoucherDetails = ({ voucher }) => {
           mt="16px"
           color="red"
           icon={CancelIcon}
-          label="Cancel vouch"
+          label="Cancel received vouch"
           {...cancelVouchButtonProps}
           disabled={cancelVouchButtonProps.disabled || locking.gt(ZERO)}
         />

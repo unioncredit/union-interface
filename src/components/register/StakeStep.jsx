@@ -71,7 +71,6 @@ export default function StakeStep() {
   const claimTokensButtonProps = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
-    enabled: unionBalance.lt(newMemberFee),
     onComplete: () => refetchMember(),
   });
 
@@ -156,7 +155,7 @@ export default function StakeStep() {
               percentage={percentage}
               {...progressBarProps()}
             />
-            {unionEarned.gte(WAD) && (
+            {unionEarned.gte(newMemberFee) && (
               <Button
                 ml="8px"
                 icon={ClaimIcon}
