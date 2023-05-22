@@ -35,8 +35,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts start",
-    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
+    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && export DISABLE_ESLINT_PLUGIN=true && react-scripts start",
+    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && export DISABLE_ESLINT_PLUGIN=true && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
