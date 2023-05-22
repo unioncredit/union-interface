@@ -14,14 +14,14 @@ export default function VouchFaucetButton() {
     method: "claimVouch",
     contract: "vouchFaucet",
     args: [],
-    onComplete: refetchVouchers,
+    onComplete: refetchVouchers
   });
 
   if (![goerli.id, optimismGoerli.id].includes(chain.id)) {
     return (
       <>
         No frens?{" "}
-        <a href={links?.discord} target="_blank">
+        <a href={links?.discord} target="_blank" rel="noreferrer">
           Try Discord
         </a>
       </>

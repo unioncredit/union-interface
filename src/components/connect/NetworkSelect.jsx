@@ -18,16 +18,14 @@ export default function NetworkSelect() {
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { switchNetworkAsync } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true,
+    throwForSwitchChainNotSupported: true
   });
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
   const allNetworks = useNetworks();
-  const networks = allNetworks.filter(
-    (x) => ![optimismGoerli.id, goerli.id].includes(x.chainId)
-  );
+  const networks = allNetworks.filter((x) => ![optimismGoerli.id, goerli.id].includes(x.chainId));
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
@@ -54,16 +52,10 @@ export default function NetworkSelect() {
       fluid
       direction="vertical"
       className={cn("NetworkSelect", {
-        "NetworkSelect--connected": isConnected,
+        "NetworkSelect--connected": isConnected
       })}
     >
-      <Box
-        fluid
-        align="center"
-        direction="vertical"
-        mb="16px"
-        className="NetworkSelect__networks"
-      >
+      <Box fluid align="center" direction="vertical" mb="16px" className="NetworkSelect__networks">
         {networks.map((network) => (
           <NetworkSelectOption
             key={network.id}
@@ -83,8 +75,8 @@ export default function NetworkSelect() {
         iconProps={{
           style: {
             width: "16px",
-            height: "16px",
-          },
+            height: "16px"
+          }
         }}
         label={
           isConnected
@@ -99,7 +91,7 @@ export default function NetworkSelect() {
       />
 
       <a
-        rel="noopener"
+        rel="noreferrer"
         target="_blank"
         className="NetworkSelect__footerLink"
         href="https://docs.union.finance/user-guides/becoming-a-member"

@@ -14,10 +14,7 @@ export default function Toasts({ children }) {
   const [toasts, setToasts] = useState([]);
   const timers = useRef([]);
 
-  const addToast = (
-    { content, link, variant, title, id },
-    autoClear = true
-  ) => {
+  const addToast = ({ content, link, variant, title, id }, autoClear = true) => {
     setToasts((x) => [...x, { id, content, link, variant, title }]);
 
     if (autoClear) {
@@ -47,6 +44,7 @@ export default function Toasts({ children }) {
       <NotificationStack className="Toasts">
         {toasts.map(({ id, link, title, variant, content }) => (
           <Notification
+            key={id}
             link={link}
             title={title}
             variant={variant}

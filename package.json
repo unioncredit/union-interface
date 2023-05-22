@@ -35,12 +35,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts start",
-    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
+    "start": "export REACT_APP_VERSION=$(git rev-parse HEAD) && export DISABLE_ESLINT_PLUGIN=true && react-scripts start",
+    "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && export DISABLE_ESLINT_PLUGIN=true && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
-    "serve": "serve build -l 3000"
+    "serve": "serve build -l 3000",
+    "lint": "eslint --ext .js,.jsx ."
   },
   "eslintConfig": {
     "extends": []
@@ -56,5 +57,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint": "^8.40.0",
+    "eslint-plugin-react": "^7.32.2"
   }
 }
