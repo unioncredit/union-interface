@@ -45,7 +45,10 @@ export default function BorrowModal() {
     originationFee = ZERO,
     overdueBlocks = ZERO,
     borrowRatePerBlock = ZERO,
+    borrowRatePerSecond = ZERO,
   } = { ...member, ...protocol };
+
+  const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
 
   const validate = (inputs) => {
     if (member.isOverdue) {
@@ -57,13 +60,7 @@ export default function BorrowModal() {
     }
   };
 
-  const {
-    register,
-    setRawValue,
-    values = {},
-    errors = {},
-    empty,
-  } = useForm({ validate });
+  const { register, setRawValue, values = {}, errors = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -75,11 +72,7 @@ export default function BorrowModal() {
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(
-    borrow,
-    borrowRatePerBlock,
-    overdueBlocks
-  );
+  const minPayment = calculateExpectedMinimumPayment(borrow, borrowRatePerBlock, overdueBlocks);
 
   const buttonProps = useWrite({
     contract: "uToken",
@@ -150,7 +143,7 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
+                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
                 )}% APR`,
                 tooltip: {
                   content: "The interest rate accrued over a 12 month borrow period",
@@ -174,7 +167,8 @@ export default function BorrowModal() {
                 label: "Payment due",
                 value: `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
                 tooltip: {
-                  content: "The amount and date of your next minimum payment in order to not enter a default state",
+                  content:
+                    "The amount and date of your next minimum payment in order to not enter a default state",
                 },
               },
             ]}
