@@ -16,5 +16,9 @@ export default function useLabels() {
     return window.localStorage.getItem(getKey(key));
   };
 
-  return { getLabel, setLabel };
+  const removeLabel = (key) => {
+    return window.localStorage.removeItem(getKey(key));
+  };
+
+  return { getLabel, setLabel, removeLabel };
 }

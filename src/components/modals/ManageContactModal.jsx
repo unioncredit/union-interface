@@ -44,11 +44,7 @@ export default function ManageContactModal({
     <ModalOverlay onClick={handleClose}>
       <Modal className="ManageContactModal">
         <Modal.Header onClose={handleClose} noHeight hideClose>
-          <Box
-            fluid
-            justify="space-between"
-            className="ManageContactModal__navigation"
-          >
+          <Box fluid justify="space-between" className="ManageContactModal__navigation">
             <Box>
               <Button onClick={handleClose} icon={CloseIcon} />
               <Text>
@@ -57,11 +53,7 @@ export default function ManageContactModal({
             </Box>
 
             <Box>
-              <Button
-                icon={ArrowLeftIcon}
-                onClick={prevContact}
-                disabled={contactIndex <= 0}
-              />
+              <Button icon={ArrowLeftIcon} onClick={prevContact} disabled={contactIndex <= 0} />
               <Button
                 onClick={nextContact}
                 icon={ArrowRightIcon}
@@ -70,7 +62,7 @@ export default function ManageContactModal({
             </Box>
           </Box>
 
-          <AddressSummary m={0} address={address} />
+          <AddressSummary m={0} address={address} allowEdit />
         </Modal.Header>
         <Modal.Body>
           <SegmentedControl
@@ -93,9 +85,7 @@ export default function ManageContactModal({
             />
           )}
 
-          {activeTab === TABS.ACTIVITY && (
-            <TransactionHistory staker={address} pageSize={5} />
-          )}
+          {activeTab === TABS.ACTIVITY && <TransactionHistory staker={address} pageSize={5} />}
         </Modal.Body>
       </Modal>
     </ModalOverlay>
