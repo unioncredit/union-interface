@@ -43,7 +43,7 @@ export default function ManageContactModal({
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="ManageContactModal">
-        <Modal.Header onClose={handleClose} noHeight>
+        <Modal.Header onClose={handleClose} noHeight hideClose>
           <Box
             fluid
             justify="space-between"
