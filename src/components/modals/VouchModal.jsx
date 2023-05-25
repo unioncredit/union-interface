@@ -23,6 +23,7 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
+import { useVersion } from "providers/Version";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -34,6 +35,7 @@ export default function VouchModal({
   showAddressSummary = true,
   address: initialAddress = null,
 }) {
+  const { isV2 } = useVersion();
   const { close } = useModals();
 
   const { refetch: refetchMember } = useMember();
@@ -73,9 +75,7 @@ export default function VouchModal({
       <Modal className="VouchModal">
         <Modal.Header onClose={handleClose} title={title} subTitle={subTitle} />
         <Modal.Body>
-          {address && showAddressSummary && (
-            <AddressSummary address={address} />
-          )}
+          {address && showAddressSummary && <AddressSummary address={address} />}
           <AddressInput
             defaultValue={initialAddress}
             label="Address or ENS of recipient"
@@ -118,32 +118,36 @@ export default function VouchModal({
                     label: "Time to default",
                     value: "30 days",
                     tooltip: {
-                      content: "How long an account can go without making at least a minimum payment",
-                    }
+                      content:
+                        "How long an account can go without making at least a minimum payment",
+                    },
                   },
                   {
                     label: "Time to write-off",
                     value: "90 days",
                     tooltip: {
-                      content: "Time an account can be in default until it can be publicly written-off",
-                    }
+                      content:
+                        "Time an account can be in default until it can be publicly written-off",
+                    },
                   },
                 ]}
               />
             </>
           )}
 
-          <ExpandingInfo
-            mt="16px"
-            icon={WarningIcon}
-            title="Vouching puts your staked funds at risk"
-          >
-            <Text m={0}>
-              If an account you vouch for doesn't pay the minimum due within 30
-              days, they'll be in a defaulted state. If they stay that way for
-              90 days, your stake could be lost permanently to cover their debt.
-            </Text>
-          </ExpandingInfo>
+          {isV2 && (
+            <ExpandingInfo
+              mt="16px"
+              icon={WarningIcon}
+              title="Vouching puts your staked funds at risk"
+            >
+              <Text m={0}>
+                If an account you vouch for doesn't pay the minimum due within 30 days, they'll be
+                in a defaulted state. If they stay that way for 90 days, your stake could be lost
+                permanently to cover their debt.
+              </Text>
+            </ExpandingInfo>
+          )}
 
           {newMember ? (
             <>
