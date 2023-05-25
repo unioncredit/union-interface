@@ -11,7 +11,7 @@ import {
   NumericalRows,
   Text,
   Tooltip,
-  VouchIcon,
+  VouchIcon
 } from "@unioncredit/ui";
 import useWrite from "hooks/useWrite";
 import { useAccount } from "wagmi";
@@ -33,7 +33,7 @@ export function ContactDetailsTab({
   prevContact,
   contactIndex,
   contactsCount,
-  clearContact,
+  clearContact
 }) {
   const { open } = useModals();
 
@@ -41,11 +41,8 @@ export function ContactDetailsTab({
   const voucher = useVoucher(address);
 
   return (
-    <>
-      <CreditDetailsHeader
-        title="You're providing"
-        type={ContactsType.VOUCHERS}
-      />
+    <div className="ContactDetailsTab">
+      <CreditDetailsHeader title="You're providing" type={ContactsType.VOUCHERS} />
       <div className="container">
         {vouchee ? (
           <VoucheeDetails
@@ -80,10 +77,7 @@ export function ContactDetailsTab({
         )}
       </div>
 
-      <CreditDetailsHeader
-        title="You're receiving"
-        type={ContactsType.VOUCHEES}
-      />
+      <CreditDetailsHeader title="You're receiving" type={ContactsType.VOUCHEES} />
       <div className="container">
         {voucher ? (
           <VoucherDetails voucher={voucher} />
@@ -95,7 +89,7 @@ export function ContactDetailsTab({
           </Modal.Container>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -103,12 +97,7 @@ const VoucherDetails = ({ voucher }) => {
   const navigate = useNavigate();
 
   const { address: borrowerAddress } = useAccount();
-  const {
-    address: stakerAddress,
-    trust = ZERO,
-    vouch = ZERO,
-    locking = ZERO,
-  } = voucher;
+  const { address: stakerAddress, trust = ZERO, vouch = ZERO, locking = ZERO } = voucher;
 
   const cancelVouchButtonProps = useWrite({
     contract: "userManager",
@@ -117,7 +106,7 @@ const VoucherDetails = ({ voucher }) => {
     enabled: locking.lte(ZERO),
     onComplete: async () => {
       navigate(0); // reload page
-    },
+    }
   });
 
   return (
@@ -128,25 +117,23 @@ const VoucherDetails = ({ voucher }) => {
             label: "Trust amount",
             value: `${format(trust)} DAI`,
             tooltip: {
-              content: "Trust set for you by this contact",
-            },
+              content: "Trust set for you by this contact"
+            }
           },
           {
             label: "Vouch you receive",
             value: `${format(vouch)} DAI`,
             tooltip: {
-              content:
-                "The max vouch you would receive based on their total stake",
-            },
+              content: "The max vouch you would receive based on their total stake"
+            }
           },
           {
             label: "Available to you",
             value: `${format(vouch.sub(locking))} DAI`,
             tooltip: {
-              content:
-                "The amount currently available to borrow via this contacts unlocked stake",
-            },
-          },
+              content: "The amount currently available to borrow via this contacts unlocked stake"
+            }
+          }
         ]}
       />
 
@@ -177,7 +164,7 @@ const VoucheeDetails = ({
   prevContact,
   contactIndex,
   contactsCount,
-  clearContact,
+  clearContact
 }) => {
   const { address: voucheeAddress } = vouchee;
   const { open } = useModals();
@@ -189,11 +176,10 @@ const VoucheeDetails = ({
     vouch = ZERO,
     lastRepay = ZERO,
     minPayment = ZERO,
-    isOverdue,
+    isOverdue
   } = { ...vouchee, ...memberData };
 
-  const { paymentDue, relative: lastRepayRelative } =
-    useLastRepayData(lastRepay);
+  const { paymentDue, relative: lastRepayRelative } = useLastRepayData(lastRepay);
 
   const stats = [
     {
@@ -208,9 +194,9 @@ const VoucheeDetails = ({
             prevContact,
             contactIndex,
             contactsCount,
-            clearContact,
-          }),
-      },
+            clearContact
+          })
+      }
     },
     {
       title: "Owes you",
@@ -226,11 +212,11 @@ const VoucheeDetails = ({
             prevContact,
             contactIndex,
             contactsCount,
-            clearContact,
+            clearContact
           });
-        },
-      },
-    },
+        }
+      }
+    }
   ];
 
   return (
@@ -245,20 +231,9 @@ const VoucheeDetails = ({
             justify="space-between"
             className="ContactDetailsTab__stat"
           >
-            <NumericalBlock
-              size="x-small"
-              title={title}
-              value={value}
-              token="dai"
-              align="left"
-            />
+            <NumericalBlock size="x-small" title={title} value={value} token="dai" align="left" />
 
-            <Button
-              size="pill"
-              variant="light"
-              color="secondary"
-              {...buttonProps}
-            />
+            <Button size="pill" variant="light" color="secondary" {...buttonProps} />
           </Modal.Container>
         ))}
       </Box>
@@ -271,23 +246,23 @@ const VoucheeDetails = ({
             value: `${format(vouch)} DAI`,
             tooltip: {
               content:
-                "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
-            },
+                "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting"
+            }
           },
           {
             label: "Available to borrow",
             value: `${format(vouch.sub(locking))} DAI`,
             tooltip: {
               content:
-                "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
-            },
+                "The amount this contact can borrow accounting for outstanding borrows from them and other contacts"
+            }
           },
           {
             label: "Last payment made",
             value: lastRepayRelative,
             tooltip: {
-              content: "The last time a payment was made by this contact",
-            },
+              content: "The last time a payment was made by this contact"
+            }
           },
           {
             label: "Payment due",
@@ -298,9 +273,9 @@ const VoucheeDetails = ({
                 ? `${format(minPayment)} DAI - ${paymentDue.formatted} ago`
                 : `${format(minPayment)} DAI in ${paymentDue.formatted}`,
             tooltip: {
-              content: "Amount and time until their next minimum payment",
-            },
-          },
+              content: "Amount and time until their next minimum payment"
+            }
+          }
         ]}
       />
     </>
