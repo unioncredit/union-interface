@@ -9,6 +9,7 @@ import {
   Text,
   Box,
   UnionIcon,
+  MobileProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -23,25 +24,22 @@ import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
 import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
+import useResponsive from "hooks/useResponsive";
 
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
   const { data: member = {} } = useMember();
-  const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakedBalance?.gt(ZERO)
-  );
+  const { isTablet } = useResponsive();
+
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance?.gt(ZERO));
 
   const stakeStep = useRef();
   const vouchStep = useRef();
   const memberStep = useRef();
 
-  const {
-    isMember = false,
-    unionBalance = ZERO,
-    unclaimedRewards = ZERO,
-  } = member;
+  const { isMember = false, unionBalance = ZERO, unclaimedRewards = ZERO } = member;
 
   const getNumberOfTasksCompleted = () => {
     let completed = 0;
@@ -60,8 +58,13 @@ export default function RegisterPage() {
   };
 
   const vouchComplete = vouchers.length > 0;
-  const stakeComplete =
-    isMember || unionBalance?.add(unclaimedRewards).gte(WAD);
+  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(WAD);
+
+  const items = [
+    { number: 1, complete: stakeComplete, scrollTo: stakeStep },
+    { number: 2, complete: vouchComplete, anchor: "second", scrollTo: vouchStep },
+    { number: 3, complete: isMember, anchor: "third", scrollTo: memberStep },
+  ];
 
   return (
     <>
@@ -77,6 +80,12 @@ export default function RegisterPage() {
             <Text m={0} grey={500} size="medium">
               {getNumberOfTasksCompleted()} of 3 tasks completed
             </Text>
+
+            {isTablet && (
+              <div style={{ zIndex: 1, position: "fixed", bottom: "24px", left: "24px" }}>
+                <MobileProgressList items={items} />
+              </div>
+            )}
 
             <ProgressList mt="24px">
               <ProgressListItem number={1} complete={stakeComplete}>
@@ -97,16 +106,12 @@ export default function RegisterPage() {
                         Join the network
                       </Heading>
                       <Text grey={500} size="medium">
-                        Once you’ve completed the two previous steps, pay the 1
-                        UNION fee to officially join the network as a Union
-                        member and unlock the full Union experience.
+                        Once you’ve completed the two previous steps, pay the 1 UNION fee to
+                        officially join the network as a Union member and unlock the full Union
+                        experience.
                       </Text>
 
-                      <Box
-                        mt="16px"
-                        className="Register__container"
-                        justify="center"
-                      >
+                      <Box mt="16px" className="Register__container" justify="center">
                         <Box w="380px" direction="vertical" align="center">
                           <Box className="Register__fee" align="center">
                             <Text size="large" grey={700} m={0} weight="medium">
@@ -120,9 +125,7 @@ export default function RegisterPage() {
                             Membership fee is permanently burned
                           </Text>
 
-                          <RegisterButton
-                            onComplete={() => open(WELCOME_MODAL)}
-                          />
+                          <RegisterButton onComplete={() => open(WELCOME_MODAL)} />
                         </Box>
                       </Box>
                     </Card.Body>
