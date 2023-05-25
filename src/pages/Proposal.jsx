@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
@@ -96,39 +95,36 @@ export default function ProposalPage() {
             </Box>
             <Box direction="vertical" mt="24px" mb="24px">
               <Heading level={3}>Details</Heading>
-              {targets.map((target, i) => {
-                const signature = signatures[i];
-                const calldata = calldatas[i];
+              <ol>
+                {targets.map((target, i) => {
+                  const signature = signatures[i];
+                  const calldata = calldatas[i];
 
-                const args = signature
-                  .match(/\((.*?)\)/)?.[0]
-                  .replace("(", "")
-                  .replace(")", "")
-                  .split(",");
+                  const args = signature
+                    .match(/\((.*?)\)/)?.[0]
+                    .replace("(", "")
+                    .replace(")", "")
+                    .split(",");
 
-                const decoded = args && calldata && defaultAbiCoder.decode(args, calldata);
-                const argumentString = decoded && decoded.map((item) => item.toString()).join(",");
+                  const decoded = args && calldata && defaultAbiCoder.decode(args, calldata);
+                  const argumentString =
+                    decoded && decoded.map((item) => item.toString()).join(",");
 
-                return (
-                  <Fragment key={`${target}${signature}${calldata}`}>
-                    <Text
-                      as="a"
-                      w="100%"
-                      m={0}
-                      grey={500}
-                      href={"#"}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ wordWrap: "break-word" }}
+                  return (
+                    <li
+                      style={{ listStyle: "decimal", marginLeft: "20px" }}
+                      key={`${target}${signature}${calldata}`}
                     >
-                      Contract: {target}
-                    </Text>
-                    <Text w="100%" weight="medium" style={{ wordWrap: "break-word" }}>
-                      Function: {signature.replace(/(\(=?)(.*)$/, "")}({argumentString})
-                    </Text>
-                  </Fragment>
-                );
-              })}
+                      <Text w="100%" m={0} style={{ wordWrap: "break-word" }}>
+                        Contract: {target}
+                      </Text>
+                      <Text grey={500} w="100%" weight="medium" style={{ wordWrap: "break-word" }}>
+                        Function: {signature.replace(/(\(=?)(.*)$/, "")}({argumentString})
+                      </Text>
+                    </li>
+                  );
+                })}
+              </ol>
             </Box>
             <Box direction="vertical" mt="24px">
               <Heading level={3}>Description</Heading>
