@@ -23,7 +23,7 @@ export default function ProposalPage() {
     targets = [],
     signatures = [],
     calldatas = [],
-    history = []
+    history = [],
   } = proposal;
 
   const title =
@@ -61,7 +61,7 @@ export default function ProposalPage() {
                         height="24px"
                         className="flip"
                         style={{
-                          marginRight: "4px"
+                          marginRight: "4px",
                         }}
                       />
                       Back to proposals
@@ -94,26 +94,6 @@ export default function ProposalPage() {
                 <Button size="pill" label="View bytecode" />
               </a>
             </Box>
-            <Box direction="vertical" mt="24px">
-              <Heading level={3}>Description</Heading>
-              <ReactMarkdown
-                renderers={{
-                  link: (props) => (
-                    <Link to={props.href}>
-                      <Text as="a" {...props} color="blue600" />
-                    </Link>
-                  ),
-                  heading: (props) => (
-                    <Text size="large" weight="medium" grey={800} {...props} mb="8px" mt="24px" />
-                  ),
-                  paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
-                  listItem: (props) => <Text grey={500} as="li" {...props} />
-                }}
-              >
-                {description}
-              </ReactMarkdown>
-            </Box>
-
             <Box direction="vertical" mt="24px" mb="24px">
               <Heading level={3}>Details</Heading>
               {targets.map((target, i) => {
@@ -149,6 +129,25 @@ export default function ProposalPage() {
                   </Fragment>
                 );
               })}
+            </Box>
+            <Box direction="vertical" mt="24px">
+              <Heading level={3}>Description</Heading>
+              <ReactMarkdown
+                renderers={{
+                  link: (props) => (
+                    <Link to={props.href}>
+                      <Text as="a" {...props} color="blue600" />
+                    </Link>
+                  ),
+                  heading: (props) => (
+                    <Text size="large" weight="medium" grey={800} {...props} mb="8px" mt="24px" />
+                  ),
+                  paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
+                  listItem: (props) => <Text grey={500} as="li" {...props} />,
+                }}
+              >
+                {description}
+              </ReactMarkdown>
             </Box>
           </Grid.Col>
           <Grid.Col md={4}>
