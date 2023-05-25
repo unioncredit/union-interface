@@ -8,10 +8,7 @@ import { filterFunctions } from "components/contacts/FiltersPopover";
 import usePagination from "hooks/usePagination";
 import useContactSearch from "hooks/useContactSearch";
 import { locationSearch } from "utils/location";
-import {
-  ContactsFilterControls,
-  ContactsTypeToggle,
-} from "components/contacts/ContactsTable";
+import { ContactsFilterControls, ContactsTypeToggle } from "components/contacts/ContactsTable";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import { DesktopContactsTable } from "components/contacts/ContactsTable/DesktopContactsTable";
@@ -61,10 +58,8 @@ const sortFns = {
     [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
-    [SortOrder.ASC]: (a, b) =>
-      a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
-    [SortOrder.DESC]: (a, b) =>
-      b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking)),
+    [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking)),
   },
 };
 
@@ -92,16 +87,12 @@ export default function ContactList({ initialType }) {
 
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
-    return urlSearchParams.has("filters")
-      ? urlSearchParams.get("filters").split(",")
-      : [];
+    return urlSearchParams.has("filters") ? urlSearchParams.get("filters").split(",") : [];
   });
 
   const setContact = (contact) => {
     setContactIndex(
-      filteredAndSorted.findIndex((c) =>
-        compareAddresses(contact.address, c.address)
-      )
+      filteredAndSorted.findIndex((c) => compareAddresses(contact.address, c.address))
     );
   };
 
@@ -152,9 +143,7 @@ export default function ContactList({ initialType }) {
           ...vouchers
             .filter(
               (voucher) =>
-                !vouchees.find((vouchee) =>
-                  compareAddresses(vouchee.address, voucher.address)
-                )
+                !vouchees.find((vouchee) => compareAddresses(vouchee.address, voucher.address))
             )
             .map(({ address }) => ({
               address,
@@ -170,9 +159,7 @@ export default function ContactList({ initialType }) {
           ...vouchees
             .filter(
               (vouchee) =>
-                !vouchers.find((voucher) =>
-                  compareAddresses(voucher.address, vouchee.address)
-                )
+                !vouchers.find((voucher) => compareAddresses(voucher.address, vouchee.address))
             )
             .map(({ address }) => ({
               address,
@@ -191,9 +178,7 @@ export default function ContactList({ initialType }) {
   const filteredAndSorted = useMemo(() => {
     const filtered = filters
       ? searched.filter((item) =>
-          filters
-            .map((filter) => filterFunctions[filter](item))
-            .every((x) => x === true)
+          filters.map((filter) => filterFunctions[filter](item)).every((x) => x === true)
         )
       : searched;
 
@@ -210,24 +195,15 @@ export default function ContactList({ initialType }) {
 
     setSort({
       ...sort,
-      order: !sort.order
-        ? SortOrder.DESC
-        : sort.order === SortOrder.DESC
-        ? SortOrder.ASC
-        : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
     });
   };
 
-  const {
-    data: contactsPage,
-    maxPages,
-    activePage,
-    onChange,
-  } = usePagination(filteredAndSorted);
+  const { data: contactsPage, maxPages, activePage, onChange } = usePagination(filteredAndSorted);
 
   return (
     <Card className="ContactList" overflow="visible">
-      <Box className="ContactList__header" p="24px">
+      <Box className="ContactList__header" p="24px" align="center">
         <ContactsTypeToggle
           type={type}
           setType={(t) => {

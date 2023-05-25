@@ -10,7 +10,7 @@
   }
 }
 
-@media screen and (max-width: $breakpoint-mobile) {
+@media screen and (max-width: $breakpoint-tablet) {
   .ContactList {
     &__header {
       padding: 16px !important;
