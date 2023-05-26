@@ -36,17 +36,9 @@ export const COLUMNS = {
 };
 
 export function ProvidingTableRow({ data, active, setContact, receiving }) {
-  const {
-    address,
-    isOverdue,
-    locking = ZERO,
-    trust = ZERO,
-    vouch = ZERO,
-    lastRepay = ZERO,
-  } = data;
+  const { address, isOverdue, locking = ZERO, trust = ZERO, vouch = ZERO, lastRepay = ZERO } = data;
 
-  const { formatted: lastRepayFormatted, paymentDue } =
-    useLastRepayData(lastRepay);
+  const { formatted: lastRepayFormatted, paymentDue } = useLastRepayData(lastRepay);
 
   const Icon = receiving ? BothRow : ProvidingRow;
 
@@ -79,7 +71,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
           dimmed={locking.eq(ZERO)}
           value={`${format(locking)} DAI`}
           className={cn({
-            "table-cell--overdue": isOverdue && locking.gt(ZERO)
+            "table-cell--overdue": isOverdue && locking.gt(ZERO),
           })}
         />
       ),
@@ -108,7 +100,9 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
       ...COLUMNS.LOAN_STATUS,
       value: (
         <TableCell key={COLUMNS.LOAN_STATUS.id} align="right">
-          <StatusBadge address={address} />
+          <Box justify="flex-end" minw="120px">
+            <StatusBadge address={address} />
+          </Box>
         </TableCell>
       ),
     },
