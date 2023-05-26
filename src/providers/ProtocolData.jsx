@@ -38,12 +38,7 @@ export const useProtocolData = (chainId) => {
     },
   ];
 
-  const userManagerFunctionNames = [
-    "maxStakeAmount",
-    "newMemberFee",
-    "totalStaked",
-    "totalFrozen",
-  ];
+  const userManagerFunctionNames = ["maxStakeAmount", "newMemberFee", "totalStaked", "totalFrozen"];
 
   const uTokenFunctionNames = [
     "reserveFactorMantissa",
@@ -79,6 +74,14 @@ export const useProtocolData = (chainId) => {
   const timelockFunctionNames = ["getMinDelay"];
 
   const unionTokenFunctionNames = ["totalSupply"];
+
+  const v2Functions = [
+    {
+      ...userManagerContract,
+      functionName: "maxOverdueTime",
+      chainId,
+    },
+  ];
 
   const contracts = [
     ...buildContractConfigs(assetManagerContract, assetManagerCalls, chainId),
@@ -116,6 +119,7 @@ export const useProtocolData = (chainId) => {
       unionTokenFunctionNames.map((n) => ({ functionName: n })),
       chainId
     ),
+    ...(version === Versions.V2 ? v2Functions : []),
   ];
 
   const resp = useContractReads({
@@ -129,10 +133,8 @@ export const useProtocolData = (chainId) => {
         ...(isMainnet ? governorFunctionsNames : []),
         ...(isMainnet ? timelockFunctionNames : []),
         ...unionTokenFunctionNames,
-      ].reduce(
-        (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
-        {}
-      ),
+        ...(version === Versions.V2 ? v2Functions.map((f) => f.functionName) : []),
+      ].reduce((acc, functionName, i) => ({ ...acc, [functionName]: data[i] }), {}),
     contracts: contracts,
   });
 
@@ -164,9 +166,5 @@ export default function ProtocolData({ children }) {
 
   const { data } = useProtocolData(chainId);
 
-  return (
-    <ProtocolContext.Provider value={{ data }}>
-      {children}
-    </ProtocolContext.Provider>
-  );
+  return <ProtocolContext.Provider value={{ data }}>{children}</ProtocolContext.Provider>;
 }
