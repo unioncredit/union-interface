@@ -19,7 +19,7 @@ const versionSupport = {
 };
 
 export function isVersionSupported(version, chainId) {
-  return versionSupport[version].includes(chainId);
+  return versionSupport[version]?.includes(chainId);
 }
 
 export function getVersion(chainId) {
