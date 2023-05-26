@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Text, Layout, Grid } from "@unioncredit/ui";
+import { Box, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -24,6 +24,8 @@ import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
+import { BuildInfo } from "components/shared/BuildInfo";
+import LoadingPage from "pages/Loading";
 
 /**
  * Shim component that checks if the App is ready
@@ -71,7 +73,7 @@ function AppReadyShim({ children }) {
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
-    JSON.stringify(chain)
+    JSON.stringify(chain),
   ]);
 
   return <>{children}</>;
@@ -123,24 +125,27 @@ export default function App() {
                       <ModalManager>
                         <AppReadyShim>
                           <Header />
-
-                          <Grid style={{ display: "flex", flexGrow: 1 }}>
-                            <Grid.Row style={{ width: "100%", margin: 0 }}>
-                              <Grid.Col>
-                                {appReady ? (
-                                  <>
-                                    <ErrorBoundary FallbackComponent={ErrorPage}>
-                                      <Layout.Columned>
-                                        <Routes />
-                                      </Layout.Columned>
-                                    </ErrorBoundary>
-                                  </>
-                                ) : (
-                                  <ConnectPage />
-                                )}
-                              </Grid.Col>
-                            </Grid.Row>
-                          </Grid>
+                          {isVersionSupported(version, chain.id) ? (
+                            <Grid style={{ display: "flex", flexGrow: 1 }}>
+                              <Grid.Row style={{ width: "100%", margin: 0 }}>
+                                <Grid.Col>
+                                  {appReady ? (
+                                    <>
+                                      <ErrorBoundary FallbackComponent={ErrorPage}>
+                                        <Layout.Columned>
+                                          <Routes />
+                                        </Layout.Columned>
+                                      </ErrorBoundary>
+                                    </>
+                                  ) : (
+                                    <ConnectPage />
+                                  )}
+                                </Grid.Col>
+                              </Grid.Row>
+                            </Grid>
+                          ) : (
+                            <LoadingPage />
+                          )}
                         </AppReadyShim>
                       </ModalManager>
                     </VoucheesData>
@@ -151,12 +156,7 @@ export default function App() {
           </Cache>
         </Settings>
         <Box mt="56px" mb="24px" w="100%">
-          <Box justify="center" fluid>
-            <Text size="small" grey={300} align="center">
-              {/* eslint-disable-next-line no-undef */}
-              Build: {process.env.REACT_APP_VERSION}
-            </Text>
-          </Box>
+          <BuildInfo />
         </Box>
       </Layout.Main>
     </Layout>

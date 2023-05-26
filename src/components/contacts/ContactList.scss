@@ -1,6 +1,16 @@
 @import "@unioncredit/ui/src/variables";
 
-@media screen and (max-width: $breakpoint-mobile) {
+.ContactList {
+  .table-head {
+    color: $zinc700;
+  }
+
+  .SegmentedControl__item--slider {
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.15), 0px 0px 1px 0.5px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+@media screen and (max-width: $breakpoint-tablet) {
   .ContactList {
     &__header {
       padding: 16px !important;
