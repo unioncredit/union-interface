@@ -25,6 +25,7 @@ import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
 import { BuildInfo } from "components/shared/BuildInfo";
+import LoadingPage from "pages/Loading";
 
 /**
  * Shim component that checks if the App is ready
@@ -72,7 +73,7 @@ function AppReadyShim({ children }) {
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
-    JSON.stringify(chain)
+    JSON.stringify(chain),
   ]);
 
   return <>{children}</>;
@@ -124,24 +125,27 @@ export default function App() {
                       <ModalManager>
                         <AppReadyShim>
                           <Header />
-
-                          <Grid style={{ display: "flex", flexGrow: 1 }}>
-                            <Grid.Row style={{ width: "100%", margin: 0 }}>
-                              <Grid.Col>
-                                {appReady ? (
-                                  <>
-                                    <ErrorBoundary FallbackComponent={ErrorPage}>
-                                      <Layout.Columned>
-                                        <Routes />
-                                      </Layout.Columned>
-                                    </ErrorBoundary>
-                                  </>
-                                ) : (
-                                  <ConnectPage />
-                                )}
-                              </Grid.Col>
-                            </Grid.Row>
-                          </Grid>
+                          {isVersionSupported(version, chain.id) ? (
+                            <Grid style={{ display: "flex", flexGrow: 1 }}>
+                              <Grid.Row style={{ width: "100%", margin: 0 }}>
+                                <Grid.Col>
+                                  {appReady ? (
+                                    <>
+                                      <ErrorBoundary FallbackComponent={ErrorPage}>
+                                        <Layout.Columned>
+                                          <Routes />
+                                        </Layout.Columned>
+                                      </ErrorBoundary>
+                                    </>
+                                  ) : (
+                                    <ConnectPage />
+                                  )}
+                                </Grid.Col>
+                              </Grid.Row>
+                            </Grid>
+                          ) : (
+                            <LoadingPage />
+                          )}
                         </AppReadyShim>
                       </ModalManager>
                     </VoucheesData>
