@@ -6,6 +6,7 @@ export const ContactsTypeToggle = ({ type, setType, clearFilters }) => (
   <Box fluid>
     <SegmentedControl
       value={type}
+      className="ContactList__toggle"
       initialActive={type === ContactsType.VOUCHEES ? 0 : 1}
       onChange={(tab) => {
         setType(tab.id);
