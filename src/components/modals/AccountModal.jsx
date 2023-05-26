@@ -8,13 +8,13 @@ import {
   Heading,
   Badge,
   ButtonRow,
-  Divider,
+  Card,
   Text,
   LinkOutIcon,
   DisconnectWalletIcon,
-  IdentityIcon,
   SuccessIcon,
-  FailedIcon
+  FailedIcon,
+  ProfileIcon,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 
@@ -62,7 +62,7 @@ export default function AccountModal() {
               />
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-                <LinkOutIcon width="12px" />
+                <LinkOutIcon width="24px" />
               </a>
             </Box>
           </Box>
@@ -74,7 +74,7 @@ export default function AccountModal() {
                 variant="light"
                 color="secondary"
                 label="View Profile"
-                icon={IdentityIcon}
+                icon={ProfileIcon}
               />
             </Link>
 
@@ -91,9 +91,11 @@ export default function AccountModal() {
               }}
             />
           </ButtonRow>
-          <Divider my="24px" />
-          <Box justify="space-between" align="center" mb="12px">
-            <Text size="medium" weight="medium" grey={700}>
+        </Modal.Body>
+
+        <Card.Footer direction="vertical" fluid>
+          <Box fluid justify="space-between" align="center" mb="12px">
+            <Text m={0} size="medium" weight="medium" grey={700}>
               Wallet Activity
             </Text>
             <Button
@@ -137,7 +139,7 @@ export default function AccountModal() {
               ))
             )}
           </Box>
-        </Modal.Body>
+        </Card.Footer>
       </Modal>
     </ModalOverlay>
   );
