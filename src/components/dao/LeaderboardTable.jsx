@@ -1,13 +1,6 @@
 import "./LeaderboardTable.scss";
 
-import {
-  Table,
-  TableRow,
-  Pagination,
-  EmptyState,
-  TableHead,
-  Card,
-} from "@unioncredit/ui";
+import { Table, TableRow, Pagination, EmptyState, TableHead, Card } from "@unioncredit/ui";
 import usePagination from "hooks/usePagination";
 import { LeaderboardTableRow } from "components/dao/LeaderboardTableRow";
 import { useState } from "react";
@@ -58,10 +51,7 @@ export function LeaderboardTable({ pageSize = 15 }) {
     maxPages,
     activePage,
     onChange,
-  } = usePagination(
-    sort.type ? data.sort(columns[sort.type].sort[sort.order]) : data,
-    pageSize
-  );
+  } = usePagination(sort.type ? data.sort(columns[sort.type].sort[sort.order]) : data, pageSize);
 
   if (voters.length <= 0) {
     return (
@@ -81,11 +71,7 @@ export function LeaderboardTable({ pageSize = 15 }) {
 
     setSort({
       ...sort,
-      order: !sort.order
-        ? SortOrder.DESC
-        : sort.order === SortOrder.DESC
-        ? SortOrder.ASC
-        : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
     });
   };
 

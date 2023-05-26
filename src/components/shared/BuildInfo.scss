@@ -1,0 +1,13 @@
+@import "@unioncredit/ui/src/variables";
+
+.BuildInfo {
+  flex-wrap: wrap;
+
+  a {
+    margin-bottom: 4px;
+
+    &:hover {
+      color: $grey700;
+    }
+  }
+}

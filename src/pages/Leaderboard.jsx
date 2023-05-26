@@ -1,20 +1,8 @@
 import { Helmet } from "react-helmet";
-import {
-  ArrowRightIcon,
-  Button,
-  Card,
-  InfoBanner,
-  SwitchIcon,
-  WarningIcon,
-} from "@unioncredit/ui";
+import { ArrowRightIcon, Button, Card } from "@unioncredit/ui";
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
-import { useNetwork, useSwitchNetwork } from "wagmi";
-import { mainnet } from "wagmi/chains";
 
 export default function LeaderboardPage() {
-  const { chain } = useNetwork();
-  const { switchNetwork } = useSwitchNetwork();
-
   return (
     <>
       <Helmet>
@@ -50,29 +38,7 @@ export default function LeaderboardPage() {
           }
         />
 
-        {chain.id === mainnet.id ? (
-          <LeaderboardTable />
-        ) : (
-          <Card.Body>
-            <InfoBanner
-              justify="space-between"
-              align="left"
-              icon={WarningIcon}
-              iconPosition="right"
-              variant="warning"
-              label="Switch to Ethereum Mainnet to view the leaderboard"
-            />
-
-            <Button
-              fluid
-              mt="8px"
-              size="large"
-              icon={SwitchIcon}
-              label="Switch to Ethereum"
-              onClick={() => switchNetwork(mainnet.id)}
-            />
-          </Card.Body>
-        )}
+        <LeaderboardTable />
       </Card>
     </>
   );

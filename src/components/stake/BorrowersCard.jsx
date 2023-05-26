@@ -1,3 +1,5 @@
+import "./BorrowersCard.scss";
+
 import {
   Table,
   Card,
@@ -7,7 +9,7 @@ import {
   TableCell,
   TableHead,
   Box,
-  Text,
+  Text
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
 
@@ -17,9 +19,11 @@ import usePagination from "hooks/usePagination";
 import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
 import { ZERO } from "constants";
+import useResponsive from "hooks/useResponsive";
 
 export default function BorrowersCard() {
   const navigate = useNavigate();
+  const { isMicro } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
 
   const borrowers = vouchees
@@ -34,15 +38,10 @@ export default function BorrowersCard() {
       }
     });
 
-  const {
-    data: borrowersPage,
-    maxPages,
-    activePage,
-    onChange,
-  } = usePagination(borrowers);
+  const { data: borrowersPage, maxPages, activePage, onChange } = usePagination(borrowers);
 
   return (
-    <Card mt="24px">
+    <Card mt="24px" className="BorrowersCard">
       <Card.Header
         title="Active borrowers"
         subTitle="Contacts actively borrowing against your stake"
@@ -53,12 +52,12 @@ export default function BorrowersCard() {
           <EmptyState label="No borrowers" />
         </Card.Body>
       ) : (
-        <Table>
+        <Table className="BorrowersCard__table">
           <TableRow>
             <TableHead></TableHead>
             <TableHead>Account</TableHead>
             <TableHead align="center">Status</TableHead>
-            <TableHead align="right">Balance owed (DAI)</TableHead>
+            <TableHead align="right">{isMicro ? "Owed (DAI)" : "Balance owed (DAI)"}</TableHead>
           </TableRow>
           {borrowersPage.map(({ address, locking }) => (
             <TableRow

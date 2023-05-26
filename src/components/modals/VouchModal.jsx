@@ -23,7 +23,10 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
+import { BlockSpeed, SECONDS_PER_DAY, ZERO } from "constants";
 import { useVersion } from "providers/Version";
+import { useProtocol } from "providers/ProtocolData";
+import { useNetwork } from "wagmi";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -37,7 +40,9 @@ export default function VouchModal({
 }) {
   const { isV2 } = useVersion();
   const { close } = useModals();
+  const { chain } = useNetwork();
 
+  const { data: protocol } = useProtocol();
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
@@ -46,6 +51,21 @@ export default function VouchModal({
   const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);
+
+  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+
+  const versioned = (v1, v2) => (isV2 ? v2 : v1);
+
+  const overdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
+    .mul(versioned(BlockSpeed[chain.id], 1))
+    .div(SECONDS_PER_DAY * 1000)
+    .toNumber();
+
+  const maxOverdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
+    .add(maxOverdueTime.mul(1000))
+    .mul(versioned(BlockSpeed[chain.id], 1))
+    .div(SECONDS_PER_DAY * 1000)
+    .toNumber();
 
   const buttonProps = useWrite({
     contract: "userManager",
@@ -116,7 +136,7 @@ export default function VouchModal({
                 items={[
                   {
                     label: "Time to default",
-                    value: "30 days",
+                    value: `${overdueDays} days`,
                     tooltip: {
                       content:
                         "How long an account can go without making at least a minimum payment",
@@ -124,7 +144,7 @@ export default function VouchModal({
                   },
                   {
                     label: "Time to write-off",
-                    value: "90 days",
+                    value: `${maxOverdueDays} days`,
                     tooltip: {
                       content:
                         "Time an account can be in default until it can be publicly written-off",
@@ -142,8 +162,8 @@ export default function VouchModal({
               title="Vouching puts your staked funds at risk"
             >
               <Text m={0}>
-                If an account you vouch for doesn't pay the minimum due within 30 days, they'll be
-                in a defaulted state. If they stay that way for 90 days, your stake could be lost
+                If an account you vouch for doesn't pay the minimum due within {overdueDays} days, they'll be
+                in a defaulted state. If they stay that way for {maxOverdueDays} days, your stake could be lost
                 permanently to cover their debt.
               </Text>
             </ExpandingInfo>

@@ -2,20 +2,13 @@ import "./Connect.scss";
 import { useEffect } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
-import {
-  Heading,
-  Text,
-  Box,
-  InfoBanner,
-  WarningIcon,
-  SegmentedControl,
-} from "@unioncredit/ui";
+import { Heading, Text, Box, InfoBanner, WarningIcon, SegmentedControl } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Banner from "components/connect/Banner";
 import { useMember } from "providers/MemberData";
 import NetworkSelect from "components/connect/NetworkSelect";
-import { useVersion, Versions } from "providers/Version";
+import { DefaultVersion, useVersion, Versions } from "providers/Version";
 
 export default function ConnectPage() {
   const { chain } = useNetwork();
@@ -43,10 +36,13 @@ export default function ConnectPage() {
     { id: Versions.V2, label: "Union v2" },
   ];
 
-  const initialActive0 = versionToggleItems.findIndex(
-    (item) => item.id === version
-  );
-  const initialActive = !!~initialActive0 ? initialActive0 : 0;
+  const initialActive0 = versionToggleItems.find((item) => item.id === version);
+  const initialActive1 = versionToggleItems.find((item) => item.id === DefaultVersion);
+  const toggleValue = !!initialActive0
+    ? initialActive0.id
+    : !!initialActive1
+    ? initialActive1.id
+    : versionToggleItems[0].id;
 
   return (
     <>
@@ -56,13 +52,7 @@ export default function ConnectPage() {
 
       <Banner />
       <Box justify="center" fluid>
-        <Box
-          className="Connect__container"
-          direction="vertical"
-          w="100%"
-          pb="2em"
-          maxw="485px"
-        >
+        <Box className="Connect__container" direction="vertical" w="100%" pb="2em" maxw="485px">
           {chain?.unsupported && (
             <InfoBanner
               mb="16px"
@@ -73,15 +63,15 @@ export default function ConnectPage() {
           )}
           <Heading>Select a Credit Network</Heading>
           <Text color="grey600" mt="0" mb="16px">
-            Union’s networks are isolated, so it’s best to choose the network
-            where your friends and DAO’s are.
+            Union’s networks are isolated, so it’s best to choose the network where your friends and
+            DAO’s are.
           </Text>
           <Box mb="16px" fluid>
             <SegmentedControl
               fluid
               items={versionToggleItems}
               onChange={onToggleVersion}
-              initialActive={initialActive}
+              value={toggleValue}
             />
           </Box>
           <NetworkSelect />

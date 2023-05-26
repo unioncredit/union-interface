@@ -79,7 +79,7 @@ export function ProvidingTableRow({ data, active, setContact, receiving }) {
           dimmed={locking.eq(ZERO)}
           value={`${format(locking)} DAI`}
           className={cn({
-            "table-cell--overdue": isOverdue,
+            "table-cell--overdue": isOverdue && locking.gt(ZERO)
           })}
         />
       ),
