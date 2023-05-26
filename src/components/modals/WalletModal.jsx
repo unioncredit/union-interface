@@ -15,11 +15,14 @@ import { useModals } from "providers/ModalManager";
 import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
 import { Link } from "react-router-dom";
+import { useNetwork } from "wagmi";
 
 export const WALLET_MODAL = "wallet-modal";
 
 export default function WalletModal() {
   const { close } = useModals();
+  const { chain } = useNetwork();
+
   const { data: member = {}, refetch } = useMember();
 
   const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
@@ -50,7 +53,7 @@ export default function WalletModal() {
             <NumericalBlock
               align="center"
               size="large"
-              title="Total Ethereum Balance"
+              title={`Total ${chain.name} Balance`}
               value={format(totalBalance)}
               token="union"
             />

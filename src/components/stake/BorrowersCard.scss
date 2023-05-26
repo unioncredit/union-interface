@@ -1,0 +1,18 @@
+@import "@unioncredit/ui/src/variables";
+
+.BorrowersCard {
+  &__table {
+    @media screen and (max-width: $breakpoint-micro) {
+      td:first-of-type {
+        padding-left: 12px
+      }
+      th:last-of-type,
+      td:last-of-type {
+        padding-right: 12px;
+      }
+      .badge {
+        font-size: 12px;
+      }
+    }
+  }
+}
