@@ -33,6 +33,10 @@
   .wallet.button {
     background: $grey50;
     border-radius: 8px;
+
+    &:hover {
+      background: $grey100;
+    }
   }
   .wallet.button {
     @media screen and (max-width: $breakpoint-mobile) {
