@@ -59,8 +59,8 @@ const sortFns = {
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
-    [SortOrder.DESC]: (a, b) => b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking))
-  }
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(b.locking).sub(a.vouch.sub(a.locking)),
+  },
 };
 
 export default function ContactList({ initialType }) {
@@ -195,7 +195,7 @@ export default function ContactList({ initialType }) {
 
     setSort({
       ...sort,
-      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
     });
   };
 
@@ -203,7 +203,7 @@ export default function ContactList({ initialType }) {
 
   return (
     <Card className="ContactList" overflow="visible">
-      <Box className="ContactList__header" p="24px">
+      <Box className="ContactList__header" p="24px" align="center">
         <ContactsTypeToggle
           type={type}
           setType={(t) => {

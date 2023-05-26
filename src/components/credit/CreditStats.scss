@@ -4,6 +4,9 @@
   overflow: visible;
 
   .Card__footer {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+
     @media screen and (max-width: $breakpoint-mobile) {
       align-items: flex-start !important;
       flex-direction: column !important;
