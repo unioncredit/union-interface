@@ -142,30 +142,36 @@ export default function VouchModal({
                         "How long an account can go without making at least a minimum payment",
                     },
                   },
-                  {
-                    label: "Time to write-off",
-                    value: `${maxOverdueDays} days`,
-                    tooltip: {
-                      content:
-                        "Time an account can be in default until it can be publicly written-off",
-                    },
-                  },
+                  ...(isV2
+                    ? [
+                        {
+                          label: "Time to write-off",
+                          value: `${maxOverdueDays} days`,
+                          tooltip: {
+                            content:
+                              "Time an account can be in default until it can be publicly written-off",
+                          },
+                        },
+                      ]
+                    : []),
                 ]}
               />
             </>
           )}
 
-          <ExpandingInfo
-            mt="16px"
-            icon={WarningIcon}
-            title="Vouching puts your staked funds at risk"
-          >
-            <Text m={0}>
-              If an account you vouch for doesn't pay the minimum due within 30 days, they'll be in
-              a defaulted state. If they stay that way for 90 days, your stake could be lost
-              permanently to cover their debt.
-            </Text>
-          </ExpandingInfo>
+          {isV2 && (
+            <ExpandingInfo
+              mt="16px"
+              icon={WarningIcon}
+              title="Vouching puts your staked funds at risk"
+            >
+              <Text m={0}>
+                If an account you vouch for doesn't pay the minimum due within {overdueDays} days,
+                they'll be in a defaulted state. If they stay that way for {maxOverdueDays} days,
+                your stake could be lost permanently to cover their debt.
+              </Text>
+            </ExpandingInfo>
+          )}
 
           {newMember ? (
             <>
