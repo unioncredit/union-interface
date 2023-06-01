@@ -49,7 +49,9 @@ export default function createParseToast(
         case "approve":
           return {
             ...sharedProps,
-            content: `Approved ${format(args[2])} successfully`,
+            content: `Approved ${
+              ethers.constants.MaxUint256.eq(args[1]) ? "max" : format(args[1])
+            } successfully`,
             title: "Approved",
           };
         case "borrow":
