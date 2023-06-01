@@ -1,6 +1,8 @@
 @import "@unioncredit/ui/src/variables";
 
 .BuildInfo {
+  font-feature-settings: "calt" on;
+  
   flex-wrap: wrap;
 
   a {
