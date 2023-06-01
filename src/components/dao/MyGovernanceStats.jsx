@@ -12,40 +12,38 @@ import {
   IconBadge,
   SetupIcon,
   InfoBanner,
+  OptimismIcon,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { mainnet, arbitrum } from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 
 import { AddressLabelBox } from "components/shared";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
-import { ZERO } from "constants";
-import { ZERO_ADDRESS } from "constants";
+import { ZERO, ZERO_ADDRESS } from "constants";
 import { useModals } from "providers/ModalManager";
 import { DELEGATE_MODAL } from "components/modals/DelegateModal";
-import { useBalance } from "hooks/useBalance";
+import { useGovernanceStats } from "hooks/useGovernanceStats";
 
 export default function MyGovernanceStats() {
   const { open } = useModals();
   const { address } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
   const { chain: connectedChain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
   const { data: member = {} } = useMember();
-  const { data: arbUnionBalance = ZERO } = useBalance(
-    address,
-    "bridgedToken",
-    arbitrum.id
-  );
+  const { data: governance = {} } = useGovernanceStats({ address });
+
+  const { delegate = ZERO_ADDRESS } = member;
 
   const {
-    unionBalance = ZERO,
-    votes = ZERO,
-    delegate = ZERO_ADDRESS,
-    rewards,
-  } = member;
-  const { unclaimed = ZERO } = rewards || {};
+    mainnetVotes = ZERO,
+    mainnetBalance = ZERO,
+    mainnetUnclaimed = ZERO,
+    arbitrumBalance = ZERO,
+    optimismBalance = ZERO,
+  } = governance;
 
-  const votesDelegated = votes.sub(unionBalance);
+  const votesDelegated = mainnetVotes.sub(mainnetBalance);
 
   const isMainnet = connectedChain.id === mainnet.id;
   const isVotingConfigured = delegate && delegate !== ZERO_ADDRESS;
@@ -54,7 +52,7 @@ export default function MyGovernanceStats() {
   const governanceStats = [
     {
       title: "Your voting power",
-      value: isMainnet ? format(votes) : "--",
+      value: format(mainnetVotes),
       subtitleTooltip: {
         shrink: true,
         content: "TODO",
@@ -69,12 +67,12 @@ export default function MyGovernanceStats() {
     {
       token: "union",
       title: "Wallet balance",
-      value: format(unionBalance),
-      subtitle: `${format(unclaimed)} unclaimed`,
+      value: format(mainnetBalance),
+      subtitle: `${format(mainnetUnclaimed)} unclaimed`,
     },
     {
       title: "Delegated to you",
-      value: isMainnet ? format(votesDelegated) : "--",
+      value: format(votesDelegated),
       subtitle: "From other addresses",
       className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
     },
@@ -104,8 +102,14 @@ export default function MyGovernanceStats() {
     {
       icon: ArbitrumIcon,
       label: "Arbitrum Balance",
-      balance: arbUnionBalance,
+      balance: arbitrumBalance,
       token: "arbUNION",
+    },
+    {
+      icon: OptimismIcon,
+      label: "Optimism Balance",
+      balance: optimismBalance,
+      token: "opUNION",
     },
   ];
 
@@ -114,13 +118,7 @@ export default function MyGovernanceStats() {
       <Card.Body>
         <Box className="MyGovernanceStats__top" justify="space-between">
           {governanceStats.map((stat) => (
-            <NumericalBlock
-              fluid
-              key={stat.title}
-              align="left"
-              size="regular"
-              {...stat}
-            />
+            <NumericalBlock fluid key={stat.title} align="left" size="regular" {...stat} />
           ))}
         </Box>
 
@@ -153,9 +151,9 @@ export default function MyGovernanceStats() {
         <Button fluid mt="8px" size="large" {...buttonProps} />
       </Card.Body>
 
-      <Card.Footer>
+      <Card.Footer direction="vertical" mb="-12px">
         {balances.map(({ icon, label, balance, token }) => (
-          <Box key={token} align="center" justify="space-between" fluid>
+          <Box mb="12px" key={token} align="center" justify="space-between" fluid>
             <Box align="center">
               <IconBadge
                 mr="4px"
