@@ -1,13 +1,7 @@
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext } from "react";
 
-import {
-  STALE_TIME,
-  CACHE_TIME,
-  DUST_THRESHOLD,
-  ZERO,
-  ZERO_ADDRESS,
-} from "constants";
+import { STALE_TIME, CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
@@ -58,10 +52,6 @@ const selectMemberData = (data) => {
     minPayment: ZERO,
     rewardsMultiplier,
   };
-
-  if (creditLimit.lt(DUST_THRESHOLD)) {
-    result.creditLimit = ZERO;
-  }
 
   if (owed.gt(ZERO)) {
     result.minPayment = calculateMinPayment(interest);
@@ -122,10 +112,7 @@ export function useMemberData(address, chainId) {
         },
         {
           ...comptrollerContract,
-          functionName:
-            version === Versions.V1
-              ? "calculateRewardsByBlocks"
-              : "calculateRewards",
+          functionName: version === Versions.V1 ? "calculateRewardsByBlocks" : "calculateRewards",
           args:
             version === Versions.V1
               ? [address, daiContract.address, ZERO]
@@ -227,11 +214,7 @@ export function useMemberData(address, chainId) {
   };
 }
 
-export default function MemberData({
-  chainId,
-  children,
-  address: addressProp,
-}) {
+export default function MemberData({ chainId, children, address: addressProp }) {
   const { address: connectedAddress } = useAccount();
 
   const address = addressProp || connectedAddress;
@@ -241,9 +224,7 @@ export default function MemberData({
   const pollResp = usePollMemberData(address, chainId);
 
   return (
-    <MemberContext.Provider
-      value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}
-    >
+    <MemberContext.Provider value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}>
       {children}
     </MemberContext.Provider>
   );
