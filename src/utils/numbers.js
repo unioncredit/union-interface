@@ -65,7 +65,7 @@ export const calculateMaxBorrow = (creditLimit, originationFee) => {
 };
 
 export const calculateMinPayment = (interest) => {
-  const floor = parseEther("0.1");
+  const floor = parseEther("0.01");
   const interestWithMargin = interest.mul(10010).div(10000);
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };
@@ -79,10 +79,7 @@ export const calculateExpectedMinimumPayment = (
   borrowRatePerBlock,
   overdueBlocks
 ) => {
-  const floor = parseEther("0.1");
-  const minimumPayment = borrowAmount
-    .mul(borrowRatePerBlock)
-    .mul(overdueBlocks)
-    .div(WAD);
+  const floor = parseEther("0.01");
+  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD);
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
