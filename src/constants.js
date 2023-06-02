@@ -38,6 +38,7 @@ export const Errors = {
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
+  INSUFFICIENT_FUNDS: "Insufficient funds in protocol",
   MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
