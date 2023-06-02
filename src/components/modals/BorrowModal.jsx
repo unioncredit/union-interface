@@ -46,6 +46,7 @@ export default function BorrowModal() {
     overdueBlocks = ZERO,
     borrowRatePerBlock = ZERO,
     borrowRatePerSecond = ZERO,
+    getLoanableAmount = ZERO,
   } = { ...member, ...protocol };
 
   const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
@@ -57,6 +58,8 @@ export default function BorrowModal() {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
       return Errors.MIN_BORROW(minBorrow);
+    } else if (inputs.amount.raw.gt(getLoanableAmount)) {
+      return Errors.INSUFFICIENT_FUNDS;
     }
   };
 
