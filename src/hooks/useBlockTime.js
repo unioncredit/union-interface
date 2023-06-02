@@ -4,6 +4,7 @@ import { useProvider } from "wagmi";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ZERO } from "constants";
+import { getVersion, Versions } from "providers/Version";
 
 dayjs.extend(relativeTime);
 
@@ -16,8 +17,14 @@ export function useBlockTime(blockNumber, chainId, dateFormat = "dd LLL yyyy") {
   useEffect(() => {
     const load = async () => {
       if (!blockNumber.eq(ZERO)) {
-        const block = await provider.getBlock(Number(blockNumber.toString()));
-        setTimestamp(block.timestamp * 1000);
+        const blockNum = Number(blockNumber.toString());
+
+        if (getVersion(chainId) === Versions.V2) {
+          setTimestamp(blockNum * 1000);
+        } else {
+          const block = await provider.getBlock(blockNum);
+          setTimestamp(block.timestamp * 1000);
+        }
       }
     };
     provider && load();
