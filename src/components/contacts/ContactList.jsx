@@ -27,19 +27,19 @@ const score = (bools) => {
 const sortFns = {
   [PROVIDING_COLUMNS.TRUST_SET.id]: {
     [SortOrder.ASC]: (a, b) => a.trust.sub(b.trust),
-    [SortOrder.DESC]: (a, b) => b.trust.sub(a.trust)
+    [SortOrder.DESC]: (a, b) => b.trust.sub(a.trust),
   },
   [PROVIDING_COLUMNS.TOTAL_VOUCH.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
-    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch)
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
   },
   [PROVIDING_COLUMNS.STAKE_LOCKED.id]: {
     [SortOrder.ASC]: (a, b) => a.locking.sub(b.locking),
-    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking)
+    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
   },
   [PROVIDING_COLUMNS.LAST_PAYMENT.id]: {
     [SortOrder.ASC]: (a, b) => a.lastRepay.sub(b.lastRepay),
-    [SortOrder.DESC]: (a, b) => b.lastRepay.sub(a.lastRepay)
+    [SortOrder.DESC]: (a, b) => b.lastRepay.sub(a.lastRepay),
   },
   [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
     [SortOrder.ASC]: (a, b) =>
@@ -47,15 +47,15 @@ const sortFns = {
       score([b.locking.gt(ZERO) && b.isOverdue, b.isMember, b.locking.gt(ZERO)]),
     [SortOrder.DESC]: (a, b) =>
       score([b.isOverdue && b.locking.gt(ZERO), b.isMember, b.locking.gt(ZERO)]) -
-      score([a.isOverdue && a.locking.gt(ZERO), a.isMember, a.locking.gt(ZERO)])
+      score([a.isOverdue && a.locking.gt(ZERO), a.isMember, a.locking.gt(ZERO)]),
   },
   [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
-    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch)
+    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
   },
   [RECEIVING_COLUMNS.LOCKING.id]: {
-    [SortOrder.ASC]: (a, b) => a.locking.sub(b.locking),
-    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking)
+    [SortOrder.ASC]: (a, b) => (a.locking ?? a.locked).sub(b.locking ?? b.locked),
+    [SortOrder.DESC]: (a, b) => (b.locking ?? b.locked).sub(a.locking ?? a.locked),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(a.locking).sub(b.vouch.sub(b.locking)),
@@ -77,11 +77,11 @@ export default function ContactList({ initialType }) {
     type === ContactsType.VOUCHEES
       ? {
           type: PROVIDING_COLUMNS.LOAN_STATUS.id,
-          order: SortOrder.DESC
+          order: SortOrder.DESC,
         }
       : {
           type: null,
-          order: null
+          order: null,
         }
   );
 
@@ -131,7 +131,7 @@ export default function ContactList({ initialType }) {
         contactIndex,
         contactsCount: filteredAndSorted.length,
         address: contact.address,
-        clearContact: () => setContactIndex(null)
+        clearContact: () => setContactIndex(null),
       });
     }
   }, [contactIndex]);
@@ -151,8 +151,8 @@ export default function ContactList({ initialType }) {
               locking: ZERO,
               trust: ZERO,
               vouch: ZERO,
-              lastRepay: ZERO
-            }))
+              lastRepay: ZERO,
+            })),
         ]
       : [
           ...vouchers,
@@ -165,8 +165,8 @@ export default function ContactList({ initialType }) {
               address,
               locked: ZERO,
               trust: ZERO,
-              vouch: ZERO
-            }))
+              vouch: ZERO,
+            })),
         ]) || [];
 
   /*--------------------------------------------------------------
@@ -189,7 +189,7 @@ export default function ContactList({ initialType }) {
     if (sort.type !== sortType) {
       return setSort({
         type: sortType,
-        order: SortOrder.DESC
+        order: SortOrder.DESC,
       });
     }
 
