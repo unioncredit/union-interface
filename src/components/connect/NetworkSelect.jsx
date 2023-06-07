@@ -12,19 +12,19 @@ import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
 import cn from "classnames";
 
-export default function NetworkSelect() {
+export default function NetworkSelect({ version }) {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { switchNetworkAsync } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true
+    throwForSwitchChainNotSupported: true,
   });
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
 
-  const allNetworks = useNetworks();
+  const allNetworks = useNetworks(false, version);
   const networks = allNetworks.filter((x) => ![optimismGoerli.id, goerli.id].includes(x.chainId));
 
   const handleChangeNetwork = async (network) => {
@@ -52,7 +52,7 @@ export default function NetworkSelect() {
       fluid
       direction="vertical"
       className={cn("NetworkSelect", {
-        "NetworkSelect--connected": isConnected
+        "NetworkSelect--connected": isConnected,
       })}
     >
       <Box fluid align="center" direction="vertical" mb="16px" className="NetworkSelect__networks">
@@ -75,8 +75,8 @@ export default function NetworkSelect() {
         iconProps={{
           style: {
             width: "16px",
-            height: "16px"
-          }
+            height: "16px",
+          },
         }}
         label={
           isConnected

@@ -34,7 +34,6 @@ function AppReadyShim({ children }) {
   const location = useLocation();
 
   const { chain } = useNetwork();
-  const { version } = useVersion();
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
@@ -54,18 +53,6 @@ function AppReadyShim({ children }) {
 
     if (chain && appReady && (isDisconnected || chain?.unsupported)) {
       setAppReady(false);
-      return;
-    }
-
-    // If the user is a member, or we are accessing a general route, then
-    // skip the connect/ready page and auto connect straight into
-    // the credit page "/"
-    if (!appReady && member.isMember) {
-      // Check if the currently verions matches the network. Only if
-      // the version is set correctly can we proceed
-      if (isVersionSupported(version, chain.id)) {
-        setAppReady(true);
-      }
     }
   }, [
     appReady,
