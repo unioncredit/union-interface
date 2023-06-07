@@ -61,8 +61,8 @@ export default function VouchModal({
     .div(SECONDS_PER_DAY * 1000)
     .toNumber();
 
-  const maxOverdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
-    .add(maxOverdueTime.mul(1000))
+  const maxOverdueDays = maxOverdueTime
+    .mul(1000)
     .mul(versioned(BlockSpeed[chain.id], 1))
     .div(SECONDS_PER_DAY * 1000)
     .toNumber();
