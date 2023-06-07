@@ -116,9 +116,7 @@ export default function ContactList({ initialType }) {
       const searchAddress = urlSearchParams.get("address");
 
       setContactIndex(
-        (type === ContactsType.VOUCHEES ? vouchees : vouchers).findIndex((v) =>
-          compareAddresses(v.address, searchAddress)
-        )
+        filteredAndSorted.findIndex((v) => compareAddresses(v.address, searchAddress))
       );
     }
   }, []);
