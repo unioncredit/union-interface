@@ -89,7 +89,7 @@ export default function ProposalPage() {
               </Text>
             </Box>
             <Box mt="16px">
-              <a href="#" target="_blank" rel="noreferrer">
+              <a href={`https://etherscan.io/tx/${hash}`} target="_blank" rel="noreferrer">
                 <Button size="pill" label="View bytecode" />
               </a>
             </Box>
