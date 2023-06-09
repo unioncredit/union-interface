@@ -30,6 +30,7 @@ import useContactSearch from "hooks/useContactSearch";
 import Filters, { filterFns, sortFns } from "./Filters";
 import useIsMobile from "hooks/useIsMobile";
 import { locationSearch } from "utils/location";
+import { compareAddresses } from "utils/compare";
 
 export default function ContactList({
   contact,
@@ -101,7 +102,6 @@ export default function ContactList({
     data: contactsPage,
     maxPages,
     activePage,
-    pageSize,
     onChange,
   } = usePagination(filtered);
 
@@ -172,7 +172,7 @@ export default function ContactList({
                 <TableHead align="right">Trust Limit (DAI)</TableHead>
               )}
             </TableRow>
-            {contactsPage.map((row, i) => {
+            {contactsPage.map((row) => {
               const { address, locking = ZERO, trust = ZERO } = row;
 
               return (
@@ -180,7 +180,11 @@ export default function ContactList({
                   key={address}
                   active={address === contact?.address}
                   onClick={() =>
-                    setContactIndex(pageSize * (activePage - 1) + i)
+                    setContactIndex(
+                      contacts.findIndex((c) =>
+                        compareAddresses(c.address, address)
+                      )
+                    )
                   }
                 >
                   <TableCell fixedSize>
