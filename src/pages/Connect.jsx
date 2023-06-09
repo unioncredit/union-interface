@@ -2,7 +2,15 @@ import "./Connect.scss";
 import { useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
-import { Heading, Text, Box, InfoBanner, WarningIcon, SegmentedControl } from "@unioncredit/ui";
+import {
+  Heading,
+  Text,
+  Box,
+  InfoBanner,
+  WarningIcon,
+  SegmentedControl,
+  MarketingIcon,
+} from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Banner from "components/connect/Banner";
@@ -55,6 +63,22 @@ export default function ConnectPage() {
               label="Unsupported network selected in wallet"
             />
           )}
+
+          <a
+            target="_blank"
+            rel="noreferrer"
+            style={{ width: "100%" }}
+            href="https://union.mirror.xyz/uPnUm4TLNyWoRfNAVCJwxT0TeNPBgNCg04vuDv5sIGk"
+          >
+            <InfoBanner
+              mt="-16px"
+              mb="24px"
+              icon={MarketingIcon}
+              variant="info"
+              label={"Version 2 of the Union Protocol is live now on Optimism"}
+            />
+          </a>
+
           <Heading>Select a Credit Network</Heading>
           <Text color="grey600" mt="0" mb="16px">
             Union’s networks are isolated, so it’s best to choose the network where your friends and
