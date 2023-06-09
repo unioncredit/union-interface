@@ -8,7 +8,7 @@ import Routes from "./Routes";
 
 import ConnectPage from "pages/Connect";
 import { Header } from "components/shared/Header";
-import { general as generalRoutes } from "App.routes";
+import { allRoutes, general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 
 import Cache from "providers/Cache";
@@ -26,6 +26,7 @@ import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
 import { BuildInfo } from "components/shared/BuildInfo";
 import LoadingPage from "pages/Loading";
+import NotFoundPage from "pages/NotFoundPage";
 
 /**
  * Shim component that checks if the App is ready
@@ -76,6 +77,8 @@ export default function App() {
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
+  const is404 = !allRoutes.some((r) => r.path === location.pathname);
+
   if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute)) {
     return (
       <AppReadyShim>
@@ -87,7 +90,7 @@ export default function App() {
               <Grid.Row style={{ width: "100%", margin: 0 }}>
                 <Grid.Col>
                   <ErrorBoundary FallbackComponent={ErrorPage}>
-                    <ConnectPage />
+                    {is404 ? <NotFoundPage /> : <ConnectPage />}
                   </ErrorBoundary>
                 </Grid.Col>
               </Grid.Row>
@@ -116,7 +119,9 @@ export default function App() {
                             <Grid style={{ display: "flex", flexGrow: 1 }}>
                               <Grid.Row style={{ width: "100%", margin: 0 }}>
                                 <Grid.Col>
-                                  {appReady ? (
+                                  {is404 ? (
+                                    <NotFoundPage />
+                                  ) : appReady ? (
                                     <>
                                       <ErrorBoundary FallbackComponent={ErrorPage}>
                                         <Layout.Columned>

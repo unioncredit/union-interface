@@ -28,3 +28,5 @@ export const general = [
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
   { path: Links.LEADERBOARD,               component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD } },
 ]
+
+export const allRoutes = [...member, ...nonMember, ...general];
