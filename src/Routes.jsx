@@ -1,10 +1,4 @@
-import {
-  Route,
-  matchRoutes,
-  useLocation,
-  Routes as ReactRoutes,
-  Navigate,
-} from "react-router-dom";
+import { Route, matchRoutes, useLocation, Routes as ReactRoutes, Navigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 
 import * as routes from "./App.routes";
@@ -21,30 +15,23 @@ export default function Routes() {
 
   const needsToConnect = !isConnected;
 
-  const getElement = (Component, props) =>
-    isLoading ? <LoadingPage /> : <Component {...props} />;
+  const getElement = (Component, props) => (isLoading ? <LoadingPage /> : <Component {...props} />);
 
   /*--------------------------------------------------------------
     App Routes Setup 
    --------------------------------------------------------------*/
 
-  const memberRoutes = routes.member.map(
-    ({ path, component: Component, props }) => (
-      <Route key={path} path={path} element={getElement(Component, props)} />
-    )
-  );
+  const memberRoutes = routes.member.map(({ path, component: Component, props }) => (
+    <Route key={path} path={path} element={getElement(Component, props)} />
+  ));
 
-  const nonMemberRoutes = routes.nonMember.map(
-    ({ path, component: Component, props }) => (
-      <Route key={path} path={path} element={getElement(Component, props)} />
-    )
-  );
+  const nonMemberRoutes = routes.nonMember.map(({ path, component: Component, props }) => (
+    <Route key={path} path={path} element={getElement(Component, props)} />
+  ));
 
-  const generalRoutes = routes.general.map(
-    ({ path, component: Component, props }) => (
-      <Route key={path} path={path} element={<Component {...props} />} />
-    )
-  );
+  const generalRoutes = routes.general.map(({ path, component: Component, props }) => (
+    <Route key={path} path={path} element={<Component {...props} />} />
+  ));
 
   if (isLoading) {
     return <LoadingPage />;
@@ -71,12 +58,7 @@ export default function Routes() {
       }
       <Route
         path="*"
-        element={
-          matchRoutes(
-            [...routes.member, ...routes.nonMember, ...routes.general],
-            location
-          ) && <Navigate to="/" replace={true} />
-        }
+        element={matchRoutes([...routes.allRoutes], location) && <Navigate to="/" replace={true} />}
       />
     </ReactRoutes>
   );
