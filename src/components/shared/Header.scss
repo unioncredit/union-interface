@@ -1,15 +1,80 @@
+@import "@unioncredit/ui/src/variables.scss";
+
 .Header__Box--loading {
   .nav-item {
     visibility: hidden;
   }
 }
 
-.UnionWallet.button.UnionWallet.button {
-  height: 32px;
+.UnionWallet.button {
+  height: 40px;
   min-height: 0;
   padding: 8px;
+  color: $grey600;
+  font-size: 14px !important;
+}
 
-  .text {
-    font-size: 14px !important;
+.Header {
+  width: 100%;
+  box-sizing: border-box;
+
+  .UnionWallet.button,
+  .wallet.button,
+  .Header__context-menu .PopoverMenu__button,
+  .Header__hamburger {
+    margin-left: 4px
+  }
+
+  .grid-row {
+    margin: 0 !important;
+  }
+
+  .UnionWallet.button,
+  .wallet.button {
+    background: $grey50;
+    border-radius: 8px;
+
+    &:hover {
+      background: $grey100;
+    }
+  }
+  .wallet.button {
+    @media screen and (max-width: $breakpoint-mobile) {
+      width: 40px;
+    }
+  }
+}
+
+.Header__context-menu .PopoverMenu__button,
+.Header__hamburger {
+  width: 40px !important;
+  height: 40px;
+  min-height: 0;
+  border-radius: 8px;
+}
+.Header__hamburger {
+  padding: 11px !important;
+  background: #fafaf9 !important;
+
+  svg {
+    height: 24px;
+  }
+
+  &.active {
+    padding: 8px !important;
+  }
+}
+
+.Header__context-menu {
+  .PopoverMenu__button {
+    border: 1px solid $grey200;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 8px;
+
+    &--open,
+    &:hover {
+      background-color: $grey100;
+    }
   }
 }

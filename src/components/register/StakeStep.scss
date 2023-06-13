@@ -1,3 +1,36 @@
-.StakeStep__Box__details {
-  border-bottom: 1px solid #e7e5e4;
+@import "@unioncredit/ui/src/variables";
+
+.StakeStep {
+  &__container {
+    padding: 24px;
+    border-radius: 12px;
+    background: $grey50;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding: 0;
+      background: white;
+    }
+
+  }
+  &__stats {
+    @media screen and (max-width: 480px) {
+      flex-direction: column !important;
+
+      .NumericalBlock:not(:last-of-type) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-mobile) {
+    &__progress-container {
+      flex-direction: column !important;
+
+      .button {
+        width: 100% !important;
+        margin: 16px 0 0 !important;
+      }
+    }
+
+  }
 }

@@ -1,14 +1,18 @@
-import { useContractReads } from "wagmi";
+import { useContractReads, useNetwork } from "wagmi";
 import { useEffect, useRef } from "react";
 
 import { CACHE_TIME, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
 
-export default function usePollMemberData(address, chainId) {
+export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
+  const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
 
+  const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
+
+  const chainId = inputChainId || connectedChain?.id;
   const daiContract = useContract("dai", chainId);
   const uTokenContract = useContract("uToken", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
@@ -17,10 +21,10 @@ export default function usePollMemberData(address, chainId) {
     ? [
         {
           ...comptrollerContract,
-          functionName:
-            version === Versions.V1
-              ? "calculateRewardsByBlocks"
-              : "calculateRewards",
+          functionName: versioned(
+            "calculateRewardsByBlocks",
+            "calculateRewards"
+          ),
           args:
             version === Versions.V1
               ? [address, daiContract.address, ZERO]
@@ -41,11 +45,13 @@ export default function usePollMemberData(address, chainId) {
 
   const resp = useContractReads({
     enabled: false,
-    select: (data) => ({
-      unclaimedRewards: data[0] || ZERO,
-      owed: data[1] || ZERO,
-      interest: data[2] || ZERO,
-    }),
+    select: (data) => {
+      return {
+        unclaimedRewards: data[0] || ZERO,
+        owed: data[1] || ZERO,
+        interest: data[2] || ZERO,
+      };
+    },
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,

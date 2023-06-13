@@ -1,9 +1,9 @@
+import assetManagerAbi from "abis/assetManager.json";
+import comptrollerAbi from "abis/comptroller.json";
+import erc20Abi from "abis/erc20.json";
+import unionAbi from "abis/union.json";
 import userManagerAbi from "abis/userManager.json";
 import uTokenAbi from "abis/uToken.json";
-import unionAbi from "abis/union.json";
-import erc20Abi from "abis/erc20.json";
-import comptrollerAbi from "abis/comptroller.json";
-import assetManagerAbi from "../../abis/assetManager.json";
 
 export const userManagerContract = {
   address: "0xb71F3D4342AaE0b8D531E14D2CF2F45d6e458A5F",

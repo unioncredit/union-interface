@@ -1,30 +1,30 @@
-import { MultiStepButton } from "@unioncredit/ui";
-import { useAccount, useContractRead } from "wagmi";
-import { useEffect, useState, useCallback } from "react";
+import { CheckIcon, MultiStepButton, Toggle } from "@unioncredit/ui";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useCallback, useEffect, useState } from "react";
 
 import { MultiStep, ZERO } from "constants";
-import format from "utils/format";
 import useWrite from "hooks/useWrite";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
-import { ReactComponent as CloudCheck } from "@unioncredit/ui/lib/icons/cloudCheck.svg";
+import usePermit from "hooks/usePermit";
+import { getPermitMethod } from "utils/permits";
+import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
 import { useVouchers } from "providers/VouchersData";
 
-const createItems = (s1, s2, s3) => [
-  { number: 1, status: s1 },
-  { number: 2, status: s2 },
-  { number: 3, status: s3 },
-];
+const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 
 export default function RegisterButton({ onComplete }) {
   const { address } = useAccount();
+  const { chain } = useNetwork();
+  const { settings, setSetting } = useSettings();
 
   const [action, setAction] = useState(null);
   const [items, setItems] = useState(null);
-  const [label, setLabel] = useState(null);
+  const [gasless, setGasless] = useState(settings[GASLESS_APPROVALS] || false);
+  const [permitArgs, setPermitArgs] = useState(null);
 
-  const { data: member, refetch: refetchMember } = useMember();
+  const { data: member } = useMember();
   const { data: vouchersData = [] } = useVouchers();
   const { data: protocol } = useProtocol();
 
@@ -34,10 +34,12 @@ export default function RegisterButton({ onComplete }) {
 
   const {
     unionBalance = ZERO,
-    unclaimedRewards = ZERO,
     isMember = false,
     newMemberFee = ZERO,
   } = { ...member, ...protocol };
+
+  const permit = getPermitMethod(chain.id, "registerMember");
+  const readyToBurn = vouchers.length > 0 && unionBalance.gte(newMemberFee);
 
   const unionConfig = useContract("union");
   const userManagerConfig = useContract("userManager");
@@ -54,14 +56,16 @@ export default function RegisterButton({ onComplete }) {
     }
   );
 
-  const { onClick: claim, loading: claimLoading } = useWrite({
-    contract: "userManager",
-    method: "withdrawRewards",
-    enabled: unionBalance.lt(newMemberFee),
-    onComplete: () => refetchMember(),
+  const permitApproveProps = usePermit({
+    type: permit.type,
+    args: [address, newMemberFee],
+    value: newMemberFee,
+    spender: userManagerConfig.address,
+    tokenAddress: unionConfig.address,
+    onComplete: useCallback((args) => setPermitArgs(args), []),
   });
 
-  const { onClick: approve, loading: approveLoading } = useWrite({
+  const transactionApproveProps = useWrite({
     contract: "union",
     method: "approve",
     args: [userManagerConfig.address, newMemberFee],
@@ -69,91 +73,106 @@ export default function RegisterButton({ onComplete }) {
     onComplete: () => refetchAllowance(),
   });
 
-  const { onClick: register, loading: registerLoading } = useWrite({
+  const registerButtonProps = useWrite({
     contract: "userManager",
-    method: "registerMember",
-    args: [address],
-    enabled: allowance.gte(newMemberFee) && unionBalance.gte(newMemberFee),
+    method: permitArgs ? permit.functionName : "registerMember",
+    args: permitArgs ? permitArgs : [address],
+    enabled:
+      (allowance.gte(newMemberFee) || permitArgs) &&
+      unionBalance.gte(newMemberFee),
     onComplete: () => onComplete(),
   });
 
-  /*--------------------------------------------------------------
-    Button action handlers for "Claim", "Approve" and "Register"
-   --------------------------------------------------------------*/
-
-  const handleClaim = useCallback(async () => {
-    setItems(createItems(MultiStep.PENDING));
-    await claim();
-  }, [claim, refetchMember]);
-
-  const handleApprove = useCallback(async () => {
-    setItems(createItems(MultiStep.COMPLETE, MultiStep.PENDING));
-    await approve();
-  }, [approve, refetchAllowance]);
-
-  const handleRegister = useCallback(async () => {
-    setItems(
-      createItems(MultiStep.COMPLETE, MultiStep.COMPLETE, MultiStep.PENDING)
+  const GaslessToggle = () => {
+    return (
+      <Toggle
+        active={gasless}
+        color="primary"
+        label="Gasless approval"
+        labelPosition="end"
+        disabled={!readyToBurn}
+        onChange={() => {
+          setGasless(!gasless);
+          setPermitArgs(null);
+          setSetting(GASLESS_APPROVALS, !gasless);
+        }}
+      />
     );
-    await register();
-  }, [register, refetchMember]);
+  };
 
   /**
    * Determine which state to show the multistep button in. There are
-   * three states "Claim", "Approve" and "Register"
+   * three states "Approve" and "Register"
    */
   useEffect(() => {
-    if (unionBalance.lt(newMemberFee)) {
-      // Member UNION balance is not enough so needs to claim UNION
-      // If there is any UNION available
-      setAction({ label: "Claim UNION", onClick: handleClaim });
-      setLabel(`Unclaimed: ${format(unclaimedRewards)} UNION`);
-      setItems(
-        createItems(claimLoading ? MultiStep.PENDING : MultiStep.SELECTED)
-      );
-    } else if (allowance.lt(newMemberFee)) {
+    if (allowance.lt(newMemberFee) && !permitArgs) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
-      setAction({ label: "Approve UNION", onClick: handleApprove });
-      setLabel("Approving 1.00 UNION");
-      setItems(
-        createItems(
-          MultiStep.COMPLETE,
-          approveLoading ? MultiStep.PENDING : MultiStep.SELECTED
-        )
-      );
+      if (!readyToBurn) {
+        setAction({
+          size: "large",
+          label: "Complete the previous steps",
+          disabled: true,
+        })
+      } else if (gasless) {
+        setAction({
+          ...permitApproveProps,
+          size: "large",
+          label: permitApproveProps.loading
+              ? "Approving..."
+              : "Approve UNION",
+          disabled: permitApproveProps.loading,
+        });
+      } else {
+        setAction({
+          ...transactionApproveProps,
+          label: transactionApproveProps.loading
+            ? "Approving..."
+            : "Approve UNION",
+          size: "large",
+          disabled:
+            unionBalance.lt(newMemberFee) || transactionApproveProps.loading,
+        });
+      }
     } else {
       // The member satisfies all the prerequisite and can register
       setAction({
-        label:
-          vouchers.length <= 0
-            ? "Receive a vouch to continue"
-            : "Pay membership fee",
-        onClick: handleRegister,
-        icon: vouchers.length > 0 && CloudCheck,
-        disabled: vouchers.length <= 0,
+        ...registerButtonProps,
+        label: "Pay Membership Fee",
+        icon: CheckIcon,
+        size: "large",
+        disabled: registerButtonProps.loading,
       });
-      setLabel("Paying 1.00 UNION");
-      setItems(
-        createItems(
-          MultiStep.COMPLETE,
-          MultiStep.COMPLETE,
-          registerLoading ? MultiStep.PENDING : MultiStep.SELECTED
-        )
-      );
     }
   }, [
+    gasless,
     isMember,
     newMemberFee,
     unionBalance,
     allowance,
-    handleRegister,
-    handleApprove,
-    handleClaim,
-    claimLoading,
-    approveLoading,
-    registerLoading,
+    permitApproveProps,
+    transactionApproveProps,
+    registerButtonProps,
   ]);
+
+  useEffect(() => {
+    if (permitApproveProps.loading || transactionApproveProps.loading) {
+      // Approval is loading
+      setItems([{ number: 1, status: MultiStep.PENDING }, { number: 2 }]);
+    } else if (registerButtonProps.loading) {
+      // Transaction is loading
+      setItems([{ number: 1 }, { number: 2, status: MultiStep.PENDING }]);
+    } else if (allowance.gte(newMemberFee) || permitArgs) {
+      // Allowance has been complete
+      setItems([
+        { number: 1, status: MultiStep.COMPLETE },
+        { number: 2, status: MultiStep.SELECTED },
+      ]);
+    } else {
+      // Return to normal state
+      setItems(initialItems);
+    }
+  }, [permitApproveProps.loading]);
 
   /*--------------------------------------------------------------
     Render Component 
@@ -165,10 +184,11 @@ export default function RegisterButton({ onComplete }) {
 
   return (
     <MultiStepButton
+      toggle={GaslessToggle}
+      id="approval-component"
       items={items}
       action={action}
       showSteps={true}
-      label={label}
     />
   );
 }

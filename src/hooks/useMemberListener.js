@@ -3,6 +3,7 @@ import { mainnet, useAccount, useContractEvent, useNetwork } from "wagmi";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
+import { compareAddresses } from "utils/compare";
 
 export default function useMemberListener() {
   const { address } = useAccount();
@@ -10,10 +11,7 @@ export default function useMemberListener() {
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
 
-  const userManager = useContract(
-    "userManager",
-    connectedChain?.id ?? mainnet.id
-  );
+  const userManager = useContract("userManager", connectedChain?.id ?? mainnet.id);
   const daiContract = useContract("dai", connectedChain?.id ?? mainnet.id);
 
   const refreshMember = () => {
@@ -25,9 +23,9 @@ export default function useMemberListener() {
   useContractEvent({
     ...userManager,
     eventName: "LogUpdateTrust",
-    listener: ([, borrower]) => {
-      console.log("Listener: LogUpdateTrust received", { borrower, address });
-      if (borrower === address) {
+    listener: (_, borrower) => {
+      console.debug("Listener: LogUpdateTrust received", { borrower, address });
+      if (compareAddresses(borrower, address)) {
         refreshMember();
       }
     },
@@ -36,9 +34,9 @@ export default function useMemberListener() {
   useContractEvent({
     ...userManager,
     eventName: "LogCancelVouch",
-    listener: ([, borrower]) => {
-      console.log("Listener: LogCancelVouch received", { borrower, address });
-      if (borrower === address) {
+    listener: (_, borrower) => {
+      console.debug("Listener: LogCancelVouch received", { borrower, address });
+      if (compareAddresses(borrower, address)) {
         refreshMember();
       }
     },
@@ -47,9 +45,9 @@ export default function useMemberListener() {
   useContractEvent({
     ...userManager,
     eventName: "LogRegisterMember",
-    listener: ([, account]) => {
-      console.log("Listener: LogRegisterMember received", { account, address });
-      if (account === address) {
+    listener: (_, account) => {
+      console.debug("Listener: LogRegisterMember received", { account, address });
+      if (compareAddresses(account, address)) {
         refreshMember();
       }
     },
@@ -58,9 +56,9 @@ export default function useMemberListener() {
   useContractEvent({
     ...daiContract,
     eventName: "Transfer",
-    listener: ([from, to]) => {
-      if (address === from || address === to) {
-        console.log("Listener: DAI Transfer received", { address, from, to });
+    listener: (from, to) => {
+      console.debug("Listener: DAI Transfer received", { address, from, to });
+      if (compareAddresses(address, from) || compareAddresses(address, to)) {
         refreshMember();
       }
     },

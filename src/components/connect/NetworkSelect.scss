@@ -1,10 +1,20 @@
-.NetworkSelect__footerLink {
-  text-align: center;
-  margin-top: 1.5em;
-  font-size: 0.8em;
-  color: #373e98;
+.NetworkSelect {
+  &:not(&--connected) {
+    .NetworkSelect__networks {
+      filter: blur(4px);
+      pointer-events: none;
+    }
+  }
 
-  &:hover {
-    text-decoration: underline;
+  &__footerLink {
+    text-align: center;
+    margin-top: 1.5em;
+    font-size: 0.8em;
+    color: #373e98;
+    width: 100%;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

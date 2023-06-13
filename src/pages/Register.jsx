@@ -8,14 +8,12 @@ import {
   ProgressListItem,
   Text,
   Box,
-  Divider,
-  Label,
-  MiniProgressList,
+  UnionIcon,
+  MobileProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
-import { ReactComponent as Logo } from "@unioncredit/ui/lib/icons/union.svg";
 
-import { ZERO } from "constants";
+import { WAD, ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
@@ -24,27 +22,24 @@ import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
 import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
-import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
+import useResponsive from "hooks/useResponsive";
 
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
-  const { data: member = {}, refetch: refetchMember } = useMember();
-  const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakedBalance?.gt(ZERO)
-  );
+  const { data: member = {} } = useMember();
+  const { isTablet } = useResponsive();
+
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance?.gt(ZERO));
 
   const stakeStep = useRef();
   const vouchStep = useRef();
   const memberStep = useRef();
 
-  const {
-    isMember = false,
-    unionBalance = ZERO,
-    unclaimedRewards = ZERO,
-  } = member;
+  const { isMember = false, unionBalance = ZERO, unclaimedRewards = ZERO } = member;
 
   const getNumberOfTasksCompleted = () => {
     let completed = 0;
@@ -62,13 +57,13 @@ export default function RegisterPage() {
     return completed;
   };
 
-  const stakeComplete = unionBalance?.add(unclaimedRewards).gt(0);
   const vouchComplete = vouchers.length > 0;
+  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(WAD);
 
-  const miniProgressListItems = [
+  const items = [
     { number: 1, complete: stakeComplete, scrollTo: stakeStep },
-    { number: 2, complete: vouchComplete, scrollTo: vouchStep },
-    { number: 3, complete: isMember, scrollTo: memberStep },
+    { number: 2, complete: vouchComplete, anchor: "second", scrollTo: vouchStep },
+    { number: 3, complete: isMember, anchor: "third", scrollTo: memberStep },
   ];
 
   return (
@@ -79,14 +74,20 @@ export default function RegisterPage() {
       <Grid className="Register">
         <Grid.Row justify="center">
           <Grid.Col xs={11} md={8} className="Register__col">
-            <Heading mb="0" className="Register__heading">
+            <Heading level={1} mb="0" className="Register__heading" grey={800}>
               Become a Union member
             </Heading>
-            <Text mt="0" mb="16px">
+            <Text m={0} grey={500} size="medium">
               {getNumberOfTasksCompleted()} of 3 tasks completed
             </Text>
 
-            <ProgressList>
+            {isTablet && (
+              <div style={{ zIndex: 1, position: "fixed", bottom: "24px", left: "24px" }}>
+                <MobileProgressList items={items} />
+              </div>
+            )}
+
+            <ProgressList mt="24px">
               <ProgressListItem number={1} complete={stakeComplete}>
                 <div ref={stakeStep}>
                   <StakeStep />
@@ -100,32 +101,31 @@ export default function RegisterPage() {
               <ProgressListItem number={3} complete={isMember}>
                 <div ref={memberStep}>
                   <Card size="fluid" mb="24px">
-                    <Card.Header
-                      title="Complete Membership"
-                      subTitle="Once you’ve got at least 1 vouch and have earned enough UNION for your membership fee; claim and pay 1 UNION to finalize your membership."
-                    />
                     <Card.Body>
-                      <Divider mb="56px" />
-                      <Box justify="center" mb="32px">
+                      <Heading level={2} size="large" grey={700}>
+                        Join the network
+                      </Heading>
+                      <Text grey={500} size="medium">
+                        Once you’ve completed the two previous steps, pay the 1 UNION fee to
+                        officially join the network as a Union member and unlock the full Union
+                        experience.
+                      </Text>
+
+                      <Box mt="16px" className="Register__container" justify="center">
                         <Box w="380px" direction="vertical" align="center">
-                          <Logo width="32px" />
-                          <Heading size="large" grey={700} mb={0} mt="2px">
-                            {format(protocol.newMemberFee, 0)} UNION
-                          </Heading>
-                          <Label m={0} grey={500} mb="24px">
-                            Membership Fee
-                          </Label>
-                          <RegisterButton
-                            onComplete={() =>
-                              open(VOUCH_MODAL, {
-                                title: "Vouch for a friend",
-                                subTitle:
-                                  "Expand the web of trust with a vouch",
-                                showNewMemberHeader: true,
-                                onClose: () => refetchMember(),
-                              })
-                            }
-                          />
+                          <Box className="Register__fee" align="center">
+                            <Text size="large" grey={700} m={0} weight="medium">
+                              {format(protocol.newMemberFee, 2)}
+                            </Text>
+
+                            <UnionIcon width="24px" />
+                          </Box>
+
+                          <Text grey={500} m="8px 0 16px" weight="medium">
+                            Membership fee is permanently burned
+                          </Text>
+
+                          <RegisterButton onComplete={() => open(WELCOME_MODAL)} />
                         </Box>
                       </Box>
                     </Card.Body>
@@ -136,9 +136,6 @@ export default function RegisterPage() {
           </Grid.Col>
         </Grid.Row>
       </Grid>
-      <div className="MiniProgressListContainer">
-        <MiniProgressList items={miniProgressListItems} />
-      </div>
     </>
   );
 }

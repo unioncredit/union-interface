@@ -1,28 +1,38 @@
+import "./CreditStats.scss";
+
 import { useNetwork } from "wagmi";
-import { Stat, Button, Grid, Card, Label, Tooltip, Dai } from "@unioncredit/ui";
-import { ReactComponent as TooltipIcon } from "@unioncredit/ui/lib/icons/wireInfo.svg";
+import {
+  Button,
+  Card,
+  Text,
+  NumericalBlock,
+  Box,
+  DistributionBar,
+  BorrowIcon,
+  Badge,
+  RepayIcon,
+  WarningIcon,
+} from "@unioncredit/ui";
 
 import { ZERO } from "constants";
-import format from "utils/format";
-import dueDate, { NoPaymentLabel } from "utils/dueDate";
+import format, { formattedNumber } from "utils/format";
+import { dueOrOverdueDate, NoPaymentLabel } from "utils/dueDate";
 import { reduceBnSum } from "utils/reduce";
 import { useMember } from "providers/MemberData";
-import { useVouchers } from "providers/VouchersData";
 import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
-import { PAYMENT_REMINDER_MODAL } from "components/modals/PaymentReminderModal";
 import { useVersion } from "providers/Version";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
+import cn from "classnames";
 
-export default function CreditStats() {
+export default function CreditStats({ vouchers }) {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
   const { isV2 } = useVersion();
 
   const { data: member = {} } = useMember();
-  const { data: vouchers = [] } = useVouchers();
   const { data: protocol = {} } = useProtocol();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
@@ -39,93 +49,135 @@ export default function CreditStats() {
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
-  const dueDateDisplay = dueDate(
+  const unavailableBalance = vouch.sub(creditLimit).sub(owed);
+
+  const {
+    relative: relativeDueDate,
+    absolute: absoluteDueDate,
+    overdue: isOverdue,
+  } = dueOrOverdueDate(
     lastRepay,
     isV2 ? overdueTime : overdueBlocks,
     blockNumber,
     connectedChain.id
   );
 
+  const badgeProps = isOverdue
+    ? { color: "red" }
+    : owed.lte(ZERO)
+    ? { color: "grey", label: "No balance due" }
+    : { color: "blue" };
+
+  const buttonProps = relativeDueDate === NoPaymentLabel && {
+    disabled: true,
+    color: "secondary",
+    variant: "light",
+  };
+
   return (
-    <Card>
-      <Card.Header title="Borrow & Repay" align="center" />
+    <Card
+      className={cn("CreditStats", {
+        "CreditStats--overdue": isOverdue,
+      })}
+    >
       <Card.Body>
-        <Grid divider>
-          <Grid.Row>
-            <Grid.Col xs={6}>
-              <Stat
-                size="large"
-                align="center"
-                label="Available credit"
-                value={<Dai value={format(creditLimit, 2, false)} />}
-              />
-              <Stat
-                mt="24px"
-                align="center"
-                label="Vouch"
-                value={<Dai value={format(vouch)} />}
-                after={
-                  <Label m={0}>
-                    {format(vouch.sub(creditLimit))} DAI unavailable
-                    <Tooltip content="These are funds which are currently tied up elsewhere and as a result, not available to borrow at this time">
-                      <TooltipIcon width="16px" />
-                    </Tooltip>
-                  </Label>
-                }
-              />
-            </Grid.Col>
-            <Grid.Col xs={6}>
-              <Stat
-                size="large"
-                align="center"
-                label="Balance owed"
-                value={<Dai value={format(owed)} />}
-              />
-              <Stat
-                align="center"
-                label="Minimum due"
-                mt="24px"
-                mb="4.5px"
-                value={<Dai value={format(minPayment)} />}
-                after={
-                  <Label
-                    size="small"
-                    className="label--clickable"
-                    color={
-                      dueDateDisplay === NoPaymentLabel ? "grey500" : "blue500"
-                    }
-                    onClick={() =>
-                      dueDateDisplay !== NoPaymentLabel &&
-                      open(PAYMENT_REMINDER_MODAL)
-                    }
-                  >
-                    {dueDateDisplay}
-                  </Label>
-                }
-              />
-            </Grid.Col>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Col xs={6}>
-              <Button
-                mt="28px"
-                label="Borrow funds"
-                disabled={creditLimit.lte(ZERO)}
-                onClick={() => open(BORROW_MODAL)}
-              />
-            </Grid.Col>
-            <Grid.Col xs={6}>
-              <Button
-                mt="28px"
-                variant="secondary"
-                label="Make a payment"
-                disabled={owed.lte(ZERO)}
-                onClick={() => open(REPAY_MODAL)}
-              />
-            </Grid.Col>
-          </Grid.Row>
-        </Grid>
+        <Box align="center" justify="space-between">
+          <NumericalBlock
+            token="dai"
+            title="Balance due"
+            dotColor="blue300"
+            align="left"
+            value={format(owed)}
+          />
+
+          <Button
+            size="large"
+            label="Borrow"
+            color={
+              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "primary" : "secondary"
+            }
+            variant={
+              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "regular" : "light"
+            }
+            icon={BorrowIcon}
+            onClick={() => open(BORROW_MODAL)}
+          />
+        </Box>
+
+        <DistributionBar
+          m="24px 0"
+          items={[
+            {
+              value: formattedNumber(owed),
+              color: "blue300",
+            },
+            {
+              value: formattedNumber(creditLimit, 2, false),
+              color: "blue600",
+            },
+            {
+              value: formattedNumber(unavailableBalance),
+              color: "amber500",
+            },
+          ]}
+        />
+
+        <Box align="center" justify="space-between">
+          <NumericalBlock
+            fluid
+            align="left"
+            token="dai"
+            size="regular"
+            title="Available"
+            dotColor="blue600"
+            value={format(creditLimit, 2, false)}
+            titleTooltip={{
+              content: "The amount of DAI currently available to borrow",
+            }}
+          />
+
+          <NumericalBlock
+            fluid
+            align="left"
+            token="dai"
+            size="regular"
+            title="Unavailable"
+            dotColor="amber500"
+            value={format(unavailableBalance)}
+            titleTooltip={{
+              content: "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time.",
+            }}
+          />
+        </Box>
       </Card.Body>
+
+      <Card.Footer align="center" justify="space-between">
+        <Box direction="vertical">
+          <Box align="center">
+            {isOverdue && (
+              <WarningIcon width="21px" style={{ marginRight: "6px" }} />
+            )}
+
+            <Text m={0} size="medium" weight="medium" grey={500}>
+              {isOverdue ? `${relativeDueDate} Overdue` : "Next payment due"}
+            </Text>
+          </Box>
+
+          <Badge
+            mt="8px"
+            label={`${format(minPayment)} DAI · ${absoluteDueDate}`}
+            {...badgeProps}
+          />
+        </Box>
+
+        <Button
+          size="large"
+          label="Make a payment"
+          icon={RepayIcon}
+          onClick={() => open(REPAY_MODAL)}
+          {...buttonProps}
+        />
+      </Card.Footer>
     </Card>
   );
 }

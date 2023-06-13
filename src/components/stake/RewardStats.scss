@@ -1,0 +1,34 @@
+@import "@unioncredit/ui/src/variables";
+
+.RewardStats {
+  &__bonus .NumericalBlock__value {
+    color: $violet500 !important;
+  }
+  &__penalty .NumericalBlock__value {
+    color: $red500 !important;
+  }
+}
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .RewardStats {
+    &__top {
+      align-items: flex-start !important;
+      flex-direction: column !important;
+
+      .button {
+        width: 100%;
+        margin-top: 16px;
+      }
+    }
+
+    &__bottom {
+      margin-top: 0 !important;
+      flex-wrap: wrap;
+
+      .NumericalBlock {
+        flex: 0 50%;
+        margin-top: 16px;
+      }
+    }
+  }
+}

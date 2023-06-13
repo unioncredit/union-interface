@@ -1,0 +1,23 @@
+@import "@unioncredit/ui/src/variables";
+
+.WelcomeModal {
+  background: $blue500;
+  border-color: $blue500;
+
+  &__content {
+    text-align: center;
+  }
+  &__button {
+    &:hover {
+      color: $blue500;
+      background: white !important;
+
+      path {
+        fill: $blue500;
+      }
+    }
+    &:last-of-type {
+      margin-left: 4px;
+    }
+  }
+}

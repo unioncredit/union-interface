@@ -1,13 +1,7 @@
-import { createContext, useContext } from "react";
 import { useAccount, useContractReads } from "wagmi";
+import { createContext, useContext } from "react";
 
-import {
-  STALE_TIME,
-  CACHE_TIME,
-  DUST_THRESHOLD,
-  ZERO,
-  ZERO_ADDRESS,
-} from "constants";
+import { STALE_TIME, CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
@@ -30,6 +24,7 @@ const selectMemberData = (data) => {
     votes = ZERO,
     delegate = ZERO_ADDRESS,
     isOverdue = false,
+    rewardsMultiplier = ZERO,
     // Versioned values
     totalFrozenAmount = ZERO,
     borrowerAddresses = [],
@@ -55,11 +50,8 @@ const selectMemberData = (data) => {
     delegate,
     isOverdue,
     minPayment: ZERO,
+    rewardsMultiplier,
   };
-
-  if (creditLimit.lt(DUST_THRESHOLD)) {
-    result.creditLimit = ZERO;
-  }
 
   if (owed.gt(ZERO)) {
     result.minPayment = calculateMinPayment(interest);
@@ -120,10 +112,7 @@ export function useMemberData(address, chainId, forceVersion) {
         },
         {
           ...comptrollerContract,
-          functionName:
-            version === Versions.V1
-              ? "calculateRewardsByBlocks"
-              : "calculateRewards",
+          functionName: version === Versions.V1 ? "calculateRewardsByBlocks" : "calculateRewards",
           args:
             version === Versions.V1
               ? [address, daiContract.address, ZERO]
@@ -158,6 +147,11 @@ export function useMemberData(address, chainId, forceVersion) {
           ...uTokenContract,
           functionName: "checkIsOverdue",
           args: [address],
+        },
+        {
+          ...comptrollerContract,
+          functionName: "getRewardsMultiplier",
+          args: [address, daiContract.address],
         },
         // Versioned values
         ...(version === Versions.V1
@@ -220,11 +214,7 @@ export function useMemberData(address, chainId, forceVersion) {
   };
 }
 
-export default function MemberData({
-  chainId,
-  children,
-  address: addressProp,
-}) {
+export default function MemberData({ chainId, children, address: addressProp }) {
   const { address: connectedAddress } = useAccount();
 
   const address = addressProp || connectedAddress;
@@ -234,9 +224,7 @@ export default function MemberData({
   const pollResp = usePollMemberData(address, chainId);
 
   return (
-    <MemberContext.Provider
-      value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}
-    >
+    <MemberContext.Provider value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}>
       {children}
     </MemberContext.Provider>
   );

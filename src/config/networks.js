@@ -11,6 +11,7 @@ export const networks = {
       imageSrc: "/networks/ethereum.png",
       value: "ethereum",
       label: "Ethereum",
+      labelWithVersion: "Ethereum (v1)",
       description: "Use Union on Mainnet",
       avatar: "/networks/ethereum-avatar.png",
       chainId: 1,
@@ -20,6 +21,7 @@ export const networks = {
     },
     {
       label: "Arbitrum",
+      labelWithVersion: "Arbitrum (v1)",
       type: "arbitrum",
       id: "arbitrum",
       imageSrc: "/networks/arbitrum.png",
@@ -39,6 +41,7 @@ export const networks = {
       imageSrc: "/networks/gorli.png",
       value: "goerli",
       label: "Goerli",
+      labelWithVersion: "Goerli (v1)",
       description: "Use Union on a testnet",
       avatar: "/networks/gorli-avatar.png",
       chainId: 5,
@@ -54,6 +57,7 @@ export const networks = {
       imageSrc: "/networks/gorli.png",
       value: "optimism-goerli",
       label: "Optimism Goerli",
+      labelWithVersion: "Optimism Goerli (v2)",
       description: "Use Union on a testnet",
       avatar: "/networks/gorli-avatar.png",
       chainId: 420,
@@ -67,6 +71,7 @@ export const networks = {
       imageSrc: "/networks/optimism.png",
       value: "optimism",
       label: "Optimism",
+      labelWithVersion: "Optimism (v2)",
       description: "Use Union on optimism mainnet",
       avatar: "/networks/optimism-avatar.png",
       chainId: 10,
@@ -80,9 +85,6 @@ export const networks = {
 export function parseNetworksVersions() {
   return Object.keys(networks).reduce((acc, version) => {
     const nets = networks[version];
-    return [
-      ...acc,
-      ...nets.map((net) => ({ ...net, version, id: `${version}_${net.id}` })),
-    ];
+    return [...acc, ...nets.map((net) => ({ ...net, version, id: `${version}_${net.id}` }))];
   }, []);
 }

@@ -1,0 +1,27 @@
+@import "@unioncredit/ui/src/variables";
+
+.MyGovernanceStats {
+  &__block--dimmed {
+    .NumericalBlock__value {
+      color: $grey400 !important;
+    }
+  }
+}
+
+@media screen and (max-width: $breakpoint-mobile) {
+  .MyGovernanceStats {
+    &__top {
+      flex-wrap: wrap;
+
+      .NumericalBlock__value {
+        font-size: 22px !important;
+        line-height: 28px !important;
+      }
+
+      .NumericalBlock:first-of-type {
+        flex: 0 100%;
+        margin-bottom: 16px;
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@import "@unioncredit/ui/src/variables";
+
+.VouchersOverview {
+
+  &__chart {
+    width: 91px;
+    margin-right: 24px;
+  }
+
+  &__breakdown {
+    display: flex;
+    padding: 16px 16px 12px;
+    background: $grey50;
+    border: 0.5px solid $grey200;
+    border-radius: 8px;
+    flex-wrap: wrap;
+
+    &__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    &__voucher {
+      flex: 0 50%;
+
+      @media screen and (max-width: $breakpoint-mobile) {
+        flex: 0 100%;
+      }
+    }
+  }
+
+  &__notice {
+    margin-bottom: 4px;
+    padding: 32px 16px;
+    border-radius: 12px;
+    background: $grey100;
+  }
+
+  .button-row {
+    @media screen and (max-width: $breakpoint-mobile) {
+      display: block;
+
+      .button + .button {
+        margin-top: 4px;
+      }
+    }
+  }
+}

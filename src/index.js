@@ -13,6 +13,7 @@ import AppLogs from "providers/AppLogs";
 import Version from "providers/Version";
 import AppReadyState from "providers/AppReadyState";
 
+// eslint-disable-next-line no-undef
 window.Buffer = window.Buffer || require("buffer").Buffer;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
