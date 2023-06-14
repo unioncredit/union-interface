@@ -93,7 +93,7 @@ export default function EditVouchModal({
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="EditVouchModal">
-        <Modal.Header onClose={handleClose} noHeight>
+        <Modal.Header onClose={handleClose} noHeight hideClose>
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>
@@ -148,8 +148,8 @@ export default function EditVouchModal({
 
             {revokeVouch && (
               <Text m="0 0 8px" size="small" grey={600}>
-                Revoking a vouch sets the trust you provide to zero and
-                completely cancels the vouch this contact receives from you.
+                Revoking a vouch sets the trust you provide to zero and completely cancels the vouch
+                this contact receives from you.
               </Text>
             )}
 
@@ -157,9 +157,7 @@ export default function EditVouchModal({
               fluid
               mt="4px"
               label={`${revokeVouch ? "Revoke" : "Update"} trust`}
-              {...(revokeVouch
-                ? cancelVouchButtonProps
-                : updateTrustButtonProps)}
+              {...(revokeVouch ? cancelVouchButtonProps : updateTrustButtonProps)}
             />
 
             <Button
