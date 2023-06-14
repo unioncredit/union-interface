@@ -1,16 +1,29 @@
 import { formatUnits } from "ethers/lib/utils";
+import { DUST_THRESHOLD, ZERO } from "constants";
+import { BigNumber } from "ethers";
 
 export default function format(
   n,
   digits = 2,
   rounded = true,
-  stripTrailingZeros = false
+  stripTrailingZeros = false,
+  formatDust = true
 ) {
   if (!n) n = "0";
+  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD) && n.gt(ZERO)) return "<0.01";
   return commify(Number(formatUnits(n)), digits, rounded, stripTrailingZeros);
 }
 
-function commify(num, digits, rounded = true, stripTrailingZeros = false) {
+export const formattedNumber = (n, digits = 2, rounded = true) => {
+  return parseFloat(format(n, digits, rounded).replace(",", ""));
+};
+
+export const compactFormattedNumber = (n) => {
+  const formatter = Intl.NumberFormat("en", { notation: "compact" });
+  return formatter.format(formatUnits(n));
+};
+
+export function commify(num, digits, rounded = true, stripTrailingZeros = false) {
   num = Number(num);
   num = num <= 0 ? 0 : num;
 

@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { Box, Button, Label, Text } from "@unioncredit/ui";
+import { Box, Button, Text } from "@unioncredit/ui";
 
 import useLabels from "hooks/useLabels";
 
@@ -22,7 +22,7 @@ function setEndOfContentEditable(contentEditableElement) {
   }
 }
 
-export default function EditLabel({ address }) {
+export function EditLabel({ address }) {
   const labelEl = useRef(null);
   const [editting, setEditting] = useState(false);
 
@@ -50,7 +50,6 @@ export default function EditLabel({ address }) {
       if (event.key === "Enter") {
         event.preventDefault();
         handleSave();
-        return;
       }
     },
     [handleSave]
@@ -78,9 +77,9 @@ export default function EditLabel({ address }) {
   return (
     <Box fluid justify="space-between" align="center" mb="12px">
       <Box direction="vertical">
-        <Label size="small" grey={400} as="p" m={0}>
+        <Text size="small" grey={400} as="p" m={0}>
           CONTACT NAME
-        </Label>
+        </Text>
         <Text
           mb={0}
           size="large"
@@ -95,20 +94,29 @@ export default function EditLabel({ address }) {
         {editting ? (
           <>
             <Button
-              variant="pill"
-              color="blue"
+              size="pill"
+              color="primary"
+              variant="light"
               label="Save"
               onClick={handleSave}
             />
             <Button
               ml="4px"
-              variant="pill"
+              size="pill"
+              color="secondary"
+              variant="light"
               label="Cancel"
               onClick={handleCancel}
             />
           </>
         ) : (
-          <Button variant="pill" label="Edit alias" onClick={handleEdit} />
+          <Button
+            size="pill"
+            color="secondary"
+            variant="light"
+            label="Edit alias"
+            onClick={handleEdit}
+          />
         )}
       </Box>
     </Box>

@@ -6,11 +6,11 @@ import { EIP3770 } from "constants";
  * @param {String} address
  * @param {Number} chainId
  */
-export default function getProfileUrl(address, chainId) {
+export const getProfileUrl = (address, chainId) => {
   if (!address) return null;
 
-  return `https://app.union.finance/profile/${EIP3770[chainId]}:${address}`;
-}
+  return `/profile/${EIP3770[chainId]}:${address}`;
+};
 
 const SHARE_MESSAGE = `Please vouch for me on Union!`;
 
@@ -20,6 +20,4 @@ export const generateTwitterLink = (shareLink) =>
   )}&via=unionprotocol`;
 
 export const generateTelegramLink = (shareLink) =>
-  `https://telegram.me/share/url?text=${SHARE_MESSAGE}&url=${encodeURIComponent(
-    shareLink
-  )}`;
+  `https://telegram.me/share/url?text=${SHARE_MESSAGE}&url=${encodeURIComponent(shareLink)}`;

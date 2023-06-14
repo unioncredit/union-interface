@@ -4,7 +4,7 @@ import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
-import { useVersion, Versions } from "./Version";
+import { getVersion, Versions } from "./Version";
 
 const ProtocolContext = createContext({});
 
@@ -17,24 +17,19 @@ const buildContractConfigs = (contract, calls, chainId) =>
     chainId,
   }));
 
-export default function ProtcolData({ children }) {
-  const { chain: connectedChain } = useNetwork();
-
-  const chainId = connectedChain?.id || mainnet.id;
-
-  const isMainnet = connectedChain === mainnet.id;
-
-  const { version } = useVersion();
-
+export const useProtocolData = (chainId) => {
+  const version = getVersion(chainId);
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
-  const daiContract = useContract("dai", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const userManagerContract = useContract("userManager", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
+  const isMainnet = chainId === mainnet.id;
+  const daiContract = useContract("dai", chainId, version);
+  const uTokenContract = useContract("uToken", chainId, version);
+  const userManagerContract = useContract("userManager", chainId, version);
+  const comptrollerContract = useContract("comptroller", chainId, version);
   const governorContract = useContract("governor", mainnet.id, Versions.V1);
-  const unionTokenContract = useContract("union", chainId);
-  const assetManagerContract = useContract("assetManager", chainId);
+  const timelockContract = useContract("timelock", mainnet.id, Versions.V1);
+  const unionTokenContract = useContract("union", chainId, version);
+  const assetManagerContract = useContract("assetManager", chainId, version);
 
   const assetManagerCalls = [
     {
@@ -43,12 +38,7 @@ export default function ProtcolData({ children }) {
     },
   ];
 
-  const userManagerFunctionNames = [
-    "maxStakeAmount",
-    "newMemberFee",
-    "totalStaked",
-    "totalFrozen",
-  ];
+  const userManagerFunctionNames = ["maxStakeAmount", "newMemberFee", "totalStaked", "totalFrozen"];
 
   const uTokenFunctionNames = [
     "reserveFactorMantissa",
@@ -74,9 +64,24 @@ export default function ProtcolData({ children }) {
     versioned("gLastUpdatedBlock", "gLastUpdated"),
   ];
 
-  const governorFunctionsNames = ["quorumVotes"];
+  const governorFunctionsNames = [
+    "quorumVotes",
+    "proposalThreshold",
+    "votingDelay",
+    "votingPeriod",
+  ];
+
+  const timelockFunctionNames = ["getMinDelay"];
 
   const unionTokenFunctionNames = ["totalSupply"];
+
+  const v2Functions = [
+    {
+      ...userManagerContract,
+      functionName: "maxOverdueTime",
+      chainId,
+    },
+  ];
 
   const contracts = [
     ...buildContractConfigs(assetManagerContract, assetManagerCalls, chainId),
@@ -99,7 +104,14 @@ export default function ProtcolData({ children }) {
       ? buildContractConfigs(
           governorContract,
           governorFunctionsNames.map((n) => ({ functionName: n })),
-          chainId
+          mainnet.id
+        )
+      : []),
+    ...(isMainnet
+      ? buildContractConfigs(
+          timelockContract,
+          timelockFunctionNames.map((n) => ({ functionName: n })),
+          mainnet.id
         )
       : []),
     ...buildContractConfigs(
@@ -107,6 +119,7 @@ export default function ProtcolData({ children }) {
       unionTokenFunctionNames.map((n) => ({ functionName: n })),
       chainId
     ),
+    ...(version === Versions.V2 ? v2Functions : []),
   ];
 
   const resp = useContractReads({
@@ -118,11 +131,10 @@ export default function ProtcolData({ children }) {
         ...uTokenFunctionNames,
         ...comptrollerFunctionNames,
         ...(isMainnet ? governorFunctionsNames : []),
+        ...(isMainnet ? timelockFunctionNames : []),
         ...unionTokenFunctionNames,
-      ].reduce(
-        (acc, functionName, i) => ({ ...acc, [functionName]: data[i] }),
-        {}
-      ),
+        ...(version === Versions.V2 ? v2Functions.map((f) => f.functionName) : []),
+      ].reduce((acc, functionName, i) => ({ ...acc, [functionName]: data[i] }), {}),
     contracts: contracts,
   });
 
@@ -145,9 +157,14 @@ export default function ProtcolData({ children }) {
 
   const data = { ...resp.data, ...resp0.data };
 
-  return (
-    <ProtocolContext.Provider value={{ ...resp, data }}>
-      {children}
-    </ProtocolContext.Provider>
-  );
+  return { data };
+};
+
+export default function ProtocolData({ children }) {
+  const { chain: connectedChain } = useNetwork();
+  const chainId = connectedChain?.id || mainnet.id;
+
+  const { data } = useProtocolData(chainId);
+
+  return <ProtocolContext.Provider value={{ data }}>{children}</ProtocolContext.Provider>;
 }

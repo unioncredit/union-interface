@@ -1,17 +1,14 @@
-import { Fragment } from "react";
 import { Helmet } from "react-helmet";
 import ReactMarkdown from "react-markdown";
 import { Link, useParams } from "react-router-dom";
-import { Box, Button, Grid, Label, Heading, Text } from "@unioncredit/ui";
-import { ReactComponent as ArrowRight } from "@unioncredit/ui/lib/icons/arrowRight.svg";
+import { ArrowRightIcon, Box, Button, Grid, Heading, Text } from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
-import Avatar from "components/shared/Avatar";
+import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
-import PrimaryLabel from "components/shared/PrimaryLabel";
-import ProposalHistoryCard from "components/governance/ProposalHistoryCard";
-import VotingCard from "components/governance/VotingCard";
-import NetworkNotice from "components/governance/NetworkNotice";
+import ProposalHistoryCard from "components/dao/ProposalHistoryCard";
+import ProposalVotes from "components/dao/ProposalVotes";
+import { defaultAbiCoder } from "ethers/lib/utils";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -50,13 +47,22 @@ export default function ProposalPage() {
          * ---------------------------------------------- */}
         <Grid.Row>
           <Grid.Col>
-            <Box mb="30px">
-              <Link to="/governance/proposals">
+            <Box m="30px 0">
+              <Link to="/governance">
                 <Button
-                  variant="lite"
+                  size="pill"
+                  color="secondary"
+                  variant="light"
                   label={
                     <>
-                      <ArrowRight className="flip" width="24px" height="24px" />
+                      <ArrowRightIcon
+                        width="24px"
+                        height="24px"
+                        className="flip"
+                        style={{
+                          marginRight: "4px",
+                        }}
+                      />
                       Back to proposals
                     </>
                   }
@@ -73,9 +79,9 @@ export default function ProposalPage() {
             <Heading size="xlarge" mb="12px" grey={800}>
               {title}
             </Heading>
-            <Label as="p" size="small" grey={400}>
+            <Text size="small" grey={400}>
               PROPOSED BY
-            </Label>
+            </Text>
             <Box>
               <Avatar address={proposer} size={24} />
               <Text mb="0" mx="8px">
@@ -83,9 +89,42 @@ export default function ProposalPage() {
               </Text>
             </Box>
             <Box mt="16px">
-              <a href="#" target="_blank" rel="noreferrer">
-                <Button variant="pill" label="View bytecode" />
+              <a href={`https://etherscan.io/tx/${hash}`} target="_blank" rel="noreferrer">
+                <Button size="pill" label="View bytecode" />
               </a>
+            </Box>
+            <Box direction="vertical" mt="24px" mb="24px">
+              <Heading level={3}>Details</Heading>
+              <ol>
+                {targets.map((target, i) => {
+                  const signature = signatures[i];
+                  const calldata = calldatas[i];
+
+                  const args = signature
+                    .match(/\((.*?)\)/)?.[0]
+                    .replace("(", "")
+                    .replace(")", "")
+                    .split(",");
+
+                  const decoded = args && calldata && defaultAbiCoder.decode(args, calldata);
+                  const argumentString =
+                    decoded && decoded.map((item) => item.toString()).join(",");
+
+                  return (
+                    <li
+                      style={{ listStyle: "decimal", marginLeft: "20px" }}
+                      key={`${target}${signature}${calldata}`}
+                    >
+                      <Text w="100%" m={0} style={{ wordWrap: "break-word" }}>
+                        Contract: {target}
+                      </Text>
+                      <Text grey={500} w="100%" weight="medium" style={{ wordWrap: "break-word" }}>
+                        Function: {signature.replace(/(\(=?)(.*)$/, "")}({argumentString})
+                      </Text>
+                    </li>
+                  );
+                })}
+              </ol>
             </Box>
             <Box direction="vertical" mt="24px">
               <Heading level={3}>Description</Heading>
@@ -97,65 +136,18 @@ export default function ProposalPage() {
                     </Link>
                   ),
                   heading: (props) => (
-                    <Text
-                      size="large"
-                      grey={800}
-                      {...props}
-                      mb="8px"
-                      mt="24px"
-                    />
+                    <Text size="large" weight="medium" grey={800} {...props} mb="8px" mt="24px" />
                   ),
-                  paragraph: (props) => <Text {...props} mb="8px" />,
-                  listItem: (props) => <Text as="li" {...props} />,
+                  paragraph: (props) => <Text grey={500} {...props} mb="8px" />,
+                  listItem: (props) => <Text grey={500} as="li" {...props} />,
                 }}
               >
                 {description}
               </ReactMarkdown>
             </Box>
-
-            <Box direction="vertical" mt="24px" mb="24px">
-              <Heading level={3}>Details</Heading>
-              {targets.map((target, i) => {
-                const signature = signatures[i];
-                const calldata = calldatas[i];
-
-                const args = signature
-                  .match(/\((.*?)\)/)?.[0]
-                  .replace("(", "")
-                  .replace(")", "")
-                  .split(",");
-
-                const decoded =
-                  args && calldata && defaultAbiCoder.decode(args, calldata);
-                const argumentString =
-                  decoded && decoded.map((item) => item.toString()).join(",");
-
-                return (
-                  <Fragment key={`${target}${signature}${calldata}`}>
-                    <Label
-                      as="a"
-                      w="100%"
-                      m={0}
-                      grey={800}
-                      href={"#"}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ wordWrap: "break-word" }}
-                    >
-                      Contract: {target}
-                    </Label>
-                    <Label as="p" w="100%" style={{ wordWrap: "break-word" }}>
-                      Function: {signature.replace(/(\(=?)(.*)$/, "")}(
-                      {argumentString})
-                    </Label>
-                  </Fragment>
-                );
-              })}
-            </Box>
           </Grid.Col>
           <Grid.Col md={4}>
-            <VotingCard data={proposal} />
-            <NetworkNotice lite />
+            <ProposalVotes data={proposal} />
             <ProposalHistoryCard data={history} />
           </Grid.Col>
         </Grid.Row>

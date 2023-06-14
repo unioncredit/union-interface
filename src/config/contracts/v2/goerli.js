@@ -1,6 +1,6 @@
 import erc20Abi from "abis/erc20.json";
 import unionAbi from "abis/union.json";
-import comptrollerAbi from "abis/v2/comptroller.json";
+import comptrollerAbi from "abis/comptroller.json";
 import assetManagerAbi from "abis/assetManager.json";
 import uTokenAbi from "abis/v2/uToken.json";
 import userManagerAbi from "abis/v2/userManager.json";

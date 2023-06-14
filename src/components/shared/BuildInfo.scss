@@ -1,0 +1,15 @@
+@import "@unioncredit/ui/src/variables";
+
+.BuildInfo {
+  font-feature-settings: "calt" on;
+  
+  flex-wrap: wrap;
+
+  a {
+    margin-bottom: 4px;
+
+    &:hover {
+      color: $grey700;
+    }
+  }
+}

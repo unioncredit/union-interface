@@ -1,4 +1,4 @@
-import { BlocksPerYear, ZERO } from "constants";
+import { BlocksPerYear, WAD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
@@ -15,6 +15,13 @@ export const bnPercent = (n, d) => {
   const bps = n.mul(10000).div(d);
   return Number(bps.toString()) / 10000;
 };
+
+export const toPercent = (number, digits = 0) =>
+  Number(number).toLocaleString(undefined, {
+    style: "percent",
+    maximumFractionDigits: digits,
+    minimumFractionDigits: digits,
+  });
 
 // Converts scientific notation to a decimal formatted string
 // https://stackoverflow.com/a/66072001
@@ -47,17 +54,32 @@ export function toFixed(x) {
 }
 
 export const calculateMaxBorrow = (creditLimit, originationFee) => {
-  const cl = Number(creditLimit.mul(9990).div(10000).toString());
+  const cl = Number(
+    creditLimit
+      .mul(BigNumber.from("999999999999999"))
+      .div(BigNumber.from("1000000000000000"))
+      .toString()
+  );
   const ofe = Number(originationFee.toString()) / 1e18;
   return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
 };
 
 export const calculateMinPayment = (interest) => {
-  const floor = parseEther("0.1");
+  const floor = parseEther("0.01");
   const interestWithMargin = interest.mul(10010).div(10000);
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };
 
 export const calculateInterestRate = (borrowRatePerUnit, chainId) => {
   return borrowRatePerUnit.mul(BlocksPerYear[chainId]);
+};
+
+export const calculateExpectedMinimumPayment = (
+  borrowAmount,
+  borrowRatePerBlock,
+  overdueBlocks
+) => {
+  const floor = parseEther("0.01");
+  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD);
+  return minimumPayment.lt(floor) ? floor : minimumPayment;
 };

@@ -1,13 +1,11 @@
-import { mainnet, useBlockNumber, useNetwork } from "wagmi";
+import { useBlockNumber } from "wagmi";
 import { useVersion } from "providers/Version";
-import { arbitrum } from "wagmi/chains";
+import { arbitrum, mainnet } from "wagmi/chains";
 
-export function useVersionBlockNumber(props = {}) {
-  const { chainId } = props;
+export function useVersionBlockNumber({ chainId }) {
   const { isV2 } = useVersion();
-  const { chain } = useNetwork();
   const { data: blockNumber } = useBlockNumber({
-    chainId: chain.id === arbitrum.id ? mainnet.id : chainId,
+    chainId: chainId === arbitrum.id ? mainnet.id : chainId,
   });
 
   const unixTimestamp = Math.round(Date.now() / 1000);

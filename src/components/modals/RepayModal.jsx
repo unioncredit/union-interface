@@ -1,27 +1,31 @@
+import "./Repaymodal.scss";
+
 import { useAccount } from "wagmi";
 import {
-  Badge,
   Box,
-  Card,
-  Collapse,
-  Control,
+  Text,
   Dai,
   Grid,
   Input,
-  Label,
   Modal,
   ModalOverlay,
-  Stat,
+  NumericalBlock,
+  OptionSelect,
+  NumericalRows,
+  Button,
+  EditIcon,
+  Divider,
+  ListIcon,
 } from "@unioncredit/ui";
 
 import useForm from "hooks/useForm";
-import Approval from "components/shared/Approval";
+import { Approval } from "components/shared";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
 import format from "utils/format";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Errors } from "constants";
 import { useVersion, Versions } from "providers/Version";
 
@@ -59,48 +63,51 @@ export default function RepayModal() {
     isErrored,
   } = useForm({ validate });
 
-  const handleSelectOption = (option) => () => {
+  const handleSelect = (option) => {
     setPaymentType(option.paymentType);
-    setRawValue("amount", option.value);
+    setRawValue("amount", option.amount);
   };
 
-  const maxRepay = daiBalance.gte(owed) ? owed : daiBalance;
-
   const amount = values.amount || empty;
-
+  const newOwed = owed.sub(amount.raw);
   const isCustomSelected = paymentType === PaymentType.CUSTOM;
 
-  let newOwed = owed.sub(amount.raw);
-  newOwed = newOwed.lt(ZERO) ? ZERO : newOwed;
+  // Factor in a 0.01% margin for the max repay as we can no longer use MaxUint256
+  const owedBalanceWithMargin = owed.add(owed.div(1000));
 
-  // Factor in a 1% margin for the max repay as we can no longer use MaxUint256
-  const owedMargin = owed.add(owed.div(100));
-
-  const displayAmount = amount.raw.eq(owedMargin)
-    ? format(owed)
-    : amount.display;
+  // The maximum amount the user can repay, either their total DAI balance
+  // or their balance owed + 0.01% margin
+  const maxRepay = daiBalance.gte(owedBalanceWithMargin)
+    ? owedBalanceWithMargin
+    : daiBalance;
 
   const options = [
     {
-      value: minPayment,
-      display: format(minPayment),
-      paymentType: PaymentType.MIN,
-      title: "Pay minimum due",
-      content:
-        "Make the payment required to cover the interest due on your loan",
-    },
-    {
-      display: format(daiBalance.lt(owed) ? daiBalance : owed),
-      value: daiBalance.lt(owed) ? daiBalance : owedMargin,
+      token: "dai",
+      value: format(maxRepay),
+      amount: maxRepay,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed)
         ? "Pay-off entire loan"
         : "Pay maximum DAI available",
       content: maxRepay.gte(owed)
-        ? "Make a payment to pay-off your current balance owed in its entirety"
-        : "Make a payment with the maximum amount of DAI available in your connected wallet",
+        ? "Make a payment equal to the outstanding balance"
+        : "Make a payment with the maximum amount available in your wallet",
+    },
+    {
+      value: format(minPayment),
+      amount: minPayment,
+      token: "dai",
+      paymentType: PaymentType.MIN,
+      title: "Pay minimum due",
+      content:
+        "Make the payment required to cover the interest due on your loan",
     },
   ];
+
+  useEffect(() => {
+    handleSelect(options[0]);
+  }, []);
 
   /*--------------------------------------------------------------
     Render Component 
@@ -109,7 +116,7 @@ export default function RepayModal() {
   return (
     <ModalOverlay onClick={close}>
       <Modal className="RepayModal">
-        <Modal.Header title="Repay loan" onClose={close} />
+        <Modal.Header title="Make a payment" onClose={close} />
         <Modal.Body>
           {/*--------------------------------------------------------------
             Stats Before 
@@ -117,114 +124,107 @@ export default function RepayModal() {
           <Grid>
             <Grid.Row>
               <Grid.Col xs={6}>
-                <Stat
+                <NumericalBlock
                   mb="16px"
-                  align="center"
-                  size="medium"
-                  label="Balance owed"
-                  value={<Dai value={format(owed)} />}
+                  token="dai"
+                  size="regular"
+                  title="Balance owed"
+                  value={format(owed)}
                 />
               </Grid.Col>
               <Grid.Col xs={6}>
-                <Stat
+                <NumericalBlock
                   mb="16px"
-                  align="center"
-                  size="medium"
-                  label="Dai in Wallet"
-                  value={<Dai value={format(daiBalance)} />}
+                  token="dai"
+                  size="regular"
+                  title="Due today"
+                  value={format(minPayment)}
                 />
               </Grid.Col>
             </Grid.Row>
           </Grid>
+
           {/*--------------------------------------------------------------
             Options
           *--------------------------------------------------------------*/}
-          {options.map((option) => {
-            const selected = option.paymentType === paymentType;
+          {paymentType === PaymentType.CUSTOM ? (
+            <Box className="RepayModal__custom" direction="vertical">
+              <Text m={0} grey={800} size="medium" weight="medium">
+                Custom payment amount
+              </Text>
+              <Text m={0} grey={600}>
+                Enter a custom amount to repay
+              </Text>
+              <Divider m="8px 0" />
+              <Input
+                type="number"
+                name="amount"
+                label="Amount to repay"
+                rightLabel={`Max. ${format(daiBalance)}`}
+                suffix={<Dai />}
+                placeholder="0.0"
+                error={isCustomSelected ? errors.amount : null}
+                onChange={register("amount")}
+              />
+            </Box>
+          ) : (
+            <OptionSelect
+              cards={options}
+              onChange={(index) => handleSelect(options[index])}
+            />
+          )}
 
-            return (
-              <Card
-                key={option.paymentType}
-                variant={selected ? "blue" : "primary"}
-                bordered={selected}
-                packed
-                mt="8px"
-              >
-                <Card.Body>
-                  <Box justify="space-between">
-                    <Box direction="vertical">
-                      <Control
-                        onClick={handleSelectOption(option)}
-                        label={option.title}
-                        type="radio"
-                        checked={selected}
-                      />
-                      <Collapse active={selected}>
-                        <Label as="p" mt="4px" mb={0}>
-                          {option.content}
-                        </Label>
-                      </Collapse>
-                    </Box>
-                    {option.value && (
-                      <Badge
-                        ml="8px"
-                        color={selected ? "blue" : "grey"}
-                        label={<Dai value={option.display} />}
-                      />
-                    )}
-                  </Box>
-                </Card.Body>
-              </Card>
-            );
-          })}
-          {/*--------------------------------------------------------------
-            Custom Amount
-          *--------------------------------------------------------------*/}
-          <Card
-            packed
+          <Button
+            fluid
             mt="8px"
-            mb="24px"
-            variant={isCustomSelected ? "blue" : "primary"}
-          >
-            <Card.Body>
-              <Box align="center">
-                <Box direction="vertical" fluid>
-                  <Control
-                    checked={isCustomSelected}
-                    type="radio"
-                    label="Custom payment amount"
-                    onClick={handleSelectOption({
+            size="small"
+            icon={paymentType === PaymentType.CUSTOM ? ListIcon : EditIcon}
+            color="secondary"
+            variant="light"
+            label={
+              paymentType === PaymentType.CUSTOM
+                ? "Select a preset amount"
+                : "Enter custom amount"
+            }
+            onClick={() => {
+              handleSelect(
+                paymentType === PaymentType.CUSTOM
+                  ? options[0]
+                  : {
                       paymentType: PaymentType.CUSTOM,
-                      value: ZERO,
-                    })}
-                  />
-                  <Collapse active={isCustomSelected}>
-                    <Box fluid mt="12px">
-                      <Input
-                        type="number"
-                        name="amount"
-                        suffix={<Dai />}
-                        placeholder="0.0"
-                        error={isCustomSelected ? errors.amount : null}
-                        onChange={register("amount")}
-                      />
-                    </Box>
-                  </Collapse>
-                </Box>
-              </Box>
-            </Card.Body>
-          </Card>
+                      amount: ZERO,
+                    }
+              );
+            }}
+          />
+
           {/*--------------------------------------------------------------
             Stats After 
           *--------------------------------------------------------------*/}
-          <Box justify="space-between" mt="24px" mb="18px">
-            <Label as="p" grey={400}>
-              New balance owed
-            </Label>
-            <Label as="p" grey={400} m={0}>
-              {format(newOwed)} DAI
-            </Label>
-          </Box>
+          <NumericalRows
+            m="24px 0"
+            items={[
+              {
+                label: "Wallet balance",
+                value: `${format(daiBalance)} DAI`,
+                error: errors.amount === Errors.INSUFFICIENT_BALANCE,
+                tooltip: {
+                  content: "How much DAI you have in your connected wallet",
+                },
+              },
+              {
+                label: "Next payment due",
+                value: `${format(minPayment)} DAI`,
+              },
+              {
+                label: "New balance owed",
+                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} DAI`,
+                tooltip: {
+                  content: "The total amount you will owe if this payment transaction is successful",
+                },
+              },
+            ]}
+          />
           {/*--------------------------------------------------------------
             Button
           *--------------------------------------------------------------*/}
@@ -237,10 +237,11 @@ export default function RepayModal() {
             actionProps={{
               args:
                 version === Versions.V1 ? [amount.raw] : [address, amount.raw],
+              permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
-              label: `Repay ${displayAmount} DAI`,
+              label: `Repay ${amount.display} DAI`,
             }}
             approvalLabel="Approve Union to spend your DAI"
             approvalCompleteLabel="You can now repay"

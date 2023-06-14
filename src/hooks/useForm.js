@@ -8,10 +8,11 @@ import { toFixed } from "utils/numbers";
 const empty = {
   display: "",
   raw: ZERO,
+  formatted: "",
 };
 
 const formatValue = (value, rounded) =>
-  format(value, 2, rounded).replace(/\,/g, "");
+  format(value, 2, rounded).replace(/,/g, "");
 
 export default function useForm(props = {}) {
   const { validate } = props;

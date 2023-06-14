@@ -1,0 +1,7 @@
+@import "@unioncredit/ui/src/variables";
+
+.LeaderboardTable {
+  @media screen and (max-width: $breakpoint-mobile) {
+    overflow-x: scroll;
+  }
+}

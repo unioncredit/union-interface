@@ -2,7 +2,7 @@ import "./Toasts.scss";
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 
-import { Label, Notification, NotificationStack } from "@unioncredit/ui";
+import { Notification, NotificationStack } from "@unioncredit/ui";
 
 const ToastsContext = createContext({});
 
@@ -14,10 +14,7 @@ export default function Toasts({ children }) {
   const [toasts, setToasts] = useState([]);
   const timers = useRef([]);
 
-  const addToast = (
-    { content, link, variant, title, id },
-    autoClear = true
-  ) => {
+  const addToast = ({ content, link, variant, title, id }, autoClear = true) => {
     setToasts((x) => [...x, { id, content, link, variant, title }]);
 
     if (autoClear) {
@@ -45,23 +42,15 @@ export default function Toasts({ children }) {
     <ToastsContext.Provider value={{ closeToast, addToast, toasts }}>
       {children}
       <NotificationStack className="Toasts">
-        {toasts.map((toast) => (
+        {toasts.map(({ id, link, title, variant, content }) => (
           <Notification
-            link={toast.link}
-            title={toast.title}
-            variant={toast.variant}
-            onClose={() => closeToast(toast.id)}
-          >
-            <Label as="p" size="small">
-              {toast.link ? (
-                <a href={toast.link} target="_blank" rel="noreferrer">
-                  {toast.content}
-                </a>
-              ) : (
-                toast.content
-              )}
-            </Label>
-          </Notification>
+            key={id}
+            link={link}
+            title={title}
+            variant={variant}
+            content={content}
+            onClose={() => closeToast(id)}
+          />
         ))}
       </NotificationStack>
     </ToastsContext.Provider>

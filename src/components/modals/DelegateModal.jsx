@@ -1,10 +1,9 @@
 import {
   Text,
-  Box,
   Button,
   Modal,
   ModalOverlay,
-  ToggleMenu,
+  SegmentedControl,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -14,7 +13,7 @@ import { useMember } from "providers/MemberData";
 import { compareAddresses } from "utils/compare";
 import { Errors, ZERO_ADDRESS } from "constants";
 import { useModals } from "providers/ModalManager";
-import AddressInput from "components/shared/AddressInput";
+import { AddressInput, AddressLabelBox } from "components/shared";
 
 export const DELEGATE_MODAL = "delegate-modal";
 
@@ -54,42 +53,53 @@ export default function DelegateModal() {
     Errors.ALREADY_DELEGATING;
 
   /*--------------------------------------------------------------
-    Render Component 
+    Render Component
    --------------------------------------------------------------*/
 
   return (
     <ModalOverlay onClick={close}>
       <Modal className="DelegateModal">
-        <Modal.Header title="Delegate votes" onClose={close} />
+        <Modal.Header title="Delegate voting power" onClose={close} />
         <Modal.Body>
-          <Text mb="16px">
-            Vote as yourself or choose a trustworthy third party whom you’d like
-            to vote on your behalf.
-          </Text>
-          <ToggleMenu
-            fluid
+          <SegmentedControl
+            mb="24px"
             items={options}
             onChange={({ id }) => setSelected(id)}
           />
-          <Box mt="18px" fluid />
-          <AddressInput
-            name="address"
-            label="Wallet address"
-            placeholder="Ethereum address"
-            disabled={selected !== "delegate"}
-            error={error}
-            onChange={setDelegate}
-          />
-          <Button
-            mt="8px"
-            fluid
-            label={
-              selected === "delegate"
-                ? "Delegate to third party"
-                : "Vote as self"
-            }
-            {...buttonProps}
-          />
+
+          {selected === "delegate" && (
+            <AddressInput
+              mb="16px"
+              name="address"
+              label="Wallet address"
+              placeholder="Ethereum address"
+              disabled={selected !== "delegate"}
+              error={error}
+              onChange={setDelegate}
+            />
+          )}
+
+          {currentDelegate !== ZERO_ADDRESS && (
+            <AddressLabelBox
+              mb="8px"
+              label={
+                currentDelegate === address
+                  ? "Delegating votes to yourself"
+                  : "Delegating votes to"
+              }
+              address={currentDelegate}
+            />
+          )}
+
+          <Text mb="24px" grey={700}>
+            When you delegate votes to{" "}
+            {selected === "self" ? "yourself" : "a 3rd party"}, the voting power
+            from your wallet balance and tokens delegated to you will be
+            controlled by {selected === "self" ? "you" : "the 3rd party"} for
+            use in voting on Union Improvement Proposals (UIP’s)
+          </Text>
+
+          <Button mt="8px" fluid label="Delegate votes" {...buttonProps} />
         </Modal.Body>
       </Modal>
     </ModalOverlay>

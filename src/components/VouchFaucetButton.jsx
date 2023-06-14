@@ -14,16 +14,14 @@ export default function VouchFaucetButton() {
     method: "claimVouch",
     contract: "vouchFaucet",
     args: [],
-    onComplete: refetchVouchers,
+    onComplete: refetchVouchers
   });
-
-  console.log(onClick, loading, onClick);
 
   if (![goerli.id, optimismGoerli.id].includes(chain.id)) {
     return (
       <>
         No frens?{" "}
-        <a href={links?.discord} target="_blank">
+        <a href={links?.discord} target="_blank" rel="noreferrer">
           Try Discord
         </a>
       </>
@@ -36,7 +34,8 @@ export default function VouchFaucetButton() {
       onClick={onClick}
       loading={loading}
       label="Claim a testnet vouch"
-      variant="secondary"
+      color="secondary"
+      variant="light"
     />
   );
 }
