@@ -160,14 +160,7 @@ export default function EditVouchModal({
               {...(revokeVouch ? cancelVouchButtonProps : updateTrustButtonProps)}
             />
 
-            <Button
-              fluid
-              mt="8px"
-              label="Cancel"
-              color="secondary"
-              variant="light"
-              onClick={back}
-            />
+            <Button fluid mt="8px" label="Back" color="secondary" variant="light" onClick={back} />
           </Modal.Container>
         </Modal.Body>
       </Modal>
