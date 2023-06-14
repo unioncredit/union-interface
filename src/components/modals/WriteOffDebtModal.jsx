@@ -57,13 +57,7 @@ export default function WriteOffDebtModal({
     close();
   };
 
-  const {
-    register,
-    setRawValue,
-    errors = {},
-    values = {},
-    empty,
-  } = useForm({ validate });
+  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -86,12 +80,7 @@ export default function WriteOffDebtModal({
         </Modal.Header>
         <Modal.Body>
           <Modal.Container direction="vertical">
-            <NumericalBlock
-              align="left"
-              token="dai"
-              title="Balance owed"
-              value={format(locking)}
-            />
+            <NumericalBlock align="left" token="dai" title="Balance owed" value={format(locking)} />
 
             <Input
               mt="16px"
@@ -117,18 +106,11 @@ export default function WriteOffDebtModal({
             />
 
             <Button fluid label="Write-off debt" {...buttonProps} />
-            <Button
-              fluid
-              mt="8px"
-              label="Cancel"
-              color="secondary"
-              variant="light"
-              onClick={back}
-            />
+            <Button fluid mt="8px" label="Back" color="secondary" variant="light" onClick={back} />
 
             <Text m="16px 0 0" grey={600}>
-              When you write-off the debt of a vouchee, your locked funds are
-              consumed and cannot be redeemed.
+              When you write-off the debt of a vouchee, your locked funds are consumed and cannot be
+              redeemed.
             </Text>
           </Modal.Container>
         </Modal.Body>
