@@ -32,7 +32,7 @@
       font-weight: 500;
       height: 32px;
       padding: 6px 12px;
-      background: #5C5958;
+      background: #5c5958;
       margin: 0;
       box-sizing: border-box;
       border-radius: 16px;
@@ -45,7 +45,15 @@
       height: 32px;
       padding: 5px !important;
       border-radius: 50%;
-      background: #5C5958;
+      background: rgba(41, 37, 36, 0.75);
+
+      &:hover {
+        background: rgba(41, 37, 36, 0.9);
+      }
+
+      &:active {
+        background: rgba(41, 37, 36, 1);
+      }
     }
 
     .button + * {
@@ -93,3 +101,4 @@
     }
   }
 }
+
