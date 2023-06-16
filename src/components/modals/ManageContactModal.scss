@@ -45,9 +45,13 @@
       height: 32px;
       padding: 5px !important;
       border-radius: 50%;
-      background: #5C5958;
-    }
+      background: rgba(41, 37, 36, 0.75);
 
+        &:hover {
+          background: rgba(41, 37, 36, 0.9);
+        }
+    }
+      
     .button + * {
       margin-left: 4px;
     }
