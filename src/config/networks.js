@@ -24,7 +24,7 @@ export const networks = {
       labelWithVersion: "Arbitrum (v1)",
       type: "arbitrum",
       id: "arbitrum",
-      imageSrc: "/networks/arbitrum.png",
+      imageSrc: "/networks/arbitrum-avatar.png",
       value: "arbitrum one",
       description: "Use Arbitrum’s L2",
       avatar: "/networks/arbitrum-avatar.png",
@@ -68,7 +68,7 @@ export const networks = {
     {
       type: "optimism",
       id: "optimism",
-      imageSrc: "/networks/optimism.png",
+      imageSrc: "/networks/optimism-avatar.png",
       value: "optimism",
       label: "Optimism",
       labelWithVersion: "Optimism (v2)",
