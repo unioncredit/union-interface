@@ -41,7 +41,7 @@ export default function VouchLinkModal() {
     _network ||
     networks.find((network) => network.chainId === connectedChain.id);
 
-  const profileUrl = getProfileUrl(address, network.chainId);
+  const profileUrl = `https://app.union.finance${getProfileUrl(address, network.chainId)}`;
 
   return (
     <ModalOverlay onClick={close}>
@@ -58,7 +58,9 @@ export default function VouchLinkModal() {
             />
 
             <Box mt="8px" direction="vertical" align="center" fluid>
-              <Input value={profileUrl} readonly />
+              <Input value={profileUrl} inputProps={{
+                onFocus: e => e.target.select()
+              }} readonly />
             </Box>
 
             <ButtonRow fluid mt="24px">
