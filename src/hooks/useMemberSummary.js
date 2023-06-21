@@ -1,10 +1,11 @@
 import { useContractReads } from "wagmi";
 
 import useContract from "hooks/useContract";
+import { getVersion } from "providers/Version";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 
 export default function useMemberSummary(address, chainId) {
-  const userManagerContract = useContract("userManager", chainId);
+  const userManagerContract = useContract("userManager", chainId, getVersion(chainId));
 
   const contracts = address
     ? [
