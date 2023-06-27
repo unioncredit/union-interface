@@ -35,7 +35,7 @@ import { blockExplorerAddress } from "utils/blockExplorer";
 import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
-import { Versions, isVersionSupported } from "providers/Version";
+import { getVersion } from "providers/Version";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
@@ -175,7 +175,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   align="left"
                   size="small"
                   title="Receiving vouches from"
-                  value={`${stakerAddresses.length} accounts`}
+                  value={`${(stakerAddresses?.length ?? 0)} accounts`}
                 />
               </Grid.Col>
               <Grid.Col>
@@ -183,7 +183,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   align="left"
                   size="small"
                   title="Vouching for"
-                  value={`${borrowerAddresses.length} accounts`}
+                  value={`${(borrowerAddresses?.length ?? 0)} accounts`}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -220,7 +220,7 @@ export default function Profile() {
   const { data: profileMember } = useMemberData(
     address,
     chainId,
-    isVersionSupported(Versions.V1, chainId) ? Versions.V1 : Versions.V2
+    getVersion(chainId)
   );
 
   const { data: connectedMember } = useMemberData(connectedAddress, chainId);
