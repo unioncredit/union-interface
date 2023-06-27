@@ -109,10 +109,6 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 fluid: true,
                 label: "Connect Wallet",
                 style: {
-                  borderRadius: "8px",
-                  height: "40px",
-                  fontSize: "16px",
-                  backgroundColor: "transparent",
                   marginTop: "20px",
                 }
               }}
