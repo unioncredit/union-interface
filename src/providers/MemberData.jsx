@@ -154,7 +154,7 @@ export function useMemberData(address, chainId, forceVersion) {
           args: [address, daiContract.address],
         },
         // Versioned values
-        ...(version === Versions.V1
+        ...((forceVersion || version) === Versions.V1
           ? [
               {
                 ...userManagerContract,
