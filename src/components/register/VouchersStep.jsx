@@ -38,7 +38,7 @@ export default function VouchersStep() {
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
-  const profileUrl = getProfileUrl(address, chain.id);
+  const profileUrl = `https://app.union.finance${getProfileUrl(address, chain.id)}`;
 
   const vouchers = vouchersData.filter((voucher) =>
     voucher.stakedBalance.gt(ZERO)
