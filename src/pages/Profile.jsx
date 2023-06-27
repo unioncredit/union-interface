@@ -107,8 +107,14 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
             <ConnectButton
               buttonProps={{
                 fluid: true,
-                mt: "20px",
-                label: "Connect Wallet"
+                label: "Connect Wallet",
+                style: {
+                  borderRadius: "8px",
+                  height: "40px",
+                  fontSize: "16px",
+                  backgroundColor: "transparent",
+                  marginTop: "20px",
+                }
               }}
               connectedElement={
                 isSelf ? (
