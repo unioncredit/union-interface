@@ -13,6 +13,9 @@ import { WagmiConfig, createClient, configureChains } from "wagmi";
 import { mainnet, arbitrum, goerli, optimismGoerli, optimism } from "wagmi/chains";
 import { useAppReadyState } from "./AppReadyState";
 
+// eslint-disable-next-line no-undef
+const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
+
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
@@ -31,10 +34,10 @@ const connectors = connectorsForWallets([
     groupName: "Recommended",
     wallets: [
       injectedWallet({ chains }),
-      metaMaskWallet({ chains, shimDisconnect: true }),
-      walletConnectWallet({ chains }),
+      metaMaskWallet({ projectId, chains, shimDisconnect: true }),
+      walletConnectWallet({ projectId, chains, options: { projectId, showQrModal: true } }),
       coinbaseWallet({ chains }),
-      rainbowWallet({ chains, shimDisconnect: true })
+      rainbowWallet({ projectId, chains, shimDisconnect: true })
     ]
   }
 ]);
