@@ -1,4 +1,4 @@
-import { RainbowKitProvider, connectorsForWallets, getDefaultWallets } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, connectorsForWallets } from "@rainbow-me/rainbowkit";
 import {
   walletConnectWallet,
   metaMaskWallet,
