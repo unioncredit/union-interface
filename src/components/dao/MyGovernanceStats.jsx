@@ -53,14 +53,10 @@ export default function MyGovernanceStats() {
     {
       title: "Your voting power",
       value: format(mainnetVotes),
-      subtitleTooltip: {
-        shrink: true,
-        content: "TODO",
-      },
       subtitle: isVotingConfigured
         ? isDelegatingToSelf
           ? "Wallet + Delegation"
-          : "Delegated to 3rd part"
+          : "Delegated to 3rd party"
         : "Not delegated",
       className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
     },

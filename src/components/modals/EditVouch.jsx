@@ -120,11 +120,11 @@ export default function EditVouchModal({
               m="20px 0"
               items={[
                 {
-                  label: "Minimum trust",
+                  label: "Utilized trust",
                   value: `${format(locking)} DAI`,
                   tooltip: {
                     shrink: true,
-                    content: "TODO",
+                    content: "Your stake currently backing someone you vouched for",
                     position: "right",
                   },
                 },
