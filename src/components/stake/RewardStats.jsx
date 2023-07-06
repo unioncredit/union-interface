@@ -60,7 +60,7 @@ export default function RewardStats() {
             value={format(estimatedDailyBase)}
             titleTooltip={{
               shrink: true,
-              content: "TODO",
+              content: "UNION you get just for depositing DAI",
             }}
           />
           <NumericalBlock
@@ -73,7 +73,7 @@ export default function RewardStats() {
             value={`+${format(estimatedDailyBonus)}`}
             titleTooltip={{
               shrink: true,
-              content: "TODO",
+              content: "UNION you get because you vouched for someone actively borrowing",
             }}
           />
           <NumericalBlock
@@ -86,7 +86,7 @@ export default function RewardStats() {
             value={`-${format(estimatedDailyPenalty)}`}
             titleTooltip={{
               shrink: true,
-              content: "TODO",
+              content: "Not a strict penalty, you just dont earn any UNION for stake backing a borrower in default",
             }}
           />
           <NumericalBlock
@@ -98,7 +98,7 @@ export default function RewardStats() {
             value={format(estimatedDailyTotal)}
             titleTooltip={{
               shrink: true,
-              content: "TODO",
+              content: "The very rough estimate of how many UNION you'll earn in a day",
             }}
           />
         </Box>
