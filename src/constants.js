@@ -34,6 +34,7 @@ export const Status = {
 
 export const Errors = {
   MAX_USER_BALANCE_EXCEEDED: "Amount entered exceeds available balance",
+  MIN_STAKE_LIMIT_REQUIRED: "Deposit size must be at least 1 DAI",
   MAX_STAKE_LIMIT_EXCEEDED: "Deposit size exceeds staking limit",
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
