@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import format from "utils/format";
-import { Errors } from "constants";
+import { Errors, WAD } from "constants";
 import useForm from "hooks/useForm";
 import { min } from "utils/numbers";
 import { StakeType } from "constants";
@@ -56,6 +56,9 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
   const validateStake = (inputs) => {
+    if (inputs.amount.display !== "" && inputs.amount.raw.lt(WAD)) {
+      return Errors.MIN_STAKE_LIMIT_REQUIRED;
+    }
     if (inputs.amount.raw.gt(userStakeLimit)) {
       return Errors.MAX_STAKE_LIMIT_EXCEEDED;
     }
