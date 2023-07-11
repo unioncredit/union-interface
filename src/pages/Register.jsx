@@ -82,7 +82,7 @@ export default function RegisterPage() {
             </Text>
 
             {isTablet && (
-              <div style={{ zIndex: 100, position: "fixed", bottom: "24px", left: "24px" }}>
+              <div style={{ zIndex: 100, position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)" }}>
                 <MobileProgressList items={items} />
               </div>
             )}
