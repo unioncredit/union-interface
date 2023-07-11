@@ -140,7 +140,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
               />
             )}
           </Box>
-          <Box align="center">
+          <Box className="AddressSummary__info" align="center">
             <BadgeRow>
               <Badge
                 mr="4px"
@@ -151,18 +151,20 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
               <StatusBadge address={address} />
             </BadgeRow>
 
-            <a href={getProfileUrl(address, chain.id)}>
-              <ProfileIcon width="24px" style={{ marginLeft: "4px" }} />
-            </a>
+            <Box>
+              <a href={getProfileUrl(address, chain.id)}>
+                <ProfileIcon width="24px" style={{ marginLeft: "4px" }} />
+              </a>
 
-            <a href={blockExplorerLink} target="_blank" rel="noreferrer">
-              <LinkOutIcon
-                width="24px"
-                fill="#44403c"
-                className="fillPath"
-                style={{ marginLeft: "4px" }}
-              />
-            </a>
+              <a href={blockExplorerLink} target="_blank" rel="noreferrer">
+                <LinkOutIcon
+                  width="24px"
+                  fill="#44403c"
+                  className="fillPath"
+                  style={{ marginLeft: "4px" }}
+                />
+              </a>
+            </Box>
           </Box>
         </Box>
       </Box>

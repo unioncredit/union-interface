@@ -2,6 +2,16 @@
   &__ens {
     line-height: 26px !important;
   }
+  &__info {
+    @media screen and (max-width: 400px) {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+
+      .badgeRow {
+        margin-bottom: 4px;
+      }
+    }
+  }
   &__alias-input {
     width: 70%;
     padding: 0;
