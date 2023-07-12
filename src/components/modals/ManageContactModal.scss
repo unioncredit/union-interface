@@ -2,6 +2,8 @@
 
 .ManageContactModal {
   overflow: visible;
+  max-height: calc(95vh - 56px) !important;
+  bottom: -25px;
 
   .modalHeader {
     position: relative;
