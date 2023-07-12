@@ -49,6 +49,12 @@
       border-radius: 50%;
       background: rgba(41, 37, 36, 0.75);
 
+      svg {
+        width: 100%;
+        max-width: 24px;
+        max-height: 24px;
+      }
+
       &:hover {
         background: rgba(41, 37, 36, 0.9);
       }
