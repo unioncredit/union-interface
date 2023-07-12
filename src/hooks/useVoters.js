@@ -24,7 +24,7 @@ function useVotes() {
       const data = await fetchVoteCasts(getVersion(mainnet.id), mainnet.id);
       setAddresses(data);
     })();
-  }, [chain.id]);
+  }, [chain?.id]);
 
   return { data: addresses };
 }
