@@ -1,6 +1,7 @@
 import "./Repaymodal.scss";
 
 import { useAccount } from "wagmi";
+import { BigNumber } from "ethers";
 import {
   Box,
   Text,
@@ -72,11 +73,14 @@ export default function RepayModal() {
   const newOwed = owed.sub(amount.raw);
   const isCustomSelected = paymentType === PaymentType.CUSTOM;
 
-  // Factor in a 0.01% margin for the max repay as we can no longer use MaxUint256
-  const owedBalanceWithMargin = owed.add(owed.div(1000));
+  // Factor in a 0.005% margin for the max repay as we can no longer use MaxUint256.
+  // If 0.005% of the balance owed is less than 0.01 we default to 0.01
+  const margin = owed.div(50000);
+  const minMargin = BigNumber.from("10000000000000000");
+  const owedBalanceWithMargin = owed.add(margin.lt(minMargin) ? minMargin : margin);
 
   // The maximum amount the user can repay, either their total DAI balance
-  // or their balance owed + 0.01% margin
+  // or their balance owed + 0.005% margin
   const maxRepay = daiBalance.gte(owedBalanceWithMargin)
     ? owedBalanceWithMargin
     : daiBalance;
@@ -93,6 +97,11 @@ export default function RepayModal() {
       content: maxRepay.gte(owed)
         ? "Make a payment equal to the outstanding balance"
         : "Make a payment with the maximum amount available in your wallet",
+      tooltip: maxRepay.gte(owed) && format(maxRepay) !== format(owed) && {
+        title: "Why is this more than my balance owed?",
+        content: "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
+        position: "right",
+      },
     },
     {
       value: format(minPayment),
@@ -191,9 +200,9 @@ export default function RepayModal() {
                 paymentType === PaymentType.CUSTOM
                   ? options[0]
                   : {
-                      paymentType: PaymentType.CUSTOM,
-                      amount: ZERO,
-                    }
+                    paymentType: PaymentType.CUSTOM,
+                    amount: ZERO,
+                  },
               );
             }}
           />
