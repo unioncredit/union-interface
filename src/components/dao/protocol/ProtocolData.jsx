@@ -15,8 +15,8 @@ export default function ProtocolData() {
   const { chain: connectedChain } = useNetwork();
   const [network, setNetwork] = useState(
     [...networks[Versions.V1], ...networks[Versions.V2]].find(
-      (network) => network.chainId === connectedChain.id
-    )
+      (network) => network.chainId === connectedChain?.id
+    ) || networks[Versions.V1][0]
   );
 
   const { data: protocol = {} } = useProtocolData(network.chainId);

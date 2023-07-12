@@ -15,7 +15,7 @@ export default function ProtocolPage() {
       </Helmet>
 
       <ProtocolData />
-      {chain.id === mainnet.id && <GovernanceOverview />}
+      {chain?.id === mainnet.id && <GovernanceOverview />}
     </>
   );
 }
