@@ -95,7 +95,7 @@ export default function App() {
         <Layout>
           <ScrollToTop />
           <Layout.Main>
-            <Header showNav={false} />
+            <Header />
             <Grid style={{ display: "flex", flexGrow: 1 }}>
               <Grid.Row style={{ width: "100%", margin: 0 }}>
                 <Grid.Col>
