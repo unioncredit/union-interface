@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import VouchLinkModal, {
   VOUCH_LINK_MODAL,
@@ -40,8 +41,13 @@ const modals = {
 };
 
 export default function ModalManager({ children }) {
+  const location = useLocation();
   const [props, setProps] = useState(null);
   const [modal, setModal] = useState(null);
+
+  useEffect(() => {
+    close();
+  }, [location]);
 
   const close = () => {
     document.body.classList.remove("no-scroll");
