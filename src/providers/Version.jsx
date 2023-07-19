@@ -23,7 +23,7 @@ export function isVersionSupported(version, chainId) {
 }
 
 export function getVersion(chainId) {
-  return isVersionSupported(Versions.V2, chainId) ? Versions.V2 : Versions.V1;
+  return isVersionSupported(Versions.V2, parseInt(chainId)) ? Versions.V2 : Versions.V1;
 }
 
 export default function Version({ children }) {
