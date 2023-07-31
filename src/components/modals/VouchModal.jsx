@@ -18,6 +18,7 @@ import {
   DaiIcon,
   Toggle,
   TextArea,
+  ControlRows,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -173,6 +174,7 @@ export default function VouchModal({
   const [address, setAddress] = useState(initialAddress);
   const [activeSection, setActiveSection] = useState(0);
   const [skipVouchNote, setSkipVouchNote] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const onSendVouchComplete = async () => {
     await refetchMember();
@@ -189,7 +191,7 @@ export default function VouchModal({
     contract: "userManager",
     method: "updateTrust",
     args: [address, values?.trust?.raw],
-    enabled: values?.trust?.raw.gt(0) && address,
+    enabled: termsAccepted && values?.trust?.raw.gt(0) && address,
     onComplete: onSendVouchComplete,
   });
 
@@ -267,6 +269,24 @@ export default function VouchModal({
                   />
                 )}
 
+                <ControlRows
+                  fluid
+                  mt="12px"
+                  items={[
+                    {
+                      type: "checkbox",
+                      content: "I understand the risks of vouching on Union",
+                      checked: termsAccepted,
+                      onClick: () => setTermsAccepted((a) => !a),
+                      tooltip: {
+                        content:
+                          "If an account you vouch for doesn't pay the minimum due within 30 days, they'll be in a defaulted state. If they stay that way for 60 days, your stake could be lost permanently to cover their debt.",
+                        position: "left",
+                      },
+                    },
+                  ]}
+                />
+
                 <Box fluid>
                   {skipVouchNote || !isV2 ? (
                     <Button
@@ -276,6 +296,7 @@ export default function VouchModal({
                       label="Confirm vouch"
                       icon={VouchIcon}
                       {...sendVouchButtonProps}
+                      disabled={!termsAccepted}
                     />
                   ) : (
                     <SendVouchNoteButton
@@ -283,6 +304,7 @@ export default function VouchModal({
                       address={address}
                       trust={values?.trust}
                       message={values?.message}
+                      disabled={!termsAccepted}
                       onVouchComplete={onSendVouchComplete}
                       onVouchNoteComplete={close}
                     />

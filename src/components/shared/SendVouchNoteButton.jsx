@@ -18,6 +18,7 @@ export default function SendVouchNoteButton({
   address,
   trust,
   message,
+  disabled,
   onVouchComplete,
   onVouchNoteComplete,
   ...props
@@ -58,7 +59,7 @@ export default function SendVouchNoteButton({
           size: "large",
           icon: VouchIcon,
           label: sendVouchButtonProps.loading ? "Sending vouch..." : "Confirm vouch",
-          disabled: sendVouchButtonProps.loading,
+          disabled: sendVouchButtonProps.loading || disabled,
         });
         break;
 
@@ -68,11 +69,11 @@ export default function SendVouchNoteButton({
           size: "large",
           icon: DiscordIcon,
           label: vouchNoteButtonProps.loading ? "Sending note..." : "Send note",
-          disabled: !message || vouchNoteButtonProps.loading,
+          disabled: !message || vouchNoteButtonProps.loading || disabled,
         });
         break;
     }
-  }, [activeItem, sendVouchButtonProps, vouchNoteButtonProps]);
+  }, [activeItem, sendVouchButtonProps, vouchNoteButtonProps, disabled]);
 
   useEffect(() => {
     switch (activeItem) {
