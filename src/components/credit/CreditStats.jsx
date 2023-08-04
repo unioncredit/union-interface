@@ -12,6 +12,7 @@ import {
   Badge,
   RepayIcon,
   WarningIcon,
+  BadgeIndicator,
 } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
@@ -26,6 +27,7 @@ import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { useVersion } from "providers/Version";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import cn from "classnames";
+import { BigNumber } from "ethers";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
@@ -45,22 +47,26 @@ export default function CreditStats({ vouchers }) {
     lastRepay = ZERO,
     overdueBlocks = ZERO,
     overdueTime = ZERO,
+    maxOverdueTime = ZERO,
   } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const unavailableBalance = vouch.sub(creditLimit).sub(owed);
+  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
 
   const {
     relative: relativeDueDate,
     absolute: absoluteDueDate,
     overdue: isOverdue,
-  } = dueOrOverdueDate(
-    lastRepay,
-    isV2 ? overdueTime : overdueBlocks,
-    blockNumber,
-    connectedChain.id
-  );
+  } = dueOrOverdueDate(lastRepay, overdueUnit, blockNumber, connectedChain.id);
+
+  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const isMaxOverdue =
+    isOverdue &&
+    lastRepay &&
+    isV2 &&
+    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   const badgeProps = isOverdue
     ? { color: "red" }
@@ -93,12 +99,8 @@ export default function CreditStats({ vouchers }) {
           <Button
             size="large"
             label="Borrow"
-            color={
-              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "primary" : "secondary"
-            }
-            variant={
-              owed.eq(ZERO) && creditLimit.gt(ZERO) ? "regular" : "light"
-            }
+            color={owed.eq(ZERO) && creditLimit.gt(ZERO) ? "primary" : "secondary"}
+            variant={owed.eq(ZERO) && creditLimit.gt(ZERO) ? "regular" : "light"}
             icon={BorrowIcon}
             onClick={() => open(BORROW_MODAL)}
           />
@@ -145,38 +147,51 @@ export default function CreditStats({ vouchers }) {
             dotColor="amber500"
             value={format(unavailableBalance)}
             titleTooltip={{
-              content: "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time.",
+              content:
+                "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time.",
             }}
           />
         </Box>
       </Card.Body>
 
-      <Card.Footer align="center" justify="space-between">
-        <Box direction="vertical">
-          <Box align="center">
-            {isOverdue && (
-              <WarningIcon width="21px" style={{ marginRight: "6px" }} />
-            )}
+      <Card.Footer direction="vertical">
+        <Box justify="space-between" align="center" fluid>
+          <Box direction="vertical">
+            <Box align="center">
+              {isOverdue && <WarningIcon width="21px" style={{ marginRight: "6px" }} />}
 
-            <Text m={0} size="medium" weight="medium" grey={500}>
-              {isOverdue ? `${relativeDueDate} Overdue` : "Next payment due"}
-            </Text>
+              <Text m={0} size="medium" weight="medium" grey={500}>
+                {isOverdue ? `${relativeDueDate} Overdue` : "Next payment due"}
+              </Text>
+            </Box>
+
+            {isMaxOverdue ? (
+              <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
+            ) : (
+              <Badge
+                mt="8px"
+                label={`${format(minPayment)} DAI · ${absoluteDueDate}`}
+                {...badgeProps}
+              />
+            )}
           </Box>
 
-          <Badge
-            mt="8px"
-            label={`${format(minPayment)} DAI · ${absoluteDueDate}`}
-            {...badgeProps}
+          <Button
+            size="large"
+            label="Make a payment"
+            icon={RepayIcon}
+            onClick={() => open(REPAY_MODAL)}
+            {...buttonProps}
           />
         </Box>
 
-        <Button
-          size="large"
-          label="Make a payment"
-          icon={RepayIcon}
-          onClick={() => open(REPAY_MODAL)}
-          {...buttonProps}
-        />
+        {isMaxOverdue && (
+          <Text m="16px 0 0 0" size="medium">
+            When you’re in an overdue state for the maximum time, you enter a “write-off” state.
+            Your backers risk permanent loss of all funds due to public write-off of your unpaid
+            balance.
+          </Text>
+        )}
       </Card.Footer>
     </Card>
   );
