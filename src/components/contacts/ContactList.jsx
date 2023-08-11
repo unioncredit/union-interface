@@ -111,12 +111,9 @@ export default function ContactList({ initialType }) {
   };
 
   useEffect(() => {
-    console.log("here");
     const urlSearchParams = locationSearch();
     if (urlSearchParams.has("address")) {
       const searchAddress = urlSearchParams.get("address");
-
-      console.log({ searchAddress });
 
       setContactIndex(
         filteredAndSorted.findIndex((v) => compareAddresses(v.address, searchAddress))
