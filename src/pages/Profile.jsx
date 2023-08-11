@@ -17,6 +17,8 @@ import {
   SwitchIcon,
   Layout,
   ManageIcon,
+  CancelIcon,
+  BadgeIndicator,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -27,7 +29,7 @@ import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import { useMemberData } from "providers/MemberData";
-import { EIP3770, ZERO_ADDRESS } from "constants";
+import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
 import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
@@ -35,21 +37,45 @@ import { blockExplorerAddress } from "utils/blockExplorer";
 import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
-import { getVersion } from "providers/Version";
+import { getVersion, useVersion } from "providers/Version";
+import { useProtocol } from "../providers/ProtocolData";
+import { BigNumber } from "ethers";
+import { useVersionBlockNumber } from "../hooks/useVersionBlockNumber";
+import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../components/modals/PublicWriteOffDebtModal";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
 
   const { open } = useModals();
+  const { isV2 } = useVersion();
+  const { data: protocol } = useProtocol();
   const { chain: connectedChain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
+  const { data: blockNumber } = useVersionBlockNumber({
+    chainId,
+  });
 
   const [copied, copy] = useCopyToClipboard();
   const [copiedAddress, copyAddress] = useCopyToClipboard();
 
   const networks = useNetworks(true);
 
-  const { isMember = false, stakerAddresses = [], borrowerAddresses = [] } = profileMember;
+  const {
+    isMember = false,
+    isOverdue = false,
+    stakerAddresses = [],
+    borrowerAddresses = [],
+    lastRepay = ZERO,
+  } = profileMember;
+
+  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+
+  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const isMaxOverdue =
+    isOverdue &&
+    lastRepay &&
+    isV2 &&
+    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   const address = profileMember.address || ZERO_ADDRESS;
 
@@ -91,10 +117,12 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   onClick={() => copyAddress(address)}
                   label={copiedAddress ? "Copied!" : truncateAddress(address)}
                 />
-                {isMember ? (
-                  <Badge label="Union Member" color="blue" mr="4px" />
+                {isMaxOverdue ? (
+                  <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
+                ) : isMember ? (
+                  <BadgeIndicator label="Member" color="blue500" />
                 ) : (
-                  <Badge label="Not a member" color="grey" mr="4px" />
+                  <BadgeIndicator label="Non-member" />
                 )}
               </BadgeRow>
               <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
@@ -124,13 +152,26 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                     label={`Switch to ${targetNetwork?.label}`}
                     onClick={() => switchNetworkAsync(targetNetwork?.chainId)}
                   />
+                ) : isMaxOverdue ? (
+                  <Button
+                    fluid
+                    mt="20px"
+                    icon={CancelIcon}
+                    label="Write-off debt"
+                    className="WriteOffButton"
+                    onClick={() =>
+                      open(PUBLIC_WRITE_OFF_DEBT_MODAL, {
+                        address: profileMember.address,
+                      })
+                    }
+                  />
                 ) : alreadyVouching ? (
                   <Button
                     fluid
                     mt="20px"
                     icon={ManageIcon}
                     label="Manage Contact"
-                    onClick={() => navigate(`/contacts/?address=${address}`)}
+                    onClick={() => navigate(`/contacts/providing?address=${address}`)}
                   />
                 ) : !connectedMember.isMember ? (
                   <Button fluid to="/" mt="20px" as={RouterLink} label="Register to vouch" />
