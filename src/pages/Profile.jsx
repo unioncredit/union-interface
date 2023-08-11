@@ -16,7 +16,7 @@ import {
   VouchIcon,
   SwitchIcon,
   Layout,
-  ManageIcon
+  ManageIcon,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -81,7 +81,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               </div>
             </div>
             <Heading mt="8px" mb={0}>
-              <PrimaryLabel address={address} />
+              <PrimaryLabel address={address} shouldTruncate={false} />
             </Heading>
             <Box mt="8px" align="center">
               <BadgeRow>
@@ -110,7 +110,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                 label: "Connect Wallet",
                 style: {
                   marginTop: "20px",
-                }
+                },
               }}
               connectedElement={
                 isSelf ? (
@@ -175,7 +175,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   align="left"
                   size="small"
                   title="Receiving vouches from"
-                  value={`${(stakerAddresses?.length ?? 0)} accounts`}
+                  value={`${stakerAddresses?.length ?? 0} accounts`}
                 />
               </Grid.Col>
               <Grid.Col>
@@ -183,7 +183,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
                   align="left"
                   size="small"
                   title="Vouching for"
-                  value={`${(borrowerAddresses?.length ?? 0)} accounts`}
+                  value={`${borrowerAddresses?.length ?? 0} accounts`}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -210,18 +210,14 @@ export default function Profile() {
 
   const { data: addressFromEns } = useEnsAddress({
     name: addressOrEns,
-    chainId: mainnet.id
+    chainId: mainnet.id,
   });
 
   const address = isAddress(addressOrEns) ? addressOrEns : addressFromEns;
 
   const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
 
-  const { data: profileMember } = useMemberData(
-    address,
-    chainId,
-    getVersion(chainId)
-  );
+  const { data: profileMember } = useMemberData(address, chainId, getVersion(chainId));
 
   const { data: connectedMember } = useMemberData(connectedAddress, chainId);
 
