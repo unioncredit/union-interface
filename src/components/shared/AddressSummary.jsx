@@ -152,9 +152,9 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
             </BadgeRow>
 
             <Box>
-              <a href={getProfileUrl(address, chain.id)}>
+              <Link to={getProfileUrl(address, chain.id)}>
                 <ProfileIcon width="24px" style={{ marginLeft: "4px" }} />
-              </a>
+              </Link>
 
               <a href={blockExplorerLink} target="_blank" rel="noreferrer">
                 <LinkOutIcon
