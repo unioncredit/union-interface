@@ -1,14 +1,6 @@
 import "./FiltersPopover.scss";
 
-import {
-  Box,
-  Text,
-  Button,
-  Control,
-  FilterIcon,
-  Modal,
-  Popover,
-} from "@unioncredit/ui";
+import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
 
@@ -56,6 +48,7 @@ export default function FiltersPopover({ filters, setFilters }) {
             label="Reset"
             variant="light"
             color="secondary"
+            className="ResetAccountStatusButton"
             onClick={() => setFilters([])}
           />
         </Modal.Header>
@@ -74,11 +67,7 @@ export default function FiltersPopover({ filters, setFilters }) {
                   checked={active}
                   className="FiltersPopover__checkbox"
                   onClick={() =>
-                    setFilters(
-                      active
-                        ? filters.filter((f) => f !== id)
-                        : [id, ...filters]
-                    )
+                    setFilters(active ? filters.filter((f) => f !== id) : [id, ...filters])
                   }
                 />
               );
