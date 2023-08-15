@@ -49,6 +49,6 @@ export const vouchFaucetContract = {
 };
 
 export const vouchNoteContract = {
-  address: "", // TODO: Add contract address when deployed
+  address: "0x7350a59e26caeFAb8532D5dC4558e59a7E16de83",
   abi: vouchNoteAbi,
 };
