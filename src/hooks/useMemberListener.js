@@ -3,6 +3,7 @@ import { mainnet, useAccount, useContractEvent, useNetwork } from "wagmi";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { useVouchers } from "providers/VouchersData";
+import { useVouchees } from "providers/VoucheesData";
 import { compareAddresses } from "utils/compare";
 
 export default function useMemberListener() {
@@ -10,6 +11,7 @@ export default function useMemberListener() {
   const { chain: connectedChain } = useNetwork();
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
+  const { refetch: refetchVouchees } = useVouchees();
 
   const userManager = useContract("userManager", connectedChain?.id ?? mainnet.id);
   const daiContract = useContract("dai", connectedChain?.id ?? mainnet.id);
@@ -18,14 +20,15 @@ export default function useMemberListener() {
     console.log("Listener: refreshing member");
     refetchMember();
     refetchVouchers();
+    refetchVouchees();
   };
 
   useContractEvent({
     ...userManager,
     eventName: "LogUpdateTrust",
-    listener: (_, borrower) => {
-      console.debug("Listener: LogUpdateTrust received", { borrower, address });
-      if (compareAddresses(borrower, address)) {
+    listener: (staker, borrower) => {
+      console.debug("Listener: LogUpdateTrust received", { staker, borrower, address });
+      if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
         refreshMember();
       }
     },
