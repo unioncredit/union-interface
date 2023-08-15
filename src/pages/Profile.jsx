@@ -107,7 +107,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               </div>
             </div>
             <Heading mt="8px" mb={0}>
-              <PrimaryLabel address={address} />
+              <PrimaryLabel address={address} shouldTruncate={false} />
             </Heading>
             <Box mt="8px" align="center">
               <BadgeRow>
