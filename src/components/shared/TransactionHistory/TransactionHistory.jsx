@@ -23,12 +23,7 @@ export function TransactionHistory({
 }) {
   const { data = [] } = useTxHistory({ staker, borrower });
 
-  const {
-    data: transactionPage,
-    maxPages,
-    activePage,
-    onChange,
-  } = usePagination(data, pageSize);
+  const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
 
   if (data.length <= 0) {
     return (
