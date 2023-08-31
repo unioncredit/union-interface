@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Layout, Grid } from "@unioncredit/ui";
+import { Text, Box, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -24,7 +24,7 @@ import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
-import { BuildInfo } from "components/shared/BuildInfo";
+import { FooterLinks } from "components/shared/FooterLinks";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
 
@@ -158,7 +158,7 @@ export default function App() {
           </Cache>
         </Settings>
         <Box mt="56px" mb="24px" w="100%">
-          <BuildInfo />
+          <FooterLinks />
         </Box>
       </Layout.Main>
     </Layout>
