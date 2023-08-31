@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
-import { networks as supportedNetworks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 import { EIP3770Map } from "constants";
 import { locationSearch } from "utils/location";
 import { isVersionSupported, Versions, useVersion } from "providers/Version";

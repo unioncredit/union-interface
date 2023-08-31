@@ -19,7 +19,7 @@ import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { AddressSummary } from "components/shared";
 import { generateTelegramLink, generateTwitterLink, getProfileUrl } from "utils/generateLinks";
-import { networks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 
 export const VOUCH_LINK_MODAL = "vouch-link-modal";
 
@@ -32,7 +32,8 @@ export default function VouchLinkModal() {
 
   const [_network, setNetwork] = useState();
 
-  const network = _network || networks.find((network) => network.chainId === connectedChain.id);
+  const network =
+    _network || supportedNetworks.find((network) => network.chainId === connectedChain.id);
 
   const profileUrl = `https://app.union.finance${getProfileUrl(address, network.chainId)}`;
 
@@ -45,7 +46,7 @@ export default function VouchLinkModal() {
 
           <Box align="center" justify="center" direction="vertical">
             <Select
-              options={networks}
+              options={supportedNetworks}
               defaultValue={network}
               onChange={(option) => setNetwork(option)}
             />

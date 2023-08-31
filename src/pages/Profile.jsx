@@ -41,7 +41,7 @@ import { useProtocol } from "../providers/ProtocolData";
 import { BigNumber } from "ethers";
 import { useVersionBlockNumber } from "../hooks/useVersionBlockNumber";
 import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../components/modals/PublicWriteOffDebtModal";
-import { networks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
     connectedMember.address || ZERO_ADDRESS
   );
 
-  const targetNetwork = networks.find((network) => network.chainId === Number(chainId));
+  const targetNetwork = supportedNetworks.find((network) => network.chainId === Number(chainId));
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">

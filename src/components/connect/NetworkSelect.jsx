@@ -11,7 +11,7 @@ import { NetworkSelectOption } from "./NetworkSelectOption";
 import useMemberSummary from "hooks/useMemberSummary";
 import { useAppNetwork } from "providers/Network";
 import { useSettings } from "providers/Settings";
-import { networks as availableNetworks } from "config/networks";
+import { supportedNetworks as availableNetworks } from "config/networks";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();

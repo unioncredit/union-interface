@@ -1,7 +1,7 @@
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { NetworkSwitcher, NetworkButton } from "@unioncredit/ui";
 
-import { testNetworkIds, networks as supportedNetworks } from "config/networks";
+import { testNetworkIds, supportedNetworks } from "config/networks";
 import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "providers/Version";
 
