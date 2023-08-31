@@ -31,7 +31,6 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
-import { useVersion } from "providers/Version";
 import { EnsIconLabel } from "../shared/EnsIconLabel";
 import SendVouchNoteButton from "../shared/SendVouchNoteButton";
 
@@ -177,7 +176,6 @@ export default function VouchModal({
   onClose,
   address: initialAddress = null,
 }) {
-  const { isV2 } = useVersion();
   const { close } = useModals();
 
   const { refetch: refetchMember } = useMember();
@@ -253,37 +251,33 @@ export default function VouchModal({
               <SteppedSection.Header>
                 <Box align="center" justify="space-between" fluid>
                   <Text m={0} grey={800} size="medium">
-                    {skipVouchNote || !isV2 ? "Confirm vouch" : "Confirm & send vouch note"}
+                    {skipVouchNote ? "Confirm vouch" : "Confirm & send vouch note"}
                   </Text>
 
-                  {isV2 && (
-                    <Toggle
-                      active={skipVouchNote}
-                      label="Skip vouch note"
-                      labelPosition="start"
-                      onChange={() => setSkipVouchNote((a) => !a)}
-                    />
-                  )}
+                  <Toggle
+                    active={skipVouchNote}
+                    label="Skip vouch note"
+                    labelPosition="start"
+                    onChange={() => setSkipVouchNote((a) => !a)}
+                  />
                 </Box>
               </SteppedSection.Header>
 
               <SteppedSection.Body direction="vertical">
-                {isV2 && (
-                  <TextArea
-                    rows={4}
-                    maxh="200px"
-                    label="Write your vouch note"
-                    rightLabel={`${values?.message?.length || 0}/140 characters`}
-                    onChange={register("message")}
-                    disabled={skipVouchNote}
-                    placeholder={`Hey, I just vouched ${
-                      values?.trust && values?.trust.formatted + " DAI"
-                    } for you on Union. You now have an on-chain credit line! Come join me 🙂`}
-                    inputProps={{
-                      maxlength: 140,
-                    }}
-                  />
-                )}
+                <TextArea
+                  rows={4}
+                  maxh="200px"
+                  label="Write your vouch note"
+                  rightLabel={`${values?.message?.length || 0}/140 characters`}
+                  onChange={register("message")}
+                  disabled={skipVouchNote}
+                  placeholder={`Hey, I just vouched ${
+                    values?.trust && values?.trust.formatted + " DAI"
+                  } for you on Union. You now have an on-chain credit line! Come join me 🙂`}
+                  inputProps={{
+                    maxlength: 140,
+                  }}
+                />
 
                 <ControlRows
                   fluid
@@ -304,7 +298,7 @@ export default function VouchModal({
                 />
 
                 <Box fluid>
-                  {skipVouchNote || !isV2 ? (
+                  {skipVouchNote ? (
                     <Button
                       fluid
                       mt="16px"

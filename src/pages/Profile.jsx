@@ -36,7 +36,7 @@ import { useModals } from "providers/ModalManager";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
-import { getVersion, useVersion } from "providers/Version";
+import { getVersion } from "providers/Version";
 import { useProtocol } from "../providers/ProtocolData";
 import { BigNumber } from "ethers";
 import { useVersionBlockNumber } from "../hooks/useVersionBlockNumber";
@@ -47,7 +47,6 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
 
   const { open } = useModals();
-  const { isV2 } = useVersion();
   const { data: protocol } = useProtocol();
   const { chain: connectedChain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
@@ -66,14 +65,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
     lastRepay = ZERO,
   } = profileMember;
 
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
   const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   const address = profileMember.address || ZERO_ADDRESS;
 

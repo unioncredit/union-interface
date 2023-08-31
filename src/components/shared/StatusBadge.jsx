@@ -9,10 +9,8 @@ import { useProtocol } from "../../providers/ProtocolData";
 import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
 import { useNetwork } from "wagmi";
 import { BigNumber } from "ethers";
-import { useVersion } from "../../providers/Version";
 
 export function StatusBadge({ address }) {
-  const { isV2 } = useVersion();
   const { chain } = useNetwork();
   const { data: protocol } = useProtocol();
   const { data: member } = useMemberData(address);
@@ -22,7 +20,7 @@ export function StatusBadge({ address }) {
     chainId: chain.id,
   });
 
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const voucherOrVouchee =
     vouchees.find((vouchee) => compareAddresses(vouchee.address, address)) ||
@@ -35,12 +33,9 @@ export function StatusBadge({ address }) {
   const isMember = contact?.isMember;
   const borrowed = contact?.locking || ZERO;
 
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
   const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   return (
     <>

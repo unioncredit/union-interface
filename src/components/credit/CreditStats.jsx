@@ -1,5 +1,7 @@
 import "./CreditStats.scss";
 
+import cn from "classnames";
+import { BigNumber } from "ethers";
 import { useNetwork } from "wagmi";
 import {
   Button,
@@ -24,15 +26,11 @@ import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
-import { useVersion } from "providers/Version";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
-import cn from "classnames";
-import { BigNumber } from "ethers";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
-  const { isV2 } = useVersion();
 
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
@@ -45,7 +43,6 @@ export default function CreditStats({ vouchers }) {
     minPayment = ZERO,
     owed = ZERO,
     lastRepay = ZERO,
-    overdueBlocks = ZERO,
     overdueTime = ZERO,
     maxOverdueTime = ZERO,
   } = { ...member, ...protocol };
@@ -53,20 +50,16 @@ export default function CreditStats({ vouchers }) {
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const unavailableBalance = vouch.sub(creditLimit).sub(owed);
-  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
 
   const {
     relative: relativeDueDate,
     absolute: absoluteDueDate,
     overdue: isOverdue,
-  } = dueOrOverdueDate(lastRepay, overdueUnit, blockNumber, connectedChain.id);
+  } = dueOrOverdueDate(lastRepay, overdueTime, blockNumber, connectedChain.id);
 
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
   const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   const badgeProps = isOverdue
     ? { color: "red" }
