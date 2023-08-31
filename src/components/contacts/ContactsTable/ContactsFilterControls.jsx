@@ -1,15 +1,19 @@
 import "./ContactsFilterControls.scss";
 
-import { Box, Button, Input, SearchIcon, VouchIcon } from "@unioncredit/ui";
+import { Box, Button, Input, SearchIcon, VouchIcon, LockIcon, Tooltip } from "@unioncredit/ui";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import FiltersPopover from "components/contacts/FiltersPopover";
 import { ContactsType } from "constants";
 import useResponsive from "hooks/useResponsive";
+import { useMember } from "../../../providers/MemberData";
 
 export const ContactsFilterControls = ({ type, filters, setQuery, setFilers }) => {
   const { open } = useModals();
+  const { data: member } = useMember();
   const { isMicro, isMobile } = useResponsive();
+
+  const { isOverdue } = member;
 
   return (
     <Box fluid className="ContactsFilterControls" align="center">
@@ -26,7 +30,26 @@ export const ContactsFilterControls = ({ type, filters, setQuery, setFilers }) =
         <FiltersPopover filters={filters} setFilters={setFilers} />
       )}
 
-      <Button fluid ml="8px" label="New vouch" icon={VouchIcon} onClick={() => open(VOUCH_MODAL)} />
+      {isOverdue ? (
+        <Tooltip content="You cannot vouch for new addresses while in default">
+          <Button
+            fluid
+            ml="8px"
+            label="New vouch"
+            icon={LockIcon}
+            disabled={true}
+            onClick={() => open(VOUCH_MODAL)}
+          />
+        </Tooltip>
+      ) : (
+        <Button
+          fluid
+          ml="8px"
+          label="New vouch"
+          icon={VouchIcon}
+          onClick={() => open(VOUCH_MODAL)}
+        />
+      )}
     </Box>
   );
 };

@@ -19,6 +19,8 @@ import {
   Toggle,
   TextArea,
   ControlRows,
+  Tooltip,
+  LockIcon,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -45,6 +47,9 @@ function VoucheeSection({
   onContinue,
   onEdit,
 }) {
+  const { data: member } = useMember();
+  const { isOverdue } = member;
+
   return (
     <SteppedSection active={active} complete={complete}>
       <SteppedSection.CollapsedHeader onEditClick={onEdit}>
@@ -76,9 +81,14 @@ function VoucheeSection({
       </SteppedSection.Header>
 
       <SteppedSection.Body direction="vertical">
-        <AddressInput defaultValue={address} label="Address or ENS" onChange={setAddress} />
+        <AddressInput
+          disabled={isOverdue}
+          defaultValue={isOverdue ? "" : address}
+          label="Address or ENS"
+          onChange={setAddress}
+        />
 
-        {address && (
+        {!isOverdue && address && (
           <Box fluid mt="16px">
             <HiddenInput
               w="100%"
@@ -98,7 +108,13 @@ function VoucheeSection({
           </Box>
         )}
 
-        <Button fluid mt="16px" label="Continue" disabled={!address} onClick={onContinue} />
+        {isOverdue ? (
+          <Tooltip w="100%" content="You cannot vouch for new addresses while in default">
+            <Button fluid mt="16px" label="Continue" disabled={true} icon={LockIcon} />
+          </Tooltip>
+        ) : (
+          <Button fluid mt="16px" label="Continue" disabled={!address} onClick={onContinue} />
+        )}
       </SteppedSection.Body>
     </SteppedSection>
   );

@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   CancelIcon,
+  LockIcon,
   Modal,
   NumericalBlock,
   NumericalRows,
@@ -21,7 +22,7 @@ import { EDIT_VOUCH_MODAL } from "components/modals/EditVouch";
 import format from "utils/format";
 import { WRITE_OFF_DEBT_MODAL } from "components/modals/WriteOffDebtModal";
 import { useModals } from "providers/ModalManager";
-import { useMemberData } from "providers/MemberData";
+import { useMember, useMemberData } from "providers/MemberData";
 import { useVouchee } from "providers/VoucheesData";
 import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
@@ -36,6 +37,9 @@ export function ContactDetailsTab({
   clearContact,
 }) {
   const { open } = useModals();
+  const { data: member } = useMember();
+
+  const { isOverdue } = member;
 
   const vouchee = useVouchee(address);
   const voucher = useVoucher(address);
@@ -60,19 +64,34 @@ export function ContactDetailsTab({
               You're not providing to this contact
             </Text>
 
-            <Button
-              mt="8px"
-              size="small"
-              color="secondary"
-              variant="light"
-              icon={VouchIcon}
-              onClick={() => {
-                clearContact();
-                open(VOUCH_MODAL, { address });
-              }}
-            >
-              Vouch
-            </Button>
+            {isOverdue ? (
+              <Tooltip content="You cannot vouch for new addresses while in default">
+                <Button
+                  mt="8px"
+                  size="small"
+                  color="secondary"
+                  variant="light"
+                  icon={LockIcon}
+                  disabled={true}
+                >
+                  Vouch
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                mt="8px"
+                size="small"
+                color="secondary"
+                variant="light"
+                icon={VouchIcon}
+                onClick={() => {
+                  clearContact();
+                  open(VOUCH_MODAL, { address });
+                }}
+              >
+                Vouch
+              </Button>
+            )}
           </Modal.Container>
         )}
       </div>
