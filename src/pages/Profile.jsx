@@ -34,7 +34,6 @@ import { compareAddresses } from "utils/compare";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
 import { blockExplorerAddress } from "utils/blockExplorer";
-import useNetworks from "hooks/useNetworks";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { getVersion, useVersion } from "providers/Version";
@@ -42,6 +41,7 @@ import { useProtocol } from "../providers/ProtocolData";
 import { BigNumber } from "ethers";
 import { useVersionBlockNumber } from "../hooks/useVersionBlockNumber";
 import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../components/modals/PublicWriteOffDebtModal";
+import { networks } from "config/networks";
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
@@ -57,8 +57,6 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   const [copied, copy] = useCopyToClipboard();
   const [copiedAddress, copyAddress] = useCopyToClipboard();
-
-  const networks = useNetworks(true);
 
   const {
     isMember = false,
