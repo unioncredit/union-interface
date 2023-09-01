@@ -5,17 +5,15 @@ import { commify } from "utils/format";
 import { getVersion, Versions } from "providers/Version";
 
 export function ProtocolPeriods({ protocol, chainId, ...props }) {
-  const { overdueTime = ZERO } = protocol;
+  const { overdueBlocks = ZERO, overdueTime = ZERO } = protocol;
   const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
 
-  const overdueHours = overdueTime
-    .mul(1000)
+  const overdueHours = versioned(overdueBlocks, overdueTime.mul(1000))
     .mul(versioned(BlockSpeed[chainId], 1))
     .div(SECONDS_PER_HOUR * 1000)
     .toNumber();
 
-  const overdueDays = overdueTime
-    .mul(1000)
+  const overdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
     .mul(versioned(BlockSpeed[chainId], 1))
     .div(SECONDS_PER_DAY * 1000)
     .toNumber();
@@ -25,7 +23,7 @@ export function ProtocolPeriods({ protocol, chainId, ...props }) {
   const periods = [
     {
       title: "Payment",
-      value: `${commify(overdueTime, 0)} Seconds`,
+      value: versioned(`${commify(overdueBlocks, 0)} Blocks`, `${commify(overdueTime, 0)} Seconds`),
       subtitle: `~${overdueFormatted}`,
     },
     {
