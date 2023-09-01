@@ -6,6 +6,7 @@ export function FooterLinks() {
   return (
     <Box className="BuildInfo" direction="vertical" align="center" fluid>
       <Text size="small" grey={300} align="center">
+        Union V2 ·{" "}
         <a
           /* eslint-disable-next-line no-undef */
           target="_blank"
