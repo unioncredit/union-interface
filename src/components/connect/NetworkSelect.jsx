@@ -1,7 +1,7 @@
 import "./NetworkSelect.scss";
 
 import cn from "classnames";
-import { optimismGoerli } from "wagmi/chains";
+import { mainnet, optimismGoerli } from "wagmi/chains";
 import { useEffect, useState } from "react";
 import { WalletIcon, Box, Button } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -11,7 +11,7 @@ import { NetworkSelectOption } from "./NetworkSelectOption";
 import useMemberSummary from "hooks/useMemberSummary";
 import { useAppNetwork } from "providers/Network";
 import { useSettings } from "providers/Settings";
-import { supportedNetworks as availableNetworks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -25,6 +25,9 @@ export default function NetworkSelect() {
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
+
+  const isMainnet = chain.id === mainnet.id;
+  const availableNetworks = supportedNetworks.filter((x) => ![mainnet.id].includes(x.chainId));
 
   const networks = availableNetworks.filter(
     (x) => settings.showTestnets || ![optimismGoerli.id].includes(x.chainId)
@@ -72,7 +75,7 @@ export default function NetworkSelect() {
       </Box>
       <Button
         w="100%"
-        disabled={chain?.unsupported}
+        disabled={chain?.unsupported || isMainnet}
         size="large"
         icon={!isConnected && WalletIcon}
         iconProps={{
@@ -83,7 +86,7 @@ export default function NetworkSelect() {
         }}
         label={
           isConnected
-            ? chain?.unsupported
+            ? chain?.unsupported || isMainnet
               ? "Select a Supported Network"
               : member.isMember
               ? "Open Union Dashboard"

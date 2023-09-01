@@ -32,12 +32,6 @@ export const supportedNetworks = [
       chainId: "0x1A4",
     },
   },
-];
-
-// Consists of all networks for both V1 and V2
-// Useful for protocol data/governance etc
-export const allNetworks = [
-  ...supportedNetworks,
   {
     type: "ethereum",
     id: "ethereum",
@@ -52,6 +46,12 @@ export const allNetworks = [
       chainId: "0x1",
     },
   },
+];
+
+// Consists of all networks for both V1 and V2
+// Useful for protocol data/governance etc
+export const allNetworks = [
+  ...supportedNetworks,
   {
     label: "Arbitrum",
     labelWithVersion: "Arbitrum (v1)",

@@ -1,5 +1,5 @@
 import { Route, matchRoutes, useLocation, Routes as ReactRoutes, Navigate } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork, mainnet } from "wagmi";
 
 import * as routes from "./App.routes";
 import { useMember } from "providers/MemberData";
@@ -11,9 +11,11 @@ export default function Routes() {
 
   const { data = {}, isLoading } = useMember();
 
+  const { chain } = useNetwork();
   const { isConnected } = useAccount();
 
   const needsToConnect = !isConnected;
+  const isMainnet = chain.id === mainnet.id;
 
   const getElement = (Component, props) => (isLoading ? <LoadingPage /> : <Component {...props} />);
 
@@ -46,7 +48,7 @@ export default function Routes() {
       }
       {needsToConnect
         ? [...memberRoutes, ...nonMemberRoutes]
-        : data.isMember
+        : data.isMember && !isMainnet
         ? memberRoutes
         : nonMemberRoutes}
       {

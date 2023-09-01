@@ -1,4 +1,4 @@
-import { useNetwork, useSwitchNetwork } from "wagmi";
+import { useNetwork, useSwitchNetwork, mainnet } from "wagmi";
 import { NetworkSwitcher, NetworkButton } from "@unioncredit/ui";
 
 import { testNetworkIds, supportedNetworks } from "config/networks";
@@ -11,7 +11,13 @@ export function NetworkSelect() {
   const { setVersion } = useVersion();
   const { switchNetworkAsync } = useSwitchNetwork();
 
-  const networks = supportedNetworks.filter((network) =>
+  const isMainnet = chain.id === mainnet.id;
+
+  const availableNetworks = supportedNetworks.filter((x) =>
+    isMainnet ? true : ![mainnet.id].includes(x.chainId)
+  );
+
+  const networks = availableNetworks.filter((network) =>
     settings.showTestnets ? true : !testNetworkIds.includes(network.chainId)
   );
 
