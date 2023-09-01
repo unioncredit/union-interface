@@ -46,7 +46,7 @@ export function StatusBadge({ address }) {
     <>
       {borrowed.gt(0) ? (
         <BadgeIndicator
-          color={isMaxOverdue ? "red500" : isOverdue ? "orange500" : "green500"}
+          color={isOverdue ? "red500" : "green500"}
           label={isMaxOverdue ? "Write-Off" : isOverdue ? "Overdue" : "Borrowing"}
           textColor={isMaxOverdue && "red500"}
         />
