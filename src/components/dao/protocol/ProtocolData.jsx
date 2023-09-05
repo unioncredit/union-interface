@@ -20,7 +20,6 @@ export default function ProtocolData() {
   );
 
   const { data: protocol = {} } = useProtocolData(network.chainId);
-
   return (
     <Card className="ProtocolData">
       <Card.Header
@@ -38,11 +37,7 @@ export default function ProtocolData() {
         <ProtocolBalances protocol={protocol} />
         <ProtocolLimits mt="16px" protocol={protocol} />
         <ProtocolFees mt="16px" protocol={protocol} chainId={network.chainId} />
-        <ProtocolPeriods
-          mt="16px"
-          protocol={protocol}
-          chainId={network.chainId}
-        />
+        <ProtocolPeriods mt="16px" protocol={protocol} chainId={network.chainId} />
       </Card.Body>
     </Card>
   );
