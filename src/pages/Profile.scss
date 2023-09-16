@@ -8,14 +8,4 @@
       background: $red600;
     }
   }
-
-  &__avatar {
-    position: relative;
-
-    &__network {
-      position: absolute;
-      right: -8px;
-      bottom: 0;
-    }
-  }
 }

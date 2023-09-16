@@ -1,0 +1,86 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileHeader {
+  padding: 18px;
+
+  &__avatar {
+    position: relative;
+
+    &__network {
+      position: absolute;
+      right: 2px;
+      bottom: 0;
+    }
+  }
+
+  &__content {
+    padding-left: 16px;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      padding-left: 0;
+      margin-top: 16px;
+    }
+
+    .heading {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  &__address {
+    a {
+      margin-top: 2px;
+    }
+    .badge, .BadgeIndicator {
+      padding: 6px 12px !important;
+      border: none;
+      background: rgba(244, 244, 245, 0.50);
+      color: $grey600;
+      font-weight: 400;
+    }
+    .badge {
+      margin-left: 0;
+    }
+    .BadgeIndicator:last-child {
+      padding-left: 12px !important;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      position: relative;
+
+      &::after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        top: 6px;
+        right: 0;
+        width: 1px;
+        bottom: 6px;
+        background: $grey400;
+      }
+    }
+  }
+
+  &__verification {
+    flex-wrap: wrap;
+
+    &__item {
+      padding: 6px 12px;
+      background: rgba(244, 244, 245, 0.50);
+      border-radius: 20px;
+      margin-right: 4px;
+      color: $grey600;
+      margin-top: 8px;
+
+      p {
+        margin: 0;
+      }
+      svg + p {
+        margin-left: 4px
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
