@@ -6,6 +6,7 @@ import uTokenAbi from "abis/v2/uToken.json";
 import userManagerAbi from "abis/v2/userManager.json";
 import unionLensAbi from "abis/v2/unionLens.json";
 import vouchFaucetAbi from "abis/vouchFaucet.json";
+import vouchNoteAbi from "abis/v2/vouchNote.json";
 
 export const userManagerContract = {
   address: "0xe2732f6E7306908697D111A53806C5883eaf0fc5",
@@ -45,4 +46,9 @@ export const unionLensContract = {
 export const vouchFaucetContract = {
   address: "",
   abi: vouchFaucetAbi,
+};
+
+export const vouchNoteContract = {
+  address: "0x7350a59e26caeFAb8532D5dC4558e59a7E16de83",
+  abi: vouchNoteAbi,
 };
