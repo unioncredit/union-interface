@@ -14,6 +14,8 @@ import {
   WarningIcon,
   BadgeIndicator,
 } from "@unioncredit/ui";
+import cn from "classnames";
+import { BigNumber } from "ethers";
 
 import { ZERO } from "constants";
 import format, { formattedNumber } from "utils/format";
@@ -26,13 +28,13 @@ import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { useVersion } from "providers/Version";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
-import cn from "classnames";
-import { BigNumber } from "ethers";
+import useResponsive from "hooks/useResponsive";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
   const { isV2 } = useVersion();
+  const { isMobile } = useResponsive();
 
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
@@ -155,7 +157,13 @@ export default function CreditStats({ vouchers }) {
       </Card.Body>
 
       <Card.Footer direction="vertical">
-        <Box justify="space-between" align="center" fluid>
+        <Box
+          direction={isMobile ? "vertical" : "horizontal"}
+          justify="space-between"
+          align={isMobile ? "flex-start" : "center"}
+          fluid
+        >
+          y
           <Box direction="vertical">
             <Box align="center">
               {isOverdue && <WarningIcon width="21px" style={{ marginRight: "6px" }} />}
@@ -175,7 +183,6 @@ export default function CreditStats({ vouchers }) {
               />
             )}
           </Box>
-
           <Button
             size="large"
             label="Make a payment"
