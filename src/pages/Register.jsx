@@ -82,7 +82,15 @@ export default function RegisterPage() {
             </Text>
 
             {isTablet && (
-              <div style={{ zIndex: 100, position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)" }}>
+              <div
+                style={{
+                  zIndex: 100,
+                  position: "fixed",
+                  bottom: "24px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
                 <MobileProgressList items={items} />
               </div>
             )}
@@ -103,11 +111,11 @@ export default function RegisterPage() {
                   <Card size="fluid" mb="24px">
                     <Card.Body>
                       <Heading level={2} size="large" grey={700}>
-                        Join the network
+                        Claim your membership
                       </Heading>
                       <Text grey={500} size="medium">
-                        Once you’ve completed the two previous steps, pay the 1 UNION fee to
-                        officially join the network as a Union member and unlock the full Union
+                        Once you’ve earned and claimed enough UNION for your membership fee; pay 1
+                        UNION to finalize your membership and unlock the full Union Credit
                         experience.
                       </Text>
 
