@@ -11,14 +11,9 @@ import {
 import { Table } from "@unioncredit/ui";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
+import { compareAddresses } from "utils/compare";
 
-export function DesktopContactsTable({
-  type,
-  data,
-  setContact,
-  sort,
-  setSortType,
-}) {
+export function DesktopContactsTable({ type, data, setContact, sort, setSortType }) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
@@ -52,14 +47,20 @@ export function DesktopContactsTable({
             key={row.address}
             data={row}
             setContact={setContact}
-            receiving={vouchers.find((v) => v.address === row.address)}
+            receiving={
+              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+              vouchees.find((v) => compareAddresses(v.address, row.address))
+            }
           />
         ) : (
           <ReceivingTableRow
             key={row.address}
             data={row}
             setContact={setContact}
-            providing={vouchees.find((v) => v.address === row.address)}
+            providing={
+              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+              vouchees.find((v) => compareAddresses(v.address, row.address))
+            }
           />
         )
       )}
