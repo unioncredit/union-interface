@@ -49,6 +49,6 @@ export const vouchFaucetContract = {
 };
 
 export const vouchNoteContract = {
-  address: "0xE81911b311AdED2dAb287C61D5FebA3b2e2dE6c2",
+  address: "0xE7d93b94eAC2d3E49bFcc222d07a39e44EbBe934",
   abi: vouchNoteAbi,
 };
