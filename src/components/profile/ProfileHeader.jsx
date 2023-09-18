@@ -65,7 +65,7 @@ export default function ProfileHeader({ address, profileMember, chainId }) {
   const targetNetwork = networks.find((network) => network.chainId === Number(chainId));
 
   useEffect(() => {
-    fetch(`http://api.union.finance:8080/address/${address}`)
+    fetch(`https://identity.union.finance/address/${address}`)
       .then((res) => res.json())
       .then(setData)
       .catch((err) => {
