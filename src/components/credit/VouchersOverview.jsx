@@ -48,7 +48,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
 
   // If we have more than displayCount vouchers, collapse into "others" item
   if (sortedVouchers.length > displayCount) {
-    const others = sortedVouchers.slice(displayCount);
+    const others = sortedVouchers.slice(displayCount - 1);
     const othersVouch = others.reduce((acc, curr) => acc.add(curr.vouch), ZERO);
 
     sortedVouchers = sortedVouchers.slice(0, displayCount - 1);
