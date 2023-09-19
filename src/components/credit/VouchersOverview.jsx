@@ -37,7 +37,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   let sortedVouchers = vouchers
-    .sort((a, b) => a.vouch.lt(b.vouch))
+    .sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1))
     .map((voucher) => ({
       vouch: voucher.vouch,
       label: voucher.ens ? voucher.ens : truncateAddress(voucher.address),
