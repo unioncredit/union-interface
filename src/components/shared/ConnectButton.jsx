@@ -1,3 +1,5 @@
+import "./ConnectButton.scss";
+
 import { Button, Wallet } from "@unioncredit/ui";
 import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
 
