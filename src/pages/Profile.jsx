@@ -19,12 +19,14 @@ import {
   ManageIcon,
   CancelIcon,
   BadgeIndicator,
+  ArrowLeftIcon,
+  UnionIcon,
 } from "@unioncredit/ui";
 import { useAccount, useEnsAddress, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
-import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { Avatar, ConnectButton, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
@@ -45,6 +47,11 @@ import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../components/modals/PublicWriteOff
 
 function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // True if the user has navigated other pages previously, false if they landed
+  // on the profile directly.
+  const historyExists = location.key !== "default";
 
   const { open } = useModals();
   const { isV2 } = useVersion();
@@ -94,6 +101,15 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
+      <Button
+        mb="16px"
+        size="pill"
+        color="secondary"
+        variant="light"
+        onClick={() => historyExists ? navigate(-1) : navigate("/")}
+        label={historyExists ? "Back" : "Union dashboard"}
+        icon={historyExists ? ArrowLeftIcon : UnionIcon} />
+
       {/*--------------------------------------------------------------
         Profile Header 
       *--------------------------------------------------------------*/}
