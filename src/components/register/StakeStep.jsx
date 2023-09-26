@@ -111,17 +111,12 @@ export default function StakeStep() {
           Stake DAI to earn UNION
         </Heading>
         <Text grey={500} size="medium">
-          A minimum of 1 UNION is needed to complete the membership process and
-          become a protocol member. You can use your DAI later to underwrite
-          loans to trusted contacts.
+          A minimum of 1 UNION is needed to complete the membership process and become a member of
+          the credit network. After registration, you can use this staked DAI to underwrite trusted
+          contacts, and continue to earn Union Tokens (UNION).
         </Text>
 
-        <Box
-          fluid
-          mt="16px"
-          direction="vertical"
-          className="StakeStep__container"
-        >
+        <Box fluid mt="16px" direction="vertical" className="StakeStep__container">
           <Box className="StakeStep__stats" justify="space-between" fluid>
             <NumericalBlock
               fluid
@@ -150,11 +145,7 @@ export default function StakeStep() {
           </Box>
 
           <Box fluid m="16px 0" className="StakeStep__progress-container">
-            <ProgressBar
-              fluid
-              percentage={percentage}
-              {...progressBarProps()}
-            />
+            <ProgressBar fluid percentage={percentage} {...progressBarProps()} />
             {unionEarned.gte(newMemberFee) && (
               <Button
                 ml="8px"
