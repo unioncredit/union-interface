@@ -24,6 +24,10 @@
     &__voucher {
       flex: 0 50%;
 
+      p:hover {
+        text-decoration: underline;
+      }
+
       @media screen and (max-width: $breakpoint-mobile) {
         flex: 0 100%;
       }
