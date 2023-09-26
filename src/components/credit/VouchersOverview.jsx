@@ -37,7 +37,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   let sortedVouchers = vouchers
-    .sort((a, b) => a.vouch.lt(b.vouch))
+    .sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1))
     .map((voucher) => ({
       vouch: voucher.vouch,
       label: voucher.ens ? voucher.ens : truncateAddress(voucher.address),
@@ -48,7 +48,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
 
   // If we have more than displayCount vouchers, collapse into "others" item
   if (sortedVouchers.length > displayCount) {
-    const others = sortedVouchers.slice(displayCount);
+    const others = sortedVouchers.slice(displayCount - 1);
     const othersVouch = others.reduce((acc, curr) => acc.add(curr.vouch), ZERO);
 
     sortedVouchers = sortedVouchers.slice(0, displayCount - 1);
