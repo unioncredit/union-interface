@@ -3,6 +3,8 @@ import "./FiltersPopover.scss";
 import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
+import useScrollLock from "hooks/useScrollLock";
+import useResponsive from "hooks/useResponsive";
 
 // prettier-ignore
 export const filterFunctions = {
@@ -13,6 +15,9 @@ export const filterFunctions = {
 };
 
 export default function FiltersPopover({ filters, setFilters }) {
+  const { isMobile } = useResponsive();
+  const setScrollLock = useScrollLock();
+
   const checkboxFilters = [
     { id: "borrowing", label: "Borrowing" },
     { id: "overdue", label: "Overdue" },
@@ -25,6 +30,7 @@ export default function FiltersPopover({ filters, setFilters }) {
       stickyMobile
       position="left"
       className="FiltersPopover"
+      onClose={() => setScrollLock(false)}
       button={(toggleOpen) => (
         <Button
           ml="8px"
@@ -32,7 +38,13 @@ export default function FiltersPopover({ filters, setFilters }) {
           icon={FilterIcon}
           color="secondary"
           variant="light"
-          onClick={toggleOpen}
+          onClick={() => {
+            toggleOpen();
+
+            if (isMobile) {
+              setScrollLock(true);
+            }
+          }}
         />
       )}
     >
