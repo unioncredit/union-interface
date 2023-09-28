@@ -163,7 +163,6 @@ export default function CreditStats({ vouchers }) {
           align={isMobile ? "flex-start" : "center"}
           fluid
         >
-          y
           <Box direction="vertical">
             <Box align="center">
               {isOverdue && <WarningIcon width="21px" style={{ marginRight: "6px" }} />}
