@@ -65,6 +65,7 @@ export default function StakeStats() {
               size="large"
               label="Deposit"
               icon={DepositIcon}
+              className="DepositButton"
               onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
             />
           </ButtonRow>
@@ -132,7 +133,7 @@ export default function StakeStats() {
                 addresses={borrowingVouchees.map((v) => v.address)}
                 label={`${
                   borrowingVouchees.length ? borrowingVouchees.length : "No"
-                } contacts borrowing`}
+                } Contacts Borrowing`}
                 showLabel={
                   !borrowingVouchees.length || borrowingVouchees.length > 6
                 }
@@ -157,7 +158,7 @@ export default function StakeStats() {
                 addresses={defaultedVouchees.map((v) => v.address)}
                 label={`${
                   defaultedVouchees.length ? defaultedVouchees.length : "No"
-                } defaulters`}
+                } Defaulters`}
                 showLabel={
                   !defaultedVouchees.length || defaultedVouchees.length > 6
                 }
