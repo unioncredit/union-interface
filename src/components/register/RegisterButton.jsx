@@ -10,10 +10,13 @@ import { useProtocol } from "providers/ProtocolData";
 import usePermit from "hooks/usePermit";
 import { getPermitMethod } from "utils/permits";
 import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
+import { useVersion } from "providers/Version";
+import { useVouchers } from "providers/VouchersData";
 
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 
 export default function RegisterButton({ onComplete }) {
+  const { isV2 } = useVersion();
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { settings, setSetting } = useSettings();
@@ -25,11 +28,16 @@ export default function RegisterButton({ onComplete }) {
 
   const { data: member } = useMember();
   const { data: protocol } = useProtocol();
+  const { data: vouchersData = [] } = useVouchers();
+
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance?.gt(ZERO));
 
   const { unionBalance = ZERO, isMember = false, newMemberFee = ZERO } = { ...member, ...protocol };
 
   const permit = getPermitMethod(chain.id, "registerMember");
-  const readyToBurn = unionBalance.gte(newMemberFee);
+  const readyToBurn = isV2
+    ? unionBalance.gte(newMemberFee)
+    : vouchers.length > 0 && unionBalance.gte(newMemberFee);
 
   const unionConfig = useContract("union");
   const userManagerConfig = useContract("userManager");
