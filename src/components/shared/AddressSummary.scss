@@ -1,8 +1,14 @@
+@import "@unioncredit/ui/src/variables";
+
 .AddressSummary {
   &__ens {
     line-height: 26px !important;
   }
   &__info {
+    .badge.badge--grey {
+      border: 1px solid $grey200;
+    }
+
     @media screen and (max-width: 400px) {
       flex-direction: column !important;
       align-items: flex-start !important;

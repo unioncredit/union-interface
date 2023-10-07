@@ -106,9 +106,10 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
         size="pill"
         color="secondary"
         variant="light"
-        onClick={() => historyExists ? navigate(-1) : navigate("/")}
+        onClick={() => (historyExists ? navigate(-1) : navigate("/"))}
         label={historyExists ? "Back" : "Union dashboard"}
-        icon={historyExists ? ArrowLeftIcon : UnionIcon} />
+        icon={historyExists ? ArrowLeftIcon : UnionIcon}
+      />
 
       {/*--------------------------------------------------------------
         Profile Header 
@@ -126,7 +127,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               <PrimaryLabel address={address} shouldTruncate={false} />
             </Heading>
             <Box mt="8px" align="center">
-              <BadgeRow>
+              <BadgeRow className="ProfileInner__BadgeRow">
                 <Badge
                   mr="4px"
                   color="grey"
