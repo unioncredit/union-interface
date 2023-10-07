@@ -9,6 +9,7 @@ import {
   EmptyState,
   TableHead,
   Card,
+  Box,
 } from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
@@ -21,14 +22,16 @@ export function TransactionHistory({
   staker = ZERO_ADDRESS,
   borrower = ZERO_ADDRESS,
 }) {
-  const { data = [] } = useTxHistory({ staker, borrower });
+  const { data = [], loading } = useTxHistory({ staker, borrower });
 
   const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
 
   if (data.length <= 0) {
     return (
       <Card.Body>
-        <EmptyState label="No transactions" />
+        <Box className="TransactionHistory__empty" justify="center">
+          <EmptyState label={loading ? "Loading transactions..." : "No transactions"} />
+        </Box>
       </Card.Body>
     );
   }

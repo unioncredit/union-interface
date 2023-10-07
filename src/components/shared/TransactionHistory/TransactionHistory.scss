@@ -1,4 +1,13 @@
 .TransactionHistory {
+  &__empty {
+    min-height: 250px;
+
+    .empty-state {
+      width: 100%;
+      margin: 15px;
+    }
+  }
+
   .avatarIcon {
     position: relative;
     svg {
