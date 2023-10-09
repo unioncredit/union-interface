@@ -2,28 +2,35 @@ import "./FiltersPopover.scss";
 
 import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
 
-import { ZERO } from "constants";
 import useScrollLock from "hooks/useScrollLock";
 import useResponsive from "hooks/useResponsive";
+import { ContactsType, ZERO } from "constants";
 
 // prettier-ignore
 export const filterFunctions = {
+  // vouchee filters
   borrowing:  (item) => item.locking.gt(ZERO),
   notMember:  (item) => !item.isMember,
   inactive:   (item) => !item.isOverdue && item.isMember,
   overdue:    (item) => item.isOverdue,
+
+  // voucher filters
+  borrowing_from: (item) => item.locking?.gt(ZERO),
 };
 
-export default function FiltersPopover({ filters, setFilters }) {
+export default function FiltersPopover({ type, filters, setFilters }) {
   const { isMobile } = useResponsive();
   const setScrollLock = useScrollLock();
 
-  const checkboxFilters = [
-    { id: "borrowing", label: "Borrowing" },
-    { id: "overdue", label: "Overdue" },
-    { id: "inactive", label: "Inactive" },
-    { id: "notMember", label: "Not a member" },
-  ];
+  const checkboxFilters =
+    type === ContactsType.VOUCHEES
+      ? [
+          { id: "borrowing", label: "Borrowing" },
+          { id: "overdue", label: "Overdue" },
+          { id: "inactive", label: "Inactive" },
+          { id: "notMember", label: "Not a member" },
+        ]
+      : [{ id: "borrowing_from", label: "Borrowing from" }];
 
   return (
     <Popover
