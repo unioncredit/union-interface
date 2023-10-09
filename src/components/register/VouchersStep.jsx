@@ -28,9 +28,11 @@ import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
+import { useVersion } from "../../providers/Version";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
+  const { isV2 } = useVersion();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
@@ -46,14 +48,16 @@ export default function VouchersStep() {
           <Heading level={2} size="large" grey={700}>
             Find vouchers
           </Heading>
-          <Heading level={2} size="large" grey={400} ml="8px">
-            (optional)
-          </Heading>
+          {isV2 && (
+            <Heading level={2} size="large" grey={400} ml="8px">
+              (optional)
+            </Heading>
+          )}
         </Box>
 
         <Text grey={500} size="medium">
           In order to have credit and borrow on Union, you’ll need to find existing Union members to
-          vouch for you. This step you can do before or after you register.
+          vouch for you. {isV2 && "This step you can do before or after you register."}
         </Text>
 
         <Box className="VouchersStep__container" fluid mt="24px" mb="14px" direction="vertical">
