@@ -3,10 +3,9 @@ import "./ContactsFilterControls.scss";
 import { Box, Button, Input, SearchIcon, VouchIcon, LockIcon, Tooltip } from "@unioncredit/ui";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useModals } from "providers/ModalManager";
+import { useMember } from "providers/MemberData";
 import FiltersPopover from "components/contacts/FiltersPopover";
-import { ContactsType } from "constants";
 import useResponsive from "hooks/useResponsive";
-import { useMember } from "../../../providers/MemberData";
 
 export const ContactsFilterControls = ({ type, filters, setQuery, setFilers }) => {
   const { open } = useModals();
@@ -26,9 +25,7 @@ export const ContactsFilterControls = ({ type, filters, setQuery, setFilers }) =
         }}
       />
 
-      {type === ContactsType.VOUCHEES && (
-        <FiltersPopover filters={filters} setFilters={setFilers} />
-      )}
+      <FiltersPopover type={type} filters={filters} setFilters={setFilers} />
 
       {isOverdue ? (
         <Tooltip content="You cannot vouch for new addresses while in default">
