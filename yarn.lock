@@ -4030,10 +4030,10 @@
     "@typescript-eslint/types" "5.60.1"
     eslint-visitor-keys "^3.3.0"
 
-"@unioncredit/ui@^2.0.13":
-  version "2.0.13"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.13.tgz#b70f7881c79dd1293e687a82d8a0f3b841281f28"
-  integrity sha512-p922tPr0giKlv7sIPrCRHyo2l5ZdL9EJ2ckZqM1MbklBribLE0iMEVRDCn+U0txmfu8mZV53DA3W2MCf9DwkLg==
+"@unioncredit/ui@^2.0.14":
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.14.tgz#f58a7691aae3da22d89867648428bb637cde4fa4"
+  integrity sha512-py0s2TVJes/9sV0bTziGVF82ymmXWUdllucihpIEzVaMZAYIFUxvUqv1TZNc4I3JeyoKQ3o0hRLOR68eKpbXTg==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
