@@ -102,62 +102,57 @@ export default function VouchModal({
             onChange={setAddress}
           />
 
-          {address && (
-            <>
-              <Input
-                mt="16px"
-                type="number"
-                suffix={<Dai />}
-                error={errors.trust}
-                label="Trust amount"
-                onChange={register("trust")}
-              />
+          <Input
+            mt="16px"
+            type="number"
+            suffix={<Dai />}
+            error={errors.trust}
+            label="Trust amount"
+            onChange={register("trust")}
+          />
 
-              <Box fluid mt="16px">
-                <HiddenInput
-                  w="100%"
-                  title="Contact alias"
-                  buttonProps={{
-                    w: "100%",
-                    h: "40px",
-                    icon: AddIcon,
-                    size: "small",
-                    color: "secondary",
-                    variant: "light",
-                    label: "Add a contact alias",
-                  }}
-                >
-                  <Input error={errors.name} onChange={register("name")} />
-                </HiddenInput>
-              </Box>
+          <Box fluid mt="16px">
+            <HiddenInput
+              w="100%"
+              title="Contact alias"
+              buttonProps={{
+                w: "100%",
+                h: "40px",
+                icon: AddIcon,
+                size: "small",
+                color: "secondary",
+                variant: "light",
+                label: "Add a contact alias",
+              }}
+            >
+              <Input error={errors.name} onChange={register("name")} />
+            </HiddenInput>
+          </Box>
 
-              <NumericalRows
-                mt="24px"
-                items={[
-                  {
-                    label: "Time to default",
-                    value: `${overdueDays} days`,
-                    tooltip: {
-                      content:
-                        "How long an account can go without making at least a minimum payment",
+          <NumericalRows
+            mt="24px"
+            items={[
+              {
+                label: "Time to default",
+                value: `${overdueDays} days`,
+                tooltip: {
+                  content: "How long an account can go without making at least a minimum payment",
+                },
+              },
+              ...(isV2
+                ? [
+                    {
+                      label: "Time to write-off",
+                      value: `${maxOverdueDays} days`,
+                      tooltip: {
+                        content:
+                          "Time an account can be in default until it can be publicly written-off",
+                      },
                     },
-                  },
-                  ...(isV2
-                    ? [
-                        {
-                          label: "Time to write-off",
-                          value: `${maxOverdueDays} days`,
-                          tooltip: {
-                            content:
-                              "Time an account can be in default until it can be publicly written-off",
-                          },
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            </>
-          )}
+                  ]
+                : []),
+            ]}
+          />
 
           {isV2 && (
             <ExpandingInfo
