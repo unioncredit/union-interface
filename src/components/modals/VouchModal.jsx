@@ -74,6 +74,7 @@ export default function VouchModal({
     method: "updateTrust",
     args: [address, values?.trust?.raw],
     enabled: values?.trust?.raw.gt(0) && address,
+    disabled: !address || values?.trust?.raw.lte(0),
     onComplete: async () => {
       await refetchMember();
       await refetchVouchees();
