@@ -50,6 +50,11 @@ export function AddressInput(props) {
     if (address && props.onChange) {
       props.onChange(address);
     }
+
+    // Input value looks like an ENS but it is not valid
+    if (value?.endsWith(".eth") && !isLoadingAddress && !addressFromEns) {
+      setError(Errors.INVALID_ADDRESS_OR_ENS);
+    }
   }, [address, props.onChange]);
 
   return (

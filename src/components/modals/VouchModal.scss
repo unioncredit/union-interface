@@ -1,0 +1,18 @@
+@import "@unioncredit/ui/src/variables";
+
+.VouchModal {
+  .ExpandingInfo {
+    @media screen and (max-width: 400px) {
+      &__header {
+        padding: 12px 10px;
+      }
+      &__icon {
+        margin-right: 4px;
+      }
+      &__arrow {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  }
+}
