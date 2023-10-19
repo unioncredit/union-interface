@@ -18,6 +18,20 @@
     height: 41px;
     box-shadow: 0 0 1px 0.5px #0000001A, 0 4px 8px 0 #00000026, 0 0 4px 0 #0000001A;
   }
+
+  .MobileContainer {
+    position: relative;
+
+    .MobileColumnToggle {
+      position: absolute;
+      right: 14px;
+      top: 3px;
+
+      &:not(.open) {
+        z-index: 1;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: $breakpoint-tablet) {
@@ -56,7 +70,7 @@
     }
 
     .table-head {
-      padding: 3px 4px;
+      padding: 12px 4px;
     }
 
     .table-head:first-of-type,

@@ -2,7 +2,7 @@ import {
   COLUMNS as PROVIDING_COLUMNS,
   ProvidingTableRow,
 } from "components/contacts/ContactsTable/ProvidingTableRow";
-import { Table, TableHead, TableRow } from "@unioncredit/ui";
+import { Box, Table, TableHead, TableRow } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
 import MobileColumnToggle from "components/contacts/ContactsTable/MobileColumnToggle";
 import { ContactsType } from "constants";
@@ -29,49 +29,51 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
   }, [type]);
 
   return (
-    <Table>
-      <TableRow>
-        <TableHead></TableHead>
-        <TableHead>Account</TableHead>
+    <Box className="MobileContainer">
+      <MobileColumnToggle
+        sort={sort}
+        setSort={setSort}
+        columns={Object.values(
+          type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS : RECEIVING_COLUMNS
+        )}
+        active={selectedColumn}
+        setSelectedColumn={setSelectedColumn}
+      />
 
-        <TableHead align="right">
-          <MobileColumnToggle
-            sort={sort}
-            setSort={setSort}
-            columns={Object.values(
-              type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS : RECEIVING_COLUMNS
-            )}
-            active={selectedColumn}
-            setSelectedColumn={setSelectedColumn}
-          />
-        </TableHead>
-      </TableRow>
+      <Table>
+        <TableRow>
+          <TableHead></TableHead>
+          <TableHead>Account</TableHead>
 
-      {data.map((row) =>
-        type === ContactsType.VOUCHEES ? (
-          <ProvidingTableRow
-            key={`${selectedColumn}_${row.address}`}
-            active={selectedColumn}
-            data={row}
-            setContact={setContact}
-            receiving={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
-          />
-        ) : (
-          <ReceivingTableRow
-            key={`${selectedColumn}_${row.address}`}
-            active={selectedColumn}
-            data={row}
-            setContact={setContact}
-            providing={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
-          />
-        )
-      )}
-    </Table>
+          <TableHead align="right"></TableHead>
+        </TableRow>
+
+        {data.map((row) =>
+          type === ContactsType.VOUCHEES ? (
+            <ProvidingTableRow
+              key={`${selectedColumn}_${row.address}`}
+              active={selectedColumn}
+              data={row}
+              setContact={setContact}
+              receiving={
+                vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+                vouchees.find((v) => compareAddresses(v.address, row.address))
+              }
+            />
+          ) : (
+            <ReceivingTableRow
+              key={`${selectedColumn}_${row.address}`}
+              active={selectedColumn}
+              data={row}
+              setContact={setContact}
+              providing={
+                vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+                vouchees.find((v) => compareAddresses(v.address, row.address))
+              }
+            />
+          )
+        )}
+      </Table>
+    </Box>
   );
 }
