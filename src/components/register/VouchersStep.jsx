@@ -50,7 +50,7 @@ export default function VouchersStep() {
           </Heading>
           {isV2 && (
             <Heading level={2} size="large" grey={400} ml="8px">
-              (optional)
+              (*optional)
             </Heading>
           )}
         </Box>
