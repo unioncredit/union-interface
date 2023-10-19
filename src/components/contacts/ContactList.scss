@@ -24,7 +24,8 @@
 
     .MobileColumnToggle {
       position: absolute;
-      right: 14px;
+      //right: 14px;
+      right: 0;
       top: 3px;
 
       &:not(.open) {
