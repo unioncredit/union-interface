@@ -168,7 +168,9 @@ export default function BorrowModal() {
               },
               {
                 label: "Payment due",
-                value: `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
+                value: amount.raw.lte(0)
+                  ? "N/A"
+                  : `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",
