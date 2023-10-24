@@ -212,7 +212,7 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               color="secondary"
               variant="light"
               label={copied ? "Copied" : "Copy profile link"}
-              onClick={() => copy(window.location.host + window.location.hash)}
+              onClick={() => copy(window.location.href)}
             />
           </Box>
         </Card.Body>
