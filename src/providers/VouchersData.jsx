@@ -2,7 +2,7 @@ import chunk from "lodash/chunk";
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
-import { useMember } from "providers/MemberData";
+import { useMemberData } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { STALE_TIME, CACHE_TIME, ZERO } from "constants";
@@ -36,10 +36,9 @@ const selectVoucher = (version) => (data) => {
   };
 };
 
-export default function VouchersData({ children }) {
+export const useVouchersData = (address) => {
   const { version } = useVersion();
-  const { address } = useAccount();
-  const { data: member = {} } = useMember();
+  const { data: member = {} } = useMemberData(address);
 
   const daiContract = useContract("dai");
   const unionLensContract = useContract("unionLens");
@@ -105,11 +104,13 @@ export default function VouchersData({ children }) {
     resp.refetch,
   ]);
 
-  const data = usePopulateEns(resp.data);
+  return { ...resp, data: usePopulateEns(resp.data) };
+};
 
-  return (
-    <VouchersContext.Provider value={{ ...resp, data }}>
-      {children}
-    </VouchersContext.Provider>
-  );
+export default function VouchersData({ children }) {
+  const { address } = useAccount();
+
+  const data = useVouchersData(address);
+
+  return <VouchersContext.Provider value={{ ...data }}>{children}</VouchersContext.Provider>;
 }

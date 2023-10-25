@@ -34,10 +34,9 @@ const selectVouchee = (version) => (data) => ({
   lastRepay: data[4],
 });
 
-export default function VoucheesData({ children }) {
+export const useVoucheesData = (address) => {
   const { version } = useVersion();
   const { data: member = {} } = useMember();
-  const { address, isConnected } = useAccount();
 
   const daiContract = useContract("dai");
   const unionLens = useContract("unionLens");
@@ -99,14 +98,16 @@ export default function VoucheesData({ children }) {
   });
 
   useEffect(() => {
-    if (address && isConnected && borrowerAddresses?.length > 0) resp.refetch();
-  }, [address, resp.refetch, borrowerAddresses?.length, isConnected]);
+    if (address && borrowerAddresses?.length > 0) resp.refetch();
+  }, [address, resp.refetch, borrowerAddresses?.length]);
 
-  const data = usePopulateEns(resp.data);
+  return { ...resp, data: usePopulateEns(resp.data) };
+};
 
-  return (
-    <VoucheesContext.Provider value={{ ...resp, data }}>
-      {children}
-    </VoucheesContext.Provider>
-  );
+export default function VoucheesData({ children }) {
+  const { address } = useAccount();
+
+  const data = useVoucheesData(address);
+
+  return <VoucheesContext.Provider value={{ ...data }}>{children}</VoucheesContext.Provider>;
 }

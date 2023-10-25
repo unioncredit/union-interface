@@ -1,22 +1,18 @@
 import "./Profile.scss";
 
-import { Box, Card, Divider, Grid, Heading, Text, NumericalBlock, Layout } from "@unioncredit/ui";
-import { useAccount, useEnsAddress, useNetwork } from "wagmi";
+import { Box, Card, Layout } from "@unioncredit/ui";
+import { useAccount, useEnsAddress } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
 import { useParams } from "react-router-dom";
 import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
-import ProfileGovernanceStats from "components/profile/ProfileGovernanceStats";
 import { getVersion } from "providers/Version";
-import ProfileHeader from "../components/profile/ProfileHeader";
+import ProfileHeader from "components/profile/ProfileHeader";
+import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
 function ProfileInner({ profileMember = {}, chainId }) {
-  const { chain: connectedChain } = useNetwork();
-
-  const { stakerAddresses = [], borrowerAddresses = [] } = profileMember;
-
   const address = profileMember.address || ZERO_ADDRESS;
 
   return (
@@ -32,37 +28,13 @@ function ProfileInner({ profileMember = {}, chainId }) {
       {/*--------------------------------------------------------------
         Profile details 
       *--------------------------------------------------------------*/}
-      <Card mb="24px">
-        <Card.Body>
-          <Heading mb="24px">Reputation</Heading>
-          <Text color="grey500" mb="12px">
-            Wallet traits
-          </Text>
-          <Grid>
-            <Grid.Row>
-              <Grid.Col>
-                <NumericalBlock
-                  align="left"
-                  size="small"
-                  title="Receiving vouches from"
-                  value={`${stakerAddresses?.length ?? 0} accounts`}
-                />
-              </Grid.Col>
-              <Grid.Col>
-                <NumericalBlock
-                  align="left"
-                  size="small"
-                  title="Vouching for"
-                  value={`${borrowerAddresses?.length ?? 0} accounts`}
-                />
-              </Grid.Col>
-            </Grid.Row>
-          </Grid>
-          <Divider my="24px" />
-          <Heading mb="24px">Governance</Heading>
-          <ProfileGovernanceStats address={address} chainId={connectedChain?.id} />
-        </Card.Body>
-      </Card>
+      <Box fluid>
+        <ProfileSidebar address={address} profileMember={profileMember} />
+
+        <Card mb="24px">
+          <Card.Body>Credit request etc</Card.Body>
+        </Card>
+      </Box>
     </Box>
   );
 }
