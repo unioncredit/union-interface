@@ -3,7 +3,7 @@ import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import useContract from "hooks/useContract";
-import { useMember } from "providers/MemberData";
+import { useMemberData } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
 import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
 import { compareAddresses } from "utils/compare";
@@ -36,7 +36,7 @@ const selectVouchee = (version) => (data) => ({
 
 export const useVoucheesData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
-  const { data: member = {} } = useMember();
+  const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
 
   const daiContract = useContract("dai", chainId, forcedVersion);
   const unionLens = useContract("unionLens", chainId, forcedVersion);
@@ -92,7 +92,10 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
         address: borrowerAddresses[i],
       }));
     },
-    contracts: contracts,
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
   });
