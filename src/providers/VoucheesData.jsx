@@ -34,14 +34,14 @@ const selectVouchee = (version) => (data) => ({
   lastRepay: data[4],
 });
 
-export const useVoucheesData = (address) => {
+export const useVoucheesData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
   const { data: member = {} } = useMember();
 
-  const daiContract = useContract("dai");
-  const unionLens = useContract("unionLens");
-  const uTokenContract = useContract("uToken");
-  const userManagerContract = useContract("userManager");
+  const daiContract = useContract("dai", chainId, forcedVersion);
+  const unionLens = useContract("unionLens", chainId, forcedVersion);
+  const uTokenContract = useContract("uToken", chainId, forcedVersion);
+  const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
   const { borrowerAddresses } = member;
 

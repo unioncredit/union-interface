@@ -36,13 +36,13 @@ const selectVoucher = (version) => (data) => {
   };
 };
 
-export const useVouchersData = (address) => {
+export const useVouchersData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
-  const { data: member = {} } = useMemberData(address);
+  const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
 
-  const daiContract = useContract("dai");
-  const unionLensContract = useContract("unionLens");
-  const userManagerContract = useContract("userManager");
+  const daiContract = useContract("dai", chainId, forcedVersion);
+  const unionLensContract = useContract("unionLens", chainId, forcedVersion);
+  const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
   const { stakerAddresses } = member;
 
@@ -82,7 +82,10 @@ export const useVouchersData = (address) => {
         address: stakerAddresses[i],
       }));
     },
-    contracts: contracts,
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
   });

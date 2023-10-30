@@ -80,6 +80,7 @@ export const EIP3770Map = {
   eth: mainnet.id,
   arb1: arbitrum.id,
   goe: goerli.id,
+  opt: optimism.id,
   optgoe: optimismGoerli.id,
 };
 

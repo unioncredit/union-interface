@@ -5,10 +5,11 @@ import ProfileGovernanceStats from "./ProfileGovernanceStats";
 import { ProfileVoucherStats } from "./ProfileVoucherStats";
 import { useVoucheesData } from "../../providers/VoucheesData";
 import { useVouchersData } from "../../providers/VouchersData";
+import { getVersion } from "../../providers/Version";
 
-export function ProfileSidebar({ address, profileMember }) {
-  const { data: vouchees = [] } = useVoucheesData(address);
-  const { data: vouchers = [] } = useVouchersData(address);
+export function ProfileSidebar({ chainId, address, profileMember }) {
+  const { data: vouchees = [] } = useVoucheesData(address, chainId, getVersion(chainId));
+  const { data: vouchers = [] } = useVouchersData(address, chainId, getVersion(chainId));
 
   const { stakerAddresses = [], borrowerAddresses = [] } = profileMember;
 
@@ -50,7 +51,7 @@ export function ProfileSidebar({ address, profileMember }) {
 
         <Divider m="24px 0" />
 
-        <ProfileGovernanceStats address={address} />
+        <ProfileGovernanceStats address={address} chainId={chainId} />
       </Card.Body>
     </Card>
   );

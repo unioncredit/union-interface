@@ -1,7 +1,7 @@
 import "./Profile.scss";
 
 import { Box, Card, Layout } from "@unioncredit/ui";
-import { useAccount, useEnsAddress } from "wagmi";
+import { useEnsAddress } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
@@ -12,7 +12,7 @@ import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
-function ProfileInner({ profileMember = {}, chainId }) {
+function ProfileInner({ profileMember, chainId }) {
   const address = profileMember.address || ZERO_ADDRESS;
 
   return (
@@ -29,7 +29,7 @@ function ProfileInner({ profileMember = {}, chainId }) {
         Profile details 
       *--------------------------------------------------------------*/}
       <Box fluid>
-        <ProfileSidebar address={address} profileMember={profileMember} />
+        <ProfileSidebar chainId={chainId} address={address} profileMember={profileMember} />
 
         <Card mb="24px">
           <Card.Body>Credit request etc</Card.Body>
@@ -40,7 +40,6 @@ function ProfileInner({ profileMember = {}, chainId }) {
 }
 
 export default function Profile() {
-  const { address: connectedAddress } = useAccount();
   const { addressOrEns: addressOrEnsParam } = useParams();
 
   // Profile pages support EIP3770 addresses so we need to check if
@@ -59,9 +58,7 @@ export default function Profile() {
 
   const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
 
-  const { data: profileMember } = useMemberData(address, chainId, getVersion(chainId));
-
-  const { data: connectedMember } = useMemberData(connectedAddress, chainId);
+  const { data: profileMember = {} } = useMemberData(address, chainId, getVersion(chainId));
 
   return (
     <>
@@ -72,7 +69,6 @@ export default function Profile() {
         <ProfileInner
           chainId={chainId}
           profileMember={profileMember}
-          connectedMember={connectedMember}
         />
       </Layout.Columned>
     </>
