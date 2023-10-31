@@ -1,9 +1,12 @@
 import { Box, Divider, Heading, NumericalRows, Text } from "@unioncredit/ui";
 import { ProfileReputationHistory } from "./ProfileReputationHistory";
 import { useCreditData } from "../../hooks/useCreditData";
+import { useState } from "react";
 
 export function ProfileAccountReputation({ address, chainId }) {
-  const { history } = useCreditData(address, chainId);
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  const { history, daysInDefault } = useCreditData(address, chainId);
 
   return (
     <>
@@ -31,12 +34,12 @@ export function ProfileAccountReputation({ address, chainId }) {
           </Text>
 
           <Text m={0} grey={800} size="large" style={{ fontSize: "24px", lineHeight: "32px" }}>
-            3 days
+            {daysInDefault} days
           </Text>
         </Box>
       </Box>
 
-      <ProfileReputationHistory history={history} />
+      <ProfileReputationHistory year={year} setYear={setYear} history={history} />
 
       <NumericalRows
         mt="16px"
@@ -57,5 +60,5 @@ export function ProfileAccountReputation({ address, chainId }) {
         ]}
       />
     </>
-  )
+  );
 }

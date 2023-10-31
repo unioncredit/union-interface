@@ -5,25 +5,29 @@ import { useProtocolData } from "providers/ProtocolData";
 import { getVersion, Versions } from "providers/Version";
 import { useMemberData } from "providers/MemberData";
 import { BlockSpeed, ZERO } from "constants";
+import { SECONDS_PER_DAY } from "../constants";
 
 export function useCreditData(address, chainId) {
   const [borrows, setBorrows] = useState([]);
   const [repays, setRepays] = useState([]);
   const [history, setHistory] = useState({});
+  const [daysInDefault, setDaysInDefault] = useState(0);
 
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
-  const { data: protocol } = useProtocolData(chainId)
+  const { data: protocol } = useProtocolData(chainId);
 
   const { owed = ZERO } = member;
   const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
-  const overduePeriodSeconds = (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks).mul(BlockSpeed[chainId]).div(1000);
+  const overduePeriodSeconds = (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks)
+    .mul(BlockSpeed[chainId])
+    .div(1000);
 
   const fetchBorrowsAndRepays = async (address) => {
     const [borrows, repays] = await Promise.all([
       fetchAccountBorrows(address, "timestamp", OrderDirection.ASC),
-      fetchAccountRepays(address, "timestamp", OrderDirection.ASC)],
-    );
+      fetchAccountRepays(address, "timestamp", OrderDirection.ASC),
+    ]);
     setBorrows(borrows);
     setRepays(repays);
   };
@@ -39,9 +43,15 @@ export function useCreditData(address, chainId) {
       // Move to the next month
       currentDate.setMonth(month + 1);
     }
-  }
+  };
+
+  const getDaysBetweenDates = (startDate, endDate) => {
+    const diff = Math.abs(startDate - endDate);
+    return Math.floor(diff / (SECONDS_PER_DAY * 1000));
+  };
 
   useEffect(() => {
+    let newDaysInDefault = 0;
     const newHistory = {};
 
     const createEmptyYear = (year) => {
@@ -98,9 +108,11 @@ export function useCreditData(address, chainId) {
 
         if (parseInt(repay.timestamp) > expectedDueDate) {
           let startDate = new Date(expectedDueDate * 1000);
-          let endDate = new Date(repay.timestamp * 1000)
+          let endDate = new Date(repay.timestamp * 1000);
 
-          getMonthsBetweenDates(startDate, endDate, ({ month, year}) => {
+          newDaysInDefault += getDaysBetweenDates(startDate, endDate);
+
+          getMonthsBetweenDates(startDate, endDate, ({ month, year }) => {
             newHistory[year][month + 1].isOverdue = true;
           });
         }
@@ -115,6 +127,8 @@ export function useCreditData(address, chainId) {
       if (owed.gt(ZERO) && today.getTime() / 1000 > overdueCutoff) {
         let startDate = new Date(overdueCutoff * 1000);
 
+        newDaysInDefault += getDaysBetweenDates(startDate, today);
+
         getMonthsBetweenDates(startDate, today, ({ month, year }) => {
           newHistory[year][month + 1].isOverdue = true;
         });
@@ -122,6 +136,7 @@ export function useCreditData(address, chainId) {
     }
 
     setHistory(newHistory);
+    setDaysInDefault(newDaysInDefault);
   }, [borrows, repays]);
 
   useEffect(() => {
@@ -135,5 +150,6 @@ export function useCreditData(address, chainId) {
     borrows,
     repays,
     history,
-  }
+    daysInDefault,
+  };
 }
