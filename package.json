@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@unioncredit/data": "^1.0.18",
     "@unioncredit/ui": "2.0.17",
     "@walletconnect/modal": "^2.5.8",
     "add-event-to-calendar": "^1.0.7",

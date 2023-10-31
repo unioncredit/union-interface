@@ -13,7 +13,7 @@ import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
 function ProfileInner({ profileMember, chainId }) {
-  const address = profileMember.address || ZERO_ADDRESS;
+  const { address = ZERO_ADDRESS } = profileMember;
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
@@ -29,7 +29,7 @@ function ProfileInner({ profileMember, chainId }) {
         Profile details 
       *--------------------------------------------------------------*/}
       <Box fluid>
-        <ProfileSidebar chainId={chainId} address={address} profileMember={profileMember} />
+        <ProfileSidebar chainId={chainId} address={address} />
 
         <Card mb="24px">
           <Card.Body>Credit request etc</Card.Body>
