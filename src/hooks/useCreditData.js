@@ -19,6 +19,9 @@ export function useCreditData(address, chainId) {
   const [history, setHistory] = useState({});
   const [daysInDefault, setDaysInDefault] = useState(0);
   const [daysSinceMembership, setDaysSinceMembership] = useState(0);
+  const [borrowedVolume, setBorrowedVolume] = useState(ZERO);
+  const [repaidVolume, setRepaidVolume] = useState(ZERO);
+  const [defaultedVolume, setDefaultedVolume] = useState(ZERO);
 
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocolData(chainId);
@@ -72,6 +75,8 @@ export function useCreditData(address, chainId) {
 
   useEffect(() => {
     let newDaysInDefault = 0;
+    let newBorrowedVolume = ZERO;
+    let newRepaidVolume = ZERO;
     const newHistory = {};
 
     const createEmptyYear = (year) => {
@@ -101,6 +106,8 @@ export function useCreditData(address, chainId) {
         createEmptyYear(year);
       }
 
+      newBorrowedVolume = newBorrowedVolume.add(borrow.amount);
+      newBorrowedVolume = newBorrowedVolume.add(borrow.fee);
       newHistory[year][month]["borrows"].push(borrow);
     });
 
@@ -114,6 +121,7 @@ export function useCreditData(address, chainId) {
         createEmptyYear(year);
       }
 
+      newRepaidVolume = newRepaidVolume.add(repay.amount);
       newHistory[year][month]["repays"].push(repay);
     });
 
@@ -145,6 +153,7 @@ export function useCreditData(address, chainId) {
       const overdueCutoff = parseInt(lastRepay) + overduePeriodSeconds.toNumber();
 
       if (owed.gt(ZERO) && today.getTime() / 1000 > overdueCutoff) {
+        setDefaultedVolume(owed);
         let startDate = new Date(overdueCutoff * 1000);
 
         newDaysInDefault += getDaysBetweenDates(startDate, today);
@@ -157,6 +166,8 @@ export function useCreditData(address, chainId) {
 
     setHistory(newHistory);
     setDaysInDefault(newDaysInDefault);
+    setRepaidVolume(newRepaidVolume);
+    setBorrowedVolume(newBorrowedVolume);
   }, [borrows, repays]);
 
   useEffect(() => {
@@ -172,6 +183,10 @@ export function useCreditData(address, chainId) {
     history,
     daysInDefault,
     daysSinceMembership,
+    borrowedVolume,
+    repaidVolume,
+    defaultedVolume,
+    totalVolume: borrowedVolume.add(repaidVolume).add(defaultedVolume),
     defaultRate: daysSinceMembership > 0 ? (daysInDefault / daysSinceMembership) * 100 : 0,
   };
 }

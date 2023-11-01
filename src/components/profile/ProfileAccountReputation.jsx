@@ -2,20 +2,27 @@ import React, { useState } from "react";
 import { Box, Divider, Heading, NumericalRows, Text } from "@unioncredit/ui";
 import { ProfileReputationHistory } from "./ProfileReputationHistory";
 import { useCreditData } from "../../hooks/useCreditData";
+import format from "../../utils/format";
 
 export function ProfileAccountReputation({ address, chainId }) {
   const [year, setYear] = useState(new Date().getFullYear());
 
-  const { history, daysInDefault, daysSinceMembership, defaultRate } = useCreditData(
-    address,
-    chainId
-  );
+  const {
+    history,
+    daysInDefault,
+    daysSinceMembership,
+    defaultRate,
+    borrowedVolume,
+    repaidVolume,
+    defaultedVolume,
+    totalVolume,
+  } = useCreditData(address, chainId);
 
   return (
     <>
       <Heading m={0}>Account Reputation</Heading>
       <Text color="grey500" mb="12px" size="medium">
-        {daysSinceMembership} days · $1,242.12 Volume
+        {daysSinceMembership} days · ${format(totalVolume)} Volume
       </Text>
 
       <Divider m="24px 0" />
@@ -50,15 +57,15 @@ export function ProfileAccountReputation({ address, chainId }) {
         items={[
           {
             label: "Borrowed Volume",
-            value: "$TODO.00",
+            value: `$${format(borrowedVolume)}`,
           },
           {
             label: "Repaid Volume",
-            value: "$TODO.00",
+            value: `$${format(repaidVolume)}`,
           },
           {
             label: "Defaulted Volume",
-            value: "$TODO.00",
+            value: `$${format(defaultedVolume)}`,
           },
         ]}
       />
