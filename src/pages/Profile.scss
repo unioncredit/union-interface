@@ -1,6 +1,9 @@
 @import "@unioncredit/ui/src/variables";
 
 .ProfileInner {
+  margin: 0 auto;
+  max-width: 767px;
+
   .WriteOffButton {
     background: $red500;
 

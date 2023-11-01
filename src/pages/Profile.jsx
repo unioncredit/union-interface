@@ -30,10 +30,6 @@ function ProfileInner({ profileMember, chainId }) {
       *--------------------------------------------------------------*/}
       <Box fluid>
         <ProfileSidebar chainId={chainId} address={address} />
-
-        <Card mb="24px">
-          <Card.Body>Credit request etc</Card.Body>
-        </Card>
       </Box>
     </Box>
   );
@@ -66,10 +62,7 @@ export default function Profile() {
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <Layout.Columned mt="24px" maxw="985px">
-        <ProfileInner
-          chainId={chainId}
-          profileMember={profileMember}
-        />
+        <ProfileInner chainId={chainId} profileMember={profileMember} />
       </Layout.Columned>
     </>
   );

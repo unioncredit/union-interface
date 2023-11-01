@@ -17,13 +17,22 @@
   }
 
   &__MonthIndicator {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     border-radius: 6px;
     background: var(--zinc-100, #F4F4F5);
     border: 1px solid var(--zinc-100, #F4F4F5);
     box-sizing: border-box;
     position: relative;
+
+    @media screen and (max-width: $breakpoint-tablet) {
+      width: 32px;
+      height: 32px;
+    }
+    @media screen and (max-width: $breakpoint-mobile) {
+      width: 24px;
+      height: 24px;
+    }
 
     &::after {
       content: ' ';
