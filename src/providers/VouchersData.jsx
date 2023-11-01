@@ -53,7 +53,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
       functionName: "getStakerBalance",
       args: [staker],
     },
-    version === Versions.V1
+    (forcedVersion || version) === Versions.V1
       ? {
           ...userManagerContract,
           functionName: "getBorrowerAsset",
@@ -78,7 +78,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
       return chunked.map((x, i) => ({
-        ...selectVoucher(version)(x),
+        ...selectVoucher(forcedVersion || version)(x),
         address: stakerAddresses[i],
       }));
     },

@@ -47,7 +47,7 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
 
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
-    version === Versions.V1
+    (forcedVersion || version) === Versions.V1
       ? {
           ...userManagerContract,
           functionName: "getBorrowerAsset",
@@ -88,7 +88,7 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
       const chunked = chunk(data, chunkSize);
 
       return chunked.map((chunk, i) => ({
-        ...selectVouchee(version)(chunk),
+        ...selectVouchee(forcedVersion || version)(chunk),
         address: borrowerAddresses[i],
       }));
     },
