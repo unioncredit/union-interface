@@ -65,6 +65,7 @@ export default function ProfileHeader({ address, chainId }) {
 
   const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
   const isMaxOverdue =
+    blockNumber &&
     isOverdue &&
     lastRepay &&
     getVersion(chainId) === Versions.V2 &&
