@@ -4060,10 +4060,10 @@
     "@typescript-eslint/types" "5.60.1"
     eslint-visitor-keys "^3.3.0"
 
-"@unioncredit/data@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.18.tgz#ed526159835282452bf280087eb460b3fa468672"
-  integrity sha512-CXz86SQC7vO5WpKKKX9fkzaZKxrIu62oDS98tZkrlBVViO/X+1SgkVQvgPZi/dDQGbLu0VlAnrVhR+ozoFoO8Q==
+"@unioncredit/data@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.19.tgz#ecd708574eac19e72dcd11ea63e01049762d35a4"
+  integrity sha512-/VG93IXqW7Uvo8I+kBsseX7/exxCpiHxjJ0279Y2aFi2hBlN9TFoFoNQCWC/oRmO5KLXo+rUlJbinHP7vX9isg==
   dependencies:
     graphql "^16.5.0"
     graphql-request "^4.2.0"

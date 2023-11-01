@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { OrderDirection } from "@unioncredit/data/lib/constants";
-import { config, fetchAccountBorrows, fetchAccountRepays } from "@unioncredit/data";
+import {
+  config,
+  fetchAccountBorrows,
+  fetchAccountMembershipApplication,
+  fetchAccountRepays,
+} from "@unioncredit/data";
 import { useProtocolData } from "providers/ProtocolData";
 import { getVersion, Versions } from "providers/Version";
 import { useMemberData } from "providers/MemberData";
@@ -10,8 +15,10 @@ import { SECONDS_PER_DAY } from "../constants";
 export function useCreditData(address, chainId) {
   const [borrows, setBorrows] = useState([]);
   const [repays, setRepays] = useState([]);
+  const [application, setApplication] = useState({});
   const [history, setHistory] = useState({});
   const [daysInDefault, setDaysInDefault] = useState(0);
+  const [daysSinceMembership, setDaysSinceMembership] = useState(0);
 
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocolData(chainId);
@@ -24,10 +31,16 @@ export function useCreditData(address, chainId) {
     .div(1000);
 
   const fetchBorrowsAndRepays = async (address) => {
-    const [borrows, repays] = await Promise.all([
+    const [borrows, repays, applications] = await Promise.all([
       fetchAccountBorrows(address, "timestamp", OrderDirection.ASC),
       fetchAccountRepays(address, "timestamp", OrderDirection.ASC),
+      fetchAccountMembershipApplication(address, "timestamp", OrderDirection.ASC),
     ]);
+
+    if (applications.length > 0) {
+      setApplication(applications[0]);
+    }
+
     setBorrows(borrows);
     setRepays(repays);
   };
@@ -49,6 +62,13 @@ export function useCreditData(address, chainId) {
     const diff = Math.abs(startDate - endDate);
     return Math.floor(diff / (SECONDS_PER_DAY * 1000));
   };
+
+  useEffect(() => {
+    if (application) {
+      const startDate = new Date(application.timestamp * 1000);
+      setDaysSinceMembership(getDaysBetweenDates(startDate, new Date()));
+    }
+  }, [application]);
 
   useEffect(() => {
     let newDaysInDefault = 0;
@@ -99,6 +119,7 @@ export function useCreditData(address, chainId) {
 
     let lastRepay;
     if (borrows.length > 0 && repays.length > 0) {
+      const today = new Date();
       let expectedDueDate = null;
       lastRepay = borrows[0].timestamp;
 
@@ -121,7 +142,6 @@ export function useCreditData(address, chainId) {
       });
 
       // Check if the user has an owed balance and has missed the last due date
-      const today = new Date();
       const overdueCutoff = parseInt(lastRepay) + overduePeriodSeconds.toNumber();
 
       if (owed.gt(ZERO) && today.getTime() / 1000 > overdueCutoff) {
@@ -151,5 +171,7 @@ export function useCreditData(address, chainId) {
     repays,
     history,
     daysInDefault,
+    daysSinceMembership,
+    defaultRate: daysSinceMembership > 0 ? (daysInDefault / daysSinceMembership) * 100 : 0,
   };
 }
