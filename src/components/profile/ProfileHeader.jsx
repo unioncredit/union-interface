@@ -1,68 +1,30 @@
 import "./ProfileHeader.scss";
 
-import {
-  Text,
-  Badge,
-  Box,
-  Heading,
-  Avatar as UiAvatar,
-  BadgeRow,
-  LinkOutIcon,
-  BadgeIndicator,
-  ProfileIcon,
-} from "@unioncredit/ui";
-import { BigNumber } from "ethers";
+import { Text, Box, Heading, LinkOutIcon, ProfileIcon, Select } from "@unioncredit/ui";
 
 import { Avatar, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
-import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
-import { EIP3770, ZERO } from "constants";
-import { useProtocol } from "providers/ProtocolData";
-import { useVersion } from "providers/Version";
-import useNetworks from "../../hooks/useNetworks";
+import { EIP3770 } from "constants";
+import { Versions } from "providers/Version";
 import { useEffect, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "../../images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "../../images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "../../images/verification/lens.svg";
 import useResponsive from "../../hooks/useResponsive";
 import { truncateAddress } from "../../utils/truncateAddress";
+import { networks } from "../../config/networks";
+import { useNavigate } from "react-router-dom";
 
-const ProfileAddress = ({ profileMember, chainId }) => {
-  const { isV2 } = useVersion();
-  const { data: protocol } = useProtocol();
-  const { data: blockNumber } = useVersionBlockNumber({
-    chainId,
-  });
-
-  const { isMember = false, isOverdue = false, lastRepay = ZERO } = profileMember;
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
-
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
-
-  const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
-
-  return isMaxOverdue ? (
-    <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
-  ) : isMember ? (
-    <BadgeIndicator label="Member" color="blue500" />
-  ) : (
-    <BadgeIndicator label="Non-member" />
-  );
-};
-
-export default function ProfileHeader({ address, profileMember, chainId }) {
-  const networks = useNetworks(true);
+export default function ProfileHeader({ address, chainId }) {
+  const navigate = useNavigate();
   const { isMobile, isTablet } = useResponsive();
 
-  const [copiedAddress, copyAddress] = useCopyToClipboard();
   const [data, setData] = useState(null);
 
-  const targetNetwork = networks.find((network) => network.chainId === Number(chainId));
+  const network =
+    [...networks[Versions.V1], ...networks[Versions.V2]].find(
+      (network) => network.chainId === parseInt(chainId)
+    ) || networks[Versions.V1][0];
 
   useEffect(() => {
     fetch(`https://identity.union.finance/address/${address}`)
@@ -78,58 +40,49 @@ export default function ProfileHeader({ address, profileMember, chainId }) {
       align="flex-start"
       direction={isMobile ? "vertical" : "horizontal"}
       className="ProfileHeader"
-      style={{
-        background: `radial-gradient(circle at 60% -20%, rgba(207,207,254,1) 40%, rgba(251,214,93,1) 60%, rgba(124,239,117,1) 100%)`,
-      }}
     >
       <Box className="ProfileHeader__avatar">
         <Avatar address={address} size={112} />
-
-        <div className="ProfileHeader__avatar__network">
-          <UiAvatar src={targetNetwork?.imageSrc} size={28} />
-        </div>
       </Box>
 
       <Box className="ProfileHeader__content" direction="vertical">
         <Heading mb={0}>
-          <PrimaryLabel address={address} shouldTruncate={false} />
+          <PrimaryLabel address={address} shouldTruncate={true} />
         </Heading>
 
-        <Box mt="8px" align="center" className="ProfileHeader__address">
-          <BadgeRow>
-            <Badge
-              mr="4px"
-              color="grey"
-              onClick={() => copyAddress(address)}
-              label={
-                copiedAddress
-                  ? "Address copied to clipboard"
-                  : isTablet
-                  ? truncateAddress(address)
-                  : `${EIP3770[chainId]}:${address}`
-              }
-            />
-
-            <ProfileAddress profileMember={profileMember} chainId={chainId} />
-          </BadgeRow>
+        <Box mt="0" align="flex-end" className="ProfileHeader__address">
+          <Text m="0 8px 1px 0" grey={500} size="medium">
+            {isTablet ? truncateAddress(address) : address}
+          </Text>
 
           <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
             <LinkOutIcon width="24px" />
           </a>
         </Box>
 
-        {data && (
-          <Box className="ProfileHeader__verification">
-            <VerificationBadge
-              type="account"
-              label={data.account.is_contract_address ? "Contract address" : "EOA"}
-            />
+        <Box mt="12px" align="center" className="ProfileHeader__verification" fluid>
+          <Select
+            options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+              ...n,
+              label: null,
+            }))}
+            defaultValue={{ ...network, label: null }}
+            onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
+          />
 
-            {data.socials?.map((item, idx) => (
-              <VerificationBadge key={idx} type={item.dappname} label={item.profileName} />
-            ))}
-          </Box>
-        )}
+          {data && (
+            <>
+              <VerificationBadge
+                type="account"
+                label={data.account.is_contract_address ? "Contract address" : "EOA"}
+              />
+
+              {data.socials?.map((item, idx) => (
+                <VerificationBadge key={idx} type={item.dappname} label={item.profileName} />
+              ))}
+            </>
+          )}
+        </Box>
       </Box>
     </Box>
   );

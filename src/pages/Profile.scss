@@ -4,6 +4,10 @@
   margin: 0 auto;
   max-width: 767px;
 
+  .Card, .Card__body {
+    overflow: visible;
+  }
+
   .WriteOffButton {
     background: $red500;
 

@@ -12,9 +12,7 @@ import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
-function ProfileInner({ profileMember, chainId }) {
-  const { address = ZERO_ADDRESS } = profileMember;
-
+function ProfileInner({ address, chainId }) {
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
       {/*--------------------------------------------------------------
@@ -22,7 +20,7 @@ function ProfileInner({ profileMember, chainId }) {
       *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body p={0}>
-          <ProfileHeader address={address} profileMember={profileMember} chainId={chainId} />
+          <ProfileHeader address={address} chainId={chainId} />
         </Card.Body>
       </Card>
       {/*--------------------------------------------------------------
@@ -56,13 +54,15 @@ export default function Profile() {
 
   const { data: profileMember = {} } = useMemberData(address, chainId, getVersion(chainId));
 
+  const profileMemberAddress = profileMember.address || ZERO_ADDRESS;
+
   return (
     <>
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <Layout.Columned mt="24px" maxw="985px">
-        <ProfileInner chainId={chainId} profileMember={profileMember} />
+        <ProfileInner chainId={chainId} address={profileMemberAddress} />
       </Layout.Columned>
     </>
   );

@@ -2,6 +2,24 @@
 
 .ProfileHeader {
   padding: 18px;
+  overflow: visible !important;
+
+  .select-ui {
+    width: auto !important;
+    outline: none !important;
+
+    .select-control {
+      min-height: 40px;
+
+      .avatar + * {
+        padding: 0;
+      }
+
+      .dropdown-indicator {
+        margin: 0 12px 0 4px;
+      }
+    }
+  }
 
   &__avatar {
     position: relative;
@@ -67,9 +85,8 @@
       padding: 6px 12px;
       background: rgba(244, 244, 245, 0.50);
       border-radius: 20px;
-      margin-right: 4px;
+      margin-left: 4px;
       color: $grey600;
-      margin-top: 8px;
 
       p {
         margin: 0;
