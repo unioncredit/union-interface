@@ -42,6 +42,9 @@ export function useCreditData(address, chainId) {
 
     if (applications.length > 0) {
       setApplication(applications[0]);
+    } else {
+      setApplication(null);
+      setDaysSinceMembership(null);
     }
 
     setBorrows(borrows);
@@ -162,6 +165,8 @@ export function useCreditData(address, chainId) {
           newHistory[year][month + 1].isOverdue = true;
         });
       }
+    } else {
+      setDefaultedVolume(ZERO);
     }
 
     setHistory(newHistory);

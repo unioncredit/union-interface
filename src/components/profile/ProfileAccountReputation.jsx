@@ -22,7 +22,7 @@ export function ProfileAccountReputation({ address, chainId }) {
     <>
       <Heading m={0}>Account Reputation</Heading>
       <Text color="grey500" mb="12px" size="medium">
-        {daysSinceMembership} days · ${format(totalVolume)} Volume
+        {daysSinceMembership && `${daysSinceMembership} days · `} ${format(totalVolume)} Volume
       </Text>
 
       <Divider m="24px 0" />
