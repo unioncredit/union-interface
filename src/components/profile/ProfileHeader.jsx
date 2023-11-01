@@ -1,5 +1,6 @@
 import "./ProfileHeader.scss";
 
+import cn from "classnames";
 import { Text, Box, Heading, LinkOutIcon, ProfileIcon, Select } from "@unioncredit/ui";
 
 import { Avatar, PrimaryLabel } from "../shared";
@@ -50,7 +51,7 @@ export default function ProfileHeader({ address, chainId }) {
           <PrimaryLabel address={address} shouldTruncate={true} />
         </Heading>
 
-        <Box mt="0" align="flex-end" className="ProfileHeader__address">
+        <Box mt="4px" align="flex-end" className="ProfileHeader__address">
           <Text m="0 8px 1px 0" grey={500} size="medium">
             {isTablet ? truncateAddress(address) : address}
           </Text>
@@ -105,7 +106,7 @@ const VerificationBadge = ({ type, label }) => {
   };
 
   return (
-    <Box className="ProfileHeader__verification__item" justify="center">
+    <Box className={cn("ProfileHeader__verification__item", type)} justify="center" align="center">
       <Icon />
       <Text>{label}</Text>
     </Box>
