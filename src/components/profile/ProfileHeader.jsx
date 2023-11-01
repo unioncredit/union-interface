@@ -22,7 +22,7 @@ import { Avatar, ConnectButton, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
 import { getVersion, Versions } from "providers/Version";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "images/verification/lens.svg";
@@ -49,7 +49,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: connectedMember } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
-  const { isMobile, isTablet } = useResponsive();
+  const { isMobile, isWidth } = useResponsive();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
@@ -75,10 +75,13 @@ export default function ProfileHeader({ address, chainId }) {
     compareAddresses(borrower, address)
   );
 
-  const network =
-    [...networks[Versions.V1], ...networks[Versions.V2]].find(
-      (network) => network.chainId === parseInt(chainId)
-    ) || networks[Versions.V1][0];
+  const network = useMemo(() => {
+    return (
+      [...networks[Versions.V1], ...networks[Versions.V2]].find(
+        (network) => network.chainId === parseInt(chainId)
+      ) || networks[Versions.V1][0]
+    );
+  }, [networks, chainId]);
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
@@ -99,19 +102,34 @@ export default function ProfileHeader({ address, chainId }) {
       direction={isMobile ? "vertical" : "horizontal"}
       className="ProfileHeader"
     >
-      <Box>
-        <Box className="ProfileHeader__avatar">
+      <Box className="ProfileHeader__card" fluid>
+        <Box className="ProfileHeader__avatar" align="flex-start" justify="space-between">
           <Avatar address={address} size={112} />
+
+          {isMobile && (
+            <Box>
+              <Select
+                options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+                  ...n,
+                  label: null,
+                }))}
+                defaultValue={{ ...network, label: null }}
+                onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
+              />
+            </Box>
+          )}
         </Box>
 
-        <Box className="ProfileHeader__content" direction="vertical">
-          <Heading mb={0}>
-            <PrimaryLabel address={address} shouldTruncate={true} />
-          </Heading>
+        <Box className="ProfileHeader__content" direction="vertical" fluid>
+          <Box align="center" justify="space-between" fluid>
+            <Heading mb={0}>
+              <PrimaryLabel address={address} shouldTruncate={true} />
+            </Heading>
+          </Box>
 
           <Box mt="4px" align="flex-end" className="ProfileHeader__address">
             <Text m="0 8px 1px 0" grey={500} size="medium">
-              {isTablet ? truncateAddress(address) : address}
+              {isWidth(900) ? truncateAddress(address) : address}
             </Text>
 
             <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
@@ -119,15 +137,17 @@ export default function ProfileHeader({ address, chainId }) {
             </a>
           </Box>
 
-          <Box mt="12px" align="center" className="ProfileHeader__verification" fluid>
-            <Select
-              options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
-                ...n,
-                label: null,
-              }))}
-              defaultValue={{ ...network, label: null }}
-              onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
-            />
+          <Box mt="4px" align="center" className="ProfileHeader__verification" fluid>
+            {!isMobile && (
+              <Select
+                options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+                  ...n,
+                  label: null,
+                }))}
+                defaultValue={{ ...network, label: null }}
+                onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
+              />
+            )}
 
             {data && (
               <>
