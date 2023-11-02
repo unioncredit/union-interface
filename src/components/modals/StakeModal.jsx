@@ -96,8 +96,8 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
         }
       : {
           label: "Amount to unstake",
-          rightLabel: `Max. ${format(stakedBalance)} DAI`,
-          rightLabelAction: () => setRawValue("amount", stakedBalance, false),
+          rightLabel: `Max. ${format(maxUserUnstake)} DAI`,
+          rightLabelAction: () => setRawValue("amount", maxUserUnstake, false),
         };
 
   return (
