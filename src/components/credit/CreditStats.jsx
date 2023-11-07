@@ -96,6 +96,7 @@ export default function CreditStats({ vouchers }) {
             token="dai"
             title="Available to Borrow"
             align="left"
+            smallDecimals={true}
             value={format(creditLimit)}
           />
 
@@ -116,7 +117,7 @@ export default function CreditStats({ vouchers }) {
             },
             {
               value: formattedNumber(creditLimit, 2, false),
-              color: "blue600",
+              color: "violet400",
             },
             {
               value: formattedNumber(unavailableBalance),
@@ -145,7 +146,7 @@ export default function CreditStats({ vouchers }) {
             token="dai"
             size="regular"
             title="Available"
-            dotColor="blue600"
+            dotColor="violet400"
             value={format(creditLimit, 2, false)}
             titleTooltip={{
               content: "The amount of DAI currently available to borrow",
@@ -170,7 +171,13 @@ export default function CreditStats({ vouchers }) {
 
       <Card.Footer direction="vertical">
         <Box mb="24px" align="center" justify="space-between" fluid>
-          <NumericalBlock token="dai" title="Balance owed" align="left" value={format(owed)} />
+          <NumericalBlock
+            token="dai"
+            title="Balance owed"
+            align="left"
+            value={format(owed)}
+            smallDecimals={true}
+          />
 
           <Box>
             <Button
