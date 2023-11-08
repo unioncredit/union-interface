@@ -121,7 +121,7 @@ export default function CreditStats({ vouchers }) {
             },
             {
               value: formattedNumber(creditLimit, 2, false),
-              color: "violet400",
+              color: "blue800",
             },
             {
               value: formattedNumber(unavailableBalance),
@@ -147,7 +147,7 @@ export default function CreditStats({ vouchers }) {
           </Box>
 
           <Box align="center" className="CreditStats__Legend">
-            <Dot color="violet400" mr="4px" />
+            <Dot color="blue800" mr="4px" />
 
             <Heading level={3} grey={500} m={0} weight="medium" size="small">
               Available
