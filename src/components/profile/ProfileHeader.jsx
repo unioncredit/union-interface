@@ -194,11 +194,19 @@ export default function ProfileHeader({ address, chainId }) {
               <>
                 <VerificationBadge
                   type="account"
+                  chainId={chainId}
+                  address={address}
                   label={data.account.is_contract_address ? "Contract address" : "EOA"}
                 />
 
                 {data.socials?.map((item, idx) => (
-                  <VerificationBadge key={idx} type={item.dappname} label={item.profileName} />
+                  <VerificationBadge
+                    key={idx}
+                    chainId={chainId}
+                    address={address}
+                    type={item.dappname}
+                    label={item.profileName}
+                  />
                 ))}
               </>
             )}
@@ -271,7 +279,7 @@ export default function ProfileHeader({ address, chainId }) {
   );
 }
 
-const VerificationBadge = ({ type, label }) => {
+const VerificationBadge = ({ type, label, chainId, address }) => {
   const Icon = () => {
     switch (type) {
       case "account":
@@ -287,10 +295,35 @@ const VerificationBadge = ({ type, label }) => {
     }
   };
 
+  const getLink = () => {
+    switch (type) {
+      case "account":
+        return blockExplorerAddress(chainId, address);
+      case "farcaster":
+        return `https://warpcast.com/${clean(label)}`;
+      case "twitter":
+        return `https://twitter.com/${clean(label)}`;
+      case "lens":
+        return `https://hey.xyz/u/${clean(label)}`;
+      default:
+        return null;
+    }
+  };
+
+  const clean = (input) => {
+    return input.replace("lens/@", "");
+  };
+
   return (
-    <Box className={cn("ProfileHeader__verification__item", type)} justify="center" align="center">
-      <Icon />
-      <Text>{label}</Text>
-    </Box>
+    <a href={getLink()} target="_blank" rel="noreferrer">
+      <Box
+        className={cn("ProfileHeader__verification__item", type)}
+        justify="center"
+        align="center"
+      >
+        <Icon />
+        <Text>{clean(label)}</Text>
+      </Box>
+    </a>
   );
 };
