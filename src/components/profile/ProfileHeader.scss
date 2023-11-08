@@ -82,32 +82,8 @@
     a {
       margin-top: 2px;
     }
-    .badge, .BadgeIndicator {
-      padding: 6px 12px !important;
-      border: none;
-      background: rgba(244, 244, 245, 0.50);
-      color: $grey600;
-      font-weight: 400;
-    }
     .badge {
-      margin-left: 0;
-    }
-    .BadgeIndicator:last-child {
-      padding-left: 12px !important;
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      position: relative;
-
-      &::after {
-        content: ' ';
-        display: block;
-        position: absolute;
-        top: 6px;
-        right: 0;
-        width: 1px;
-        bottom: 6px;
-        background: $grey400;
-      }
+      border: 1px solid #F4F4F5 !important;
     }
   }
 

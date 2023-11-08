@@ -14,6 +14,9 @@ import {
   SwitchIcon,
   CancelIcon,
   VouchIcon,
+  BadgeRow,
+  Badge,
+  BadgeIndicator,
 } from "@unioncredit/ui";
 
 import { compareAddresses } from "utils/compare";
@@ -21,7 +24,7 @@ import { compareAddresses } from "utils/compare";
 import { Avatar, ConnectButton, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
-import { getVersion, Versions } from "providers/Version";
+import { getVersion, useVersion, Versions } from "providers/Version";
 import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
@@ -41,6 +44,33 @@ import { useProtocol } from "../../providers/ProtocolData";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
 
+const ProfileAddress = ({ member, chainId }) => {
+  const { isV2 } = useVersion();
+  const { data: protocol } = useProtocol();
+  const { data: blockNumber } = useVersionBlockNumber({
+    chainId,
+  });
+
+  const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
+  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+
+  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+
+  const isMaxOverdue =
+    isOverdue &&
+    lastRepay &&
+    isV2 &&
+    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+
+  return isMaxOverdue ? (
+    <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
+  ) : isMember ? (
+    <BadgeIndicator label="Member" color="blue500" />
+  ) : (
+    <BadgeIndicator label="Non-member" />
+  );
+};
+
 export default function ProfileHeader({ address, chainId }) {
   const navigate = useNavigate();
   const { open } = useModals();
@@ -49,14 +79,14 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: connectedMember } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
-  const { isMobile, isWidth } = useResponsive();
+  const { isMobile, isTablet } = useResponsive();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
 
   const [data, setData] = useState(null);
-  const [_, copy] = useCopyToClipboard();
+  const [copiedAddress, copy] = useCopyToClipboard();
 
   const { isOverdue = false, lastRepay = ZERO } = member;
 
@@ -121,16 +151,27 @@ export default function ProfileHeader({ address, chainId }) {
         </Box>
 
         <Box className="ProfileHeader__content" direction="vertical" fluid>
-          <Box align="center" justify="space-between" fluid>
-            <Heading mb={0}>
-              <PrimaryLabel address={address} shouldTruncate={true} />
-            </Heading>
-          </Box>
+          <Heading mb={0}>
+            <PrimaryLabel address={address} shouldTruncate={false} />
+          </Heading>
 
-          <Box mt="4px" align="flex-end" className="ProfileHeader__address">
-            <Text m="0 8px 1px 0" grey={500} size="medium">
-              {isWidth(900) ? truncateAddress(address) : address}
-            </Text>
+          <Box mt="8px" align="center" className="ProfileHeader__address">
+            <BadgeRow>
+              <Badge
+                mr="4px"
+                color="grey"
+                onClick={() => copy(address)}
+                label={
+                  copiedAddress
+                    ? "Address copied to clipboard"
+                    : isTablet
+                    ? truncateAddress(address)
+                    : address
+                }
+              />
+
+              <ProfileAddress member={member} chainId={chainId} />
+            </BadgeRow>
 
             <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
               <LinkOutIcon width="24px" />
