@@ -43,7 +43,7 @@ export function ProfileVoucherStats({ vouchers, vouchees }) {
                     <PrimaryLabel address={address} />
                   </Text>
                   <Text m={0} size="small" grey={500}>
-                    {vouchees.find((v) => v.address === address) ? "Mutual Contact" : "Top Voucher"}
+                    {vouchees.find((v) => v.address === address) ? "Mutuals" : "Top Voucher"}
                   </Text>
                 </Box>
               </Box>
