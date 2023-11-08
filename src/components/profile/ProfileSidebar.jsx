@@ -34,7 +34,7 @@ export function ProfileSidebar({ address, chainId }) {
         {vouchers.length > 0 && (
           <>
             <Divider m="24px 0" />
-            <ProfileVoucherStats vouchers={vouchers} vouchees={vouchees} />
+            <ProfileVoucherStats vouchers={vouchers} vouchees={vouchees} chainId={chainId} />
           </>
         )}
 

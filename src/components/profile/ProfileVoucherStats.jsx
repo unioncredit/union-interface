@@ -3,8 +3,10 @@ import "./ProfileVoucherStats.scss";
 import { Badge, Box, Heading, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "../shared";
 import format from "utils/format";
+import { Link } from "react-router-dom";
+import { getProfileUrl } from "../../utils/generateLinks";
 
-export function ProfileVoucherStats({ vouchers, vouchees }) {
+export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
   const topVouchers = [...vouchers].sort((a, b) => a.vouch.lt(b.vouch)).slice(0, 3);
 
   return (
@@ -35,18 +37,20 @@ export function ProfileVoucherStats({ vouchers, vouchees }) {
               align="center"
               fluid
             >
-              <Box>
-                <Avatar address={address} size={40} />
+              <Link to={getProfileUrl(address, chainId)}>
+                <Box>
+                  <Avatar address={address} size={40} />
 
-                <Box pl="8px" direction="vertical">
-                  <Text m={0} size="medium">
-                    <PrimaryLabel address={address} />
-                  </Text>
-                  <Text m={0} size="small" grey={500}>
-                    {vouchees.find((v) => v.address === address) ? "Mutuals" : "Top Voucher"}
-                  </Text>
+                  <Box pl="8px" direction="vertical">
+                    <Text m={0} size="medium">
+                      <PrimaryLabel address={address} />
+                    </Text>
+                    <Text m={0} size="small" grey={500}>
+                      {vouchees.find((v) => v.address === address) ? "Mutuals" : "Top Voucher"}
+                    </Text>
+                  </Box>
                 </Box>
-              </Box>
+              </Link>
 
               <Badge color="grey" label={`${format(vouch)} DAI`} borderColor="#E4E4E7" />
             </Box>
