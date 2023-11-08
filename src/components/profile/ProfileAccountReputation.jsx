@@ -15,21 +15,20 @@ export function ProfileAccountReputation({ address, chainId }) {
     borrowedVolume,
     repaidVolume,
     defaultedVolume,
-    totalVolume,
   } = useCreditData(address, chainId);
 
   return (
     <>
       <Heading m={0}>Account Reputation</Heading>
-      <Text color="grey500" mb="12px" size="medium">
-        {daysSinceMembership && `${daysSinceMembership} days · `} ${format(totalVolume)} Volume
+      <Text color="grey500" mb="12px" size="medium" weight="medium">
+        Account Age: {daysSinceMembership || 0} days
       </Text>
 
       <Divider m="24px 0" />
 
       <Box justify="space-between">
         <Box direction="vertical" mb="16px">
-          <Text m={0} color="grey500" mb="12px" size="medium">
+          <Text m={0} color="grey500" mb="12px" size="medium" weight="medium">
             Default Rate
           </Text>
 
@@ -39,7 +38,7 @@ export function ProfileAccountReputation({ address, chainId }) {
         </Box>
 
         <Box direction="vertical" align="flex-end">
-          <Text m={0} color="grey500" mb="12px" size="medium">
+          <Text m={0} color="grey500" mb="12px" size="medium" weight="medium">
             Time in Default
           </Text>
 
@@ -53,7 +52,6 @@ export function ProfileAccountReputation({ address, chainId }) {
 
       <NumericalRows
         mt="16px"
-        weight="regular"
         items={[
           {
             label: "Borrowed Volume",

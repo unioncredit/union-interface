@@ -17,7 +17,7 @@ export function ProfileVoucherStats({ vouchers, vouchees }) {
           align="center"
           fluid
         >
-          <Heading m={0} level={2} size="small" weight="regular" grey={500}>
+          <Heading m={0} level={2} size="small" weight="medium" grey={500}>
             Top Vouchers
           </Heading>
 

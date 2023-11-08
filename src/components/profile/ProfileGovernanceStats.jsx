@@ -26,7 +26,7 @@ export default function ProfileGovernanceStats({ address }) {
         align="center"
         fluid
       >
-        <Heading m={0} level={2} size="small" weight="regular">
+        <Heading m={0} level={2} size="small" weight="medium">
           Governance
         </Heading>
 
@@ -41,7 +41,6 @@ export default function ProfileGovernanceStats({ address }) {
       </Box>
 
       <NumericalRows
-        weight="regular"
         items={[
           {
             label: "Voting Power",
