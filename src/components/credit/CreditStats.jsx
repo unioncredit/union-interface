@@ -11,6 +11,10 @@ import {
   WarningIcon,
   BadgeIndicator,
   CalendarIcon,
+  Dot,
+  Tooltip,
+  Heading,
+  InfoOutlinedIcon,
 } from "@unioncredit/ui";
 import cn from "classnames";
 import { BigNumber } from "ethers";
@@ -109,7 +113,7 @@ export default function CreditStats({ vouchers }) {
         </Box>
 
         <DistributionBar
-          m="24px 0"
+          m="24px 0 12px"
           items={[
             {
               value: formattedNumber(owed),
@@ -117,7 +121,7 @@ export default function CreditStats({ vouchers }) {
             },
             {
               value: formattedNumber(creditLimit, 2, false),
-              color: "violet400",
+              color: "blue800",
             },
             {
               value: formattedNumber(unavailableBalance),
@@ -126,46 +130,51 @@ export default function CreditStats({ vouchers }) {
           ]}
         />
 
-        <Box className="CreditStats__BorrowStats" align="center" justify="space-between">
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Borrowed"
-            dotColor="blue300"
-            value={format(owed)}
-            titleTooltip={{
-              content: "The amount of DAI you are currently borrowing",
-            }}
-          />
+        <Box className="CreditStats__BorrowStats" align="center">
+          <Box align="center" className="CreditStats__Legend">
+            <Dot color="blue300" mr="4px" />
 
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Available"
-            dotColor="violet400"
-            value={format(creditLimit, 2, false)}
-            titleTooltip={{
-              content: "The amount of DAI currently available to borrow",
-            }}
-          />
+            <Heading level={3} grey={500} m={0} weight="medium" size="small">
+              Borrowed
+              <Tooltip
+                ml="4px"
+                title={`${format(owed)} DAI`}
+                content="The amount of DAI you are currently borrowing"
+              >
+                <InfoOutlinedIcon width="13px" />
+              </Tooltip>
+            </Heading>
+          </Box>
 
-          <NumericalBlock
-            fluid
-            align="left"
-            token="dai"
-            size="regular"
-            title="Unavailable"
-            dotColor="amber500"
-            value={format(unavailableBalance)}
-            titleTooltip={{
-              content:
-                "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time",
-            }}
-          />
+          <Box align="center" className="CreditStats__Legend">
+            <Dot color="blue800" mr="4px" />
+
+            <Heading level={3} grey={500} m={0} weight="medium" size="small">
+              Available
+              <Tooltip
+                ml="4px"
+                title={`${format(creditLimit, 2, false)} DAI`}
+                content="The amount of DAI currently available to borrow"
+              >
+                <InfoOutlinedIcon width="13px" />
+              </Tooltip>
+            </Heading>
+          </Box>
+
+          <Box align="center" className="CreditStats__Legend">
+            <Dot color="amber500" mr="4px" />
+
+            <Heading level={3} grey={500} m={0} weight="medium" size="small">
+              Unavailable
+              <Tooltip
+                ml="4px"
+                title={`${format(unavailableBalance)} DAI`}
+                content="Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time"
+              >
+                <InfoOutlinedIcon width="13px" />
+              </Tooltip>
+            </Heading>
+          </Box>
         </Box>
       </Card.Body>
 
