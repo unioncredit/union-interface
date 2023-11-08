@@ -31,9 +31,32 @@
     }
   }
 
-  &__BorrowStats {
+  &__Legend {
+    margin-right: 24px;
+
     @media screen and (max-width: $breakpoint-micro) {
-      flex-direction: column !important;
+      margin-right: 8px;
+
+      &:last-of-type .Tooltip__content {
+        left: -350%;
+      }
+
+      svg {
+        width: 10px;
+      }
+      .Dot {
+        width: 8px !important;
+        height: 8px !important;
+      }
+    }
+  }
+
+  &__BorrowStats {
+
+    h3 {
+      @media screen and (max-width: $breakpoint-micro) {
+        font-size: 14px;
+      }
     }
 
     .NumericalBlock {
