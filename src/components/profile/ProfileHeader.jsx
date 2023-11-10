@@ -144,7 +144,7 @@ export default function ProfileHeader({ address, chainId }) {
 
         <Box className="ProfileHeader__content" direction="vertical" fluid>
           <Heading mb={0}>
-            <PrimaryLabel address={address} shouldTruncate={false} />
+            <PrimaryLabel address={address} shouldTruncate={true} />
           </Heading>
 
           <Box mt="8px" align="center" className="ProfileHeader__address">
