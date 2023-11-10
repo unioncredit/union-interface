@@ -23,24 +23,30 @@
     }
   }
 
-  .select-ui {
-    width: auto !important;
-    outline: none !important;
+  &__NetworkSelect {
+    position: absolute;
+    right: 0;
+    bottom: -5px;
 
-    @media screen and (min-width: $breakpoint-mobile) {
-      margin-right: 8px;
-      margin-top: 8px;
-    }
+    .select-ui {
+      width: auto !important;
+      outline: none !important;
 
-    .select-control {
-      min-height: 34px;
+      .select-control {
+        min-height: 31px;
+        border-radius: 20px;
+        padding: 0 1px;
 
-      .avatar + * {
-        padding: 0;
+        & > .avatar + div {
+          padding: 0;
+        }
+
+        .dropdown-indicator {
+          margin: 2px 8px 0 4px;
+        }
       }
-
-      .dropdown-indicator {
-        margin: 0 12px 0 4px;
+      .select-option {
+        padding: 6px 3px;
       }
     }
   }
@@ -58,12 +64,6 @@
         height: 80px !important;
         margin-bottom: 16px;
       }
-    }
-
-    &__network {
-      position: absolute;
-      right: 2px;
-      bottom: 0;
     }
   }
 

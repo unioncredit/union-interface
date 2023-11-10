@@ -136,18 +136,16 @@ export default function ProfileHeader({ address, chainId }) {
         <Box className="ProfileHeader__avatar" align="flex-start" justify="space-between">
           <Avatar address={address} size={112} />
 
-          {isMobile && (
-            <Box>
-              <Select
-                options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
-                  ...n,
-                  label: null,
-                }))}
-                defaultValue={{ ...network, label: null }}
-                onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
-              />
-            </Box>
-          )}
+          <Box className="ProfileHeader__NetworkSelect">
+            <Select
+              options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+                ...n,
+                label: null,
+              }))}
+              defaultValue={{ ...network, label: null }}
+              onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
+            />
+          </Box>
         </Box>
 
         <Box className="ProfileHeader__content" direction="vertical" fluid>
@@ -179,17 +177,6 @@ export default function ProfileHeader({ address, chainId }) {
           </Box>
 
           <Box mt="4px" align="center" className="ProfileHeader__verification" fluid>
-            {!isMobile && (
-              <Select
-                options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
-                  ...n,
-                  label: null,
-                }))}
-                defaultValue={{ ...network, label: null }}
-                onChange={(option) => navigate(`/profile/${EIP3770[option.chainId]}:${address}`)}
-              />
-            )}
-
             {data && (
               <>
                 <VerificationBadge
