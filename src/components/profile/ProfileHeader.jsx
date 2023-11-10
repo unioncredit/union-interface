@@ -79,14 +79,15 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: connectedMember } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
-  const { isMobile, isTablet, isWidth } = useResponsive();
+  const { isWidth } = useResponsive();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
 
   const [data, setData] = useState(null);
-  const [copiedAddress, copy] = useCopyToClipboard();
+  const [copiedAddress, copyAddress] = useCopyToClipboard();
+  const [copiedProfileUrl, copyProfileUrl] = useCopyToClipboard();
 
   const { isOverdue = false, lastRepay = ZERO } = member;
 
@@ -152,7 +153,7 @@ export default function ProfileHeader({ address, chainId }) {
               <Badge
                 mr="4px"
                 color="grey"
-                onClick={() => copy(address)}
+                onClick={() => copyAddress(address)}
                 label={
                   copiedAddress
                     ? "Address copied to clipboard"
@@ -252,8 +253,10 @@ export default function ProfileHeader({ address, chainId }) {
           mt="12px"
           color="secondary"
           variant="light"
-          label="Copy profile link"
-          onClick={() => copy(`https://app.union.finance${getProfileUrl(address, chainId)}`)}
+          label={copiedProfileUrl ? "Copied profile!" : "Copy profile link"}
+          onClick={() =>
+            copyProfileUrl(`https://app.union.finance${getProfileUrl(address, chainId)}`)
+          }
         />
       </Box>
     </Box>
