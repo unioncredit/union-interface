@@ -12,22 +12,19 @@ import {
 } from "components/contacts/ContactsTable/ReceivingTableRow";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
+import { compareAddresses } from "utils/compare";
 
 export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
   const [selectedColumn, setSelectedColumn] = useState(
-    type === ContactsType.VOUCHEES
-      ? PROVIDING_COLUMNS.LOAN_STATUS
-      : RECEIVING_COLUMNS.TRUST_SET
+    type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS.LOAN_STATUS : RECEIVING_COLUMNS.TRUST_SET
   );
 
   useEffect(() => {
     setSelectedColumn(
-      type === ContactsType.VOUCHEES
-        ? PROVIDING_COLUMNS.LOAN_STATUS
-        : RECEIVING_COLUMNS.TRUST_SET
+      type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS.LOAN_STATUS : RECEIVING_COLUMNS.TRUST_SET
     );
   }, [type]);
 
@@ -42,9 +39,7 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             sort={sort}
             setSort={setSort}
             columns={Object.values(
-              type === ContactsType.VOUCHEES
-                ? PROVIDING_COLUMNS
-                : RECEIVING_COLUMNS
+              type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS : RECEIVING_COLUMNS
             )}
             active={selectedColumn}
             setSelectedColumn={setSelectedColumn}
@@ -59,7 +54,10 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             active={selectedColumn}
             data={row}
             setContact={setContact}
-            receiving={vouchers.find((v) => v.address === row.address)}
+            receiving={
+              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+              vouchees.find((v) => compareAddresses(v.address, row.address))
+            }
           />
         ) : (
           <ReceivingTableRow
@@ -67,7 +65,10 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             active={selectedColumn}
             data={row}
             setContact={setContact}
-            providing={vouchees.find((v) => v.address === row.address)}
+            providing={
+              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
+              vouchees.find((v) => compareAddresses(v.address, row.address))
+            }
           />
         )
       )}

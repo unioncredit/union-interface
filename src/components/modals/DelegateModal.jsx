@@ -1,17 +1,11 @@
-import {
-  Text,
-  Button,
-  Modal,
-  ModalOverlay,
-  SegmentedControl,
-} from "@unioncredit/ui";
+import { Text, Button, Modal, ModalOverlay, SegmentedControl } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import useWrite from "hooks/useWrite";
 import { useMember } from "providers/MemberData";
 import { compareAddresses } from "utils/compare";
-import { Errors, ZERO_ADDRESS } from "constants";
+import { ZERO_ADDRESS } from "constants";
 import { useModals } from "providers/ModalManager";
 import { AddressInput, AddressLabelBox } from "components/shared";
 
@@ -32,25 +26,20 @@ export default function DelegateModal() {
 
   const { delegate: currentDelegate = ZERO_ADDRESS } = member;
 
-  const delegateTo = selected === "self" ? address : delegate;
+  const selfDelegating = selected === "self";
+  const delegateTo = selfDelegating ? address : delegate;
 
   const buttonProps = useWrite({
     contract: "union",
     method: "delegate",
     args: [delegateTo],
-    enabled: !(
-      delegateTo &&
-      currentDelegate &&
-      compareAddresses(delegateTo, currentDelegate)
-    ),
-    onComplete: () => refetchMember(),
+    enabled: !(delegateTo && currentDelegate && compareAddresses(delegateTo, currentDelegate)),
+    disabled: !delegateTo || compareAddresses(delegateTo, currentDelegate),
+    onComplete: () => {
+      refetchMember();
+      close();
+    },
   });
-
-  const error =
-    delegateTo &&
-    currentDelegate &&
-    compareAddresses(delegateTo, currentDelegate) &&
-    Errors.ALREADY_DELEGATING;
 
   /*--------------------------------------------------------------
     Render Component
@@ -61,11 +50,7 @@ export default function DelegateModal() {
       <Modal className="DelegateModal">
         <Modal.Header title="Delegate voting power" onClose={close} />
         <Modal.Body>
-          <SegmentedControl
-            mb="24px"
-            items={options}
-            onChange={({ id }) => setSelected(id)}
-          />
+          <SegmentedControl mb="24px" items={options} onChange={({ id }) => setSelected(id)} />
 
           {selected === "delegate" && (
             <AddressInput
@@ -74,7 +59,6 @@ export default function DelegateModal() {
               label="Wallet address"
               placeholder="Ethereum address"
               disabled={selected !== "delegate"}
-              error={error}
               onChange={setDelegate}
             />
           )}
@@ -83,20 +67,17 @@ export default function DelegateModal() {
             <AddressLabelBox
               mb="8px"
               label={
-                currentDelegate === address
-                  ? "Delegating votes to yourself"
-                  : "Delegating votes to"
+                currentDelegate === address ? "Delegating votes to yourself" : "Delegating votes to"
               }
               address={currentDelegate}
             />
           )}
 
           <Text mb="24px" grey={700}>
-            When you delegate votes to{" "}
-            {selected === "self" ? "yourself" : "a 3rd party"}, the voting power
-            from your wallet balance and tokens delegated to you will be
-            controlled by {selected === "self" ? "you" : "the 3rd party"} for
-            use in voting on Union Improvement Proposals (UIP’s)
+            When you delegate votes to {selected === "self" ? "yourself" : "a 3rd party"}, the
+            voting power from your wallet balance and tokens delegated to you will be controlled by{" "}
+            {selected === "self" ? "you" : "the 3rd party"} for use in voting on Union Improvement
+            Proposals (UIP’s)
           </Text>
 
           <Button mt="8px" fluid label="Delegate votes" {...buttonProps} />

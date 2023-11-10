@@ -5,6 +5,10 @@
     flex-direction: column !important;
   }
 
+  .DepositButton {
+    border: 1px solid $blue800;
+  }
+
   .AvatarBadgeRow {
     &:hover {
       background: $grey100;
@@ -37,6 +41,9 @@
 
       &:not(:last-of-type) {
         margin-bottom: 8px;
+      }
+      .NumericalBlock__value {
+        margin: 0 !important;
       }
     }
 

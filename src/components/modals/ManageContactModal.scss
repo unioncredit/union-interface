@@ -2,11 +2,14 @@
 
 .ManageContactModal {
   overflow: visible;
-  max-height: calc(100% - 56px) !important;
-  bottom: -25px;
+  max-height: calc(100% - 75px) !important;
 
   .modalHeader {
     position: relative;
+
+    @media screen and (max-width: 400px) {
+      padding: 26px 12px
+    }
   }
 
   .Card__body {

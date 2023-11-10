@@ -1,11 +1,11 @@
 import "./Profile.scss";
 
-import { Box, Card, Layout } from "@unioncredit/ui";
+import { Button, Box, Card, Layout, ArrowLeftIcon, UnionIcon, } from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
 import { getVersion } from "providers/Version";
@@ -13,8 +13,25 @@ import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
 function ProfileInner({ address, chainId }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // True if the user has navigated other pages previously, false if they landed
+  // on the profile directly.
+  const historyExists = location.key !== "default";
+
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
+      <Button
+        mb="16px"
+        size="pill"
+        color="secondary"
+        variant="light"
+        onClick={() => (historyExists ? navigate(-1) : navigate("/"))}
+        label={historyExists ? "Back" : "Union dashboard"}
+        icon={historyExists ? ArrowLeftIcon : UnionIcon}
+      />
+
       {/*--------------------------------------------------------------
         Profile Header 
       *--------------------------------------------------------------*/}

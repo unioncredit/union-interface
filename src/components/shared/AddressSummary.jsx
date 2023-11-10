@@ -90,7 +90,6 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
               <input
                 autoFocus
                 type="text"
-                maxLength={10}
                 value={labelText}
                 onBlur={(e) =>
                   (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&

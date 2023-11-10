@@ -25,8 +25,10 @@ import { useModals } from "providers/ModalManager";
 import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
 import useResponsive from "hooks/useResponsive";
+import { useVersion } from "../providers/Version";
 
 export default function RegisterPage() {
+  const { isV2 } = useVersion();
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
@@ -73,7 +75,7 @@ export default function RegisterPage() {
       </Helmet>
       <Grid className="Register">
         <Grid.Row justify="center">
-          <Grid.Col xs={11} md={8} className="Register__col">
+          <Grid.Col xs={11} md={8.1} className="Register__col">
             <Heading level={1} mb="0" className="Register__heading" grey={800}>
               Become a Union member
             </Heading>
@@ -82,7 +84,15 @@ export default function RegisterPage() {
             </Text>
 
             {isTablet && (
-              <div style={{ zIndex: 100, position: "fixed", bottom: "24px", left: "50%", transform: "translateX(-50%)" }}>
+              <div
+                style={{
+                  zIndex: 100,
+                  position: "fixed",
+                  bottom: "24px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
                 <MobileProgressList items={items} />
               </div>
             )}
@@ -93,7 +103,7 @@ export default function RegisterPage() {
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={2} complete={vouchComplete}>
+              <ProgressListItem number={isV2 ? "2*" : 2} complete={vouchComplete}>
                 <div ref={vouchStep}>
                   <VouchersStep />
                 </div>
@@ -103,11 +113,11 @@ export default function RegisterPage() {
                   <Card size="fluid" mb="24px">
                     <Card.Body>
                       <Heading level={2} size="large" grey={700}>
-                        Join the network
+                        Claim your membership
                       </Heading>
                       <Text grey={500} size="medium">
-                        Once you’ve completed the two previous steps, pay the 1 UNION fee to
-                        officially join the network as a Union member and unlock the full Union
+                        Once you’ve earned and claimed enough UNION for your membership fee; pay 1
+                        UNION to finalize your membership and unlock the full Union Credit
                         experience.
                       </Text>
 
@@ -122,7 +132,7 @@ export default function RegisterPage() {
                           </Box>
 
                           <Text grey={500} m="8px 0 16px" weight="medium">
-                            Membership fee is permanently burned
+                            Registering an Address costs 1 UNION
                           </Text>
 
                           <RegisterButton onComplete={() => open(WELCOME_MODAL)} />

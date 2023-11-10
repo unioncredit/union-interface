@@ -13,14 +13,11 @@ import {
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { SortOrder } from "constants";
+import useScrollLock from "hooks/useScrollLock";
 
-export default function MobileColumnToggle({
-  active,
-  columns,
-  setSelectedColumn,
-  sort,
-  setSort,
-}) {
+export default function MobileColumnToggle({ active, columns, setSelectedColumn, sort, setSort }) {
+  const setScrollLock = useScrollLock();
+
   const [open, setOpen] = useState(false);
 
   const Icon = sort.order
@@ -35,13 +32,19 @@ export default function MobileColumnToggle({
       stickyMobile
       position="left"
       className="MobileColumnToggle"
-      onClose={() => setOpen(false)}
+      onClose={() => {
+        setOpen(false);
+        setScrollLock(false);
+      }}
       button={() => (
         <Button
           size="small"
           color="secondary"
           variant="light"
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setScrollLock(true);
+            setOpen(!open);
+          }}
           className="MobileColumnToggle__toggle"
         >
           <>

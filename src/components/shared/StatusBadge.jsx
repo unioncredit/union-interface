@@ -22,6 +22,7 @@ export function StatusBadge({ address }) {
     chainId: chain.id,
   });
 
+  const { isMember } = member;
   const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const voucherOrVouchee =
@@ -32,7 +33,6 @@ export function StatusBadge({ address }) {
 
   const lastRepay = contact?.lastRepay;
   const isOverdue = contact?.isOverdue;
-  const isMember = contact?.isMember;
   const borrowed = contact?.locking || ZERO;
 
   const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
