@@ -4,14 +4,12 @@
   padding: 18px;
   overflow: visible !important;
 
-  &__card {
-    @media screen and (max-width: $breakpoint-mobile) {
-      flex-direction: column !important;
-    }
+  @media screen and (max-width: 670px) {
+    flex-direction: column !important;
   }
 
   .ProfileButtons {
-    @media screen and (max-width: $breakpoint-mobile) {
+    @media screen and (max-width: 670px) {
       width: 100%;
       margin-top: 16px;
     }
@@ -27,6 +25,14 @@
     position: absolute;
     right: 0;
     bottom: -5px;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      //bottom: 0;
+      right: 50%;
+      transform: translateX(50%);
+      z-index: 1;
+      width: 51px;
+    }
 
     .select-ui {
       width: auto !important;
@@ -54,10 +60,6 @@
   &__avatar {
     position: relative;
 
-    @media screen and (max-width: $breakpoint-mobile) {
-      width: 100%;
-    }
-
     & > .avatar {
       @media screen and (max-width: $breakpoint-mobile) {
         width: 80px !important;
@@ -68,8 +70,10 @@
   }
 
   &__content {
-    @media screen and (min-width: $breakpoint-mobile) {
-      padding-left: 16px;
+    padding-left: 16px;
+
+    @media screen and (max-width: 670px) {
+      padding-left: 8px;
     }
 
     .heading {

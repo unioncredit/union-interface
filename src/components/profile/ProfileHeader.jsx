@@ -79,7 +79,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: connectedMember } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
-  const { isMobile, isTablet } = useResponsive();
+  const { isMobile, isTablet, isWidth } = useResponsive();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
@@ -125,13 +125,7 @@ export default function ProfileHeader({ address, chainId }) {
   }, [address]);
 
   return (
-    <Box
-      fluid
-      justify="space-between"
-      align="flex-start"
-      direction={isMobile ? "vertical" : "horizontal"}
-      className="ProfileHeader"
-    >
+    <Box fluid justify="space-between" align="flex-start" className="ProfileHeader">
       <Box className="ProfileHeader__card" fluid>
         <Box className="ProfileHeader__avatar" align="flex-start" justify="space-between">
           <Avatar address={address} size={112} />
@@ -162,7 +156,7 @@ export default function ProfileHeader({ address, chainId }) {
                 label={
                   copiedAddress
                     ? "Address copied to clipboard"
-                    : isTablet
+                    : isWidth(930)
                     ? truncateAddress(address)
                     : address
                 }
