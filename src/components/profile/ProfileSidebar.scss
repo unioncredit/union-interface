@@ -1,4 +1,18 @@
+@import "@unioncredit/ui/src/variables";
+
 .ProfileSidebar {
-  //max-width: 400px;
-  //margin-right: 20px;
+  &__Balances {
+    .Stats {
+      @media screen and (max-width: $breakpoint-mobile) {
+        flex-direction: column !important;
+
+        .NumericalBlock:not(:first-of-type) {
+          margin-top: 12px;
+        }
+        .NumericalBlock__value {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
 }

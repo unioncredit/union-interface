@@ -1,6 +1,6 @@
 import "./Profile.scss";
 
-import { Button, Box, Card, Layout, ArrowLeftIcon, UnionIcon, } from "@unioncredit/ui";
+import { Button, Box, Card, Layout, ArrowLeftIcon, UnionIcon } from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
@@ -12,7 +12,7 @@ import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
-function ProfileInner({ address, chainId }) {
+function ProfileInner({ address, member, chainId }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -44,7 +44,7 @@ function ProfileInner({ address, chainId }) {
         Profile details 
       *--------------------------------------------------------------*/}
       <Box fluid>
-        <ProfileSidebar chainId={chainId} address={address} />
+        <ProfileSidebar chainId={chainId} address={address} member={member} />
       </Box>
     </Box>
   );
@@ -69,9 +69,9 @@ export default function Profile() {
 
   const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
 
-  const { data: profileMember = {} } = useMemberData(address, chainId, getVersion(chainId));
+  const { data: member = {} } = useMemberData(address, chainId, getVersion(chainId));
 
-  const profileMemberAddress = profileMember.address || ZERO_ADDRESS;
+  const profileAddress = member.address || ZERO_ADDRESS;
 
   return (
     <>
@@ -79,7 +79,7 @@ export default function Profile() {
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <Layout.Columned mt="24px" maxw="985px">
-        <ProfileInner chainId={chainId} address={profileMemberAddress} />
+        <ProfileInner chainId={chainId} address={profileAddress} member={member} />
       </Layout.Columned>
     </>
   );
