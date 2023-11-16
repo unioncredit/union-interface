@@ -44,12 +44,15 @@ export default function BorrowModal() {
     creditLimit = ZERO,
     originationFee = ZERO,
     overdueBlocks = ZERO,
+    overdueTime = ZERO,
     borrowRatePerBlock = ZERO,
     borrowRatePerSecond = ZERO,
     getLoanableAmount = ZERO,
   } = { ...member, ...protocol };
 
-  const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
+  const borrowRatePerUnit = isV2 ? borrowRatePerSecond : borrowRatePerBlock;
+
+  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
 
   const validate = (inputs) => {
     if (member.isOverdue) {
@@ -75,7 +78,7 @@ export default function BorrowModal() {
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(borrow, borrowRatePerBlock, overdueBlocks);
+  const minPayment = calculateExpectedMinimumPayment(newOwed, borrowRatePerUnit, overdueUnit);
 
   const buttonProps = useWrite({
     contract: "uToken",
@@ -168,9 +171,10 @@ export default function BorrowModal() {
               },
               {
                 label: "Payment due",
-                value: amount.raw.lte(0)
-                  ? "N/A"
-                  : `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
+                value:
+                  amount.raw.lte(0) && owed.lte(0)
+                    ? "N/A"
+                    : `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",
