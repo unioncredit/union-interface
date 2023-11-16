@@ -43,6 +43,10 @@
         border-radius: 20px;
         padding: 0 1px;
 
+        & + div {
+          z-index: 100;
+        }
+
         & > .avatar + div {
           padding: 0;
         }
