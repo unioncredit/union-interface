@@ -3,10 +3,10 @@
 .RewardStats {
   overflow: visible;
 
-  &__bonus .NumericalBlock__value {
+  &__bonus .NumericalBlock__value p {
     color: $violet500 !important;
   }
-  &__penalty .NumericalBlock__value {
+  &__penalty .NumericalBlock__value p {
     color: $red500 !important;
   }
 }
