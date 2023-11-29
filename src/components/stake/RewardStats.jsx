@@ -24,11 +24,7 @@ export default function RewardStats() {
   return (
     <Card mt="24px" className="RewardStats">
       <Card.Body>
-        <Box
-          className="RewardStats__top"
-          align="center"
-          justify="space-between"
-        >
+        <Box className="RewardStats__top" align="center" justify="space-between">
           <NumericalBlock
             align="left"
             token="union"
@@ -45,12 +41,7 @@ export default function RewardStats() {
           />
         </Box>
 
-        <Box
-          mt="24px"
-          align="center"
-          justify="space-between"
-          className="RewardStats__bottom"
-        >
+        <Box mt="24px" align="center" justify="space-between" className="RewardStats__bottom">
           <NumericalBlock
             fluid
             size="medium"
@@ -59,7 +50,6 @@ export default function RewardStats() {
             title="Base Reward"
             value={format(estimatedDailyBase)}
             titleTooltip={{
-              shrink: true,
               content: "UNION you get just for depositing DAI",
             }}
           />
@@ -72,7 +62,6 @@ export default function RewardStats() {
             className="RewardStats__bonus"
             value={`+${format(estimatedDailyBonus)}`}
             titleTooltip={{
-              shrink: true,
               content: "UNION you get because you vouched for someone actively borrowing",
             }}
           />
@@ -85,8 +74,8 @@ export default function RewardStats() {
             className="RewardStats__penalty"
             value={`-${format(estimatedDailyPenalty)}`}
             titleTooltip={{
-              shrink: true,
-              content: "Not a strict penalty, you just dont earn any UNION for stake backing a borrower in default",
+              content:
+                "Not a strict penalty, you just dont earn any UNION for stake backing a borrower in default",
             }}
           />
           <NumericalBlock
@@ -97,7 +86,6 @@ export default function RewardStats() {
             title="Est. Daily"
             value={format(estimatedDailyTotal)}
             titleTooltip={{
-              shrink: true,
               content: "The very rough estimate of how many UNION you'll earn in a day",
             }}
           />
