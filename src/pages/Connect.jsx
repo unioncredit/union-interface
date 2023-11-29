@@ -54,20 +54,6 @@ export default function ConnectPage() {
 
       <Banner />
       <Box direction="vertical" align="center" fluid>
-        <Box mt="24px">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            style={{ width: "100%" }}
-            href="https://union.mirror.xyz/uPnUm4TLNyWoRfNAVCJwxT0TeNPBgNCg04vuDv5sIGk"
-          >
-            <InfoBanner
-              icon={MarketingIcon}
-              variant="info"
-              label={"Version 2 of the Union Protocol is live now on Optimism. Read More"}
-            />
-          </a>
-        </Box>
 
         <Box className="Connect__container" direction="vertical" w="100%" pb="2em" maxw="485px">
           {chain?.unsupported && (
