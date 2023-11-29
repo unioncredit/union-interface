@@ -47,20 +47,16 @@ export function DesktopContactsTable({ type, data, setContact, sort, setSortType
             key={row.address}
             data={row}
             setContact={setContact}
-            receiving={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
+            providing={vouchees.find((v) => compareAddresses(v.address, row.address))}
+            receiving={vouchers.find((v) => compareAddresses(v.address, row.address))}
           />
         ) : (
           <ReceivingTableRow
             key={row.address}
             data={row}
             setContact={setContact}
-            providing={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
+            providing={vouchees.find((v) => compareAddresses(v.address, row.address))}
+            receiving={vouchers.find((v) => compareAddresses(v.address, row.address))}
           />
         )
       )}
