@@ -81,9 +81,7 @@ export default function RepayModal() {
 
   // The maximum amount the user can repay, either their total DAI balance
   // or their balance owed + 0.005% margin
-  const maxRepay = daiBalance.gte(owedBalanceWithMargin)
-    ? owedBalanceWithMargin
-    : daiBalance;
+  const maxRepay = daiBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : daiBalance;
 
   const options = [
     {
@@ -91,17 +89,17 @@ export default function RepayModal() {
       value: format(maxRepay),
       amount: maxRepay,
       paymentType: PaymentType.MAX,
-      title: maxRepay.gte(owed)
-        ? "Pay-off entire loan"
-        : "Pay maximum DAI available",
+      title: maxRepay.gte(owed) ? "Pay-off entire loan" : "Pay maximum DAI available",
       content: maxRepay.gte(owed)
         ? "Make a payment equal to the outstanding balance"
         : "Make a payment with the maximum amount available in your wallet",
-      tooltip: maxRepay.gte(owed) && format(maxRepay) !== format(owed) && {
-        title: "Why is this more than my balance owed?",
-        content: "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
-        position: "right",
-      },
+      tooltip: maxRepay.gte(owed) &&
+        format(maxRepay) !== format(owed) && {
+          title: "Why is this more than my balance owed?",
+          content:
+            "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
+          position: "right",
+        },
     },
     {
       value: format(minPayment),
@@ -109,8 +107,7 @@ export default function RepayModal() {
       token: "dai",
       paymentType: PaymentType.MIN,
       title: "Pay minimum due",
-      content:
-        "Make the payment required to cover the interest due on your loan",
+      content: "Make the payment required to cover the interest due on your loan",
     },
   ];
 
@@ -169,18 +166,17 @@ export default function RepayModal() {
                 type="number"
                 name="amount"
                 label="Amount to repay"
-                rightLabel={`Max. ${format(daiBalance)}`}
+                rightLabel={`Max. ${format(maxRepay)}`}
+                rightLabelAction={() => setRawValue("amount", maxRepay, false)}
                 suffix={<Dai />}
                 placeholder="0.0"
+                value={amount.formatted}
                 error={isCustomSelected ? errors.amount : null}
                 onChange={register("amount")}
               />
             </Box>
           ) : (
-            <OptionSelect
-              cards={options}
-              onChange={(index) => handleSelect(options[index])}
-            />
+            <OptionSelect cards={options} onChange={(index) => handleSelect(options[index])} />
           )}
 
           <Button
@@ -191,18 +187,16 @@ export default function RepayModal() {
             color="secondary"
             variant="light"
             label={
-              paymentType === PaymentType.CUSTOM
-                ? "Select a preset amount"
-                : "Enter custom amount"
+              paymentType === PaymentType.CUSTOM ? "Select a preset amount" : "Enter custom amount"
             }
             onClick={() => {
               handleSelect(
                 paymentType === PaymentType.CUSTOM
                   ? options[0]
                   : {
-                    paymentType: PaymentType.CUSTOM,
-                    amount: ZERO,
-                  },
+                      paymentType: PaymentType.CUSTOM,
+                      amount: ZERO,
+                    }
               );
             }}
           />
@@ -229,7 +223,8 @@ export default function RepayModal() {
                 label: "New balance owed",
                 value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} DAI`,
                 tooltip: {
-                  content: "The total amount you will owe if this payment transaction is successful",
+                  content:
+                    "The total amount you will owe if this payment transaction is successful",
                 },
               },
             ]}
@@ -244,8 +239,7 @@ export default function RepayModal() {
             requireApproval
             tokenContract="dai"
             actionProps={{
-              args:
-                version === Versions.V1 ? [amount.raw] : [address, amount.raw],
+              args: version === Versions.V1 ? [amount.raw] : [address, amount.raw],
               permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
