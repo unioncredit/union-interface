@@ -15,18 +15,17 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
   const { version } = useVersion();
   const { cache, cached } = useCache();
   const [data, setData] = useState(cached(cacheKey) || []);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       if (cached(cacheKey)) {
         setData(cached(cacheKey));
+        setLoading(false);
         return;
       }
 
       setData([]);
-      setLoading(true);
-
       const registerTransactions = await fetchRegisterTransactions(version, chain.id, staker);
       const utokenTransactions = await fetchUTokenTransactions(version, chain.id, staker);
       const userTransactions = await fetchUserTransactions(version, chain.id, staker);
