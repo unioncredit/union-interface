@@ -1,16 +1,6 @@
 import "./TransactionHistory.scss";
 
-import {
-  Table,
-  TableCell,
-  TableRow,
-  Skeleton,
-  Pagination,
-  EmptyState,
-  TableHead,
-  Card,
-  Box,
-} from "@unioncredit/ui";
+import { Table, TableCell, TableRow, Skeleton, Pagination, TableHead, Box } from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
 import useTxHistory from "hooks/useTxHistory";
@@ -22,19 +12,9 @@ export function TransactionHistory({
   staker = ZERO_ADDRESS,
   borrower = ZERO_ADDRESS,
 }) {
-  const { data = [], loading } = useTxHistory({ staker, borrower });
+  const { data = [], loading = false } = useTxHistory({ staker, borrower });
 
   const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
-
-  if (data.length <= 0) {
-    return (
-      <Card.Body>
-        <Box className="TransactionHistory__empty" justify="center">
-          <EmptyState label={loading ? "Loading transactions..." : "No transactions"} />
-        </Box>
-      </Card.Body>
-    );
-  }
 
   return (
     <div className="TransactionHistory">
@@ -49,25 +29,30 @@ export function TransactionHistory({
           <TransactionHistoryRow key={i} {...tx} />
         ))}
 
-        {!data &&
-          Array(3)
+        {loading &&
+          Array(pageSize)
             .fill(null)
             .map((_, i) => (
               <TableRow key={i}>
                 <TableCell fixedSize>
-                  <Skeleton shimmer variant="circle" size={24} grey={200} />
+                  <Skeleton shimmer variant="circle" size={28} grey={200} />
                 </TableCell>
                 <TableCell>
-                  <Skeleton shimmer width={60} height={10} grey={200} />
+                  <Skeleton shimmer width={80 + Math.random() * 40} height={22} grey={200} />
+                  <Skeleton shimmer width={60} height={12} grey={200} mt="6px" />
                 </TableCell>
                 <TableCell align="right">
-                  <Skeleton shimmer width={30} height={10} grey={200} />
+                  <Skeleton shimmer width={60} height={24} grey={200} />
                 </TableCell>
               </TableRow>
             ))}
       </Table>
 
-      <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
+      {loading ? (
+        <Box style={{ height: "60px", borderTop: "1px solid #ddd" }} />
+      ) : (
+        <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
+      )}
     </div>
   );
 }
