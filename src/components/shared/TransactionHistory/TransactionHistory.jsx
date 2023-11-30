@@ -38,7 +38,7 @@ export function TransactionHistory({
                   <Skeleton shimmer variant="circle" size={28} grey={200} />
                 </TableCell>
                 <TableCell>
-                  <Skeleton shimmer width={80 + Math.random() * 40} height={22} grey={200} />
+                  <Skeleton shimmer width={120} height={22} grey={200} />
                   <Skeleton shimmer width={60} height={12} grey={200} mt="6px" />
                 </TableCell>
                 <TableCell align="right">
