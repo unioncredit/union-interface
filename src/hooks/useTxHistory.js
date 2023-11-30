@@ -9,23 +9,22 @@ import fetchUTokenTransactions from "fetchers/fetchUTokenTransactions";
 import fetchRegisterTransactions from "fetchers/fetchRegisterTransactions";
 
 export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_ADDRESS }) {
+  const cacheKey = `useTxHistory__${staker}___${borrower}`;
+
   const { chain } = useNetwork();
   const { version } = useVersion();
   const { cache, cached } = useCache();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(cached(cacheKey) || []);
   const [loading, setLoading] = useState(false);
-
-  const cacheKey = `useTxHistory__${staker}___${borrower}`;
 
   useEffect(() => {
     async function loadData() {
-      setData([]);
-
       if (cached(cacheKey)) {
         setData(cached(cacheKey));
         return;
       }
 
+      setData([]);
       setLoading(true);
 
       const registerTransactions = await fetchRegisterTransactions(version, chain.id, staker);
