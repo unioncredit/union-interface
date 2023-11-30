@@ -89,7 +89,9 @@ export default function ManageContactModal({
             />
           )}
 
-          {activeTab === TABS.ACTIVITY && <TransactionHistory staker={address} pageSize={5} />}
+          {activeTab === TABS.ACTIVITY && (
+            <TransactionHistory staker={address} pageSize={5} showEmptyRows={true} />
+          )}
         </Modal.Body>
       </Modal>
     </ModalOverlay>
