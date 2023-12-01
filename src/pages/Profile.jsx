@@ -216,7 +216,11 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               }
               onClick={() =>
                 navigator.share
-                  ? navigator.share({ url: window.location.href })
+                  ? navigator.share({
+                      title: "Union Finance",
+                      text: "View my profile on Union",
+                      url: window.location.href,
+                    })
                   : copy(window.location.href)
               }
             />
