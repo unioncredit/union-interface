@@ -211,8 +211,14 @@ function ProfileInner({ profileMember = {}, connectedMember = {}, chainId }) {
               icon={RouterLink}
               color="secondary"
               variant="light"
-              label={copied ? "Copied" : "Copy profile link"}
-              onClick={() => copy(window.location.href)}
+              label={
+                navigator.share ? "Share profile link" : copied ? "Copied" : "Copy profile link"
+              }
+              onClick={() =>
+                navigator.share
+                  ? navigator.share({ url: window.location.href })
+                  : copy(window.location.href)
+              }
             />
           </Box>
         </Card.Body>
