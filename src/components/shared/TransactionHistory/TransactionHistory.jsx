@@ -11,8 +11,9 @@ export function TransactionHistory({
   pageSize = 8,
   staker = ZERO_ADDRESS,
   borrower = ZERO_ADDRESS,
+  showEmptyRows = false,
 }) {
-  const { data = [], loading = false } = useTxHistory({ staker, borrower });
+  const { data = [], loading = true } = useTxHistory({ staker, borrower });
 
   const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
 
@@ -44,6 +45,18 @@ export function TransactionHistory({
                 <TableCell align="right">
                   <Skeleton shimmer width={60} height={24} grey={200} />
                 </TableCell>
+              </TableRow>
+            ))}
+
+        {showEmptyRows &&
+          !loading &&
+          data.length > 0 &&
+          data.length < pageSize &&
+          Array(pageSize - data.length)
+            .fill(null)
+            .map((_, i) => (
+              <TableRow key={i}>
+                <Box style={{ height: "61px" }}></Box>
               </TableRow>
             ))}
       </Table>
