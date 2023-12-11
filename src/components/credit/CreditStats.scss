@@ -9,8 +9,15 @@
     }
   }
 
-  .PaymentReminderButton:hover {
-    background: $grey100;
+  .PaymentReminderButton {
+    @media screen and (max-width: $breakpoint-mobile) {
+      margin-top: 12px;
+    }
+    @media screen and (min-width: $breakpoint-mobile) {
+      &:hover {
+        background: $grey100;
+      }
+    }
   }
 
   .Card__footer {
