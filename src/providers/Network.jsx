@@ -1,11 +1,4 @@
-import { RainbowKitProvider, connectorsForWallets } from "@rainbow-me/rainbowkit";
-import {
-  walletConnectWallet,
-  metaMaskWallet,
-  injectedWallet,
-  coinbaseWallet,
-  rainbowWallet
-} from "@rainbow-me/rainbowkit/wallets";
+import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { createContext, useContext } from "react";
@@ -20,32 +13,26 @@ const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
-const { chains, provider } = configureChains(
+const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, arbitrum, goerli, optimismGoerli, optimism],
   [
     // eslint-disable-next-line no-undef
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
-    publicProvider()
+    publicProvider(),
   ]
 );
 
-const connectors = connectorsForWallets([
-  {
-    groupName: "Recommended",
-    wallets: [
-      injectedWallet({ chains }),
-      metaMaskWallet({ projectId, chains, shimDisconnect: true }),
-      walletConnectWallet({ projectId, chains, options: { projectId, showQrModal: true } }),
-      coinbaseWallet({ chains }),
-      rainbowWallet({ projectId, chains, shimDisconnect: true })
-    ]
-  }
-]);
+const { connectors } = getDefaultWallets({
+  appName: "Union Credit",
+  projectId,
+  chains,
+});
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
-  provider
+  provider,
+  webSocketProvider,
 });
 
 export default function Network({ children }) {
