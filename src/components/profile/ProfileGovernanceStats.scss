@@ -1,0 +1,33 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileGovernanceStats {
+  &__header {
+    h2, a {
+      color: $grey500;
+      font-size: 16px;
+    }
+
+    a {
+      display: flex;
+      white-space: nowrap;
+      align-items: center;
+
+      &:hover {
+        color: $grey600;
+
+        path {
+          fill: $grey600;
+        }
+      }
+    }
+
+    svg {
+      width: 24px;
+      margin-left: 4px;
+
+      path {
+        fill: $grey500;
+      }
+    }
+  }
+}

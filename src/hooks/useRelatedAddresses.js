@@ -5,12 +5,12 @@ import useContract from "./useContract";
 import { STALE_TIME } from "constants";
 import { CACHE_TIME } from "constants";
 
-export default function useRelatedAddresses(address, chainId) {
+export default function useRelatedAddresses(address, chainId, forcedVersion) {
   const { version } = useVersion();
 
-  const isV2 = version === Versions.V2;
+  const isV2 = forcedVersion ? forcedVersion === Versions.V2 : version === Versions.V2;
 
-  const userManagerContract = useContract("userManager", chainId);
+  const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
   const {
     data: { voucherCount = 0, voucheeCount = 0 } = {},
@@ -26,11 +26,13 @@ export default function useRelatedAddresses(address, chainId) {
         ...userManagerContract,
         functionName: "getVoucherCount",
         args: [address],
+        chainId,
       },
       {
         ...userManagerContract,
         functionName: "getVoucheeCount",
         args: [address],
+        chainId,
       },
     ],
     cacheTime: CACHE_TIME,
@@ -46,6 +48,7 @@ export default function useRelatedAddresses(address, chainId) {
         ...userManagerContract,
         functionName: "vouchers",
         args: [address, i],
+        chainId,
       })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
@@ -61,6 +64,7 @@ export default function useRelatedAddresses(address, chainId) {
           ...userManagerContract,
           functionName: "vouchees",
           args: [address, i],
+          chainId,
         })),
       cacheTime: CACHE_TIME,
       staleTime: STALE_TIME,

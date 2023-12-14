@@ -197,7 +197,7 @@ export function useMemberData(address, chainId, forceVersion) {
     stakerAddresses = data?.stakerAddresses,
     borrowerAddresses = data?.borrowerAddresses,
     refetch: refetchRelated,
-  } = useRelatedAddresses(address, chainId);
+  } = useRelatedAddresses(address, chainId, forceVersion);
 
   return {
     data: {
