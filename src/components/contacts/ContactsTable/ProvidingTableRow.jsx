@@ -11,6 +11,7 @@ import { useLastRepayData } from "hooks/useLastRepayData";
 
 import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
 import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
+import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
 
 export const COLUMNS = {
   TRUST_SET: {
@@ -35,12 +36,12 @@ export const COLUMNS = {
   },
 };
 
-export function ProvidingTableRow({ data, active, setContact, receiving }) {
+export function ProvidingTableRow({ data, active, setContact, providing, receiving }) {
   const { address, isOverdue, locking = ZERO, trust = ZERO, vouch = ZERO, lastRepay = ZERO } = data;
 
   const { formatted: lastRepayFormatted, paymentDue } = useLastRepayData(lastRepay);
 
-  const Icon = receiving ? BothRow : ProvidingRow;
+  const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
   const columns = [
     {

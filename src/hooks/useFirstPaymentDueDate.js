@@ -10,10 +10,12 @@ export default function useFirstPaymentDueDate() {
   const { data: protocol } = useProtocol();
   const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
-  const milliseconds = isV2 ? overdueTime.mul(1000) : overdueBlocks.mul(BlockSpeed[chain.id]);
+  const milliseconds = isV2
+    ? overdueTime.mul(BlockSpeed[chain.id])
+    : overdueBlocks.mul(BlockSpeed[chain.id]);
 
   let date = new Date();
-  date.setSeconds(date.getSeconds() + milliseconds / 1000);
+  date.setMilliseconds(date.getMilliseconds() + Number(milliseconds));
 
   // we do the weird double formatting as the ' character causes the yy to not format ?!
   return `${format(date, "d LLL")} '${format(date, "yy")}`;

@@ -31,19 +31,12 @@ export default function StakeStats() {
   const withdrawableStake = stakedBalance.sub(totalLockedStake);
   const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
   const defaultedVouchees = vouchees.filter((v) => v.isOverdue);
-  const defaulted = defaultedVouchees
-    .map((v) => v.locking)
-    .reduce(reduceBnSum, ZERO);
+  const defaulted = defaultedVouchees.map((v) => v.locking).reduce(reduceBnSum, ZERO);
 
   return (
     <Card className="StakeStats">
       <Card.Body>
-        <Box
-          fluid
-          align="center"
-          justify="space-between"
-          className="StakeStats__top"
-        >
+        <Box fluid align="center" justify="space-between" className="StakeStats__top">
           <NumericalBlock
             token="dai"
             align="left"
@@ -89,11 +82,7 @@ export default function StakeStats() {
           ]}
         />
 
-        <Box
-          align="center"
-          justify="space-between"
-          className="StakeStats__bottom"
-        >
+        <Box align="center" justify="space-between" className="StakeStats__bottom">
           <Box fluid className="StakeStats__item">
             <NumericalBlock
               align="left"
@@ -104,16 +93,13 @@ export default function StakeStats() {
               value={format(withdrawableStake)}
             />
 
-            <Link to="/contacts/providing">
-              <AddressesAvatarBadgeRow
-                mt="8px"
-                addresses={vouchees.map((v) => v.address)}
-                showLabel={!vouchees.length || vouchees.length > 6}
-                label={`Providing to ${
-                  vouchees.length ? vouchees.length : "no"
-                } contacts`}
-              />
-            </Link>
+            <AddressesAvatarBadgeRow
+              mt="8px"
+              className="Withdrawable"
+              addresses={vouchees.map((v) => v.address)}
+              showLabel={true}
+              label={`Providing to ${vouchees.length ? vouchees.length : "no"} contacts`}
+            />
           </Box>
 
           <Box fluid className="StakeStats__item">
@@ -134,9 +120,7 @@ export default function StakeStats() {
                 label={`${
                   borrowingVouchees.length ? borrowingVouchees.length : "No"
                 } Contacts Borrowing`}
-                showLabel={
-                  !borrowingVouchees.length || borrowingVouchees.length > 6
-                }
+                showLabel={!borrowingVouchees.length || borrowingVouchees.length > 6}
               />
             </Link>
           </Box>
@@ -156,12 +140,8 @@ export default function StakeStats() {
               <AddressesAvatarBadgeRow
                 mt="8px"
                 addresses={defaultedVouchees.map((v) => v.address)}
-                label={`${
-                  defaultedVouchees.length ? defaultedVouchees.length : "No"
-                } Defaulters`}
-                showLabel={
-                  !defaultedVouchees.length || defaultedVouchees.length > 6
-                }
+                label={`${defaultedVouchees.length ? defaultedVouchees.length : "No"} Defaulters`}
+                showLabel={!defaultedVouchees.length || defaultedVouchees.length > 6}
               />
             </Link>
           </Box>
