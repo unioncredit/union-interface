@@ -11,11 +11,12 @@ import {
   ModalOverlay,
   SegmentedControl,
 } from "@unioncredit/ui";
-import { AddressSummary, TransactionHistory } from "components/shared";
-
-import { ContactDetailsTab } from "components/modals/ManageContactModal/ContactDetailsTab";
-import { useModals } from "providers/ModalManager";
 import { useState } from "react";
+
+import useTxHistory from "hooks/useTxHistory";
+import { useModals } from "providers/ModalManager";
+import { AddressSummary, TransactionHistory } from "components/shared";
+import { ContactDetailsTab } from "components/modals/ManageContactModal/ContactDetailsTab";
 
 export const MANAGE_CONTACT_MODAL = "manager-contact-modal";
 
@@ -34,6 +35,9 @@ export default function ManageContactModal({
 }) {
   const { close } = useModals();
   const [activeTab, setActiveTab] = useState(TABS.CONTACT_DETAILS);
+
+  // pre-fetch tx history into cache
+  useTxHistory({ staker: address });
 
   const handleClose = () => {
     clearContact?.();
@@ -85,7 +89,9 @@ export default function ManageContactModal({
             />
           )}
 
-          {activeTab === TABS.ACTIVITY && <TransactionHistory staker={address} pageSize={5} />}
+          {activeTab === TABS.ACTIVITY && (
+            <TransactionHistory staker={address} pageSize={5} showEmptyRows={true} />
+          )}
         </Modal.Body>
       </Modal>
     </ModalOverlay>

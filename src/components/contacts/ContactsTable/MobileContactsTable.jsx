@@ -54,10 +54,8 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             active={selectedColumn}
             data={row}
             setContact={setContact}
-            receiving={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
+            providing={vouchees.find((v) => compareAddresses(v.address, row.address))}
+            receiving={vouchers.find((v) => compareAddresses(v.address, row.address))}
           />
         ) : (
           <ReceivingTableRow
@@ -65,10 +63,8 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             active={selectedColumn}
             data={row}
             setContact={setContact}
-            providing={
-              vouchers.find((v) => compareAddresses(v.address, row.address)) &&
-              vouchees.find((v) => compareAddresses(v.address, row.address))
-            }
+            providing={vouchees.find((v) => compareAddresses(v.address, row.address))}
+            receiving={vouchers.find((v) => compareAddresses(v.address, row.address))}
           />
         )
       )}

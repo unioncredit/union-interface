@@ -38,9 +38,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
 
   const userManagerContract = useContract("userManager");
 
-  const initialActiveIndex = toggleMenuOptions.findIndex(
-    ({ id }) => id === initialType
-  );
+  const initialActiveIndex = toggleMenuOptions.findIndex(({ id }) => id === initialType);
 
   const {
     stakedBalance = ZERO,
@@ -91,13 +89,13 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          rightLabel: `Max. ${format(daiBalance)} DAI`,
-          rightLabelAction: () => setRawValue("amount", daiBalance, false),
+          rightLabel: `Max. ${format(maxUserStake)} DAI`,
+          rightLabelAction: () => setRawValue("amount", maxUserStake, false),
         }
       : {
           label: "Amount to unstake",
-          rightLabel: `Max. ${format(stakedBalance)} DAI`,
-          rightLabelAction: () => setRawValue("amount", stakedBalance, false),
+          rightLabel: `Max. ${format(maxUserUnstake)} DAI`,
+          rightLabelAction: () => setRawValue("amount", maxUserUnstake, false),
         };
 
   return (
@@ -140,13 +138,14 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
                 label: "Your locked stake",
                 value: `${format(totalLockedStake)} DAI`,
                 tooltip: {
-                  content: "This is DAI you cant withdraw because it is currently underwriting a Borrow you vouched for",
+                  content:
+                    "This is DAI you cant withdraw because it is currently underwriting a Borrow you vouched for",
                 },
               },
               type === StakeType.STAKE
                 ? {
                     label: "Available to stake",
-                    value: `${format(daiBalance)} DAI`,
+                    value: `${format(maxUserStake)} DAI`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
                   }
                 : {
@@ -177,9 +176,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               enabled: !isErrored,
               contract: "userManager",
               method: type === StakeType.STAKE ? "stake" : "unstake",
-              label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${
-                amount.display
-              } DAI`,
+              label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${amount.display} DAI`,
             }}
           />
         </Modal.Body>

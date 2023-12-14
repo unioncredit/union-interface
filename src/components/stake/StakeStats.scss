@@ -9,7 +9,7 @@
     border: 1px solid $blue800;
   }
 
-  .AvatarBadgeRow {
+  .AvatarBadgeRow:not(.Withdrawable) {
     &:hover {
       background: $grey100;
     }

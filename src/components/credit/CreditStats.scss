@@ -3,6 +3,23 @@
 .CreditStats {
   overflow: visible;
 
+  .BorrowButton, .RepayButton {
+    @media screen and (min-width: $breakpoint-mobile) {
+      min-width: 200px;
+    }
+  }
+
+  .PaymentReminderButton {
+    @media screen and (max-width: $breakpoint-mobile) {
+      margin-top: 12px;
+    }
+    @media screen and (min-width: $breakpoint-mobile) {
+      &:hover {
+        background: $grey100;
+      }
+    }
+  }
+
   .Card__footer {
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -14,8 +31,50 @@
 
     .button {
       @media screen and (max-width: $breakpoint-mobile) {
-        margin-top: 16px;
         width: 100%;
+      }
+    }
+  }
+
+  &__Legend {
+    margin-right: 24px;
+
+    @media screen and (max-width: $breakpoint-micro) {
+      margin-right: 8px;
+
+      &:last-of-type .Tooltip__content {
+        left: -350%;
+      }
+
+      svg {
+        width: 10px;
+      }
+      .Dot {
+        width: 8px !important;
+        height: 8px !important;
+      }
+    }
+  }
+
+  &__BorrowStats {
+
+    h3 {
+      @media screen and (max-width: $breakpoint-micro) {
+        font-size: 14px;
+      }
+    }
+
+    .NumericalBlock {
+      &:not(:first-of-type) {
+        @media screen and (max-width: $breakpoint-micro) {
+          margin-top: 8px !important;
+        }
+      }
+
+      .NumericalBlock__value {
+        margin: 0 !important;
+        font-size: 24px;
+        line-height: 28px;
       }
     }
   }
@@ -25,12 +84,10 @@
   .Card__footer {
     background: $red50;
 
-    p {
-      color: $red600 !important;
-    }
     button {
       color: white;
       background: $red500;
+      margin-top: 0 !important;
 
       path {
         fill: white;
@@ -44,7 +101,11 @@
       }
     }
 
-    path {
+    .PaymentDueInfo p, .MaxOverdueNotice {
+      color: $red600 !important;
+    }
+
+    .PaymentDueInfo path {
       fill: $red600;
     }
   }

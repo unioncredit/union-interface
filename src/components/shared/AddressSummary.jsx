@@ -91,6 +91,10 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
                 autoFocus
                 type="text"
                 value={labelText}
+                onfocusout={(e) =>
+                  (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
+                  setEditMode(false)
+                }
                 onBlur={(e) =>
                   (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
                   setEditMode(false)

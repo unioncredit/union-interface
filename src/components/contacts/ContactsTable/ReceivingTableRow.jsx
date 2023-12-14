@@ -8,6 +8,7 @@ import format from "utils/format";
 import { DimmableTableCell } from "components/contacts/ContactsTable";
 
 import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
+import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
 import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
 
 export const COLUMNS = {
@@ -33,12 +34,12 @@ export const COLUMNS = {
   },
 };
 
-export function ReceivingTableRow({ data, active, setContact, providing }) {
+export function ReceivingTableRow({ data, active, setContact, providing, receiving }) {
   const { address, locking = ZERO, trust = ZERO, vouch = ZERO } = data;
 
   const borrowable = vouch.sub(locking);
 
-  const Icon = providing ? BothRow : ReceivingRow;
+  const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
   const columns = [
     {
