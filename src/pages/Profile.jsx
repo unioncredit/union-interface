@@ -1,7 +1,7 @@
 import "./Profile.scss";
 
 import { Button, Box, Card, Layout, ArrowLeftIcon, UnionIcon } from "@unioncredit/ui";
-import { useEnsAddress } from "wagmi";
+import { useEnsAddress, useNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
@@ -51,6 +51,7 @@ function ProfileInner({ address, member, chainId }) {
 }
 
 export default function Profile() {
+  const { chain: connectedChain } = useNetwork();
   const { addressOrEns: addressOrEnsParam } = useParams();
 
   // Profile pages support EIP3770 addresses so we need to check if
@@ -58,7 +59,7 @@ export default function Profile() {
   const addressOrEnsParts = addressOrEnsParam.split(":");
   const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe|opt):/)
     ? addressOrEnsParts
-    : [EIP3770[mainnet.id], addressOrEnsParam];
+    : [EIP3770[connectedChain?.id || mainnet.id], addressOrEnsParam];
 
   const { data: addressFromEns } = useEnsAddress({
     name: addressOrEns,
