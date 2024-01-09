@@ -48,7 +48,7 @@ function AppReadyShim({ children }) {
   useEffect(() => {
     // If we are viewing a general route such as governance or
     // a member profile then we skip the ready (connect) page
-    if (isGeneralRoute || !isDisconnected) {
+    if (isGeneralRoute) {
       !appReady && setAppReady(true);
       return;
     }
