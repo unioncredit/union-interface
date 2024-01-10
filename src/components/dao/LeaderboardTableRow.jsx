@@ -9,15 +9,16 @@ import { useNetwork } from "wagmi";
 export function LeaderboardTableRow({ data }) {
   const { address, unionBalance = ZERO, votes = ZERO, delegatedVotes = ZERO, voteCount = 0 } = data;
   const { chain } = useNetwork();
+  const userLink = chain ? `/profile/${EIP3770[chain.id]}:${data.address}` : "";
   return (
     <TableRow key={address}>
       <TableCell fixedSize>
-        <Link to={`/profile/${EIP3770[chain.id]}:${data.address}`}>
+        <Link to={userLink}>
           <Avatar size={24} address={address} />
         </Link>
       </TableCell>
       <TableCell>
-        <Link to={`/profile/${EIP3770[chain.id]}:${data.address}`}>
+        <Link to={userLink}>
           <Box direction="vertical">
             <Text grey={800} m={0} size="medium" weight="medium">
               <PrimaryLabel address={address} />
