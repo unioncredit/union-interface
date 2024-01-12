@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { OrderDirection } from "@unioncredit/data/lib/constants";
 import {
   config,
@@ -29,9 +29,11 @@ export function useCreditData(address, chainId) {
   const { owed = ZERO } = member;
   const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
-  const overduePeriodSeconds = (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks)
-    .mul(BlockSpeed[chainId])
-    .div(1000);
+  const overduePeriodSeconds = useMemo(() => {
+    return (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks)
+      .mul(BlockSpeed[chainId])
+      .div(1000);
+  }, [chainId, overdueTime, overdueBlocks]);
 
   const fetchBorrowsAndRepays = async (address) => {
     const [borrows, repays, applications] = await Promise.all([
@@ -173,7 +175,7 @@ export function useCreditData(address, chainId) {
     setDaysInDefault(newDaysInDefault);
     setRepaidVolume(newRepaidVolume);
     setBorrowedVolume(newBorrowedVolume);
-  }, [borrows, repays]);
+  }, [borrows, overduePeriodSeconds, owed, repays]);
 
   useEffect(() => {
     if (address && chainId) {
