@@ -79,7 +79,6 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: connectedMember } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
-  const { isWidth } = useResponsive();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
@@ -154,13 +153,7 @@ export default function ProfileHeader({ address, chainId }) {
                 mr="4px"
                 color="grey"
                 onClick={() => copyAddress(address)}
-                label={
-                  copiedAddress
-                    ? "Address copied to clipboard"
-                    : isWidth(930)
-                    ? truncateAddress(address)
-                    : address
-                }
+                label={copiedAddress ? "Address copied" : truncateAddress(address)}
               />
 
               <ProfileAddress member={member} chainId={chainId} />

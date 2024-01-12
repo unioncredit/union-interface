@@ -78,7 +78,7 @@ export default function Profile() {
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
-      <Layout.Columned mt="24px" maxw="985px">
+      <Layout.Columned mt="24px" maxw="653px">
         <ProfileInner chainId={chainId} address={profileAddress} member={member} />
       </Layout.Columned>
     </>
