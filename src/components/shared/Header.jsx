@@ -13,7 +13,7 @@ import {
   HamburgerIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork, mainnet } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
 
 import { ZERO } from "constants";
@@ -21,11 +21,7 @@ import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { items, contextMenuItems } from "config/navigation";
-import {
-  ConnectButton,
-  HeaderMobileMenu,
-  NetworkSelect,
-} from "components/shared";
+import { ConnectButton, HeaderMobileMenu, NetworkSelect } from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
@@ -38,15 +34,22 @@ export function Header({ loading, showNav = true }) {
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
   const { width } = useWindowDimensions();
+  const { chain } = useNetwork();
   const setScrollLock = useScrollLock();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
+  const isMainnet = chain?.id === mainnet.id;
+
   const navItems0 =
     isConnected && isMember
-      ? [items.credit, items.dao]
+      ? isMainnet
+        ? [items.dao]
+        : [items.credit, items.dao]
+      : isMainnet
+      ? [items.dao]
       : [items.getStarted, items.dao];
 
   const navItems = navItems0.map((item) => ({

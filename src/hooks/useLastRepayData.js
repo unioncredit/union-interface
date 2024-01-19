@@ -1,7 +1,6 @@
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { useNetwork } from "wagmi";
-import { mainnet, arbitrum } from "wagmi/chains";
 import { useBlockTime } from "hooks/useBlockTime";
 import { parseMilliseconds } from "utils/date";
 
@@ -23,19 +22,13 @@ const formatTimestamp = (milliseconds) => {
 
 export function useLastRepayData(lastRepay) {
   const { data: protocol } = useProtocol();
-  const { chain: connectedChain } = useNetwork();
+  const { chain } = useNetwork();
 
-  const { overdueBlocks = ZERO, overdueTime = ZERO } = protocol;
-
-  // For arbitrum we use mainnet to correctly calculate repays as it uses
-  const chainId = connectedChain.id === arbitrum.id ? mainnet.id : connectedChain.id;
+  const { overdueTime = ZERO } = protocol;
 
   const today = new Date();
-  const lastRepayData = useBlockTime(lastRepay, chainId);
-
-  const overdueInMilliseconds = (overdueBlocks.eq(ZERO) ? overdueTime : overdueBlocks)
-    .mul(1000)
-    .toNumber();
+  const lastRepayData = useBlockTime(lastRepay, chain.id);
+  const overdueInMilliseconds = overdueTime.mul(1000).toNumber();
 
   const paymentDueTimestamp =
     lastRepayData.timestamp && lastRepayData.timestamp + overdueInMilliseconds;
