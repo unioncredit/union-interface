@@ -41,7 +41,7 @@ export function Header({ loading, showNav = true }) {
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
-  const isMainnet = chain.id === mainnet.id;
+  const isMainnet = chain?.id === mainnet.id;
 
   const navItems0 =
     isConnected && isMember

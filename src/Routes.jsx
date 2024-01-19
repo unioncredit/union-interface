@@ -15,7 +15,7 @@ export default function Routes() {
   const { isConnected } = useAccount();
 
   const needsToConnect = !isConnected;
-  const isMainnet = chain.id === mainnet.id;
+  const isMainnet = chain?.id === mainnet.id;
 
   const getElement = (Component, props) => (isLoading ? <LoadingPage /> : <Component {...props} />);
 

@@ -26,7 +26,7 @@ export default function NetworkSelect() {
 
   const [selected, setSelected] = useState(null);
 
-  const isMainnet = chain.id === mainnet.id;
+  const isMainnet = chain?.id === mainnet.id;
   const availableNetworks = supportedNetworks.filter((x) => ![mainnet.id].includes(x.chainId));
 
   const networks = availableNetworks.filter(
