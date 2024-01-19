@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { Text, Box, Layout, Grid } from "@unioncredit/ui";
-import { matchRoutes, useLocation } from "react-router-dom";
+import { matchRoutes, useLocation, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -28,6 +28,7 @@ import ErrorPage from "pages/Error";
 import { FooterLinks } from "components/shared/FooterLinks";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
+import useReferrer from "./hooks/useReferrer";
 
 /**
  * Shim component that checks if the App is ready
@@ -75,6 +76,15 @@ export default function App() {
   const { version } = useVersion();
   const { isConnected } = useAccount();
   const { appReady } = useAppNetwork();
+  const { setReferrer } = useReferrer();
+
+  // Parses referrer address from "refAddress" query parameter and
+  // stores it in local storage
+  const [searchParams] = useSearchParams();
+  const referrer = searchParams.get("refAddress");
+  if (referrer) {
+    setReferrer(referrer);
+  }
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
