@@ -25,45 +25,42 @@ import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 
-import {
-  getProfileUrl,
-  generateTelegramLink,
-  generateTwitterLink,
-} from "utils/generateLinks";
+import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
+import { useVersion } from "../../providers/Version";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
+  const { isV2 } = useVersion();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
 
   const profileUrl = `https://app.union.finance${getProfileUrl(address, chain.id)}`;
 
-  const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakedBalance.gt(ZERO)
-  );
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance.gt(ZERO));
 
   return (
     <Card size="fluid" mb="24px">
       <Card.Body>
-        <Heading level={2} size="large" grey={700}>
-          Find vouchers
-        </Heading>
+        <Box>
+          <Heading level={2} size="large" grey={700}>
+            Find vouchers
+          </Heading>
+          {isV2 && (
+            <Heading level={2} size="large" grey={400} ml="8px">
+              (*optional)
+            </Heading>
+          )}
+        </Box>
+
         <Text grey={500} size="medium">
-          Get an existing Union member to vouch for you. They’ll need to trust
-          you, as vouching on Union puts the vouchers funds at risk if you fail
-          to repay.
+          In order to have credit and borrow on Union, you’ll need to find existing Union members to
+          vouch for you. {isV2 && "This step you can do before or after you register."}
         </Text>
 
-        <Box
-          className="VouchersStep__container"
-          fluid
-          mt="24px"
-          mb="14px"
-          direction="vertical"
-        >
+        <Box className="VouchersStep__container" fluid mt="24px" mb="14px" direction="vertical">
           <Card className="VouchersStep__card" size="fluid">
             {vouchers.length <= 0 ? (
               <EmptyState label={<VouchFaucetButton />} />

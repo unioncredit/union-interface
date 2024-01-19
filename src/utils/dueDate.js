@@ -42,6 +42,7 @@ export const dueOrOverdueDate = (lastRepay, overdueTime, blockNumber, chainId) =
   date.setMilliseconds(date.getMilliseconds() + milliseconds);
 
   return {
+    date,
     relative: formatDueDate(Math.abs(milliseconds)),
     absolute: format(date, "do MMMM yyyy"),
     overdue: milliseconds < 0,

@@ -67,8 +67,16 @@ export default function VouchLinkModal() {
                 size="large"
                 icon={LinkIcon}
                 variant="pill"
-                onClick={() => copy(profileUrl)}
-                label={copied ? "Copied" : "Copy link"}
+                onClick={() =>
+                  navigator.share
+                    ? navigator.share({
+                        url: profileUrl,
+                        title: "Union Finance",
+                        text: "Give me a vouch on Union",
+                      })
+                    : copy(profileUrl)
+                }
+                label={navigator.share ? "Share link" : copied ? "Copied" : "Copy link"}
               />
               <Button
                 size="large"

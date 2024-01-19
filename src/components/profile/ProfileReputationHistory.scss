@@ -1,0 +1,82 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileReputationHistory {
+  &__Button {
+    width: 20px !important;
+    height: 20px;
+    background: $grey100;
+    border: 1px solid $grey300;
+    padding: 0 !important;
+    border-radius: 4px;
+    margin-left: 4px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__MonthIndicator {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    background: var(--zinc-100, #F4F4F5);
+    border: 1px solid var(--zinc-100, #F4F4F5);
+    box-sizing: border-box;
+    position: relative;
+
+    @media screen and (max-width: $breakpoint-tablet) {
+      width: 32px;
+      height: 32px;
+    }
+    @media screen and (max-width: $breakpoint-mobile) {
+      width: 24px;
+      height: 24px;
+    }
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    &.inactive {
+      background: $grey200;
+      border: 1px solid $grey300;
+    }
+    &.defaulted {
+      background: $red400;
+      border: 1px solid $red500;
+
+      &::after {
+        display: block;
+        border: 1px solid $red500;
+      }
+    }
+    &.repaid {
+      background: $green400;
+      border: 1px solid $green500;
+
+      &::after {
+        display: block;
+        border: 1px solid $green500;
+      }
+    }
+    &.borrowed {
+      background: $blue400;
+      border: 1px solid $blue500;
+
+      &::after {
+        display: block;
+        border: 1px solid $blue500;
+      }
+    }
+  }
+}

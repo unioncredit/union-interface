@@ -2,7 +2,7 @@ import chunk from "lodash/chunk";
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
-import { useMember } from "providers/MemberData";
+import { useMemberData } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
 import { STALE_TIME, CACHE_TIME, ZERO } from "constants";
@@ -36,14 +36,13 @@ const selectVoucher = (version) => (data) => {
   };
 };
 
-export default function VouchersData({ children }) {
+export const useVouchersData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
-  const { address } = useAccount();
-  const { data: member = {} } = useMember();
+  const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
 
-  const daiContract = useContract("dai");
-  const unionLensContract = useContract("unionLens");
-  const userManagerContract = useContract("userManager");
+  const daiContract = useContract("dai", chainId, forcedVersion);
+  const unionLensContract = useContract("unionLens", chainId, forcedVersion);
+  const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
   const { stakerAddresses } = member;
 
@@ -54,7 +53,7 @@ export default function VouchersData({ children }) {
       functionName: "getStakerBalance",
       args: [staker],
     },
-    version === Versions.V1
+    (forcedVersion || version) === Versions.V1
       ? {
           ...userManagerContract,
           functionName: "getBorrowerAsset",
@@ -79,11 +78,14 @@ export default function VouchersData({ children }) {
       const chunkSize = tmp.length;
       const chunked = chunk(data, chunkSize);
       return chunked.map((x, i) => ({
-        ...selectVoucher(version)(x),
+        ...selectVoucher(forcedVersion || version)(x),
         address: stakerAddresses[i],
       }));
     },
-    contracts: contracts,
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
   });
@@ -105,11 +107,13 @@ export default function VouchersData({ children }) {
     resp.refetch,
   ]);
 
-  const data = usePopulateEns(resp.data);
+  return { ...resp, data: usePopulateEns(resp.data) };
+};
 
-  return (
-    <VouchersContext.Provider value={{ ...resp, data }}>
-      {children}
-    </VouchersContext.Provider>
-  );
+export default function VouchersData({ children }) {
+  const { address } = useAccount();
+
+  const data = useVouchersData(address);
+
+  return <VouchersContext.Provider value={{ ...data }}>{children}</VouchersContext.Provider>;
 }

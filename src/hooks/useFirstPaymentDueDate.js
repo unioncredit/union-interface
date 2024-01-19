@@ -11,7 +11,7 @@ export default function useFirstPaymentDueDate() {
   const milliseconds = overdueTime.mul(BlockSpeed[chain.id]);
 
   let date = new Date();
-  date.setSeconds(date.getSeconds() + milliseconds / 1000);
+  date.setMilliseconds(date.getMilliseconds() + Number(milliseconds));
 
   // we do the weird double formatting as the ' character causes the yy to not format ?!
   return `${format(date, "d LLL")} '${format(date, "yy")}`;

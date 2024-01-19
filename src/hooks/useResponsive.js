@@ -25,7 +25,12 @@ function useWindowSize() {
 export default function useResponsive() {
   const { width } = useWindowSize();
 
+  const isWidth = (targetWidth) => {
+    return width <= targetWidth;
+  };
+
   return {
+    isWidth,
     isMicro: !width || width <= 480,
     isMobile: !width || width <= 580,
     isTablet: !width || width <= 767,

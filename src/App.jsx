@@ -3,6 +3,7 @@ import { useAccount, useNetwork } from "wagmi";
 import { Text, Box, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { Analytics } from "@vercel/analytics/react";
 
 import Routes from "./Routes";
 
@@ -106,6 +107,7 @@ export default function App() {
               </Grid.Row>
             </Grid>
           </Layout.Main>
+          <Analytics />
         </Layout>
       </AppReadyShim>
     );

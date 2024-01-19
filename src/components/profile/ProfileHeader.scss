@@ -1,0 +1,150 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileHeader {
+  padding: 18px;
+  overflow: visible !important;
+
+  @media screen and (max-width: 670px) {
+    flex-direction: column !important;
+  }
+
+  .ProfileButtons {
+    @media screen and (max-width: 670px) {
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .button {
+      width: 100%;
+      height: 48px !important;
+      border-radius: 12px !important;
+    }
+  }
+
+  &__NetworkSelect {
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+
+    @media screen and (max-width: $breakpoint-mobile) {
+      //bottom: 0;
+      right: 50%;
+      transform: translateX(50%);
+      z-index: 1;
+      width: 51px;
+    }
+
+    .select-ui {
+      width: auto !important;
+      outline: none !important;
+
+      .select-control {
+        min-height: 31px;
+        border-radius: 20px;
+        padding: 0 1px;
+
+        & + div {
+          z-index: 100;
+        }
+
+        & > .avatar + div {
+          padding: 0;
+        }
+
+        .dropdown-indicator {
+          margin: 2px 8px 0 4px;
+        }
+      }
+      .select-option {
+        padding: 6px 3px;
+      }
+    }
+  }
+
+  &__avatar {
+    position: relative;
+
+    & > .avatar {
+      @media screen and (max-width: $breakpoint-mobile) {
+        width: 80px !important;
+        height: 80px !important;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  &__content {
+    padding-left: 16px;
+
+    @media screen and (max-width: 670px) {
+      padding-left: 8px;
+    }
+
+    .heading {
+      font-size: 24px;
+      line-height: 32px;
+    }
+  }
+
+  &__address {
+    a {
+      margin-top: 2px;
+    }
+    .badge {
+      border: 1px solid #F4F4F5 !important;
+    }
+    .badge, .BadgeIndicator {
+      @media screen and (max-width: 400px) {
+        font-size: 12px;
+      }
+    }
+  }
+
+  &__verification {
+    flex-wrap: wrap;
+
+    &__item {
+      padding: 4px 10px 4px 8px;
+      background: #F1F1F1;
+      border-radius: 20px;
+      margin-top: 8px;
+      margin-left: 4px;
+      color: $grey600;
+
+      &.lens {
+        color: #3D4B41;
+        background: #E6EBE7;
+        path {
+          fill: #3D4B41;
+        }
+      }
+
+      &.farcaster {
+        color: #845FC9;
+        background: #F5F0FF;
+        path {
+          fill: #845FC9;
+        }
+      }
+      &.twitter {
+        color: #60a5fa;
+        background: #ddecff;
+        path {
+          fill: #60a5fa;
+        }
+      }
+
+      p {
+        margin: 0;
+      }
+      svg + p {
+        margin-left: 4px;
+        margin-top: -1px;
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}

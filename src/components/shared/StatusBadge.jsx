@@ -20,6 +20,7 @@ export function StatusBadge({ address }) {
     chainId: chain.id,
   });
 
+  const { isMember } = member;
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const voucherOrVouchee =
@@ -30,7 +31,6 @@ export function StatusBadge({ address }) {
 
   const lastRepay = contact?.lastRepay;
   const isOverdue = contact?.isOverdue;
-  const isMember = contact?.isMember;
   const borrowed = contact?.locking || ZERO;
 
   const maxOverdueTotal = overdueTime.add(maxOverdueTime);
@@ -41,7 +41,7 @@ export function StatusBadge({ address }) {
     <>
       {borrowed.gt(0) ? (
         <BadgeIndicator
-          color={isMaxOverdue ? "red500" : isOverdue ? "orange500" : "green500"}
+          color={isOverdue ? "red500" : "green500"}
           label={isMaxOverdue ? "Write-Off" : isOverdue ? "Overdue" : "Borrowing"}
           textColor={isMaxOverdue && "red500"}
         />

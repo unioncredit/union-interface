@@ -17,7 +17,6 @@ export default function ProtocolData() {
   );
 
   const { data: protocol = {} } = useProtocolData(network.chainId);
-
   return (
     <Card className="ProtocolData">
       <Card.Header

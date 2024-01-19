@@ -25,6 +25,17 @@ export default function useMemberListener() {
 
   useContractEvent({
     ...userManager,
+    eventName: "LogDebtWriteOff",
+    listener: (staker, borrower) => {
+      console.debug("Listener: LogDebtWriteOff received", { staker, borrower, address });
+      if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
+        refreshMember();
+      }
+    },
+  });
+
+  useContractEvent({
+    ...userManager,
     eventName: "LogUpdateTrust",
     listener: (staker, borrower) => {
       console.debug("Listener: LogUpdateTrust received", { staker, borrower, address });

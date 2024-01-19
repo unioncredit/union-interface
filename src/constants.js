@@ -56,8 +56,8 @@ export const BlockSpeed = {
   [mainnet.id]: 12e3,
   [arbitrum.id]: 12e3,
   [goerli.id]: 12e3,
-  [optimismGoerli.id]: 2e3,
-  [optimism.id]: 2e3,
+  [optimismGoerli.id]: 1e3,
+  [optimism.id]: 1e3,
 };
 
 export const BlocksPerYear = {
@@ -80,6 +80,7 @@ export const EIP3770Map = {
   eth: mainnet.id,
   arb1: arbitrum.id,
   goe: goerli.id,
+  opt: optimism.id,
   optgoe: optimismGoerli.id,
 };
 

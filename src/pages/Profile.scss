@@ -1,21 +1,18 @@
 @import "@unioncredit/ui/src/variables";
 
 .ProfileInner {
+  margin: 0 auto;
+  max-width: 900px;
+
+  .Card, .Card__body {
+    overflow: visible;
+  }
+
   .WriteOffButton {
     background: $red500;
 
     &:hover {
       background: $red600;
-    }
-  }
-
-  &__avatar {
-    position: relative;
-
-    &__network {
-      position: absolute;
-      right: -8px;
-      bottom: 0;
     }
   }
 }

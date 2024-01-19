@@ -26,7 +26,7 @@ import { mainnet } from "wagmi/chains";
 
 export function AddressSummary({ address, allowEdit = false, ...props }) {
   const { chain } = useNetwork();
-  const { getLabel, setLabel, removeLabel } = useLabels();
+  const { getLabel, setLabel } = useLabels();
   const { data: ensName } = useEnsName({
     address,
     chainId: mainnet.id,
@@ -42,9 +42,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
 
   const handleSave = () => {
-    if (labelText === primaryLabel) {
-      removeLabel(address);
-    } else {
+    if (labelText !== primaryLabel) {
       setLabel(address, labelText);
     }
 
@@ -92,8 +90,11 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
               <input
                 autoFocus
                 type="text"
-                maxLength={10}
                 value={labelText}
+                onfocusout={(e) =>
+                  (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
+                  setEditMode(false)
+                }
                 onBlur={(e) =>
                   (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
                   setEditMode(false)
@@ -123,11 +124,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
                 variant="light"
                 className="AliasButton"
                 label={
-                  editMode
-                    ? labelText === primaryLabel
-                      ? "Clear Alias"
-                      : "Save Alias"
-                    : "Edit Alias"
+                  editMode ? (labelText === primaryLabel ? "Cancel" : "Save Alias") : "Edit Alias"
                 }
                 onClick={() => {
                   if (editMode) {
