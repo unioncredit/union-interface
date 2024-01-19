@@ -1,14 +1,18 @@
 import { useNetwork } from "wagmi";
 import { useProtocol } from "providers/ProtocolData";
 import { BlockSpeed, ZERO } from "constants";
+import { useVersion } from "providers/Version";
 import { format } from "date-fns";
 
 export default function useFirstPaymentDueDate() {
+  const { isV2 } = useVersion();
   const { chain } = useNetwork();
   const { data: protocol } = useProtocol();
-  const { overdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
-  const milliseconds = overdueTime.mul(BlockSpeed[chain.id]);
+  const milliseconds = isV2
+    ? overdueTime.mul(BlockSpeed[chain.id])
+    : overdueBlocks.mul(BlockSpeed[chain.id]);
 
   let date = new Date();
   date.setMilliseconds(date.getMilliseconds() + Number(milliseconds));

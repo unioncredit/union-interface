@@ -18,6 +18,7 @@ import { Errors } from "constants";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
+import { useVersion } from "../../providers/Version";
 import { useAccount } from "wagmi";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
@@ -30,6 +31,7 @@ export default function WriteOffDebtModal({
   contactsCount,
   clearContact,
 }) {
+  const { isV2 } = useVersion();
   const { address: connectedAddress } = useAccount();
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
@@ -66,7 +68,7 @@ export default function WriteOffDebtModal({
   const buttonProps = useWrite({
     contract: "userManager",
     method: "debtWriteOff",
-    args: [connectedAddress, vouchee.address, amount.raw],
+    args: isV2 ? [connectedAddress, vouchee.address, amount.raw] : [vouchee.address, amount.raw],
     enabled: isOverdue && vouchee?.address && amount.raw.gt(ZERO),
     onComplete: async () => {
       await refetchVouchees();

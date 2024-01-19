@@ -29,8 +29,9 @@ import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "images/verification/lens.svg";
+import useResponsive from "hooks/useResponsive";
 import { truncateAddress } from "../../utils/truncateAddress";
-import { supportedNetworks } from "config/networks";
+import { networks } from "config/networks";
 import { Link, useNavigate } from "react-router-dom";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { getProfileUrl } from "../../utils/generateLinks";
@@ -44,18 +45,22 @@ import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
 
 const ProfileAddress = ({ member, chainId }) => {
+  const { isV2 } = useVersion();
   const { data: protocol } = useProtocol();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
 
   const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
-  const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
+  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
 
   const isMaxOverdue =
-    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    isOverdue &&
+    lastRepay &&
+    isV2 &&
+    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   return isMaxOverdue ? (
     <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
@@ -102,10 +107,11 @@ export default function ProfileHeader({ address, chainId }) {
 
   const network = useMemo(() => {
     return (
-      supportedNetworks.find((network) => network.chainId === parseInt(chainId)) ||
-      supportedNetworks[0]
+      [...networks[Versions.V1], ...networks[Versions.V2]].find(
+        (network) => network.chainId === parseInt(chainId)
+      ) || networks[Versions.V1][0]
     );
-  }, [supportedNetworks, chainId]);
+  }, [networks, chainId]);
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
@@ -126,7 +132,7 @@ export default function ProfileHeader({ address, chainId }) {
 
           <Box className="ProfileHeader__NetworkSelect">
             <Select
-              options={supportedNetworks.map((n) => ({
+              options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
                 ...n,
                 label: null,
               }))}
