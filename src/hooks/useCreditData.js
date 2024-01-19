@@ -84,6 +84,17 @@ export function useCreditData(address, chainId) {
     let newRepaidVolume = ZERO;
     const newHistory = {};
 
+    // Creates all years from the targetYear to the current year
+    const createEmptyYears = (targetYear) => {
+      const today = new Date();
+
+      for (let year = targetYear; year <= today.getFullYear(); year++) {
+        if (!newHistory[year]) {
+          createEmptyYear(year);
+        }
+      }
+    };
+
     const createEmptyYear = (year) => {
       const today = new Date();
 
@@ -106,10 +117,7 @@ export function useCreditData(address, chainId) {
       const date = new Date(borrow.timestamp * 1000);
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
-
-      if (!newHistory[year]) {
-        createEmptyYear(year);
-      }
+      createEmptyYears(year);
 
       newBorrowedVolume = newBorrowedVolume.add(borrow.amount);
       newBorrowedVolume = newBorrowedVolume.add(borrow.fee);
@@ -121,10 +129,7 @@ export function useCreditData(address, chainId) {
       const date = new Date(repay.timestamp * 1000);
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
-
-      if (!newHistory[year]) {
-        createEmptyYear(year);
-      }
+      createEmptyYears(year);
 
       newRepaidVolume = newRepaidVolume.add(repay.amount);
       newHistory[year][month]["repays"].push(repay);
