@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
+import { supportedNetworks } from "config/networks";
 import { EIP3770Map } from "constants";
-import useNetworks from "hooks/useNetworks";
 import { locationSearch } from "utils/location";
 import { isVersionSupported, Versions, useVersion } from "providers/Version";
 
@@ -14,8 +14,6 @@ export default function useChainParams() {
     throwForSwitchChainNotSupported: true,
   });
 
-  const allNetworks = useNetworks(true);
-
   const urlSearchParams = locationSearch();
 
   const targetChain = urlSearchParams.has("chain")
@@ -24,20 +22,12 @@ export default function useChainParams() {
 
   useEffect(() => {
     (async function () {
-      if (
-        switchNetworkAsync &&
-        isConnected &&
-        targetChain &&
-        connector &&
-        !chain?.unsupported
-      ) {
-        const toSelect = allNetworks.find(
-          (network) => network.chainId === targetChain
-        );
+      if (switchNetworkAsync && isConnected && targetChain && connector && !chain?.unsupported) {
+        const toSelect = supportedNetworks.find((network) => network.chainId === targetChain);
         // If the current network is not he same as the selected network
         // fire off a chain network request. This is to support the ?chain
         // URL search param
-        if (toSelect.chainId !== chain.id) {
+        if (toSelect?.chainId !== chain.id) {
           try {
             await switchNetworkAsync(toSelect.chainId);
             if (!isVersionSupported(version, toSelect.chainId)) {
@@ -49,5 +39,5 @@ export default function useChainParams() {
         }
       }
     })();
-  }, [isConnected, connector, targetChain, allNetworks, switchNetworkAsync]);
+  }, [isConnected, connector, targetChain, supportedNetworks, switchNetworkAsync]);
 }
