@@ -41,7 +41,12 @@ export default function RegisterPage() {
   const vouchStep = useRef();
   const memberStep = useRef();
 
-  const { isMember = false, unionBalance = ZERO, unclaimedRewards = ZERO } = member;
+  const {
+    isMember = false,
+    unionBalance = ZERO,
+    unclaimedRewards = ZERO,
+    creditLimit = ZERO,
+  } = member;
 
   const getNumberOfTasksCompleted = () => {
     let completed = 0;
@@ -77,10 +82,19 @@ export default function RegisterPage() {
         <Grid.Row justify="center">
           <Grid.Col xs={11} md={8.1} className="Register__col">
             <Heading level={1} mb="0" className="Register__heading" grey={800}>
-              Become a Union member
+              Getting Started on Union
             </Heading>
             <Text m={0} grey={500} size="medium">
-              {getNumberOfTasksCompleted()} of 3 tasks completed
+              {getNumberOfTasksCompleted()} of 3 tasks completed (or{" "}
+              <a
+                href="#step-3"
+                target="_blank"
+                rel="noopener"
+                style={{ textDecoration: "underline" }}
+              >
+                skip to the end
+              </a>{" "}
+              if impatient)
             </Text>
 
             {isTablet && (
@@ -98,27 +112,28 @@ export default function RegisterPage() {
             )}
 
             <ProgressList mt="24px">
-              <ProgressListItem number={1} complete={stakeComplete}>
+              <ProgressListItem number="1*" complete={stakeComplete}>
                 <div ref={stakeStep}>
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={isV2 ? "2*" : 2} complete={vouchComplete}>
+              <ProgressListItem number="2*" complete={vouchComplete}>
                 <div ref={vouchStep}>
                   <VouchersStep />
                 </div>
               </ProgressListItem>
               <ProgressListItem number={3} complete={isMember}>
                 <div ref={memberStep}>
+                  <span id="step-3" />
                   <Card size="fluid" mb="24px">
                     <Card.Body>
                       <Heading level={2} size="large" grey={700}>
                         Claim your membership
                       </Heading>
                       <Text grey={500} size="medium">
-                        Once you’ve earned and claimed enough UNION for your membership fee; pay 1
-                        UNION to finalize your membership and unlock the full Union Credit
-                        experience.
+                        Register your address in order to access{" "}
+                        {creditLimit.gt(ZERO) && `your $${format(creditLimit)} in credit and`} all
+                        the benefits of being a member of the union credit network
                       </Text>
 
                       <Box mt="16px" className="Register__container" justify="center">

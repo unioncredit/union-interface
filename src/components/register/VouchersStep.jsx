@@ -46,7 +46,7 @@ export default function VouchersStep() {
       <Card.Body>
         <Box>
           <Heading level={2} size="large" grey={700}>
-            Find vouchers
+            Invite friends to vouch for you
           </Heading>
           {isV2 && (
             <Heading level={2} size="large" grey={400} ml="8px">
@@ -56,8 +56,8 @@ export default function VouchersStep() {
         </Box>
 
         <Text grey={500} size="medium">
-          In order to have credit and borrow on Union, you’ll need to find existing Union members to
-          vouch for you. {isV2 && "This step you can do before or after you register."}
+          In order to get credit and borrow on Union, you’ll need to find existing Union members to
+          vouch for you. This step can be done before or after you register.
         </Text>
 
         <Box className="VouchersStep__container" fluid mt="24px" mb="14px" direction="vertical">

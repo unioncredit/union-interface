@@ -108,12 +108,20 @@ export default function StakeStep() {
     <Card size="fluid" mb="24px">
       <Card.Body>
         <Heading level={2} size="large" grey={700}>
-          Stake DAI to earn UNION
+          Stake DAI to provide credit to those you Trust
         </Heading>
         <Text grey={500} size="medium">
-          A minimum of 1 UNION is needed to complete the membership process and become a member of
-          the credit network. After registration, you can use this staked DAI to underwrite trusted
-          contacts, and continue to earn Union Tokens (UNION).
+          After registration, you can use this staked DAI to extend credit trusted contacts, and
+          continue to earn Union Tokens (UNION) (
+          <a
+            href="https://docs.union.finance/user-guides/becoming-a-member#1.-stake-dai-in-the-union-protocol"
+            style={{ textDecoration: "underline" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Learn more
+          </a>
+          )
         </Text>
 
         <Box fluid mt="16px" direction="vertical" className="StakeStep__container">
