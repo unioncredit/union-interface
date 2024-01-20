@@ -9,7 +9,9 @@ import { useNetwork } from "wagmi";
 export function LeaderboardTableRow({ data }) {
   const { address, unionBalance = ZERO, votes = ZERO, delegatedVotes = ZERO, voteCount = 0 } = data;
   const { chain } = useNetwork();
-  const userLink = chain ? `/profile/${EIP3770[chain.id]}:${data.address}` : "";
+  const userLink = chain
+    ? `/profile/${EIP3770[chain.id]}:${data.address}`
+    : `/profile/opt:${data.address}`; //default to Optimism
   return (
     <TableRow key={address}>
       <TableCell fixedSize>
