@@ -60,10 +60,17 @@
   display: none;
   justify-content: center;
   z-index: 9999;
-}
 
-@media screen and (max-width: 600px) {
-  .MiniProgressListContainer {
+
+  @media screen and (max-width: 600px) {
     display: flex;
   }
+}
+
+.EthRegisterContainer {
+  background: $blue100;
+  padding: 8px;
+  border-radius: 16px;
+  min-width: 320px;
+  margin-top: 16px;
 }
