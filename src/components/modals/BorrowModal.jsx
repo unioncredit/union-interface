@@ -25,12 +25,10 @@ import {
   calculateInterestRate,
   calculateMaxBorrow,
 } from "utils/numbers";
-import { useVersion } from "providers/Version";
 
 export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
-  const { isV2 } = useVersion();
   const { chain } = useNetwork();
   const { close } = useModals();
   const { address } = useAccount();
@@ -43,16 +41,13 @@ export default function BorrowModal() {
     minBorrow = ZERO,
     creditLimit = ZERO,
     originationFee = ZERO,
-    overdueBlocks = ZERO,
     overdueTime = ZERO,
     borrowRatePerBlock = ZERO,
     borrowRatePerSecond = ZERO,
     getLoanableAmount = ZERO,
   } = { ...member, ...protocol };
 
-  const borrowRatePerUnit = isV2 ? borrowRatePerSecond : borrowRatePerBlock;
-
-  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
+  const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
 
   const validate = (inputs) => {
     if (member.isOverdue) {
@@ -78,12 +73,12 @@ export default function BorrowModal() {
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(newOwed, borrowRatePerUnit, overdueUnit);
+  const minPayment = calculateExpectedMinimumPayment(borrow, borrowRatePerBlock, overdueTime);
 
   const buttonProps = useWrite({
     contract: "uToken",
     method: "borrow",
-    args: isV2 ? [address, amount.raw] : [amount.raw],
+    args: [address, amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
     onComplete: async () => {
       await refetchMember();
