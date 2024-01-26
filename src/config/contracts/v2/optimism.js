@@ -49,6 +49,6 @@ export const vouchFaucetContract = {
 };
 
 export const registerHelperContract = {
-  address: "0x61a937c0b1717cf86f805324158a427264c53599",
+  address: "0x2683666a3004c553b3a40ed13c32678ed11d9b49",
   abi: registerHelperAbi,
 };

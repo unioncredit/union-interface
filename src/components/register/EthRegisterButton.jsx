@@ -2,7 +2,7 @@ import { useAccount, useBalance } from "wagmi";
 import useWrite from "hooks/useWrite";
 import { useProtocol } from "providers/ProtocolData";
 import { Button, CheckIcon } from "@unioncredit/ui";
-import { ZERO_ADDRESS } from "constants";
+import { ZERO, ZERO_ADDRESS } from "constants";
 
 export function EthRegisterButton({ onComplete }) {
   const { data: protocol = {} } = useProtocol();
@@ -12,15 +12,20 @@ export function EthRegisterButton({ onComplete }) {
     address,
   });
 
-  const { regFee, value: ethBalance } = { ...protocol, ...balance };
+  const { regFee = ZERO, rebate = ZERO, value: ethBalance = ZERO } = { ...protocol, ...balance };
+
+  const ethRegisterFee = regFee.add(rebate);
 
   const registerButtonProps = useWrite({
     contract: "registerHelper",
     method: "register",
     args: [address, ZERO_ADDRESS],
-    enabled: regFee.lte(ethBalance),
-    disabled: regFee.gt(ethBalance),
+    enabled: ethRegisterFee.lte(ethBalance),
+    disabled: ethRegisterFee.gt(ethBalance),
     onComplete,
+    overrides: {
+      value: ethRegisterFee,
+    },
   });
 
   return (

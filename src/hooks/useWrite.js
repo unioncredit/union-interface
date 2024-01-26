@@ -1,10 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useNetwork,
-  useSigner,
-} from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useNetwork, useSigner } from "wagmi";
 
 import { Status } from "constants";
 import praseAppLog from "utils/praseAppLog";
@@ -13,7 +8,6 @@ import useContract from "hooks/useContract";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
-import { Contract } from "ethers";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -55,27 +49,13 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(
-      method,
-      memoisedArgs,
-      chain.id,
-      version
-    );
+    const parseToast = createParseToast(method, memoisedArgs, chain.id, version);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
     try {
-      const contract = new Contract(
-        contractConfig.address,
-        contractConfig.abi,
-        signer
-      );
-
-      const gas = await contract.estimateGas[method](...(memoisedArgs || []));
-      const gasLimit = gas.mul(120).div(100).toNumber();
-
       const tx = await writeAsync({
-        recklesslySetUnpreparedOverrides: { gasLimit },
+        recklesslySetUnpreparedOverrides: overrides,
       });
 
       // Replace current pending toast with a new pending toast
@@ -88,9 +68,7 @@ export default function useWrite({
       onComplete && (await onComplete());
 
       addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
-      addToast(
-        parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx)
-      );
+      addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
 
       return true;
     } catch (error) {
@@ -116,14 +94,7 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [
-    writeAsync,
-    method,
-    memoisedArgs,
-    chain.id,
-    signer,
-    JSON.stringify(contractConfig),
-  ]);
+  }, [writeAsync, method, memoisedArgs, chain.id, signer, JSON.stringify(contractConfig)]);
 
   /*--------------------------------------------------------------
     Return  

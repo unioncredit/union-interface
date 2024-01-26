@@ -50,7 +50,9 @@ export default function RegisterPage() {
     creditLimit = ZERO,
   } = member;
 
-  const { regFee = ZERO, newMemberFee = ZERO } = protocol;
+  const { regFee = ZERO, rebate = ZERO, newMemberFee = ZERO } = protocol;
+
+  const ethRegisterFee = regFee.add(rebate);
 
   const getNumberOfTasksCompleted = () => {
     let completed = 0;
@@ -146,7 +148,7 @@ export default function RegisterPage() {
                           <Box className="Register__fee" align="center">
                             <Text size="large" grey={700} m={0} weight="medium">
                               {isV2
-                                ? format(regFee, 10, false, true, false)
+                                ? format(ethRegisterFee, 10, false, true, false)
                                 : format(newMemberFee, 2)}
                             </Text>
 

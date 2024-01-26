@@ -87,6 +87,11 @@ export const useProtocolData = (chainId) => {
       functionName: "regFee",
       chainId,
     },
+    {
+      ...registerHelperContract,
+      functionName: "rebate",
+      chainId,
+    },
   ];
 
   const contracts = [
