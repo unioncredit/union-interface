@@ -28,6 +28,7 @@ import ErrorPage from "pages/Error";
 import { FooterLinks } from "components/shared/FooterLinks";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
+import { useSupportedNetwork } from "./hooks/useSupportedNetwork";
 
 /**
  * Shim component that checks if the App is ready
@@ -39,6 +40,7 @@ function AppReadyShim({ children }) {
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
+  const { isSupported } = useSupportedNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
@@ -53,13 +55,14 @@ function AppReadyShim({ children }) {
       return;
     }
 
-    if (chain && appReady && (isDisconnected || chain?.unsupported)) {
+    if (chain && appReady && (isDisconnected || chain?.unsupported || !isSupported(chain?.id))) {
       setAppReady(false);
     }
   }, [
     appReady,
     member?.isMember,
     chain?.unsupported,
+    chain?.id,
     isDisconnected,
     isGeneralRoute,
     JSON.stringify(chain),

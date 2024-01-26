@@ -59,7 +59,7 @@ export default function ConnectPage() {
             <InfoBanner
               align="center"
               icon={WarningIcon}
-              label="You are connected to an supported network, choose a network below."
+              label="You are connected to an unsupported network, choose a network below."
               style={{ cursor: "pointer" }}
             />
           </Box>

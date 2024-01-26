@@ -65,7 +65,12 @@ export default function Version({ children }) {
 
   return (
     <VersionContext.Provider
-      value={{ isV2: _version === Versions.V2, version: _version, setVersion, versioned }}
+      value={{
+        isV2: _version === Versions.V2,
+        version: _version,
+        setVersion,
+        versioned,
+      }}
     >
       {children}
     </VersionContext.Provider>

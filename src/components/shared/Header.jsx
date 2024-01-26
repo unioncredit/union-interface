@@ -34,23 +34,14 @@ export function Header({ loading, showNav = true }) {
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
   const { width } = useWindowDimensions();
-  const { chain } = useNetwork();
   const setScrollLock = useScrollLock();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { isMember, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
-  const isMainnet = chain?.id === mainnet.id;
-
   const navItems0 =
-    isConnected && isMember
-      ? isMainnet
-        ? [items.dao]
-        : [items.credit, items.dao]
-      : isMainnet
-      ? [items.dao]
-      : [items.getStarted, items.dao];
+    isConnected && isMember ? [items.credit, items.dao] : [items.getStarted, items.dao];
 
   const navItems = navItems0.map((item) => ({
     ...item,
