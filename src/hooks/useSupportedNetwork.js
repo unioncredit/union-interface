@@ -12,7 +12,7 @@ export function useSupportedNetwork() {
     chainId && supportedNetworks.some((n) => n.chainId === chainId) && chainId !== mainnet.id;
 
   return {
-    connected: isSupported(chain.id),
+    connected: isSupported(chain?.id),
     isSupported,
   };
 }
