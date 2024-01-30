@@ -77,7 +77,7 @@ export default function NetworkSelect() {
       </Box>
       <Button
         w="100%"
-        disabled={chain?.unsupported || isMainnet || !isSupportedNetwork}
+        disabled={isConnected && (chain?.unsupported || isMainnet || !isSupportedNetwork)}
         size="large"
         icon={!isConnected && WalletIcon}
         iconProps={{

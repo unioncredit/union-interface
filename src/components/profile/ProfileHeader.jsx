@@ -24,7 +24,7 @@ import { compareAddresses } from "utils/compare";
 import { Avatar, ConnectButton, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
-import { getVersion, useVersion, Versions } from "providers/Version";
+import { getVersion, Versions } from "providers/Version";
 import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
@@ -42,6 +42,7 @@ import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
 import { useProtocol } from "../../providers/ProtocolData";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
+import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
 
 const ProfileAddress = ({ member, chainId }) => {
   const { data: protocol } = useProtocol();
@@ -75,6 +76,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
+  const { isSupported } = useSupportedNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
@@ -100,12 +102,11 @@ export default function ProfileHeader({ address, chainId }) {
     compareAddresses(borrower, address)
   );
 
+  const networks = supportedNetworks.filter((n) => isSupported(n.chainId));
+
   const network = useMemo(() => {
-    return (
-      supportedNetworks.find((network) => network.chainId === parseInt(chainId)) ||
-      supportedNetworks[0]
-    );
-  }, [supportedNetworks, chainId]);
+    return networks.find((network) => network.chainId === parseInt(chainId)) || networks[0];
+  }, [chainId, networks]);
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
@@ -126,7 +127,7 @@ export default function ProfileHeader({ address, chainId }) {
 
           <Box className="ProfileHeader__NetworkSelect">
             <Select
-              options={supportedNetworks.map((n) => ({
+              options={networks.map((n) => ({
                 ...n,
                 label: null,
               }))}
