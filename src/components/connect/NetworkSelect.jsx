@@ -1,22 +1,26 @@
 import "./NetworkSelect.scss";
 
-import { optimismGoerli, goerli } from "wagmi/chains";
+import cn from "classnames";
+import { mainnet, optimismGoerli } from "wagmi/chains";
 import { useEffect, useState } from "react";
 import { WalletIcon, Box, Button } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
-import useNetworks from "hooks/useNetworks";
-import { useAppNetwork } from "providers/Network";
-import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
-import cn from "classnames";
+import useMemberSummary from "hooks/useMemberSummary";
+import { useAppNetwork } from "providers/Network";
+import { useSettings } from "providers/Settings";
+import { supportedNetworks } from "config/networks";
+import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
 
-export default function NetworkSelect({ version }) {
+export default function NetworkSelect() {
   const { chain } = useNetwork();
+  const { settings } = useSettings();
   const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
+  const { connected: isSupportedNetwork } = useSupportedNetwork();
   const { switchNetworkAsync } = useSwitchNetwork({
     throwForSwitchChainNotSupported: true,
   });
@@ -24,8 +28,12 @@ export default function NetworkSelect({ version }) {
 
   const [selected, setSelected] = useState(null);
 
-  const allNetworks = useNetworks(false, version);
-  const networks = allNetworks.filter((x) => ![optimismGoerli.id, goerli.id].includes(x.chainId));
+  const isMainnet = chain?.id === mainnet.id;
+  const availableNetworks = supportedNetworks.filter((x) => ![mainnet.id].includes(x.chainId));
+
+  const networks = availableNetworks.filter(
+    (x) => settings.showTestnets || ![optimismGoerli.id].includes(x.chainId)
+  );
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;
@@ -69,7 +77,7 @@ export default function NetworkSelect({ version }) {
       </Box>
       <Button
         w="100%"
-        disabled={chain?.unsupported}
+        disabled={isConnected && (chain?.unsupported || isMainnet || !isSupportedNetwork)}
         size="large"
         icon={!isConnected && WalletIcon}
         iconProps={{
@@ -80,7 +88,7 @@ export default function NetworkSelect({ version }) {
         }}
         label={
           isConnected
-            ? chain?.unsupported
+            ? chain?.unsupported || isMainnet
               ? "Select a Supported Network"
               : member.isMember
               ? "Open Union Dashboard"

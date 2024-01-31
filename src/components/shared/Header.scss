@@ -18,6 +18,10 @@
   width: 100%;
   box-sizing: border-box;
 
+  .avatar {
+    background-color: transparent;
+  }
+
   .UnionWallet.button,
   .wallet.button,
   .Header__context-menu .PopoverMenu__button,

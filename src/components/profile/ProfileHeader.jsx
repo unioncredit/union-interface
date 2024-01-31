@@ -24,14 +24,13 @@ import { compareAddresses } from "utils/compare";
 import { Avatar, ConnectButton, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
-import { getVersion, useVersion, Versions } from "providers/Version";
+import { getVersion, Versions } from "providers/Version";
 import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "images/verification/lens.svg";
-import useResponsive from "hooks/useResponsive";
 import { truncateAddress } from "../../utils/truncateAddress";
-import { networks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 import { Link, useNavigate } from "react-router-dom";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { getProfileUrl } from "../../utils/generateLinks";
@@ -43,24 +42,21 @@ import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
 import { useProtocol } from "../../providers/ProtocolData";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
+import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
 
 const ProfileAddress = ({ member, chainId }) => {
-  const { isV2 } = useVersion();
   const { data: protocol } = useProtocol();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
 
   const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
 
   const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   return isMaxOverdue ? (
     <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
@@ -80,6 +76,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
+  const { isSupported } = useSupportedNetwork();
   const { data: blockNumber } = useVersionBlockNumber({
     chainId,
   });
@@ -105,13 +102,11 @@ export default function ProfileHeader({ address, chainId }) {
     compareAddresses(borrower, address)
   );
 
+  const networks = supportedNetworks.filter((n) => isSupported(n.chainId));
+
   const network = useMemo(() => {
-    return (
-      [...networks[Versions.V1], ...networks[Versions.V2]].find(
-        (network) => network.chainId === parseInt(chainId)
-      ) || networks[Versions.V1][0]
-    );
-  }, [networks, chainId]);
+    return networks.find((network) => network.chainId === parseInt(chainId)) || networks[0];
+  }, [chainId, networks]);
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
@@ -132,7 +127,7 @@ export default function ProfileHeader({ address, chainId }) {
 
           <Box className="ProfileHeader__NetworkSelect">
             <Select
-              options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+              options={networks.map((n) => ({
                 ...n,
                 label: null,
               }))}

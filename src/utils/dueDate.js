@@ -5,12 +5,12 @@ import { format } from "date-fns";
 export const NoPaymentLabel = "No payment due";
 const OverdueLabel = "Payment overdue";
 
-function dueDateToMilliseconds(lastRepay, overdueBlocks, blockNumber, chainId) {
-  if (!lastRepay || !overdueBlocks || !blockNumber || !chainId || lastRepay.lte(ZERO)) {
+function dueDateToMilliseconds(lastRepay, overdueTime, blockNumber, chainId) {
+  if (!lastRepay || !overdueTime || !blockNumber || !chainId || lastRepay.lte(ZERO)) {
     return null;
   }
 
-  const milliseconds = lastRepay.add(overdueBlocks).sub(blockNumber).mul(BlockSpeed[chainId]);
+  const milliseconds = lastRepay.add(overdueTime).sub(blockNumber).mul(BlockSpeed[chainId]);
 
   return Number(milliseconds.toString());
 }
@@ -23,14 +23,14 @@ export const formatDueDate = (milliseconds) => {
   return `${days > 0 ? `${days}d` : ""} ${hours > 0 ? `${hours}h` : ""}`;
 };
 
-export default function dueDate(lastRepay, overdueBlocks, blockNumber, chainId) {
-  const milliseconds = dueDateToMilliseconds(lastRepay, overdueBlocks, blockNumber, chainId);
+export default function dueDate(lastRepay, overdueTime, blockNumber, chainId) {
+  const milliseconds = dueDateToMilliseconds(lastRepay, overdueTime, blockNumber, chainId);
 
   return milliseconds === null ? NoPaymentLabel : formatDueDate(milliseconds);
 }
 
-export const dueOrOverdueDate = (lastRepay, overdueBlocks, blockNumber, chainId) => {
-  const milliseconds = dueDateToMilliseconds(lastRepay, overdueBlocks, blockNumber, chainId);
+export const dueOrOverdueDate = (lastRepay, overdueTime, blockNumber, chainId) => {
+  const milliseconds = dueDateToMilliseconds(lastRepay, overdueTime, blockNumber, chainId);
 
   if (milliseconds === null) {
     return {

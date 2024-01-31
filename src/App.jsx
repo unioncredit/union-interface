@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Layout, Grid } from "@unioncredit/ui";
+import { Text, Box, Layout, Grid } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Analytics } from "@vercel/analytics/react";
@@ -25,9 +25,10 @@ import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
-import { BuildInfo } from "components/shared/BuildInfo";
+import { FooterLinks } from "components/shared/FooterLinks";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
+import { useSupportedNetwork } from "./hooks/useSupportedNetwork";
 
 /**
  * Shim component that checks if the App is ready
@@ -39,6 +40,7 @@ function AppReadyShim({ children }) {
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
+  const { isSupported } = useSupportedNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
@@ -53,13 +55,14 @@ function AppReadyShim({ children }) {
       return;
     }
 
-    if (chain && appReady && (isDisconnected || chain?.unsupported)) {
+    if (chain && appReady && (isDisconnected || chain?.unsupported || !isSupported(chain?.id))) {
       setAppReady(false);
     }
   }, [
     appReady,
     member?.isMember,
     chain?.unsupported,
+    chain?.id,
     isDisconnected,
     isGeneralRoute,
     JSON.stringify(chain),
@@ -160,7 +163,7 @@ export default function App() {
           </Cache>
         </Settings>
         <Box mt="56px" mb="24px" w="100%">
-          <BuildInfo />
+          <FooterLinks />
         </Box>
       </Layout.Main>
     </Layout>
