@@ -28,11 +28,9 @@ import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
-import { useVersion } from "../../providers/Version";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
-  const { isV2 } = useVersion();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
