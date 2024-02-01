@@ -45,7 +45,7 @@ export default function Network({ children }) {
           chains={chains}
           autoConnect={true}
           modalSize="compact"
-          initialChain={optimism.id}
+          initialChain={arbitrum.id}
         >
           {children}
         </RainbowKitProvider>
