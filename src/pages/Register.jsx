@@ -1,15 +1,15 @@
 import "./Register.scss";
 
 import {
+  Box,
   Card,
   Grid,
   Heading,
+  MobileProgressList,
   ProgressList,
   ProgressListItem,
   Text,
-  Box,
   UnionIcon,
-  MobileProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -25,10 +25,8 @@ import { useModals } from "providers/ModalManager";
 import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
 import useResponsive from "hooks/useResponsive";
-import { useVersion } from "../providers/Version";
 
 export default function RegisterPage() {
-  const { isV2 } = useVersion();
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
@@ -103,7 +101,7 @@ export default function RegisterPage() {
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number={isV2 ? "2*" : 2} complete={vouchComplete}>
+              <ProgressListItem number={2} complete={vouchComplete}>
                 <div ref={vouchStep}>
                   <VouchersStep />
                 </div>

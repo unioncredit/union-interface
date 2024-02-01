@@ -2,20 +2,20 @@ import "./VouchersStep.scss";
 
 import { useAccount, useNetwork } from "wagmi";
 import {
-  Table,
-  TableRow,
-  TableHead,
-  Card,
   Box,
-  ButtonRow,
   Button,
-  Text,
-  TableCell,
+  ButtonRow,
+  Card,
   EmptyState,
   Heading,
-  TwitterIcon,
-  TelegramIcon,
   LinkIcon,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  TelegramIcon,
+  Text,
+  TwitterIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -25,14 +25,12 @@ import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 
-import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
+import { generateTelegramLink, generateTwitterLink, getProfileUrl } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
-import { useVersion } from "../../providers/Version";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
-  const { isV2 } = useVersion();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
@@ -48,16 +46,11 @@ export default function VouchersStep() {
           <Heading level={2} size="large" grey={700}>
             Find vouchers
           </Heading>
-          {isV2 && (
-            <Heading level={2} size="large" grey={400} ml="8px">
-              (*optional)
-            </Heading>
-          )}
         </Box>
 
         <Text grey={500} size="medium">
           In order to have credit and borrow on Union, you’ll need to find existing Union members to
-          vouch for you. {isV2 && "This step you can do before or after you register."}
+          vouch for you.
         </Text>
 
         <Box className="VouchersStep__container" fluid mt="24px" mb="14px" direction="vertical">

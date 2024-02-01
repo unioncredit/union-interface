@@ -1,12 +1,10 @@
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext } from "react";
 
-import { STALE_TIME, CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
-import { useVersion, Versions } from "./Version";
+import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
 import usePollMemberData from "hooks/usePollMember";
-import useRelatedAddresses from "hooks/useRelatedAddresses";
 
 const selectMemberData = (data) => {
   const [
@@ -42,7 +40,7 @@ const selectMemberData = (data) => {
     stakerAddresses,
     unionBalance,
     daiBalance,
-    unclaimedRewards,
+    unclaimedRewards: unclaimedRewards || ZERO,
     owed,
     interest,
     lastRepay,
@@ -65,8 +63,6 @@ const MemberContext = createContext({});
 export const useMember = () => useContext(MemberContext);
 
 export function useMemberData(address, chainId, forceVersion) {
-  const { version } = useVersion();
-
   const daiContract = useContract("dai", chainId, forceVersion);
   const unionContract = useContract("union", chainId, forceVersion);
   const uTokenContract = useContract("uToken", chainId, forceVersion);
@@ -112,11 +108,8 @@ export function useMemberData(address, chainId, forceVersion) {
         },
         {
           ...comptrollerContract,
-          functionName: version === Versions.V1 ? "calculateRewardsByBlocks" : "calculateRewards",
-          args:
-            version === Versions.V1
-              ? [address, daiContract.address, ZERO]
-              : [address, daiContract.address],
+          functionName: "calculateRewardsByBlocks",
+          args: [address, daiContract.address, ZERO],
         },
         {
           ...uTokenContract,
@@ -153,26 +146,21 @@ export function useMemberData(address, chainId, forceVersion) {
           functionName: "getRewardsMultiplier",
           args: [address, daiContract.address],
         },
-        // Versioned values
-        ...((forceVersion || version) === Versions.V1
-          ? [
-              {
-                ...userManagerContract,
-                functionName: "getTotalFrozenAmount",
-                args: [address],
-              },
-              {
-                ...userManagerContract,
-                functionName: "getBorrowerAddresses",
-                args: [address],
-              },
-              {
-                ...userManagerContract,
-                functionName: "getStakerAddresses",
-                args: [address],
-              },
-            ]
-          : []),
+        {
+          ...userManagerContract,
+          functionName: "getTotalFrozenAmount",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getBorrowerAddresses",
+          args: [address],
+        },
+        {
+          ...userManagerContract,
+          functionName: "getStakerAddresses",
+          args: [address],
+        },
       ]
     : [];
 
@@ -193,23 +181,14 @@ export function useMemberData(address, chainId, forceVersion) {
     staleTime: STALE_TIME,
   });
 
-  const {
-    stakerAddresses = data?.stakerAddresses,
-    borrowerAddresses = data?.borrowerAddresses,
-    refetch: refetchRelated,
-  } = useRelatedAddresses(address, chainId, forceVersion);
-
   return {
     data: {
       ...data,
       address,
-      stakerAddresses,
-      borrowerAddresses,
     },
     ...resp,
     refetch: async () => {
       await resp.refetch();
-      await refetchRelated();
     },
   };
 }

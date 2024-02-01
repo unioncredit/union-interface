@@ -11,12 +11,14 @@ import useMemberSummary from "hooks/useMemberSummary";
 import { NetworkSelectOption } from "./NetworkSelectOption";
 import cn from "classnames";
 import { supportedNetworks } from "config/networks";
+import { useSupportedNetwork } from "../../hooks/useSupportedNetworks";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
   const { setAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
+  const { connected: isSupportedNetwork } = useSupportedNetwork();
   const { switchNetworkAsync } = useSwitchNetwork({
     throwForSwitchChainNotSupported: true,
   });
@@ -44,9 +46,9 @@ export default function NetworkSelect() {
 
   useEffect(() => {
     if (!chain?.id) return;
-    const found = networks.find((net) => net.chainId === chain.id);
+    const found = networks.find((net) => net.chainId === chain?.id);
     setSelected(found || null);
-  }, [chain.id, networks]);
+  }, [chain?.id, networks]);
 
   return (
     <Box
@@ -70,7 +72,7 @@ export default function NetworkSelect() {
       </Box>
       <Button
         w="100%"
-        disabled={chain?.unsupported}
+        disabled={isConnected && (chain?.unsupported || !isSupportedNetwork)}
         size="large"
         icon={!isConnected && WalletIcon}
         iconProps={{

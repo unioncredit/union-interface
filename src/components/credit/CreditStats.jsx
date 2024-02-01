@@ -2,22 +2,20 @@ import "./CreditStats.scss";
 
 import { useNetwork } from "wagmi";
 import {
-  Button,
-  Card,
-  Text,
-  NumericalBlock,
   Box,
-  DistributionBar,
-  WarningIcon,
-  BadgeIndicator,
+  Button,
   CalendarIcon,
+  Card,
+  DistributionBar,
   Dot,
-  Tooltip,
   Heading,
   InfoOutlinedIcon,
+  NumericalBlock,
+  Text,
+  Tooltip,
+  WarningIcon,
 } from "@unioncredit/ui";
 import cn from "classnames";
-import { BigNumber } from "ethers";
 
 import { ZERO } from "constants";
 import format, { formattedNumber } from "utils/format";
@@ -28,7 +26,6 @@ import { useProtocol } from "providers/ProtocolData";
 import { REPAY_MODAL } from "components/modals/RepayModal";
 import { useModals } from "providers/ModalManager";
 import { BORROW_MODAL } from "components/modals/BorrowModal";
-import { useVersion } from "providers/Version";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import useResponsive from "hooks/useResponsive";
 import makeUrls from "add-event-to-calendar";
@@ -36,7 +33,6 @@ import makeUrls from "add-event-to-calendar";
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
   const { chain: connectedChain } = useNetwork();
-  const { isV2 } = useVersion();
   const { isMobile } = useResponsive();
 
   const { data: member = {} } = useMember();
@@ -51,28 +47,18 @@ export default function CreditStats({ vouchers }) {
     owed = ZERO,
     lastRepay = ZERO,
     overdueBlocks = ZERO,
-    overdueTime = ZERO,
-    maxOverdueTime = ZERO,
   } = { ...member, ...protocol };
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const unavailableBalance = vouch.sub(creditLimit).sub(owed);
-  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
 
   const {
     date: dueDate,
     relative: relativeDueDate,
     absolute: absoluteDueDate,
     overdue: isOverdue,
-  } = dueOrOverdueDate(lastRepay, overdueUnit, blockNumber, connectedChain.id);
-
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
-  const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+  } = dueOrOverdueDate(lastRepay, overdueBlocks, blockNumber, connectedChain.id);
 
   const buttonProps = relativeDueDate === NoPaymentLabel && {
     disabled: true,
@@ -216,13 +202,9 @@ export default function CreditStats({ vouchers }) {
               </Text>
             </Box>
 
-            {isMaxOverdue ? (
-              <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
-            ) : (
-              <Text m="4px 0 0" size="medium">
-                {owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`}
-              </Text>
-            )}
+            <Text m="4px 0 0" size="medium">
+              {owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`}
+            </Text>
           </Box>
 
           {!isOverdue && owed.gt(0) && (
@@ -239,14 +221,6 @@ export default function CreditStats({ vouchers }) {
             />
           )}
         </Box>
-
-        {isMaxOverdue && (
-          <Text className="MaxOverdueNotice" m="16px 0 0 0" size="medium">
-            When you’re in an overdue state for the maximum time, you enter a “write-off” state.
-            Your backers risk permanent loss of all funds due to public write-off of your unpaid
-            balance.
-          </Text>
-        )}
       </Card.Footer>
     </Card>
   );

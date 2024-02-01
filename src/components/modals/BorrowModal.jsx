@@ -1,4 +1,5 @@
 import {
+  BorrowIcon,
   Box,
   Button,
   Dai,
@@ -7,10 +8,9 @@ import {
   Modal,
   ModalOverlay,
   NumericalBlock,
-  BorrowIcon,
   NumericalRows,
 } from "@unioncredit/ui";
-import { useAccount, useNetwork } from "wagmi";
+import { useNetwork } from "wagmi";
 
 import format from "utils/format";
 import useForm from "hooks/useForm";
@@ -18,22 +18,19 @@ import useWrite from "hooks/useWrite";
 import useFirstPaymentDueDate from "hooks/useFirstPaymentDueDate";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { ZERO, Errors, WAD } from "constants";
+import { Errors, WAD, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 import {
   calculateExpectedMinimumPayment,
   calculateInterestRate,
   calculateMaxBorrow,
 } from "utils/numbers";
-import { useVersion } from "providers/Version";
 
 export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
-  const { isV2 } = useVersion();
   const { chain } = useNetwork();
   const { close } = useModals();
-  const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
   const firstPaymentDueDate = useFirstPaymentDueDate();
@@ -44,15 +41,9 @@ export default function BorrowModal() {
     creditLimit = ZERO,
     originationFee = ZERO,
     overdueBlocks = ZERO,
-    overdueTime = ZERO,
     borrowRatePerBlock = ZERO,
-    borrowRatePerSecond = ZERO,
     getLoanableAmount = ZERO,
   } = { ...member, ...protocol };
-
-  const borrowRatePerUnit = isV2 ? borrowRatePerSecond : borrowRatePerBlock;
-
-  const overdueUnit = isV2 ? overdueTime : overdueBlocks;
 
   const validate = (inputs) => {
     if (member.isOverdue) {
@@ -78,12 +69,12 @@ export default function BorrowModal() {
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(newOwed, borrowRatePerUnit, overdueUnit);
+  const minPayment = calculateExpectedMinimumPayment(newOwed, borrowRatePerBlock, overdueBlocks);
 
   const buttonProps = useWrite({
     contract: "uToken",
     method: "borrow",
-    args: isV2 ? [address, amount.raw] : [amount.raw],
+    args: [amount.raw],
     enabled: amount.raw.gt(ZERO) && !errors.amount,
     onComplete: async () => {
       await refetchMember();
@@ -149,7 +140,7 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
+                  calculateInterestRate(borrowRatePerBlock, chain.id).mul(100)
                 )}% APR`,
                 tooltip: {
                   content: "The interest rate accrued over a 12 month borrow period",

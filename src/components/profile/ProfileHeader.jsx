@@ -24,7 +24,7 @@ import { compareAddresses } from "utils/compare";
 import { Avatar, ConnectButton, PrimaryLabel } from "../shared";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { EIP3770, ZERO, ZERO_ADDRESS } from "constants";
-import { getVersion, useVersion, Versions } from "providers/Version";
+import { getVersion, Versions } from "providers/Version";
 import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
@@ -43,26 +43,11 @@ import { useProtocol } from "../../providers/ProtocolData";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
 
-const ProfileAddress = ({ member, chainId }) => {
-  const { isV2 } = useVersion();
-  const { data: protocol } = useProtocol();
-  const { data: blockNumber } = useVersionBlockNumber({
-    chainId,
-  });
+const ProfileAddress = ({ member }) => {
+  const { isMember = false, isOverdue = false } = member;
 
-  const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
-
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
-
-  const isMaxOverdue =
-    isOverdue &&
-    lastRepay &&
-    isV2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
-
-  return isMaxOverdue ? (
-    <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
+  return isOverdue ? (
+    <BadgeIndicator label="Overdue" color="red500" textColor="red500" />
   ) : isMember ? (
     <BadgeIndicator label="Member" color="blue500" />
   ) : (
@@ -154,7 +139,7 @@ export default function ProfileHeader({ address, chainId }) {
                 label={copiedAddress ? "Address copied" : truncateAddress(address)}
               />
 
-              <ProfileAddress member={member} chainId={chainId} />
+              <ProfileAddress member={member} />
             </BadgeRow>
 
             <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
