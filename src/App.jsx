@@ -131,7 +131,7 @@ export default function App() {
                       <ModalManager>
                         <AppReadyShim>
                           <Header />
-                          {chain ? (
+                          {chain || isGeneralRoute ? (
                             <Grid style={{ display: "flex", flexGrow: 1 }}>
                               <Grid.Row style={{ width: "100%", margin: 0 }}>
                                 <Grid.Col>
