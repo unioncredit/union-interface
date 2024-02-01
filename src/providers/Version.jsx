@@ -1,6 +1,6 @@
 import { useAccount, useNetwork } from "wagmi";
-import { mainnet, goerli, arbitrum, optimismGoerli, optimism } from "wagmi/chains";
-import { createContext, useContext, useState, useEffect } from "react";
+import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const VersionContext = createContext({});
 
@@ -61,11 +61,15 @@ export default function Version({ children }) {
     }
   };
 
-  const _version = version || DefaultVersion;
-
   return (
     <VersionContext.Provider
-      value={{ isV2: _version === Versions.V2, version: _version, setVersion, versioned }}
+      value={{
+        isV1: version === Versions.V1,
+        isV2: version === Versions.V2,
+        version,
+        setVersion,
+        versioned,
+      }}
     >
       {children}
     </VersionContext.Provider>

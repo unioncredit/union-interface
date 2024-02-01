@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Layout, Grid } from "@unioncredit/ui";
+import { Box, Grid, Layout } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Analytics } from "@vercel/analytics/react";
@@ -28,6 +28,7 @@ import ErrorPage from "pages/Error";
 import { BuildInfo } from "components/shared/BuildInfo";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
+import { useSupportedNetwork } from "./hooks/useSupportedNetworks";
 
 /**
  * Shim component that checks if the App is ready
@@ -39,6 +40,7 @@ function AppReadyShim({ children }) {
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
+  const { isSupported } = useSupportedNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
@@ -53,16 +55,18 @@ function AppReadyShim({ children }) {
       return;
     }
 
-    if (chain && appReady && (isDisconnected || chain?.unsupported)) {
+    if (chain && appReady && (isDisconnected || chain?.unsupported || !isSupported(chain?.id))) {
       setAppReady(false);
     }
   }, [
     appReady,
-    member?.isMember,
+    member.isMember,
     chain?.unsupported,
     isDisconnected,
     isGeneralRoute,
-    JSON.stringify(chain),
+    chain,
+    isSupported,
+    setAppReady,
   ]);
 
   return <>{children}</>;

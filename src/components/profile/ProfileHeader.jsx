@@ -2,21 +2,21 @@ import "./ProfileHeader.scss";
 
 import cn from "classnames";
 import {
-  Text,
-  Box,
-  Heading,
-  LinkOutIcon,
-  ProfileIcon,
-  Select,
-  Button,
-  ManageIcon,
-  CopyIcon,
-  SwitchIcon,
-  CancelIcon,
-  VouchIcon,
-  BadgeRow,
   Badge,
   BadgeIndicator,
+  BadgeRow,
+  Box,
+  Button,
+  CancelIcon,
+  CopyIcon,
+  Heading,
+  LinkOutIcon,
+  ManageIcon,
+  ProfileIcon,
+  Select,
+  SwitchIcon,
+  Text,
+  VouchIcon,
 } from "@unioncredit/ui";
 
 import { compareAddresses } from "utils/compare";
@@ -29,9 +29,8 @@ import { useEffect, useMemo, useState } from "react";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "images/verification/lens.svg";
-import useResponsive from "hooks/useResponsive";
 import { truncateAddress } from "../../utils/truncateAddress";
-import { networks } from "config/networks";
+import { supportedNetworks } from "config/networks";
 import { Link, useNavigate } from "react-router-dom";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { getProfileUrl } from "../../utils/generateLinks";
@@ -107,11 +106,10 @@ export default function ProfileHeader({ address, chainId }) {
 
   const network = useMemo(() => {
     return (
-      [...networks[Versions.V1], ...networks[Versions.V2]].find(
-        (network) => network.chainId === parseInt(chainId)
-      ) || networks[Versions.V1][0]
+      supportedNetworks.find((network) => network.chainId === parseInt(chainId)) ||
+      supportedNetworks[0]
     );
-  }, [networks, chainId]);
+  }, [chainId]);
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
@@ -132,7 +130,7 @@ export default function ProfileHeader({ address, chainId }) {
 
           <Box className="ProfileHeader__NetworkSelect">
             <Select
-              options={[...networks[Versions.V1], ...networks[Versions.V2]].map((n) => ({
+              options={supportedNetworks.map((n) => ({
                 ...n,
                 label: null,
               }))}
