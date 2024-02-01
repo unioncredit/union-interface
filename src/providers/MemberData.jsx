@@ -5,6 +5,7 @@ import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
 import usePollMemberData from "hooks/usePollMember";
+import { isVersionSupported, Versions } from "./Version";
 
 const selectMemberData = (data) => {
   const [
@@ -166,6 +167,7 @@ export function useMemberData(address, chainId, forceVersion) {
 
   const { data, ...resp } = useContractReads({
     enabled:
+      isVersionSupported(Versions.V1, chainId) &&
       !!address &&
       !!daiContract?.address &&
       !!userManagerContract?.address &&
