@@ -94,7 +94,7 @@ export default function App() {
     }
   });
 
-  if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute)) {
+  if ((!version || chain?.unsupported || !isConnected) && !isGeneralRoute) {
     return (
       <AppReadyShim>
         <Layout>
