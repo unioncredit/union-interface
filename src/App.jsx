@@ -21,7 +21,7 @@ import { useAppNetwork } from "providers/Network";
 import useMemberListener from "hooks/useMemberListener";
 import GovernanceData from "providers/GovernanceData";
 import MemberData, { useMember } from "providers/MemberData";
-import { isVersionSupported, useVersion } from "providers/Version";
+import { useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
@@ -131,7 +131,7 @@ export default function App() {
                       <ModalManager>
                         <AppReadyShim>
                           <Header />
-                          {!chain || isVersionSupported(version, chain?.id) ? (
+                          {!chain ? (
                             <Grid style={{ display: "flex", flexGrow: 1 }}>
                               <Grid.Row style={{ width: "100%", margin: 0 }}>
                                 <Grid.Col>
