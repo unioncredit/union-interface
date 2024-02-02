@@ -1,7 +1,7 @@
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext } from "react";
 
-import { STALE_TIME, CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
@@ -21,11 +21,11 @@ const selectMemberData = (data) => {
     owed = ZERO,
     interest = ZERO,
     lastRepay = ZERO,
-    votes = ZERO,
-    delegate = ZERO_ADDRESS,
     isOverdue = false,
     rewardsMultiplier = ZERO,
     // Versioned values
+    votes = ZERO,
+    delegate = ZERO_ADDRESS,
     totalFrozenAmount = ZERO,
     borrowerAddresses = [],
     stakerAddresses = [],
@@ -112,9 +112,12 @@ export function useMemberData(address, chainId, forceVersion) {
         },
         {
           ...comptrollerContract,
-          functionName: version === Versions.V1 ? "calculateRewardsByBlocks" : "calculateRewards",
+          functionName:
+            (forceVersion || version) === Versions.V1
+              ? "calculateRewardsByBlocks"
+              : "calculateRewards",
           args:
-            version === Versions.V1
+            (forceVersion || version) === Versions.V1
               ? [address, daiContract.address, ZERO]
               : [address, daiContract.address],
         },
@@ -134,16 +137,6 @@ export function useMemberData(address, chainId, forceVersion) {
           args: [address],
         },
         {
-          ...unionContract,
-          functionName: "getCurrentVotes",
-          args: [address],
-        },
-        {
-          ...unionContract,
-          functionName: "delegates",
-          args: [address],
-        },
-        {
           ...uTokenContract,
           functionName: "checkIsOverdue",
           args: [address],
@@ -156,6 +149,16 @@ export function useMemberData(address, chainId, forceVersion) {
         // Versioned values
         ...((forceVersion || version) === Versions.V1
           ? [
+              {
+                ...unionContract,
+                functionName: "getCurrentVotes",
+                args: [address],
+              },
+              {
+                ...unionContract,
+                functionName: "delegates",
+                args: [address],
+              },
               {
                 ...userManagerContract,
                 functionName: "getTotalFrozenAmount",
