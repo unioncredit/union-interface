@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Text, Box, Layout, Grid } from "@unioncredit/ui";
+import { Box, Grid, Layout } from "@unioncredit/ui";
 import { matchRoutes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Analytics } from "@vercel/analytics/react";
@@ -40,7 +40,7 @@ function AppReadyShim({ children }) {
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
-  const { isSupported } = useSupportedNetwork();
+  const { isSupported, connected: currentNetworkSupported } = useSupportedNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
@@ -50,7 +50,7 @@ function AppReadyShim({ children }) {
   useEffect(() => {
     // If we are viewing a general route such as governance or
     // a member profile then we skip the ready (connect) page
-    if (isGeneralRoute) {
+    if (isGeneralRoute || (!isDisconnected && currentNetworkSupported)) {
       !appReady && setAppReady(true);
       return;
     }
