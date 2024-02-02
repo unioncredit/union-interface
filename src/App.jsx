@@ -60,12 +60,15 @@ function AppReadyShim({ children }) {
     }
   }, [
     appReady,
-    member?.isMember,
+    member.isMember,
     chain?.unsupported,
     chain?.id,
     isDisconnected,
     isGeneralRoute,
-    JSON.stringify(chain),
+    currentNetworkSupported,
+    chain,
+    isSupported,
+    setAppReady,
   ]);
 
   return <>{children}</>;
