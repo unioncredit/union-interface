@@ -40,7 +40,7 @@ function AppReadyShim({ children }) {
   const { isDisconnected } = useAccount();
   const { data: member = {} } = useMember();
   const { appReady, setAppReady } = useAppNetwork();
-  const { isSupported } = useSupportedNetwork();
+  const { isSupported, connected: currentNetworkSupported } = useSupportedNetwork();
 
   const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
 
@@ -50,7 +50,7 @@ function AppReadyShim({ children }) {
   useEffect(() => {
     // If we are viewing a general route such as governance or
     // a member profile then we skip the ready (connect) page
-    if (isGeneralRoute) {
+    if (isGeneralRoute || (!isDisconnected && currentNetworkSupported)) {
       !appReady && setAppReady(true);
       return;
     }
