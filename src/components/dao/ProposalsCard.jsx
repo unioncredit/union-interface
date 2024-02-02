@@ -61,7 +61,7 @@ function ProposalRow({ chainId, hash, status, description, startBlock }) {
   const navigate = useNavigate();
   const { relative: relativeProposalEndsTime } = useBlockTime(startBlock, chainId);
 
-  const id = description.split(":")[0];
+  const id = description.match(/UIP-\d+/)[0];
   const title =
     String(description)
       ?.replace(/\\{1,2}n/g, "\n")
