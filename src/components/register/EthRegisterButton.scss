@@ -1,0 +1,17 @@
+@import "@unioncredit/ui/src/variables";
+
+.EthRegisterButton {
+  &__container {
+    background: $blue100;
+    padding: 8px 8px 4px;
+    border-radius: 16px;
+    min-width: 320px;
+    margin-top: 16px;
+
+    p {
+      width: 100%;
+      font-size: 13px;
+      text-align: center;
+    }
+  }
+}
