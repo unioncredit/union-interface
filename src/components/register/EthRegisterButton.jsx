@@ -36,7 +36,7 @@ export function EthRegisterButton({ onComplete }) {
       <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
 
       {!canRegister && (
-        <Text color="red500" m="2px 0 0" weight="light">
+        <Text color="red500" m="2px 0 -4px" weight="light">
           You do not have enough funds to register
         </Text>
       )}
