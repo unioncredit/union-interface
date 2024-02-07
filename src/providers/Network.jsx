@@ -1,7 +1,7 @@
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
 
@@ -35,16 +35,20 @@ const wagmiClient = createClient({
 });
 
 export default function Network({ children }) {
+  const [forceAppReady, setForceAppReady] = useState(false);
+
   return (
-    <WagmiConfig client={wagmiClient} persister={null}>
-      <RainbowKitProvider
-        chains={chains}
-        autoConnect={true}
-        modalSize="compact"
-        initialChain={optimism.id}
-      >
-        {children}
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <NetworkContext.Provider value={{ forceAppReady, setForceAppReady }}>
+      <WagmiConfig client={wagmiClient} persister={null}>
+        <RainbowKitProvider
+          chains={chains}
+          autoConnect={true}
+          modalSize="compact"
+          initialChain={optimism.id}
+        >
+          {children}
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </NetworkContext.Provider>
   );
 }
