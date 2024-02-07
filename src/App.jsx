@@ -125,7 +125,7 @@ export default function App() {
           <Cache>
             <ProtocolData>
               <GovernanceData>
-                <MemberData>
+                <MemberData chainId={chain?.id}>
                   <VouchersData>
                     <VoucheesData>
                       <ModalManager>
