@@ -3,7 +3,7 @@ import "./EthRegisterButton.scss";
 import { useAccount, useBalance } from "wagmi";
 import useWrite from "hooks/useWrite";
 import { useProtocol } from "providers/ProtocolData";
-import { Box, Button, CheckIcon, Text } from "@unioncredit/ui";
+import { Button, PlayIcon, Text } from "@unioncredit/ui";
 import { ZERO, ZERO_ADDRESS } from "constants";
 
 export function EthRegisterButton({ onComplete }) {
@@ -32,14 +32,20 @@ export function EthRegisterButton({ onComplete }) {
   });
 
   return (
-    <Box className="EthRegisterButton__container" direction="vertical">
-      <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
+    <div className="EthRegisterButton__container">
+      <Button
+        fluid
+        size="large"
+        label="Click to Become a Member ->"
+        icon={PlayIcon}
+        {...registerButtonProps}
+      />
 
       {!canRegister && (
         <Text color="red500" m="2px 0 -4px" weight="light">
           You do not have enough funds to register
         </Text>
       )}
-    </Box>
+    </div>
   );
 }

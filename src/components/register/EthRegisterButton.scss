@@ -2,15 +2,15 @@
 
 .EthRegisterButton {
   &__container {
-    background: $blue100;
-    padding: 8px;
-    border-radius: 16px;
-    min-width: 320px;
-    margin-top: 16px;
+    margin-top: 24px;
+
+    @media screen and (min-width: $breakpoint-micro) {
+      min-width: 320px;
+    }
 
     p {
       width: 100%;
-      font-size: 12px;
+      font-size: 13px;
       text-align: center;
     }
   }
