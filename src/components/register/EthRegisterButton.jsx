@@ -1,7 +1,9 @@
+import "./EthRegisterButton.scss";
+
 import { useAccount, useBalance } from "wagmi";
 import useWrite from "hooks/useWrite";
 import { useProtocol } from "providers/ProtocolData";
-import { Button, CheckIcon } from "@unioncredit/ui";
+import { Button, PlayIcon, Text } from "@unioncredit/ui";
 import { ZERO, ZERO_ADDRESS } from "constants";
 
 export function EthRegisterButton({ onComplete }) {
@@ -15,13 +17,14 @@ export function EthRegisterButton({ onComplete }) {
   const { regFee = ZERO, rebate = ZERO, value: ethBalance = ZERO } = { ...protocol, ...balance };
 
   const ethRegisterFee = regFee.add(rebate);
+  const canRegister = ethRegisterFee.lte(ethBalance);
 
   const registerButtonProps = useWrite({
     contract: "registerHelper",
     method: "register",
     args: [address, ZERO_ADDRESS],
-    enabled: ethRegisterFee.lte(ethBalance),
-    disabled: ethRegisterFee.gt(ethBalance),
+    enabled: canRegister,
+    disabled: !canRegister,
     onComplete,
     overrides: {
       value: ethRegisterFee,
@@ -29,6 +32,20 @@ export function EthRegisterButton({ onComplete }) {
   });
 
   return (
-    <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
+    <div className="EthRegisterButton__container">
+      <Button
+        fluid
+        size="large"
+        label="Click to Become a Member ->"
+        icon={PlayIcon}
+        {...registerButtonProps}
+      />
+
+      {!canRegister && (
+        <Text color="red500" m="2px 0 -4px" weight="light">
+          You do not have enough funds to register
+        </Text>
+      )}
+    </div>
   );
 }

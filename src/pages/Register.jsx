@@ -1,15 +1,15 @@
 import "./Register.scss";
 
 import {
+  Box,
   Card,
+  EthereumIcon,
   Grid,
   Heading,
+  MobileProgressList,
   ProgressList,
   ProgressListItem,
   Text,
-  Box,
-  MobileProgressList,
-  EthereumIcon,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -139,17 +139,21 @@ export default function RegisterPage() {
 
                       <Box mt="16px" className="Register__container" justify="center">
                         <Box w="380px" direction="vertical" align="center">
-                          <Box className="Register__fee" align="center">
-                            <Text size="large" grey={700} m={0} weight="medium">
-                              {format(ethRegisterFee, 10, false, true, false)}
+                          <Box className="Register__fee" direction="vertical">
+                            <Text className="Register__fee-title" grey={500} m={0} weight="light">
+                              Registration fee
                             </Text>
 
-                            <EthereumIcon width="16px" style={{ marginLeft: "5px" }} />
+                            <Box className="Register__fee-container" align="center">
+                              <Text size="large" grey={700} m={0} weight="medium">
+                                {format(ethRegisterFee, 10, false, true, false)}
+                              </Text>
+
+                              <EthereumIcon width="16px" style={{ marginLeft: "5px" }} />
+                            </Box>
                           </Box>
 
-                          <Box className="EthRegisterContainer">
-                            <EthRegisterButton onComplete={() => open(WELCOME_MODAL)} />
-                          </Box>
+                          <EthRegisterButton onComplete={() => open(WELCOME_MODAL)} />
                         </Box>
                       </Box>
                     </Card.Body>
