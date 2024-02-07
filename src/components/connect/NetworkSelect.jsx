@@ -3,7 +3,7 @@ import "./NetworkSelect.scss";
 import cn from "classnames";
 import { mainnet, optimismGoerli } from "wagmi/chains";
 import { useEffect, useState } from "react";
-import { WalletIcon, Box, Button } from "@unioncredit/ui";
+import { Box, Button, WalletIcon } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 
@@ -18,7 +18,7 @@ export default function NetworkSelect() {
   const { chain } = useNetwork();
   const { settings } = useSettings();
   const { address, isConnected } = useAccount();
-  const { setAppReady } = useAppNetwork();
+  const { setForceAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { connected: isSupportedNetwork } = useSupportedNetwork();
   const { switchNetworkAsync } = useSwitchNetwork({
@@ -95,7 +95,7 @@ export default function NetworkSelect() {
               : "Begin membership process"
             : "Connect Wallet"
         }
-        onClick={isConnected ? () => setAppReady(true) : openConnectModal}
+        onClick={isConnected ? () => setForceAppReady(true) : openConnectModal}
       />
 
       <a

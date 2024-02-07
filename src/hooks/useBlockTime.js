@@ -16,7 +16,7 @@ export function useBlockTime(blockNumber, chainId, dateFormat = "dd LLL yyyy") {
 
   useEffect(() => {
     const load = async () => {
-      if (!blockNumber.eq(ZERO)) {
+      if (blockNumber && !blockNumber.eq(ZERO)) {
         const blockNum = Number(blockNumber.toString());
 
         if (getVersion(chainId) === Versions.V2) {
@@ -28,7 +28,7 @@ export function useBlockTime(blockNumber, chainId, dateFormat = "dd LLL yyyy") {
       }
     };
     provider && load();
-  }, [provider, blockNumber]);
+  }, [provider, blockNumber, chainId]);
 
   return {
     timestamp: timestamp,
