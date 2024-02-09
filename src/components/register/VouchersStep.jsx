@@ -28,11 +28,9 @@ import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
-import { useVersion } from "../../providers/Version";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
-  const { isV2 } = useVersion();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
@@ -48,11 +46,6 @@ export default function VouchersStep() {
           <Heading level={2} size="large" grey={700}>
             Invite friends to vouch for you
           </Heading>
-          {isV2 && (
-            <Heading level={2} size="large" grey={400} ml="8px">
-              (*optional)
-            </Heading>
-          )}
         </Box>
 
         <Text grey={500} size="medium">

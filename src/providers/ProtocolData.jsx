@@ -30,6 +30,7 @@ export const useProtocolData = (chainId) => {
   const timelockContract = useContract("timelock", mainnet.id, Versions.V1);
   const unionTokenContract = useContract("union", chainId, version);
   const assetManagerContract = useContract("assetManager", chainId, version);
+  const registerHelperContract = useContract("registerHelper", chainId, version);
 
   const assetManagerCalls = [
     {
@@ -79,6 +80,16 @@ export const useProtocolData = (chainId) => {
     {
       ...userManagerContract,
       functionName: "maxOverdueTime",
+      chainId,
+    },
+    {
+      ...registerHelperContract,
+      functionName: "regFee",
+      chainId,
+    },
+    {
+      ...registerHelperContract,
+      functionName: "rebate",
       chainId,
     },
   ];

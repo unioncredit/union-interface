@@ -2,6 +2,21 @@ import { optimismGoerli } from "wagmi/chains";
 
 export const testNetworkIds = [optimismGoerli.id];
 
+export const unsupportedNetwork = {
+  type: "unsupported",
+  id: "unsupported",
+  imageSrc: "/networks/unsupported.png",
+  value: "unsupported",
+  label: "Unsupported",
+  labelWithVersion: "Unsupported",
+  description: "This is an unsupported network",
+  avatar: "/networks/unsupported.png",
+  chainId: 0,
+  networkData: {
+    chainId: "0x0",
+  },
+};
+
 // The supported V2 networks
 export const supportedNetworks = [
   {

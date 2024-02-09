@@ -1,15 +1,15 @@
 import "./Register.scss";
 
 import {
+  Box,
   Card,
+  EthereumIcon,
   Grid,
   Heading,
+  MobileProgressList,
   ProgressList,
   ProgressListItem,
   Text,
-  Box,
-  UnionIcon,
-  MobileProgressList,
 } from "@unioncredit/ui";
 import { Helmet } from "react-helmet";
 
@@ -20,15 +20,13 @@ import { useVouchers } from "providers/VouchersData";
 import { useProtocol } from "providers/ProtocolData";
 import StakeStep from "components/register/StakeStep";
 import VouchersStep from "components/register/VouchersStep";
-import RegisterButton from "components/register/RegisterButton";
 import { useModals } from "providers/ModalManager";
 import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
 import useResponsive from "hooks/useResponsive";
-import { useVersion } from "../providers/Version";
+import { EthRegisterButton } from "../components/register/EthRegisterButton";
 
 export default function RegisterPage() {
-  const { isV2 } = useVersion();
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
   const { data: vouchersData = [] } = useVouchers();
@@ -47,6 +45,10 @@ export default function RegisterPage() {
     unclaimedRewards = ZERO,
     creditLimit = ZERO,
   } = member;
+
+  const { regFee = ZERO, rebate = ZERO } = protocol;
+
+  const ethRegisterFee = regFee.add(rebate);
 
   const getNumberOfTasksCompleted = () => {
     let completed = 0;
@@ -85,16 +87,15 @@ export default function RegisterPage() {
               Getting Started on Union
             </Heading>
             <Text m={0} grey={500} size="medium">
-              {getNumberOfTasksCompleted()} of 3 tasks completed (or{" "}
-              <a
-                href="#step-3"
-                target="_blank"
-                rel="noopener"
-                style={{ textDecoration: "underline" }}
-              >
-                skip to the end
-              </a>{" "}
-              if impatient)
+              {getNumberOfTasksCompleted()} of 3 tasks completed
+              <>
+                {" "}
+                (or{" "}
+                <a href="#step-3" style={{ textDecoration: "underline" }}>
+                  skip to the end
+                </a>{" "}
+                if impatient)
+              </>
             </Text>
 
             {isTablet && (
@@ -112,20 +113,20 @@ export default function RegisterPage() {
             )}
 
             <ProgressList mt="24px">
-              <ProgressListItem number="1*" complete={stakeComplete}>
+              <ProgressListItem number={"1*"} complete={stakeComplete}>
                 <div ref={stakeStep}>
                   <StakeStep />
                 </div>
               </ProgressListItem>
-              <ProgressListItem number="2*" complete={vouchComplete}>
+              <ProgressListItem number={"2*"} complete={vouchComplete}>
                 <div ref={vouchStep}>
                   <VouchersStep />
                 </div>
               </ProgressListItem>
               <ProgressListItem number={3} complete={isMember}>
                 <div ref={memberStep}>
-                  <span id="step-3" />
                   <Card size="fluid" mb="24px">
+                    <span id="step-3" />
                     <Card.Body>
                       <Heading level={2} size="large" grey={700}>
                         Claim your membership
@@ -138,19 +139,21 @@ export default function RegisterPage() {
 
                       <Box mt="16px" className="Register__container" justify="center">
                         <Box w="380px" direction="vertical" align="center">
-                          <Box className="Register__fee" align="center">
-                            <Text size="large" grey={700} m={0} weight="medium">
-                              {format(protocol.newMemberFee, 2)}
+                          <Box className="Register__fee" direction="vertical">
+                            <Text className="Register__fee-title" grey={500} m={0} weight="light">
+                              Registration fee
                             </Text>
 
-                            <UnionIcon width="24px" />
+                            <Box className="Register__fee-container" align="center">
+                              <Text size="large" grey={700} m={0} weight="medium">
+                                {format(ethRegisterFee, 10, false, true, false)}
+                              </Text>
+
+                              <EthereumIcon width="16px" style={{ marginLeft: "5px" }} />
+                            </Box>
                           </Box>
 
-                          <Text grey={500} m="8px 0 16px" weight="medium">
-                            Registering an Address costs 1 UNION
-                          </Text>
-
-                          <RegisterButton onComplete={() => open(WELCOME_MODAL)} />
+                          <EthRegisterButton onComplete={() => open(WELCOME_MODAL)} />
                         </Box>
                       </Box>
                     </Card.Body>

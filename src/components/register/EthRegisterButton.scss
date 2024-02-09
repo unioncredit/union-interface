@@ -1,0 +1,17 @@
+@import "@unioncredit/ui/src/variables";
+
+.EthRegisterButton {
+  &__container {
+    margin-top: 24px;
+
+    @media screen and (min-width: $breakpoint-micro) {
+      min-width: 320px;
+    }
+
+    p {
+      width: 100%;
+      font-size: 13px;
+      text-align: center;
+    }
+  }
+}
