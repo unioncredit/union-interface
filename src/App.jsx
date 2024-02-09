@@ -39,7 +39,7 @@ export default function App() {
   const { chain } = useNetwork();
   const { version } = useVersion();
   const { isConnected } = useAccount();
-  const { setReferrer } = useReferrer();
+  const { set: setReferrer } = useReferrer();
 
   // Parses referrer address from "refAddress" query parameter and
   // stores it in local storage

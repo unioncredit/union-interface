@@ -1,0 +1,9 @@
+.InvitedByInput {
+  box-sizing: border-box;
+
+  &__buttons {
+    align-self: flex-end;
+    margin-bottom: -25px;
+    margin-right: 2px;
+  }
+}

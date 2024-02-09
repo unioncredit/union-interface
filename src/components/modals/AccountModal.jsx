@@ -1,20 +1,20 @@
 import "./AccountModal.scss";
 
 import {
-  Modal,
-  ModalOverlay,
+  Badge,
   Box,
   Button,
-  Heading,
-  Badge,
   ButtonRow,
   Card,
-  Text,
-  LinkOutIcon,
   DisconnectWalletIcon,
-  SuccessIcon,
   FailedIcon,
+  Heading,
+  LinkOutIcon,
+  Modal,
+  ModalOverlay,
   ProfileIcon,
+  SuccessIcon,
+  Text,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
 
@@ -22,12 +22,12 @@ import { useModals } from "providers/ModalManager";
 import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
-import { Status } from "constants";
+import { EIP3770, Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
-import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
+import { InvitedByInput } from "./AccountModal/InvitedByInput";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -91,6 +91,8 @@ export default function AccountModal() {
               }}
             />
           </ButtonRow>
+
+          <InvitedByInput />
         </Modal.Body>
 
         <Card.Footer direction="vertical" fluid>
