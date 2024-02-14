@@ -1,0 +1,14 @@
+{
+  "images": {
+    "domains": [
+      "**"
+    ],
+    "minimumCacheTTL": 60,
+    "formats": [
+      "image/webp",
+      "image/avif",
+      "image/png",
+      "image/jpeg"
+    ]
+  }
+}
