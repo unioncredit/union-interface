@@ -1,14 +1,19 @@
 {
   "images": {
+    "sizes": [
+      24,
+      112
+    ],
     "domains": [
       "**"
     ],
-    "minimumCacheTTL": 60,
     "formats": [
       "image/webp",
       "image/avif",
       "image/png",
       "image/jpeg"
     ]
-  }
+  },
+  "version": 3,
+  "routes": null
 }
