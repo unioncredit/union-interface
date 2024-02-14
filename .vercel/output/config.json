@@ -13,5 +13,7 @@
     ]
   },
   "version": 3,
-  "routes": null
+  "routes": [
+    "/"
+  ]
 }
