@@ -9,9 +9,7 @@
     ],
     "formats": [
       "image/webp",
-      "image/avif",
-      "image/png",
-      "image/jpeg"
+      "image/avif"
     ]
   },
   "version": 3,
