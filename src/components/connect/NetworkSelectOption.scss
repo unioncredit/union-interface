@@ -13,6 +13,11 @@
     }
   }
 
+  &:not(.NetworkSelectOption--active):hover {
+    background: $grey50;
+    border-color: $grey300;
+  }
+
   &--disabled {
     opacity: 0.4;
   }
