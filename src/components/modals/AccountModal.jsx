@@ -130,7 +130,7 @@ export default function AccountModal() {
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
                       {format(value)}
                     </Text>
-                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank">
+                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
                       <LinkOutIcon width="16px" />
                     </a>
                   </Box>
