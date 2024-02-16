@@ -1,11 +1,10 @@
 import { useContractReads } from "wagmi";
 
 import useContract from "./useContract";
-import { STALE_TIME } from "constants";
-import { CACHE_TIME } from "constants";
+import { CACHE_TIME, STALE_TIME } from "constants";
 
-export default function useRelatedAddresses(address, chainId) {
-  const userManagerContract = useContract("userManager", chainId);
+export default function useRelatedAddresses(address, chainId, forceVersion) {
+  const userManagerContract = useContract("userManager", chainId, forceVersion);
 
   const { data: { voucherCount = 0, voucheeCount = 0 } = {}, refetch: refetchCounts } =
     useContractReads({
@@ -19,11 +18,13 @@ export default function useRelatedAddresses(address, chainId) {
           ...userManagerContract,
           functionName: "getVoucherCount",
           args: [address],
+          chainId,
         },
         {
           ...userManagerContract,
           functionName: "getVoucheeCount",
           args: [address],
+          chainId,
         },
       ],
       cacheTime: CACHE_TIME,
