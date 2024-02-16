@@ -2,21 +2,21 @@ import "./ProfileHeader.scss";
 
 import cn from "classnames";
 import {
-  Text,
-  Box,
-  Heading,
-  LinkOutIcon,
-  ProfileIcon,
-  Select,
-  Button,
-  ManageIcon,
-  CopyIcon,
-  SwitchIcon,
-  CancelIcon,
-  VouchIcon,
-  BadgeRow,
   Badge,
   BadgeIndicator,
+  BadgeRow,
+  Box,
+  Button,
+  CancelIcon,
+  CopyIcon,
+  Heading,
+  LinkOutIcon,
+  ManageIcon,
+  ProfileIcon,
+  Select,
+  SwitchIcon,
+  Text,
+  VouchIcon,
 } from "@unioncredit/ui";
 
 import { compareAddresses } from "utils/compare";
@@ -72,7 +72,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { open } = useModals();
   const { isConnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
-  const { data: connectedMember } = useMember();
+  const { data: connectedMember = {} } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
