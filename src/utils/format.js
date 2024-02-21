@@ -15,7 +15,7 @@ export default function format(
 }
 
 export const formattedNumber = (n, digits = 2, rounded = true) => {
-  return parseFloat(format(n, digits, rounded).replace(",", ""));
+  return parseFloat(format(n, digits, rounded, false, false).replace(",", ""));
 };
 
 export const compactFormattedNumber = (n) => {
