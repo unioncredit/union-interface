@@ -25,7 +25,7 @@ import { supportedNetworks } from "config/networks";
 
 export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 
-export default function ShareReferralModal() {
+export default function ShareReferralModal({ chainId }) {
   const { close } = useModals();
   const { address } = useAccount();
   const { chain: connectedChain } = useNetwork();
@@ -35,7 +35,8 @@ export default function ShareReferralModal() {
   const [_network, setNetwork] = useState();
 
   const network =
-    _network || supportedNetworks.find((network) => network.chainId === connectedChain.id);
+    _network ||
+    supportedNetworks.find((network) => network.chainId == (chainId || connectedChain?.id));
 
   const profileUrl = `https://app.union.finance${getProfileUrl(
     address,

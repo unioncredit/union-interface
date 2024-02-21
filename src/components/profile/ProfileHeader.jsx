@@ -241,7 +241,11 @@ export default function ProfileHeader({ address, chainId }) {
           color="secondary"
           variant="light"
           label={"Share profile"}
-          onClick={() => open(SHARE_REFERRAL_MODAL)}
+          onClick={() =>
+            open(SHARE_REFERRAL_MODAL, {
+              chainId,
+            })
+          }
         />
       </Box>
     </Box>
