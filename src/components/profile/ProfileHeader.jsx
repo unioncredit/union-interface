@@ -72,7 +72,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { open } = useModals();
   const { isConnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
-  const { data: connectedMember } = useMember();
+  const { data: connectedMember = {} } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
