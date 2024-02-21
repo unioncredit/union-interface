@@ -53,7 +53,7 @@ export const supportedNetworks = [
     imageSrc: "/networks/ethereum.png",
     value: "ethereum",
     label: "Ethereum",
-    labelWithVersion: "Ethereum (v1)",
+    labelWithVersion: "Ethereum (GOV)",
     description: "Use Union on Mainnet",
     avatar: "/networks/ethereum-avatar.png",
     chainId: 1,
