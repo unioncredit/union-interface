@@ -1,4 +1,4 @@
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext } from "react";
 
 import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
@@ -63,7 +63,10 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export function useMemberData(address, chainId, forceVersion) {
+export function useMemberData(address, chainIdProp, forceVersion) {
+  const { chain: connectedChain } = useNetwork();
+
+  const chainId = chainIdProp || connectedChain?.id;
   const daiContract = useContract("dai", chainId, forceVersion);
   const unionContract = useContract("union", chainId, forceVersion);
   const uTokenContract = useContract("uToken", chainId, forceVersion);
@@ -177,7 +180,7 @@ export function useMemberData(address, chainId, forceVersion) {
     select: (data) => selectMemberData(data),
     contracts: contracts.map((contract) => ({
       ...contract,
-      chainId,
+      chainId: chainId,
     })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
