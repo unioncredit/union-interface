@@ -16,6 +16,7 @@ import WelcomeModal, { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import PublicWriteOffDebtModal, {
   PUBLIC_WRITE_OFF_DEBT_MODAL,
 } from "../components/modals/PublicWriteOffDebtModal";
+import ShareReferralModal, { SHARE_REFERRAL_MODAL } from "../components/modals/ShareReferralModal";
 
 const ModalContext = createContext({});
 
@@ -30,6 +31,7 @@ const modals = {
   [REPAY_MODAL]: RepayModal,
   [STAKE_MODAL]: StakeModal,
   [VOUCH_LINK_MODAL]: VouchLinkModal,
+  [SHARE_REFERRAL_MODAL]: ShareReferralModal,
   // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
   ["vouch-modal"]: VouchModal,
   [WALLET_MODAL]: WalletModal,
