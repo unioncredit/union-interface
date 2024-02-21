@@ -5,8 +5,10 @@ import useWrite from "hooks/useWrite";
 import { useProtocol } from "providers/ProtocolData";
 import { Button, PlayIcon, Text } from "@unioncredit/ui";
 import { ZERO, ZERO_ADDRESS } from "constants";
+import useReferrer from "../../hooks/useReferrer";
 
 export function EthRegisterButton({ onComplete }) {
+  const { referrer } = useReferrer();
   const { data: protocol = {} } = useProtocol();
   const { address } = useAccount();
 
@@ -22,7 +24,7 @@ export function EthRegisterButton({ onComplete }) {
   const registerButtonProps = useWrite({
     contract: "registerHelper",
     method: "register",
-    args: [address, ZERO_ADDRESS],
+    args: [address, referrer || ZERO_ADDRESS],
     enabled: canRegister,
     disabled: !canRegister,
     onComplete,

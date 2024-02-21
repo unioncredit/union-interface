@@ -2,21 +2,21 @@ import "./ProfileHeader.scss";
 
 import cn from "classnames";
 import {
-  Text,
-  Box,
-  Heading,
-  LinkOutIcon,
-  ProfileIcon,
-  Select,
-  Button,
-  ManageIcon,
-  CopyIcon,
-  SwitchIcon,
-  CancelIcon,
-  VouchIcon,
-  BadgeRow,
   Badge,
   BadgeIndicator,
+  BadgeRow,
+  Box,
+  Button,
+  CancelIcon,
+  CopyIcon,
+  Heading,
+  LinkOutIcon,
+  ManageIcon,
+  ProfileIcon,
+  Select,
+  SwitchIcon,
+  Text,
+  VouchIcon,
 } from "@unioncredit/ui";
 
 import { compareAddresses } from "utils/compare";
@@ -33,7 +33,6 @@ import { truncateAddress } from "../../utils/truncateAddress";
 import { supportedNetworks } from "config/networks";
 import { Link, useNavigate } from "react-router-dom";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { getProfileUrl } from "../../utils/generateLinks";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { useMember, useMemberData } from "../../providers/MemberData";
 import { BigNumber } from "ethers";
@@ -43,6 +42,7 @@ import { useProtocol } from "../../providers/ProtocolData";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useModals } from "../../providers/ModalManager";
 import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
+import { SHARE_REFERRAL_MODAL } from "../modals/ShareReferralModal";
 
 const ProfileAddress = ({ member, chainId }) => {
   const { data: protocol } = useProtocol();
@@ -72,7 +72,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { open } = useModals();
   const { isConnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
-  const { data: connectedMember } = useMember();
+  const { data: connectedMember = {} } = useMember();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
@@ -83,7 +83,6 @@ export default function ProfileHeader({ address, chainId }) {
 
   const [data, setData] = useState(null);
   const [copiedAddress, copyAddress] = useCopyToClipboard();
-  const [copiedProfileUrl, copyProfileUrl] = useCopyToClipboard();
 
   const { isOverdue = false, lastRepay = ZERO } = member;
 
@@ -241,10 +240,8 @@ export default function ProfileHeader({ address, chainId }) {
           mt="12px"
           color="secondary"
           variant="light"
-          label={copiedProfileUrl ? "Copied profile!" : "Copy profile link"}
-          onClick={() =>
-            copyProfileUrl(`https://app.union.finance${getProfileUrl(address, chainId)}`)
-          }
+          label={"Share profile"}
+          onClick={() => open(SHARE_REFERRAL_MODAL)}
         />
       </Box>
     </Box>

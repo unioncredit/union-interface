@@ -1,11 +1,11 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import useContract from "hooks/useContract";
 import { useMemberData } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
-import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
 import { useVersion, Versions } from "./Version";
 
@@ -109,8 +109,9 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
 
 export default function VoucheesData({ children }) {
   const { address } = useAccount();
+  const { chain } = useNetwork();
 
-  const data = useVoucheesData(address);
+  const data = useVoucheesData(address, chain.id);
 
   return <VoucheesContext.Provider value={{ ...data }}>{children}</VoucheesContext.Provider>;
 }

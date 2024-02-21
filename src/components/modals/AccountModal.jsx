@@ -26,6 +26,7 @@ import { EIP3770, Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
+import { InvitedByInput } from "./AccountModal/InvitedByInput";
 import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
@@ -90,6 +91,8 @@ export default function AccountModal() {
               }}
             />
           </ButtonRow>
+
+          <InvitedByInput />
         </Modal.Body>
 
         <Card.Footer direction="vertical" fluid>

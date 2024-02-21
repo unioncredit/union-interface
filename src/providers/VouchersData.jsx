@@ -1,11 +1,11 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import { useMemberData } from "providers/MemberData";
 import useContract from "hooks/useContract";
 import usePopulateEns from "hooks/usePopulateEns";
-import { STALE_TIME, CACHE_TIME, ZERO } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
 import { useVersion, Versions } from "./Version";
 
@@ -112,8 +112,9 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
 
 export default function VouchersData({ children }) {
   const { address } = useAccount();
+  const { chain } = useNetwork();
 
-  const data = useVouchersData(address);
+  const data = useVouchersData(address, chain.id);
 
   return <VouchersContext.Provider value={{ ...data }}>{children}</VouchersContext.Provider>;
 }

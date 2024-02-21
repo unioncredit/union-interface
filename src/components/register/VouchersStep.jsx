@@ -44,7 +44,7 @@ export default function VouchersStep() {
       <Card.Body>
         <Box>
           <Heading level={2} size="large" grey={700}>
-            Invite Friends to Vouch for You
+            Invite friends to vouch for you
           </Heading>
         </Box>
 

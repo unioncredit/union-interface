@@ -1,6 +1,6 @@
 import { useAccount, useNetwork } from "wagmi";
 import { Box, Grid, Layout } from "@unioncredit/ui";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Analytics } from "@vercel/analytics/react";
 
@@ -28,6 +28,7 @@ import NotFoundPage from "pages/NotFoundPage";
 import { useSupportedNetwork } from "./hooks/useSupportedNetwork";
 import { is404, isGeneralRoute } from "./utils/routes";
 import { useAppNetwork } from "./providers/Network";
+import useReferrer from "./hooks/useReferrer";
 
 export default function App() {
   useMemberListener();
@@ -38,6 +39,15 @@ export default function App() {
   const { chain } = useNetwork();
   const { version } = useVersion();
   const { isConnected } = useAccount();
+  const { set: setReferrer } = useReferrer();
+
+  // Parses referrer address from "refAddress" query parameter and
+  // stores it in local storage
+  const [searchParams] = useSearchParams();
+  const referrer = searchParams.get("refAddress");
+  if (referrer) {
+    setReferrer(referrer);
+  }
 
   if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute(location))) {
     return (

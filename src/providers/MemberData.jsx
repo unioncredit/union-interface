@@ -23,6 +23,7 @@ const selectMemberData = (data) => {
     lastRepay = ZERO,
     isOverdue = false,
     rewardsMultiplier = ZERO,
+    referrer = ZERO_ADDRESS,
     // Versioned values
     votes = ZERO,
     delegate = ZERO_ADDRESS,
@@ -46,6 +47,7 @@ const selectMemberData = (data) => {
     owed,
     interest,
     lastRepay,
+    referrer,
     votes: votes || ZERO,
     delegate,
     isOverdue,
@@ -72,6 +74,7 @@ export function useMemberData(address, chainId, forceVersion) {
   const uTokenContract = useContract("uToken", chainId, forceVersion);
   const userManagerContract = useContract("userManager", chainId, forceVersion);
   const comptrollerContract = useContract("comptroller", chainId, forceVersion);
+  const referralContract = useContract("referral", chainId, forceVersion);
 
   const contracts = address
     ? [
@@ -145,6 +148,11 @@ export function useMemberData(address, chainId, forceVersion) {
           ...comptrollerContract,
           functionName: "getRewardsMultiplier",
           args: [address, daiContract.address],
+        },
+        {
+          ...referralContract,
+          functionName: "referrers",
+          args: [address],
         },
         // Versioned values
         ...((forceVersion || version) === Versions.V1
