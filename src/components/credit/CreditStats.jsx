@@ -4,19 +4,21 @@ import cn from "classnames";
 import { BigNumber } from "ethers";
 import { useNetwork } from "wagmi";
 import {
-  Button,
-  Card,
-  Text,
-  NumericalBlock,
-  Box,
-  DistributionBar,
-  WarningIcon,
   BadgeIndicator,
+  BorrowIcon,
+  Box,
+  Button,
   CalendarIcon,
+  Card,
+  DistributionBar,
   Dot,
-  Tooltip,
   Heading,
   InfoOutlinedIcon,
+  NumericalBlock,
+  RepayIcon,
+  Text,
+  Tooltip,
+  WarningIcon,
 } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
@@ -100,6 +102,7 @@ export default function CreditStats({ vouchers }) {
           <Button
             size="large"
             label="Borrow"
+            icon={BorrowIcon}
             className="BorrowButton"
             onClick={() => open(BORROW_MODAL)}
           />
@@ -186,6 +189,7 @@ export default function CreditStats({ vouchers }) {
               size="large"
               color="secondary"
               variant="light"
+              icon={RepayIcon}
               label={isMobile ? "Repay" : "Make a payment"}
               className="RepayButton"
               onClick={() => open(REPAY_MODAL)}
