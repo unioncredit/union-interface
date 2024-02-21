@@ -70,7 +70,7 @@ export default function Profile() {
 
   const address = isAddress(addressOrEns) ? addressOrEns : addressFromEns;
 
-  const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
+  const chainId = parseInt(Object.keys(EIP3770).find((key) => EIP3770[key] === tag));
 
   const { data: member = {} } = useMemberData(address, chainId, getVersion(chainId));
 
