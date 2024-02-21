@@ -26,8 +26,8 @@ import { EIP3770, Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { blockExplorerAddress } from "utils/blockExplorer";
 import { InvitedByInput } from "./AccountModal/InvitedByInput";
+import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -133,7 +133,7 @@ export default function AccountModal() {
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
                       {format(value)}
                     </Text>
-                    <a href="#" target="_blank">
+                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
                       <LinkOutIcon width="16px" />
                     </a>
                   </Box>
