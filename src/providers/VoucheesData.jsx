@@ -110,8 +110,7 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
 export default function VoucheesData({ children }) {
   const { address } = useAccount();
   const { chain } = useNetwork();
-
-  const data = useVoucheesData(address, chain.id);
+  const data = useVoucheesData(address, chain?.id);
 
   return <VoucheesContext.Provider value={{ ...data }}>{children}</VoucheesContext.Provider>;
 }

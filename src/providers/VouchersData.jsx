@@ -113,8 +113,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
 export default function VouchersData({ children }) {
   const { address } = useAccount();
   const { chain } = useNetwork();
-
-  const data = useVouchersData(address, chain.id);
+  const data = useVouchersData(address, chain?.id);
 
   return <VouchersContext.Provider value={{ ...data }}>{children}</VouchersContext.Provider>;
 }
