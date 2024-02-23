@@ -13,6 +13,7 @@ export function useSupportedNetwork() {
 
   return {
     connected: isSupported(chain?.id),
+    supportedNetworks: supportedNetworks.filter((n) => isSupported(n.chainId)),
     isSupported,
   };
 }

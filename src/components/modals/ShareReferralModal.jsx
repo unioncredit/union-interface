@@ -21,12 +21,13 @@ import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { AddressSummary } from "components/shared";
 import { generateTelegramLink, generateTwitterLink, getProfileUrl } from "utils/generateLinks";
-import { supportedNetworks } from "config/networks";
+import { useSupportedNetwork } from "hooks/useSupportedNetwork";
 
 export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 
 export default function ShareReferralModal({ address, chainId }) {
   const { close } = useModals();
+  const { supportedNetworks } = useSupportedNetwork();
   const { address: connectedAddress } = useAccount();
   const { chain: connectedChain } = useNetwork();
 
