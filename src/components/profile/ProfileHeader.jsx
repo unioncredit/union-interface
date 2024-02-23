@@ -104,7 +104,7 @@ export default function ProfileHeader({ address, chainId }) {
   const networks = supportedNetworks.filter((n) => isSupported(n.chainId));
 
   const network = useMemo(() => {
-    return networks.find((network) => network.chainId === parseInt(chainId)) || networks[0];
+    return networks.find((network) => network.chainId === chainId) || networks[0];
   }, [chainId, networks]);
 
   useEffect(() => {
@@ -241,7 +241,11 @@ export default function ProfileHeader({ address, chainId }) {
           color="secondary"
           variant="light"
           label={"Share profile"}
-          onClick={() => open(SHARE_REFERRAL_MODAL)}
+          onClick={() =>
+            open(SHARE_REFERRAL_MODAL, {
+              chainId,
+            })
+          }
         />
       </Box>
     </Box>

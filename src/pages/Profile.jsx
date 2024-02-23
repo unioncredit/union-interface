@@ -1,8 +1,8 @@
 import "./Profile.scss";
 
-import { Button, Box, Card, Layout, ArrowLeftIcon, UnionIcon } from "@unioncredit/ui";
-import { useEnsAddress, useNetwork } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { ArrowLeftIcon, Box, Button, Card, Layout, UnionIcon } from "@unioncredit/ui";
+import { useEnsAddress } from "wagmi";
+import { mainnet, optimism } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -51,15 +51,17 @@ function ProfileInner({ address, member, chainId }) {
 }
 
 export default function Profile() {
-  const { chain: connectedChain } = useNetwork();
   const { addressOrEns: addressOrEnsParam } = useParams();
 
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(/^(eth|goe|arb1|optgoe|opt):/)
+  const [tag, addressOrEns] = addressOrEnsParam.match(/^(optgoe|opt):/)
     ? addressOrEnsParts
-    : [EIP3770[connectedChain?.id || mainnet.id], addressOrEnsParam];
+    : [
+        EIP3770[optimism.id],
+        addressOrEnsParts.length > 1 ? addressOrEnsParts[1] : addressOrEnsParam,
+      ];
 
   const { data: addressFromEns } = useEnsAddress({
     name: addressOrEns,
@@ -68,7 +70,7 @@ export default function Profile() {
 
   const address = isAddress(addressOrEns) ? addressOrEns : addressFromEns;
 
-  const chainId = Object.keys(EIP3770).find((key) => EIP3770[key] === tag);
+  const chainId = parseInt(Object.keys(EIP3770).find((key) => EIP3770[key] === tag));
 
   const { data: member = {} } = useMemberData(address, chainId, getVersion(chainId));
 
