@@ -9,15 +9,18 @@ import { useProtocol } from "../../providers/ProtocolData";
 import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
 import { useNetwork } from "wagmi";
 import { BigNumber } from "ethers";
+import { getVersion } from "../../providers/Version";
 
-export function StatusBadge({ address }) {
+export function StatusBadge({ address, chainId: chainIdProp }) {
   const { chain } = useNetwork();
+  const chainId = chainIdProp || chain?.id;
+
   const { data: protocol } = useProtocol();
-  const { data: member } = useMemberData(address);
+  const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
   const { data: blockNumber } = useVersionBlockNumber({
-    chainId: chain.id,
+    chainId: chainId,
   });
 
   const { isMember } = member;

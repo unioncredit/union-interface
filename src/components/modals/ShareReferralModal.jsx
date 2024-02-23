@@ -25,9 +25,9 @@ import { supportedNetworks } from "config/networks";
 
 export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 
-export default function ShareReferralModal({ chainId }) {
+export default function ShareReferralModal({ address, chainId }) {
   const { close } = useModals();
-  const { address } = useAccount();
+  const { address: connectedAddress } = useAccount();
   const { chain: connectedChain } = useNetwork();
 
   const [copied, copy] = useCopyToClipboard();
@@ -36,19 +36,18 @@ export default function ShareReferralModal({ chainId }) {
 
   const network =
     _network ||
-    supportedNetworks.find((network) => network.chainId == (chainId || connectedChain?.id));
+    supportedNetworks.find((network) => network.chainId === (chainId || connectedChain?.id));
 
-  const profileUrl = `https://app.union.finance${getProfileUrl(
-    address,
-    network.chainId
-  )}?refAddress=${address}`;
+  const profileUrl = `https://app.union.finance${getProfileUrl(address, network.chainId)}${
+    connectedAddress ? `?refAddress=${connectedAddress}` : ""
+  }`;
 
   return (
     <ModalOverlay onClick={close}>
       <Modal>
         <Modal.Header onClose={close} title="Share" />
         <Modal.Body>
-          <AddressSummary address={address} />
+          <AddressSummary address={address} chainId={chainId} />
 
           <Box align="center" justify="center" direction="vertical">
             <Select
