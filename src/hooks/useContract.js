@@ -28,6 +28,7 @@ import {
   comptrollerContract as MAINNET_comptrollerContract,
   daiContract as MAINNET_daiContract,
   governorContract,
+  referralContract as MAINNET_referralContract,
   timelockContract,
   unionContract as MAINNET_unionContract,
   userManagerContract as MAINNET_userManagerContract,
@@ -80,6 +81,7 @@ export default function useContract(name, chainId, forceVersion) {
       dai: MAINNET_daiContract,
       comptroller: MAINNET_comptrollerContract,
       assetManager: MAINNET_assetManagerContract,
+      referral: MAINNET_referralContract,
     },
     [arbitrum.id]: {
       userManager: ARBITRUM_userManagerContract,
