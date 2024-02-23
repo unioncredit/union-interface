@@ -3,14 +3,14 @@ import "./AddressSummary.scss";
 import { useEnsName, useNetwork } from "wagmi";
 import { Link } from "react-router-dom";
 import {
-  Heading,
   Badge,
-  Box,
   BadgeRow,
-  Skeleton,
-  ProfileIcon,
-  LinkOutIcon,
+  Box,
   Button,
+  Heading,
+  LinkOutIcon,
+  ProfileIcon,
+  Skeleton,
   Text,
 } from "@unioncredit/ui";
 
@@ -24,7 +24,7 @@ import { useState } from "react";
 import useLabels from "hooks/useLabels";
 import { mainnet } from "wagmi/chains";
 
-export function AddressSummary({ address, allowEdit = false, ...props }) {
+export function AddressSummary({ address, chainId: chainIdProp, allowEdit = false, ...props }) {
   const { chain } = useNetwork();
   const { getLabel, setLabel } = useLabels();
   const { data: ensName } = useEnsName({
@@ -32,6 +32,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
     chainId: mainnet.id,
   });
 
+  const chainId = chainIdProp || chain?.id;
   const label = getLabel(address);
   const primaryLabel = label || ensName || truncateAddress(address);
 
@@ -39,7 +40,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
   const [labelText, setLabelText] = useState(primaryLabel);
   const [editMode, setEditMode] = useState(false);
 
-  const blockExplorerLink = blockExplorerAddress(chain.id, address);
+  const blockExplorerLink = blockExplorerAddress(chainId, address);
 
   const handleSave = () => {
     if (labelText !== primaryLabel) {
@@ -80,7 +81,7 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
   return (
     <Box fluid mb="24px" align="center" className="AddressSummary" {...props}>
       <Box align="center" fluid>
-        <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
+        <Link to={`/profile/${EIP3770[chainId]}:${address}`}>
           <Avatar size={64} address={address} />
         </Link>
 
@@ -145,11 +146,11 @@ export function AddressSummary({ address, allowEdit = false, ...props }) {
                 onClick={() => copy(address)}
                 label={copied ? "Copied" : truncateAddress(address)}
               />
-              <StatusBadge address={address} />
+              <StatusBadge address={address} chainId={chainId} />
             </BadgeRow>
 
             <Box>
-              <Link to={getProfileUrl(address, chain.id)}>
+              <Link to={getProfileUrl(address, chainId)}>
                 <ProfileIcon width="24px" style={{ marginLeft: "4px" }} />
               </Link>
 
