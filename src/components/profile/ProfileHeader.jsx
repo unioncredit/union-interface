@@ -215,14 +215,7 @@ export default function ProfileHeader({ address, chainId }) {
             onClick={() => navigate(`/contacts/providing?address=${address}`)}
           />
         ) : !connectedMember.isMember ? (
-          <Button
-            color="secondary"
-            variant="light"
-            to="/"
-            mt="20px"
-            as={Link}
-            label="Register to vouch"
-          />
+          <Button color="secondary" variant="light" to="/" as={Link} label="Register to vouch" />
         ) : (
           <Button
             color="secondary"
