@@ -58,6 +58,7 @@ export const BlockSpeed = {
   [goerli.id]: 12e3,
   [optimismGoerli.id]: 1e3,
   [optimism.id]: 1e3,
+  [84532]: 1e3,
 };
 
 export const BlocksPerYear = {
@@ -66,6 +67,7 @@ export const BlocksPerYear = {
   [goerli.id]: 2407328,
   [optimismGoerli.id]: 31540000,
   [optimism.id]: 31540000,
+  [84532]: 31540000,
 };
 
 export const EIP3770 = {
@@ -74,6 +76,7 @@ export const EIP3770 = {
   [goerli.id]: "goe",
   [optimismGoerli.id]: "optgoe",
   [optimism.id]: "opt",
+  [84532]: "basesep",
 };
 
 export const EIP3770Map = {
@@ -82,6 +85,7 @@ export const EIP3770Map = {
   goe: goerli.id,
   opt: optimism.id,
   optgoe: optimismGoerli.id,
+  basesep: 84532,
 };
 
 export const TheGraphUrls = {

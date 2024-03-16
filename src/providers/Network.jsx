@@ -12,8 +12,34 @@ const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
+const baseSepolia = {
+  id: 84532,
+  name: 'Base Sepolia',
+  network: 'base-sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'ETH',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    public: { http: ['https://sepolia.base.org'] },
+    default: { http: ['https://sepolia.base.org'] },
+  },
+  blockExplorers: {
+    etherscan: { name: 'Block Scount', url: 'https://base-sepolia.blockscout.com' },
+    default: { name: 'Block Scount', url: 'https://base-sepolia.blockscout.com' },
+  },
+  testnet: true,
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 1_059_647,
+    },
+  },
+}
+
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, arbitrum, goerli, optimismGoerli, optimism],
+  [mainnet, arbitrum, goerli, optimismGoerli, optimism, baseSepolia],
   [
     // eslint-disable-next-line no-undef
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),

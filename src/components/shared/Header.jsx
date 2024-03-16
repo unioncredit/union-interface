@@ -104,7 +104,7 @@ export function Header({ loading, showNav = true }) {
                       variant="light"
                       className="UnionWallet"
                       onClick={() => open(WALLET_MODAL)}
-                      label={format(unclaimedRewards.add(unionBalance))}
+                      // label={format(unclaimedRewards.add(unionBalance))}
                     />
                   )}
                   <ConnectButton />
