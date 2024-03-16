@@ -15,7 +15,7 @@ export const DefaultVersion = Versions.V2;
 
 const versionSupport = {
   [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [optimismGoerli.id, optimism.id],
+  [Versions.V2]: [optimismGoerli.id, optimism.id, 84532],
 };
 
 export function isVersionSupported(version, chainId) {
