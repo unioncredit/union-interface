@@ -40,7 +40,7 @@ export const assetManagerContract = {
 };
 
 export const unionLensContract = {
-  address: "0x376F47C5966dcDA5c3d54B8cBF8B918777b8FF13",
+  address: "0xF440eC63091A5cdaff6f8dE19CFcD2b25DE01232",
   abi: unionLensAbi,
 };
 

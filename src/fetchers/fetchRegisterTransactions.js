@@ -22,7 +22,7 @@ export default async function fetchUserTransactions(version, chainId, account) {
       applicant: account,
     },
   };
-
+  if (!TheGraphUrls[version][chainId]) return [];
   const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   const flattened = Object.keys(resp).reduce((acc, key) => {
