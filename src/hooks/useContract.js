@@ -139,8 +139,8 @@ export default function useContract(name, chainId, forceVersion) {
       assetManager: BASE_SEPOLIA_V2_assetManagerContract,
       unionLens: BASE_SEPOLIA_V2_unionLensContract,
       vouchFaucet: BASE_SEPOLIA_V2_vouchFaucet,
-      // registerHelper: BASE_SEPOLIA_V2_registerHelperContract,
-      // referral: BASE_SEPOLIA_V2_referralContract,
+      registerHelper: BASE_SEPOLIA_V2_registerHelperContract,
+      referral: BASE_SEPOLIA_V2_referralContract,
     },
   };
 

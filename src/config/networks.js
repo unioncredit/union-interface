@@ -1,6 +1,6 @@
 import { optimismGoerli } from "wagmi/chains";
 
-export const testNetworkIds = [optimismGoerli.id];
+export const testNetworkIds = [optimismGoerli.id, 84532];
 
 export const unsupportedNetwork = {
   type: "unsupported",
