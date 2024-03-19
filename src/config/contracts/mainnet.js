@@ -6,6 +6,7 @@ import comptrollerAbi from "abis/comptroller.json";
 import governorAbi from "abis/governor.json";
 import assetManagerAbi from "abis/assetManager.json";
 import timelockAbi from "abis/timelock.json";
+import { ZERO_ADDRESS } from "constants";
 
 export const userManagerContract = {
   address: "0x49c910Ba694789B58F53BFF80633f90B8631c195",
@@ -45,4 +46,9 @@ export const assetManagerContract = {
 export const timelockContract = {
   address: "0xBBD3321f377742c4b3fe458b270c2F271d3294D8",
   abi: timelockAbi,
+};
+
+export const referralContract = {
+  address: ZERO_ADDRESS,
+  abi: [],
 };
