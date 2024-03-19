@@ -1,0 +1,19 @@
+{
+  "images": {
+    "sizes": [
+      24,
+      112
+    ],
+    "domains": [
+      "**"
+    ],
+    "formats": [
+      "image/webp",
+      "image/avif"
+    ]
+  },
+  "version": 3,
+  "routes": [
+    "/"
+  ]
+}
