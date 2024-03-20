@@ -22,6 +22,7 @@ import { useMember, useMemberData } from "../../providers/MemberData";
 import React from "react";
 import { useAccount } from "wagmi";
 import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const PUBLIC_WRITE_OFF_DEBT_MODAL = "public-write-off-debt-modal";
 
@@ -87,7 +88,7 @@ export default function PublicWriteOffDebtModal({ address }) {
               rightLabelAction={() =>
                 setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
               }
-              suffix={useToken == "Usdc" ? <Usdc /> : <Dai />}
+              suffix={<Token />}
             />
 
             <NumericalRows

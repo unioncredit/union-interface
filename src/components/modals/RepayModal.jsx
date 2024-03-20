@@ -31,6 +31,7 @@ import { useEffect, useState } from "react";
 import { Errors } from "constants";
 import { useVersion, Versions } from "providers/Version";
 import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -173,7 +174,7 @@ export default function RepayModal() {
                 label="Amount to repay"
                 rightLabel={`Max. ${format(maxRepay)}`}
                 rightLabelAction={() => setRawValue("amount", maxRepay, false)}
-                suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+                suffix={<Token />}
                 placeholder="0.0"
                 value={amount.formatted}
                 error={isCustomSelected ? errors.amount : null}

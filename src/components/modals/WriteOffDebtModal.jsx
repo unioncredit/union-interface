@@ -21,6 +21,7 @@ import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
 import { useAccount } from "wagmi";
 import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
@@ -103,7 +104,7 @@ export default function WriteOffDebtModal({
               onChange={register("amount")}
               rightLabel={`Max. ${format(locking)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
-              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+              suffix={<Token />}
             />
 
             <NumericalRows

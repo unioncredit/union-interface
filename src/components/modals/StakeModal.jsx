@@ -23,6 +23,7 @@ import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
 import { useSettings } from "providers/Settings";
 import { ZERO } from "constants";
+import Token from "components/Token";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -121,7 +122,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             <Input
               type="number"
               placeholder="0"
-              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+              suffix={<Token />}
               error={errors.amount}
               value={amount.formatted}
               onChange={register("amount")}

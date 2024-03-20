@@ -6,7 +6,7 @@ import { mainnet, arbitrum } from "wagmi/chains";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { calculateInterestRate } from "utils/numbers";
-import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 const getAnalyticsUrl = (chainId) => {
   switch (chainId) {
@@ -23,9 +23,6 @@ export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
   const analyticsUrl = getAnalyticsUrl(chain?.id);
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const {
     totalStaked = ZERO,
@@ -47,39 +44,21 @@ export default function GovernaceStats() {
               <NumericalBlock
                 mt="8px"
                 title="Total Staked"
-                value={
-                  useToken == "USDC" ? (
-                    <Usdc value={format(totalStaked)} />
-                  ) : (
-                    <Dai value={format(totalStaked)} />
-                  )
-                }
+                value={<Token value={format(totalStaked)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="8px"
                 title="Lending pool"
-                value={
-                  useToken == "USDC" ? (
-                    <Usdc value={format(getLoanableAmount)} />
-                  ) : (
-                    <Dai value={format(getLoanableAmount)} />
-                  )
-                }
+                value={<Token value={format(getLoanableAmount)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="32px"
                 title="Outstanding loans"
-                value={
-                  useToken == "USDC" ? (
-                    <Usdc value={format(totalBorrows)} />
-                  ) : (
-                    <Dai value={format(totalBorrows)} />
-                  )
-                }
+                value={<Token value={format(totalBorrows)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>

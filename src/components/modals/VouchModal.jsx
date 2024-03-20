@@ -26,10 +26,9 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
-import { BlockSpeed, SECONDS_PER_DAY, ZERO } from "constants";
+import { SECONDS_PER_DAY, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
-import { useNetwork } from "wagmi";
-import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -42,7 +41,6 @@ export default function VouchModal({
   address: initialAddress = null,
 }) {
   const { close } = useModals();
-  const { chain } = useNetwork();
 
   const { data: protocol } = useProtocol();
   const { refetch: refetchMember } = useMember();
@@ -53,9 +51,6 @@ export default function VouchModal({
   const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
@@ -108,7 +103,7 @@ export default function VouchModal({
           <Input
             mt="16px"
             type="number"
-            suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+            suffix={<Token />}
             error={errors.trust}
             label="Trust amount"
             onChange={register("trust")}

@@ -24,7 +24,7 @@ import { AddressSummary } from "components/shared";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
-import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -42,10 +42,6 @@ export default function EditVouchModal({
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
   const { address: stakerAddress } = useAccount();
-  const {
-    settings: { useToken },
-  } = useSettings();
-
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
 
@@ -113,7 +109,7 @@ export default function EditVouchModal({
             <Input
               mt="16px"
               type="number"
-              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+              suffix={<Token />}
               label="New trust amount"
               onChange={register("amount")}
               error={errors.amount}

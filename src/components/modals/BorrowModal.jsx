@@ -27,6 +27,7 @@ import {
   calculateMaxBorrow,
 } from "utils/numbers";
 import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -133,7 +134,7 @@ export default function BorrowModal() {
               label="Amount to borrow"
               rightLabel={`Max. ${format(maxBorrow)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
-              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
+              suffix={<Token />}
               placeholder="0.0"
               error={errors.amount}
               value={amount.formatted}
