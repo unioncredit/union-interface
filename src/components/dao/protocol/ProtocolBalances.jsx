@@ -3,7 +3,7 @@ import { Grid, NumericalBlock } from "@unioncredit/ui";
 import { ZERO } from "constants";
 import format from "utils/format";
 
-export function ProtocolBalances({ protocol }) {
+export function ProtocolBalances({ protocol, useToken }) {
   const {
     getLoanableAmount = ZERO,
     totalBorrows = ZERO,
@@ -51,10 +51,7 @@ export function ProtocolBalances({ protocol }) {
 
   return (
     <>
-      <ProtocolDataHeader
-        title="Balances"
-        subTitle="Important balances across the protocol"
-      />
+      <ProtocolDataHeader title="Balances" subTitle="Important balances across the protocol" />
 
       <Grid>
         {balances.map((row, index) => (
@@ -63,7 +60,7 @@ export function ProtocolBalances({ protocol }) {
               <Grid.Col key={item.title}>
                 <NumericalBlock
                   size="small"
-                  token="dai"
+                  token={useToken.toLowerCase()}
                   align="left"
                   {...item}
                 />

@@ -59,7 +59,7 @@ import {
 import {
   assetManagerContract as BASE_SEPOLIA_V2_assetManagerContract,
   comptrollerContract as BASE_SEPOLIA_V2_comptrollerContract,
-  daiContract as BASE_SEPOLIA_V2_daiContract,
+  usdcContract as BASE_SEPOLIA_V2_usdcContract,
   referralContract as BASE_SEPOLIA_V2_referralContract,
   registerHelperContract as BASE_SEPOLIA_V2_registerHelperContract,
   unionContract as BASE_SEPOLIA_V2_unionContract,
@@ -134,7 +134,7 @@ export default function useContract(name, chainId, forceVersion) {
       userManager: BASE_SEPOLIA_V2_userManagerContract,
       uToken: BASE_SEPOLIA_V2_uTokenContract,
       union: BASE_SEPOLIA_V2_unionContract,
-      dai: BASE_SEPOLIA_V2_daiContract,
+      usdc: BASE_SEPOLIA_V2_usdcContract,
       comptroller: BASE_SEPOLIA_V2_comptrollerContract,
       assetManager: BASE_SEPOLIA_V2_assetManagerContract,
       unionLens: BASE_SEPOLIA_V2_unionLensContract,

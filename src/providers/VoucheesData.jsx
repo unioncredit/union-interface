@@ -7,6 +7,7 @@ import { useMemberData } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
+import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "./Version";
 
 const VoucheesContext = createContext({});
@@ -37,8 +38,11 @@ const selectVouchee = (version) => (data) => ({
 export const useVoucheesData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
   const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
-  const daiContract = useContract("dai", chainId, forcedVersion);
+  const tokenContract = useContract(useToken.toLowerCase(), chainId, forcedVersion);
   const unionLens = useContract("unionLens", chainId, forcedVersion);
   const uTokenContract = useContract("uToken", chainId, forcedVersion);
   const userManagerContract = useContract("userManager", chainId, forcedVersion);
@@ -56,7 +60,7 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
       : {
           ...unionLens,
           functionName: "getRelatedInfo",
-          args: [daiContract.address, staker, borrower],
+          args: [tokenContract.address, staker, borrower],
         },
     {
       ...uTokenContract,

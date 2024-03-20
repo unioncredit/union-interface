@@ -33,6 +33,7 @@ import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import useResponsive from "hooks/useResponsive";
 import makeUrls from "add-event-to-calendar";
+import { useSettings } from "providers/Settings";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
@@ -44,6 +45,9 @@ export default function CreditStats({ vouchers }) {
   const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
   });
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const {
     creditLimit = ZERO,
@@ -92,7 +96,7 @@ export default function CreditStats({ vouchers }) {
       <Card.Body>
         <Box align="center" justify="space-between">
           <NumericalBlock
-            token="dai"
+            token={`${useToken.toLowerCase()}`}
             title="Available to Borrow"
             align="left"
             smallDecimals={true}
@@ -134,8 +138,8 @@ export default function CreditStats({ vouchers }) {
               Borrowed
               <Tooltip
                 ml="4px"
-                title={`${format(owed)} DAI`}
-                content="The amount of DAI you are currently borrowing"
+                title={`${format(owed)} ${useToken}`}
+                content={`The amount of ${useToken} you are currently borrowing`}
               >
                 <InfoOutlinedIcon width="13px" />
               </Tooltip>
@@ -149,8 +153,8 @@ export default function CreditStats({ vouchers }) {
               Available
               <Tooltip
                 ml="4px"
-                title={`${format(creditLimit, 2, false)} DAI`}
-                content="The amount of DAI currently available to borrow"
+                title={`${format(creditLimit, 2, false)} ${useToken}`}
+                content={`The amount of ${useToken} currently available to borrow`}
               >
                 <InfoOutlinedIcon width="13px" />
               </Tooltip>
@@ -164,7 +168,7 @@ export default function CreditStats({ vouchers }) {
               Unavailable
               <Tooltip
                 ml="4px"
-                title={`${format(unavailableBalance)} DAI`}
+                title={`${format(unavailableBalance)} ${useToken}`}
                 content="Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time"
               >
                 <InfoOutlinedIcon width="13px" />
@@ -177,7 +181,7 @@ export default function CreditStats({ vouchers }) {
       <Card.Footer direction="vertical">
         <Box mb="24px" align="center" justify="space-between" fluid>
           <NumericalBlock
-            token="dai"
+            token={`${useToken.toLowerCase()}`}
             title="Balance owed"
             align="left"
             value={format(owed)}
@@ -217,7 +221,9 @@ export default function CreditStats({ vouchers }) {
               <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
             ) : (
               <Text m="4px 0 0" size="medium">
-                {owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`}
+                {owed.lte(0)
+                  ? "No payment due"
+                  : `${format(minPayment)} ${useToken} · ${absoluteDueDate}`}
               </Text>
             )}
           </Box>

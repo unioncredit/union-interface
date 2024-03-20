@@ -3,7 +3,7 @@ import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
 import { ZERO } from "constants";
 import format from "utils/format";
 
-export function ProtocolLimits({ protocol, ...props }) {
+export function ProtocolLimits({ protocol, useToken, ...props }) {
   const { minBorrow = ZERO, maxBorrow = ZERO, debtCeiling = ZERO } = protocol;
 
   const limits = [
@@ -32,7 +32,7 @@ export function ProtocolLimits({ protocol, ...props }) {
         <Grid.Row style={{ marginTop: "16px" }}>
           {limits.map((item) => (
             <Grid.Col key={item.title}>
-              <NumericalBlock size="small" token="dai" align="left" {...item} />
+              <NumericalBlock size="small" token={useToken.toLowerCase()} align="left" {...item} />
             </Grid.Col>
           ))}
         </Grid.Row>

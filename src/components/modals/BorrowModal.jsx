@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Dai,
+  Usdc,
   Grid,
   Input,
   Modal,
@@ -25,6 +26,7 @@ import {
   calculateInterestRate,
   calculateMaxBorrow,
 } from "utils/numbers";
+import { useSettings } from "providers/Settings";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -35,6 +37,9 @@ export default function BorrowModal() {
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
   const firstPaymentDueDate = useFirstPaymentDueDate();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const {
     owed = ZERO,
@@ -93,7 +98,7 @@ export default function BorrowModal() {
   return (
     <ModalOverlay onClick={close}>
       <Modal className="BorrowModal">
-        <Modal.Header title="Borrow DAI" onClose={close} />
+        <Modal.Header title={`Borrow ${useToken}`} onClose={close} />
         <Modal.Body>
           {/*--------------------------------------------------------------
             Stats Before 
@@ -102,7 +107,7 @@ export default function BorrowModal() {
             <Grid.Row>
               <Grid.Col>
                 <NumericalBlock
-                  token="dai"
+                  token={useToken.toLowerCase()}
                   size="regular"
                   title="Available to borrow"
                   value={format(creditLimit, 2, false)}
@@ -110,7 +115,7 @@ export default function BorrowModal() {
               </Grid.Col>
               <Grid.Col>
                 <NumericalBlock
-                  token="dai"
+                  token={useToken.toLowerCase()}
                   size="regular"
                   title="Balance owed"
                   value={format(owed)}
@@ -126,9 +131,9 @@ export default function BorrowModal() {
               type="number"
               name="amount"
               label="Amount to borrow"
-              rightLabel={`Max. ${format(maxBorrow)} DAI`}
+              rightLabel={`Max. ${format(maxBorrow)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
-              suffix={<Dai />}
+              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
               placeholder="0.0"
               error={errors.amount}
               value={amount.formatted}
@@ -152,14 +157,14 @@ export default function BorrowModal() {
               },
               {
                 label: "Total incl. origination fee",
-                value: `${format(borrow)} DAI`,
+                value: `${format(borrow)} ${useToken}`,
                 tooltip: {
                   content: "Total amount borrowed including fee",
                 },
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed)} DAI`,
+                value: `${format(newOwed)} ${useToken}`,
                 tooltip: {
                   content: "The total amount you will owe if this borrow transaction is successful",
                 },
@@ -169,7 +174,7 @@ export default function BorrowModal() {
                 value:
                   amount.raw.lte(0) && owed.lte(0)
                     ? "N/A"
-                    : `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
+                    : `${format(minPayment)} ${useToken} · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",
@@ -185,7 +190,7 @@ export default function BorrowModal() {
             mt="16px"
             size="large"
             icon={BorrowIcon}
-            label={`Borrow ${amount.display} DAI`}
+            label={`Borrow ${amount.display} ${useToken}`}
             disabled={amount.raw.lte(ZERO)}
             {...buttonProps}
           />

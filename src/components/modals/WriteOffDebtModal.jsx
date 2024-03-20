@@ -1,6 +1,7 @@
 import {
   Button,
   Dai,
+  Usdc,
   Input,
   Text,
   Modal,
@@ -19,6 +20,7 @@ import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
 import { useAccount } from "wagmi";
+import { useSettings } from "providers/Settings";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
@@ -33,7 +35,9 @@ export default function WriteOffDebtModal({
   const { address: connectedAddress } = useAccount();
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
-
+  const {
+    settings: { useToken },
+  } = useSettings();
   const vouchee = useVouchee(address);
 
   const { locking = ZERO, isOverdue } = vouchee;
@@ -82,7 +86,12 @@ export default function WriteOffDebtModal({
         </Modal.Header>
         <Modal.Body>
           <Modal.Container direction="vertical">
-            <NumericalBlock align="left" token="dai" title="Balance owed" value={format(locking)} />
+            <NumericalBlock
+              align="left"
+              token={useToken.toLowerCase()}
+              title="Balance owed"
+              value={format(locking)}
+            />
 
             <Input
               mt="16px"
@@ -92,9 +101,9 @@ export default function WriteOffDebtModal({
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(locking)} DAI`}
+              rightLabel={`Max. ${format(locking)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
-              suffix={<Dai />}
+              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
             />
 
             <NumericalRows
@@ -102,7 +111,7 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw))} DAI`,
+                  value: `${format(locking.sub(amount.raw))} ${useToken}`,
                 },
               ]}
             />

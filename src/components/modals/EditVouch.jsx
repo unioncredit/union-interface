@@ -3,6 +3,7 @@ import {
   ModalOverlay,
   Button,
   Dai,
+  Usdc,
   Input,
   NumericalBlock,
   NumericalRows,
@@ -23,6 +24,7 @@ import { AddressSummary } from "components/shared";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
+import { useSettings } from "providers/Settings";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -40,6 +42,9 @@ export default function EditVouchModal({
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
   const { address: stakerAddress } = useAccount();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
@@ -100,7 +105,7 @@ export default function EditVouchModal({
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               title="Trust you provide"
               value={format(trust)}
             />
@@ -108,7 +113,7 @@ export default function EditVouchModal({
             <Input
               mt="16px"
               type="number"
-              suffix={<Dai />}
+              suffix={useToken == "USDC" ? <Usdc /> : <Dai />}
               label="New trust amount"
               onChange={register("amount")}
               error={errors.amount}
@@ -121,7 +126,7 @@ export default function EditVouchModal({
               items={[
                 {
                   label: "Utilized trust",
-                  value: `${format(locking)} DAI`,
+                  value: `${format(locking)} ${useToken}`,
                   tooltip: {
                     shrink: true,
                     content: "Your stake currently backing someone you vouched for",

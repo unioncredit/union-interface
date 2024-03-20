@@ -5,6 +5,7 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import useWrite from "hooks/useWrite";
 import useRewards from "hooks/useRewards";
+import { useSettings } from "providers/Settings";
 
 export default function RewardStats() {
   const {
@@ -14,6 +15,9 @@ export default function RewardStats() {
     estimatedDailyBonus = ZERO,
     estimatedDailyPenalty = ZERO,
   } = useRewards();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const buttonProps = useWrite({
     contract: "userManager",
@@ -50,7 +54,7 @@ export default function RewardStats() {
             title="Base Reward"
             value={format(estimatedDailyBase)}
             titleTooltip={{
-              content: "UNION you get just for depositing DAI",
+              content: `UNION you get just for depositing ${useToken}`,
             }}
           />
           <NumericalBlock

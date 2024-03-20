@@ -21,12 +21,16 @@ import { STAKE_MODAL } from "components/modals/StakeModal";
 import { StakeType } from "constants";
 import { AddressesAvatarBadgeRow } from "components/shared";
 import { Link } from "react-router-dom";
+import { useSettings } from "providers/Settings";
 
 export default function StakeStats() {
   const { open } = useModals();
   const { data: member = {} } = useMember();
   const { data: vouchees = [] } = useVouchees();
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const withdrawableStake = stakedBalance.sub(totalLockedStake);
   const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
@@ -38,7 +42,7 @@ export default function StakeStats() {
       <Card.Body>
         <Box fluid align="center" justify="space-between" className="StakeStats__top">
           <NumericalBlock
-            token="dai"
+            token={useToken.toLowerCase()}
             align="left"
             title="Your staked balance"
             value={format(stakedBalance)}
@@ -86,7 +90,7 @@ export default function StakeStats() {
           <Box fluid className="StakeStats__item">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Withdrawable"
               dotColor="blue500"
@@ -106,7 +110,7 @@ export default function StakeStats() {
             <NumericalBlock
               fluid
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Locked"
               dotColor="violet500"
@@ -129,7 +133,7 @@ export default function StakeStats() {
             <NumericalBlock
               fluid
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Frozen"
               dotColor="red500"

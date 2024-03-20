@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  Card,
-  Dai,
-  ExternalIcon,
-  NumericalBlock,
-} from "@unioncredit/ui";
+import { Button, Grid, Card, Dai, Usdc, ExternalIcon, NumericalBlock } from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
 import { useNetwork } from "wagmi";
 import { mainnet, arbitrum } from "wagmi/chains";
@@ -13,6 +6,7 @@ import { mainnet, arbitrum } from "wagmi/chains";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { calculateInterestRate } from "utils/numbers";
+import { useSettings } from "providers/Settings";
 
 const getAnalyticsUrl = (chainId) => {
   switch (chainId) {
@@ -29,6 +23,9 @@ export default function GovernaceStats() {
   const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
   const analyticsUrl = getAnalyticsUrl(chain?.id);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const {
     totalStaked = ZERO,
@@ -50,21 +47,39 @@ export default function GovernaceStats() {
               <NumericalBlock
                 mt="8px"
                 title="Total Staked"
-                value={<Dai value={format(totalStaked)} />}
+                value={
+                  useToken == "USDC" ? (
+                    <Usdc value={format(totalStaked)} />
+                  ) : (
+                    <Dai value={format(totalStaked)} />
+                  )
+                }
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="8px"
                 title="Lending pool"
-                value={<Dai value={format(getLoanableAmount)} />}
+                value={
+                  useToken == "USDC" ? (
+                    <Usdc value={format(getLoanableAmount)} />
+                  ) : (
+                    <Dai value={format(getLoanableAmount)} />
+                  )
+                }
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="32px"
                 title="Outstanding loans"
-                value={<Dai value={format(totalBorrows)} />}
+                value={
+                  useToken == "USDC" ? (
+                    <Usdc value={format(totalBorrows)} />
+                  ) : (
+                    <Dai value={format(totalBorrows)} />
+                  )
+                }
               />
             </Grid.Col>
             <Grid.Col xs={6}>
@@ -72,9 +87,7 @@ export default function GovernaceStats() {
                 <NumericalBlock
                   mt="32px"
                   title="Interest rate"
-                  value={`${format(
-                    calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
-                  )}%`}
+                  value={`${format(calculateInterestRate(borrowRatePerUnit, chain.id).mul(100))}%`}
                 />
               )}
             </Grid.Col>

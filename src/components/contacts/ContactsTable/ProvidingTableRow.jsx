@@ -8,7 +8,7 @@ import format from "utils/format";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
 import { useLastRepayData } from "hooks/useLastRepayData";
-
+import { useSettings } from "providers/Settings";
 import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
 import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
 import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
@@ -40,7 +40,9 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
   const { address, isOverdue, locking = ZERO, trust = ZERO, vouch = ZERO, lastRepay = ZERO } = data;
 
   const { formatted: lastRepayFormatted, paymentDue } = useLastRepayData(lastRepay);
-
+  const {
+    settings: { useToken },
+  } = useSettings();
   const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
   const columns = [
@@ -50,7 +52,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
-          value={`${format(trust)} DAI`}
+          value={`${format(trust)} ${useToken}`}
         />
       ),
     },
@@ -60,7 +62,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch)} DAI`}
+          value={`${format(vouch)} ${useToken}`}
         />
       ),
     },
@@ -70,7 +72,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.STAKE_LOCKED.id}
           dimmed={locking.eq(ZERO)}
-          value={`${format(locking)} DAI`}
+          value={`${format(locking)} ${useToken}`}
           className={cn({
             "table-cell--overdue": isOverdue && locking.gt(ZERO),
           })}
