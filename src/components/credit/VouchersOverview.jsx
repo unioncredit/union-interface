@@ -79,7 +79,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
             align="left"
             title="Your credit limit"
             value={format(vouch, 2, false)}
-            token={useToken}
+            token={useToken.toLowerCase()}
             subtitle={hasVouchers ? `Receiving from ${vouchers.length} contacts` : "No vouchers"}
           />
         </Box>

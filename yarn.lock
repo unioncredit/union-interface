@@ -3294,8 +3294,10 @@
     jsdoc-to-markdown "^7.1.1"
     typescript "^4.6.4"
 
-"@unioncredit/ui@file:/Users/twy/Projects/union-ui":
-  version "2.0.22"
+"@unioncredit/ui@^2.0.23":
+  version "2.0.23"
+  resolved "https://registry.npmjs.org/@unioncredit/ui/-/ui-2.0.23.tgz#2a7e59efa15eb757a605ffe24d581c380b7c50f7"
+  integrity sha512-CmcRbue2pJ3rmsg+apP0z9/v5zsvtgE1ex8ycs2u+lC015mIavs7GVVRUDeJ+QsqaukUCbryQdkjbw6KvaJt7A==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
