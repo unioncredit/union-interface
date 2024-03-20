@@ -29,6 +29,7 @@ import { useVouchees } from "providers/VoucheesData";
 import { SECONDS_PER_DAY, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -46,8 +47,10 @@ export default function VouchModal({
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
-
-  const { values, errors = {}, register } = useForm();
+  const {
+    settings: { useToken },
+  } = useSettings();
+  const { values, errors = {}, register } = useForm({ useToken });
   const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);

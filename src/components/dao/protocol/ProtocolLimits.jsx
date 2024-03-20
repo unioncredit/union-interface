@@ -9,15 +9,15 @@ export function ProtocolLimits({ protocol, useToken, ...props }) {
   const limits = [
     {
       title: "Min. Borrow",
-      value: format(minBorrow),
+      value: format(minBorrow, useToken),
     },
     {
       title: "Max. Borrow",
-      value: format(maxBorrow),
+      value: format(maxBorrow, useToken),
     },
     {
       title: "Global Max.",
-      value: format(debtCeiling),
+      value: format(debtCeiling, useToken),
     },
   ];
 

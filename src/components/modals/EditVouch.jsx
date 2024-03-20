@@ -25,6 +25,7 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -44,6 +45,9 @@ export default function EditVouchModal({
   const { address: stakerAddress } = useAccount();
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
@@ -66,7 +70,7 @@ export default function EditVouchModal({
     close();
   };
 
-  const { register, errors = {}, values = {}, empty } = useForm({ validate });
+  const { register, errors = {}, values = {}, empty } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -103,7 +107,7 @@ export default function EditVouchModal({
               align="left"
               token={useToken.toLowerCase()}
               title="Trust you provide"
-              value={format(trust)}
+              value={format(trust, useToken)}
             />
 
             <Input
@@ -122,7 +126,7 @@ export default function EditVouchModal({
               items={[
                 {
                   label: "Utilized trust",
-                  value: `${format(locking)} ${useToken}`,
+                  value: `${format(locking, useToken)} ${useToken}`,
                   tooltip: {
                     shrink: true,
                     content: "Your stake currently backing someone you vouched for",

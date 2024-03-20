@@ -61,25 +61,36 @@ export default function BorrowModal() {
     } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return Errors.MIN_BORROW(minBorrow);
+      return Errors.MIN_BORROW(minBorrow, useToken);
     } else if (inputs.amount.raw.gt(getLoanableAmount)) {
       return Errors.INSUFFICIENT_FUNDS;
     }
   };
 
-  const { register, setRawValue, values = {}, errors = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    values = {},
+    errors = {},
+    empty,
+  } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
   const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
-  const fee = amount.raw.mul(originationFee).div(WAD);
+  const fee = amount.raw.mul(originationFee).div(WAD[useToken]);
 
   const borrow = amount.raw.add(fee);
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(borrow, borrowRatePerBlock, overdueTime);
+  const minPayment = calculateExpectedMinimumPayment(
+    borrow,
+    borrowRatePerBlock,
+    overdueTime,
+    useToken
+  );
 
   const buttonProps = useWrite({
     contract: "uToken",
@@ -111,7 +122,7 @@ export default function BorrowModal() {
                   token={useToken.toLowerCase()}
                   size="regular"
                   title="Available to borrow"
-                  value={format(creditLimit, 2, false)}
+                  value={format(creditLimit, useToken, 2, false)}
                 />
               </Grid.Col>
               <Grid.Col>
@@ -119,7 +130,7 @@ export default function BorrowModal() {
                   token={useToken.toLowerCase()}
                   size="regular"
                   title="Balance owed"
-                  value={format(owed)}
+                  value={format(owed, useToken)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -132,7 +143,7 @@ export default function BorrowModal() {
               type="number"
               name="amount"
               label="Amount to borrow"
-              rightLabel={`Max. ${format(maxBorrow)} ${useToken}`}
+              rightLabel={`Max. ${format(maxBorrow, useToken)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
               suffix={<Token />}
               placeholder="0.0"
@@ -150,7 +161,8 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
+                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100),
+                  useToken
                 )}% APR`,
                 tooltip: {
                   content: "The interest rate accrued over a 12 month borrow period",
@@ -158,14 +170,14 @@ export default function BorrowModal() {
               },
               {
                 label: "Total incl. origination fee",
-                value: `${format(borrow)} ${useToken}`,
+                value: `${format(borrow, useToken)} ${useToken}`,
                 tooltip: {
                   content: "Total amount borrowed including fee",
                 },
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed)} ${useToken}`,
+                value: `${format(newOwed, useToken)} ${useToken}`,
                 tooltip: {
                   content: "The total amount you will owe if this borrow transaction is successful",
                 },
@@ -175,7 +187,7 @@ export default function BorrowModal() {
                 value:
                   amount.raw.lte(0) && owed.lte(0)
                     ? "N/A"
-                    : `${format(minPayment)} ${useToken} · ${firstPaymentDueDate}`,
+                    : `${format(minPayment, useToken)} ${useToken} · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",

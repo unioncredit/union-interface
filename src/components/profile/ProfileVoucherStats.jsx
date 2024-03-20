@@ -52,7 +52,11 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId, useToken }) {
                 </Box>
               </Link>
 
-              <Badge color="grey" label={`${format(vouch)} ${useToken}`} borderColor="#E4E4E7" />
+              <Badge
+                color="grey"
+                label={`${format(vouch, useToken)} ${useToken}`}
+                borderColor="#E4E4E7"
+              />
             </Box>
           ))}
         </Box>

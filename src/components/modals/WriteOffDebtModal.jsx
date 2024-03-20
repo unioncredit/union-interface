@@ -64,7 +64,13 @@ export default function WriteOffDebtModal({
     close();
   };
 
-  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    errors = {},
+    values = {},
+    empty,
+  } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -91,7 +97,7 @@ export default function WriteOffDebtModal({
               align="left"
               token={useToken.toLowerCase()}
               title="Balance owed"
-              value={format(locking)}
+              value={format(locking, useToken)}
             />
 
             <Input
@@ -102,7 +108,7 @@ export default function WriteOffDebtModal({
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(locking)} ${useToken}`}
+              rightLabel={`Max. ${format(locking, useToken)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
               suffix={<Token />}
             />
@@ -112,7 +118,7 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw))} ${useToken}`,
+                  value: `${format(locking.sub(amount.raw), useToken)} ${useToken}`,
                 },
               ]}
             />

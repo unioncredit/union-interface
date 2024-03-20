@@ -138,21 +138,21 @@ const VoucherDetails = ({ voucher }) => {
         items={[
           {
             label: "Trust amount",
-            value: `${format(trust)} ${useToken}`,
+            value: `${format(trust, useToken)} ${useToken}`,
             tooltip: {
               content: "Trust set for you by this contact",
             },
           },
           {
             label: "Vouch you receive",
-            value: `${format(vouch)} ${useToken}`,
+            value: `${format(vouch, useToken)} ${useToken}`,
             tooltip: {
               content: "The max vouch you would receive based on their total stake",
             },
           },
           {
             label: "Available to you",
-            value: `${format(vouch.sub(locking))} ${useToken}`,
+            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
             tooltip: {
               content: "The amount currently available to borrow via this contacts unlocked stake",
             },
@@ -210,7 +210,7 @@ const VoucheeDetails = ({
   const stats = [
     {
       title: "Trust",
-      value: format(trust),
+      value: format(trust, useToken),
       buttonProps: {
         label: "Change",
         onClick: () =>
@@ -226,7 +226,7 @@ const VoucheeDetails = ({
     },
     {
       title: "Owes you",
-      value: format(locking),
+      value: format(locking, useToken),
       buttonProps: {
         label: "Write-off",
         disabled: locking.lte(ZERO),
@@ -275,14 +275,14 @@ const VoucheeDetails = ({
         items={[
           {
             label: "Vouch you provide",
-            value: `${format(vouch)} ${useToken}`,
+            value: `${format(vouch, useToken)} ${useToken}`,
             tooltip: {
               content: `The theoretical max amount of ${useToken} you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting`,
             },
           },
           {
             label: "Available to borrow",
-            value: `${format(vouch.sub(locking))} ${useToken}`,
+            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
             tooltip: {
               content:
                 "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
@@ -301,8 +301,8 @@ const VoucheeDetails = ({
               paymentDue.formatted === "N/A"
                 ? paymentDue.formatted
                 : isOverdue
-                ? `${format(minPayment)} ${useToken} - ${paymentDue.formatted} ago`
-                : `${format(minPayment)} ${useToken} in ${paymentDue.formatted}`,
+                ? `${format(minPayment, useToken)} ${useToken} - ${paymentDue.formatted} ago`
+                : `${format(minPayment, useToken)} ${useToken} in ${paymentDue.formatted}`,
             tooltip: {
               content: "Amount and time until their next minimum payment",
             },

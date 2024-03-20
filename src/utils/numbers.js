@@ -77,9 +77,10 @@ export const calculateInterestRate = (borrowRatePerUnit, chainId) => {
 export const calculateExpectedMinimumPayment = (
   borrowAmount,
   borrowRatePerBlock,
-  overdueBlocks
+  overdueBlocks,
+  useToken
 ) => {
   const floor = parseEther("0.01");
-  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD);
+  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD[useToken]);
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };

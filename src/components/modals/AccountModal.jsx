@@ -17,7 +17,6 @@ import {
   Text,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
-
 import { useModals } from "providers/ModalManager";
 import { Link } from "react-router-dom";
 import format from "utils/format";
@@ -28,6 +27,7 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { InvitedByInput } from "./AccountModal/InvitedByInput";
 import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
+import { useSettings } from "providers/Settings";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -39,6 +39,9 @@ export default function AccountModal() {
   const { disconnect } = useDisconnect();
   const [copied, copy] = useCopyToClipboard();
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   return (
     <ModalOverlay onClick={close}>
@@ -131,7 +134,7 @@ export default function AccountModal() {
                   </Box>
                   <Box align="center">
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
-                      {format(value)}
+                      {format(value, useToken)}
                     </Text>
                     <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
                       <LinkOutIcon width="16px" />

@@ -4,18 +4,20 @@ import { BigNumber } from "ethers";
 
 export default function format(
   n,
+  token = "DAI",
   digits = 2,
   rounded = true,
   stripTrailingZeros = false,
   formatDust = true
 ) {
   if (!n) n = "0";
-  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD) && n.gt(ZERO)) return "<0.01";
+  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD[token]) && n.gt(ZERO))
+    return "<0.01";
   return commify(Number(formatUnits(n)), digits, rounded, stripTrailingZeros);
 }
 
-export const formattedNumber = (n, digits = 2, rounded = true) => {
-  return parseFloat(format(n, digits, rounded, false, false).replace(",", ""));
+export const formattedNumber = (n, token, digits = 2, rounded = true) => {
+  return parseFloat(format(n, token, digits, rounded, false, false).replace(",", ""));
 };
 
 export const compactFormattedNumber = (n) => {

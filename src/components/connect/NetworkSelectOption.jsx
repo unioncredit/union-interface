@@ -35,7 +35,7 @@ export const NetworkSelectOption = ({ address, network, useToken, active, disabl
               <Text grey={600} m={0} pr="8px" size="small">
                 {address
                   ? data.isMember
-                    ? `Member · ${format(data.creditLimit)} ${useToken} available`
+                    ? `Member · ${format(data.creditLimit, useToken)} ${useToken} available`
                     : "Not a member"
                   : description}
               </Text>

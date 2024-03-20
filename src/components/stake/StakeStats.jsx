@@ -45,7 +45,7 @@ export default function StakeStats() {
             token={useToken.toLowerCase()}
             align="left"
             title="Your staked balance"
-            value={format(stakedBalance)}
+            value={format(stakedBalance, useToken)}
           />
 
           <ButtonRow>
@@ -72,15 +72,15 @@ export default function StakeStats() {
           m="24px 0"
           items={[
             {
-              value: formattedNumber(withdrawableStake),
+              value: formattedNumber(withdrawableStake, useToken),
               color: "blue500",
             },
             {
-              value: formattedNumber(totalLockedStake),
+              value: formattedNumber(totalLockedStake, useToken),
               color: "violet500",
             },
             {
-              value: formattedNumber(defaulted),
+              value: formattedNumber(defaulted, useToken),
               color: "red500",
             },
           ]}
@@ -94,7 +94,7 @@ export default function StakeStats() {
               size="regular"
               title="Withdrawable"
               dotColor="blue500"
-              value={format(withdrawableStake)}
+              value={format(withdrawableStake, useToken)}
             />
 
             <AddressesAvatarBadgeRow
@@ -114,7 +114,7 @@ export default function StakeStats() {
               size="regular"
               title="Locked"
               dotColor="violet500"
-              value={format(totalLockedStake)}
+              value={format(totalLockedStake, useToken)}
             />
 
             <Link to="/contacts/providing?filters=borrowing">
@@ -137,7 +137,7 @@ export default function StakeStats() {
               size="regular"
               title="Frozen"
               dotColor="red500"
-              value={format(defaulted)}
+              value={format(defaulted, useToken)}
             />
 
             <Link to="/contacts/providing?filters=overdue">

@@ -49,15 +49,15 @@ export function ProfileSidebar({ address, member, chainId }) {
             m="24px 0"
             items={[
               {
-                value: formattedNumber(owed),
+                value: formattedNumber(owed, useToken),
                 color: "blue300",
               },
               {
-                value: formattedNumber(creditLimit, 2, false),
+                value: formattedNumber(creditLimit, useToken, 2, false),
                 color: "blue800",
               },
               {
-                value: formattedNumber(unavailableBalance),
+                value: formattedNumber(unavailableBalance, useToken),
                 color: "amber500",
               },
             ]}
@@ -71,7 +71,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Borrowed"
               dotColor="blue300"
-              value={format(owed)}
+              value={format(owed, useToken)}
               titleTooltip={{
                 content: `The amount of ${useToken} you are currently borrowing`,
               }}
@@ -84,7 +84,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Available"
               dotColor="blue800"
-              value={format(creditLimit, 2, false)}
+              value={format(creditLimit, useToken, 2, false)}
               titleTooltip={{
                 content: `The amount of ${useToken} currently available to borrow`,
               }}
@@ -97,7 +97,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Unavailable"
               dotColor="amber500"
-              value={format(unavailableBalance)}
+              value={format(unavailableBalance, useToken)}
               titleTooltip={{
                 content:
                   "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time",

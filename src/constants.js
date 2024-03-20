@@ -7,13 +7,21 @@ export const ZERO = BigNumber.from(0);
 
 export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
-export const WAD = BigNumber.from("1000000000000000000");
+export const WAD = {
+  DAI: BigNumber.from("1000000000000000000"),
+  UNION: BigNumber.from("1000000000000000000"),
+  USDC: BigNumber.from("1000000"),
+};
 
 export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
 export const STALE_TIME = 30_000; // 30 seconds
 
-export const DUST_THRESHOLD = "10000000000000000";
+export const DUST_THRESHOLD = {
+  DAI: "10000000000000000",
+  UNION: "10000000000000000",
+  USDC: "10000",
+};
 
 export const SECONDS_PER_HOUR = 3600;
 
@@ -40,7 +48,7 @@ export const Errors = {
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   INSUFFICIENT_FUNDS: "Insufficient funds in protocol",
-  MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
+  MIN_BORROW: (amount, useToken) => `Amount less than minimum borrow (${format(amount, useToken)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
   EXCEEDED_LOCK: "Amount exceeded locked value",

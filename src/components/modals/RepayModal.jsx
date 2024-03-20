@@ -68,7 +68,7 @@ export default function RepayModal() {
     empty,
     setRawValue,
     isErrored,
-  } = useForm({ validate });
+  } = useForm({ validate, useToken });
 
   const handleSelect = (option) => {
     setPaymentType(option.paymentType);
@@ -92,7 +92,7 @@ export default function RepayModal() {
   const options = [
     {
       token: useToken.toLowerCase(),
-      value: format(maxRepay),
+      value: format(maxRepay, useToken),
       amount: maxRepay,
       paymentType: PaymentType.MAX,
       title: maxRepay.gte(owed) ? "Pay-off entire loan" : `Pay maximum ${useToken} available`,
@@ -100,7 +100,7 @@ export default function RepayModal() {
         ? "Make a payment equal to the outstanding balance"
         : "Make a payment with the maximum amount available in your wallet",
       tooltip: maxRepay.gte(owed) &&
-        format(maxRepay) !== format(owed) && {
+        format(maxRepay, useToken) !== format(owed, useToken) && {
           title: "Why is this more than my balance owed?",
           content:
             "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
@@ -108,7 +108,7 @@ export default function RepayModal() {
         },
     },
     {
-      value: format(minPayment),
+      value: format(minPayment, useToken),
       amount: minPayment,
       token: useToken.toLowerCase(),
       paymentType: PaymentType.MIN,
@@ -141,7 +141,7 @@ export default function RepayModal() {
                   token={useToken.toLowerCase()}
                   size="regular"
                   title="Balance owed"
-                  value={format(owed)}
+                  value={format(owed, useToken)}
                 />
               </Grid.Col>
               <Grid.Col xs={6}>
@@ -150,7 +150,7 @@ export default function RepayModal() {
                   token={useToken.toLowerCase()}
                   size="regular"
                   title="Due today"
-                  value={format(minPayment)}
+                  value={format(minPayment, useToken)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -172,7 +172,7 @@ export default function RepayModal() {
                 type="number"
                 name="amount"
                 label="Amount to repay"
-                rightLabel={`Max. ${format(maxRepay)}`}
+                rightLabel={`Max. ${format(maxRepay, useToken)}`}
                 rightLabelAction={() => setRawValue("amount", maxRepay, false)}
                 suffix={<Token />}
                 placeholder="0.0"
@@ -215,7 +215,7 @@ export default function RepayModal() {
             items={[
               {
                 label: "Wallet balance",
-                value: `${format(tokenBalance)} ${useToken}`,
+                value: `${format(tokenBalance, useToken)} ${useToken}`,
                 error: errors.amount === Errors.INSUFFICIENT_BALANCE,
                 tooltip: {
                   content: `How much ${useToken} you have in your connected wallet`,
@@ -223,11 +223,11 @@ export default function RepayModal() {
               },
               {
                 label: "Next payment due",
-                value: `${format(minPayment)} ${useToken}`,
+                value: `${format(minPayment, useToken)} ${useToken}`,
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} ${useToken}`,
+                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed, useToken)} ${useToken}`,
                 tooltip: {
                   content:
                     "The total amount you will owe if this payment transaction is successful",

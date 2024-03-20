@@ -100,7 +100,7 @@ export default function CreditStats({ vouchers }) {
             title="Available to Borrow"
             align="left"
             smallDecimals={true}
-            value={format(creditLimit)}
+            value={format(creditLimit, useToken)}
           />
 
           <Button
@@ -116,15 +116,15 @@ export default function CreditStats({ vouchers }) {
           m="24px 0 12px"
           items={[
             {
-              value: formattedNumber(owed),
+              value: formattedNumber(owed, useToken),
               color: "blue300",
             },
             {
-              value: formattedNumber(creditLimit, 2, false),
+              value: formattedNumber(creditLimit, useToken, 2, false),
               color: "blue800",
             },
             {
-              value: formattedNumber(unavailableBalance),
+              value: formattedNumber(unavailableBalance, useToken),
               color: "amber500",
             },
           ]}
@@ -138,7 +138,7 @@ export default function CreditStats({ vouchers }) {
               Borrowed
               <Tooltip
                 ml="4px"
-                title={`${format(owed)} ${useToken}`}
+                title={`${format(owed, useToken)} ${useToken}`}
                 content={`The amount of ${useToken} you are currently borrowing`}
               >
                 <InfoOutlinedIcon width="13px" />
@@ -153,7 +153,7 @@ export default function CreditStats({ vouchers }) {
               Available
               <Tooltip
                 ml="4px"
-                title={`${format(creditLimit, 2, false)} ${useToken}`}
+                title={`${format(creditLimit, useToken, 2, false)} ${useToken}`}
                 content={`The amount of ${useToken} currently available to borrow`}
               >
                 <InfoOutlinedIcon width="13px" />
@@ -168,7 +168,7 @@ export default function CreditStats({ vouchers }) {
               Unavailable
               <Tooltip
                 ml="4px"
-                title={`${format(unavailableBalance)} ${useToken}`}
+                title={`${format(unavailableBalance, useToken)} ${useToken}`}
                 content="Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time"
               >
                 <InfoOutlinedIcon width="13px" />
@@ -184,7 +184,7 @@ export default function CreditStats({ vouchers }) {
             token={`${useToken.toLowerCase()}`}
             title="Balance owed"
             align="left"
-            value={format(owed)}
+            value={format(owed, useToken)}
             smallDecimals={true}
           />
 
@@ -223,7 +223,7 @@ export default function CreditStats({ vouchers }) {
               <Text m="4px 0 0" size="medium">
                 {owed.lte(0)
                   ? "No payment due"
-                  : `${format(minPayment)} ${useToken} · ${absoluteDueDate}`}
+                  : `${format(minPayment, useToken)} ${useToken} · ${absoluteDueDate}`}
               </Text>
             )}
           </Box>

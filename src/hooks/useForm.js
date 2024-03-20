@@ -11,11 +11,11 @@ const empty = {
   formatted: "",
 };
 
-const formatValue = (value, rounded) =>
-  format(value, 2, rounded).replace(/,/g, "");
+const formatValue = (value, useToken, rounded) =>
+  format(value, useToken, 2, rounded).replace(/,/g, "");
 
 export default function useForm(props = {}) {
-  const { validate } = props;
+  const { validate, useToken } = props;
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -40,7 +40,7 @@ export default function useForm(props = {}) {
             }
           : {
               raw: value,
-              display: formatValue(value, rounded),
+              display: formatValue(value, useToken, rounded),
               formatted: formatEther(value),
             };
 

@@ -60,7 +60,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
   const validateStake = (inputs) => {
-    if (inputs.amount.display !== "" && inputs.amount.raw.lt(WAD)) {
+    if (inputs.amount.display !== "" && inputs.amount.raw.lt(WAD[useToken])) {
       return Errors.MIN_STAKE_LIMIT_REQUIRED;
     }
     if (inputs.amount.raw.gt(userStakeLimit)) {
@@ -87,6 +87,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     isErrored,
   } = useForm({
     validate: type === StakeType.STAKE ? validateStake : validateUnstake,
+    useToken,
   });
 
   const amount = values.amount || empty;
@@ -95,12 +96,12 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          rightLabel: `Max. ${format(maxUserStake)} ${useToken}`,
+          rightLabel: `Max. ${format(maxUserStake, useToken)} ${useToken}`,
           rightLabelAction: () => setRawValue("amount", maxUserStake, false),
         }
       : {
           label: "Amount to unstake",
-          rightLabel: `Max. ${format(maxUserUnstake)} ${useToken}`,
+          rightLabel: `Max. ${format(maxUserUnstake, useToken)} ${useToken}`,
           rightLabelAction: () => setRawValue("amount", maxUserUnstake, false),
         };
 
@@ -135,14 +136,14 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             items={[
               {
                 label: "Currently staked",
-                value: `${format(stakedBalance)} ${useToken}`,
+                value: `${format(stakedBalance, useToken)} ${useToken}`,
                 tooltip: {
                   content: `Amount of ${useToken} you have staked in the protocol`,
                 },
               },
               {
                 label: "Your locked stake",
-                value: `${format(totalLockedStake)} ${useToken}`,
+                value: `${format(totalLockedStake, useToken)} ${useToken}`,
                 tooltip: {
                   content: `This is ${useToken} you cant withdraw because it is currently underwriting a Borrow you vouched for`,
                 },
@@ -150,17 +151,17 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
               type === StakeType.STAKE
                 ? {
                     label: "Available to stake",
-                    value: `${format(maxUserStake)} ${useToken}`,
+                    value: `${format(maxUserStake, useToken)} ${useToken}`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
                   }
                 : {
                     label: "Available to unstake",
-                    value: `${format(maxUserUnstake)} ${useToken}`,
+                    value: `${format(maxUserUnstake, useToken)} ${useToken}`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
                   },
               type === StakeType.STAKE && {
                 label: "Staking limit",
-                value: `${format(maxStakeAmount)} ${useToken}`,
+                value: `${format(maxStakeAmount, useToken)} ${useToken}`,
                 error: errors.amount === Errors.MAX_STAKE_LIMIT_EXCEEDED,
                 tooltip: {
                   content: "A contract defined maximum any one account can stake in the protocol",

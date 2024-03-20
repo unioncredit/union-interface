@@ -68,7 +68,7 @@ export default function VouchersCard() {
                     </Text>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{format(vouch)}</TableCell>
+                <TableCell align="right">{format(vouch, useToken)}</TableCell>
               </TableRow>
             ))}
           </Table>

@@ -85,7 +85,7 @@ export default function WelcomeModal() {
             </Heading>
             <Text m={0} size="medium" color="blue100">
               You just joined Union's credit network on {chain.name} with a starting credit line of{" "}
-              {format(creditLimit)} {useToken}
+              {format(creditLimit, useToken)} {useToken}
             </Text>
 
             <Box fluid mt="24px">

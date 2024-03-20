@@ -45,7 +45,13 @@ export default function PublicWriteOffDebtModal({ address }) {
     }
   };
 
-  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    errors = {},
+    values = {},
+    empty,
+  } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -71,7 +77,7 @@ export default function PublicWriteOffDebtModal({ address }) {
               align="left"
               token={useToken.toLowerCase()}
               title="Amount in default"
-              value={format(owed)}
+              value={format(owed, useToken)}
             />
 
             <Input
@@ -83,7 +89,8 @@ export default function PublicWriteOffDebtModal({ address }) {
               value={amount.display}
               onChange={register("amount")}
               rightLabel={`Max. ${format(
-                tokenBalance.gte(owed) ? owed : tokenBalance
+                tokenBalance.gte(owed) ? owed : tokenBalance,
+                useToken
               )} ${useToken}`}
               rightLabelAction={() =>
                 setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
@@ -96,11 +103,11 @@ export default function PublicWriteOffDebtModal({ address }) {
               items={[
                 {
                   label: `Your ${useToken} balance`,
-                  value: `${format(tokenBalance)} ${useToken}`,
+                  value: `${format(tokenBalance, useToken)} ${useToken}`,
                 },
                 {
                   label: "New amount in default",
-                  value: `${format(owed.sub(amount.raw))} ${useToken}`,
+                  value: `${format(owed.sub(amount.raw), useToken)} ${useToken}`,
                 },
               ]}
             />

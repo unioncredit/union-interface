@@ -83,7 +83,7 @@ export default function VouchersStep() {
                     </TableCell>
                     <TableCell align="right">
                       <Text grey={800} size="medium" weight="medium" m={0}>
-                        {format(trust)} {useToken}
+                        {format(trust, useToken)} {useToken}
                       </Text>
                     </TableCell>
                   </TableRow>

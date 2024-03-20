@@ -86,7 +86,7 @@ export default function BorrowersCard() {
               <TableCell align="center">
                 <StatusBadge address={address} />
               </TableCell>
-              <TableCell align="right">{format(locking)}</TableCell>
+              <TableCell align="right">{format(locking, useToken)}</TableCell>
             </TableRow>
           ))}
         </Table>
