@@ -9,7 +9,7 @@ import usePollMemberData from "hooks/usePollMember";
 import useRelatedAddresses from "hooks/useRelatedAddresses";
 import { useSettings } from "providers/Settings";
 
-const selectMemberData = (data) => {
+const selectMemberData = (data, useToken) => {
   const [
     isMember = false,
     creditLimit = ZERO,
@@ -57,7 +57,7 @@ const selectMemberData = (data) => {
   };
 
   if (owed.gt(ZERO)) {
-    result.minPayment = calculateMinPayment(interest);
+    result.minPayment = calculateMinPayment(interest, useToken);
   }
 
   return result;
@@ -199,7 +199,7 @@ export function useMemberData(address, chainId, forceVersion) {
       !!unionContract?.address &&
       !!uTokenContract?.address &&
       !!comptrollerContract?.address,
-    select: (data) => selectMemberData(data),
+    select: (data) => selectMemberData(data, useToken),
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
