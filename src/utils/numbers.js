@@ -80,7 +80,7 @@ export const calculateExpectedMinimumPayment = (
   overdueBlocks,
   useToken
 ) => {
-  const floor = parseUnits("0.01", useToken);
+  const floor = parseUnits("0.01", UNIT[useToken]);
   const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD[useToken]);
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
