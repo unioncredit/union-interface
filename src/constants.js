@@ -13,6 +13,12 @@ export const WAD = {
   USDC: BigNumber.from("1000000"),
 };
 
+export const UNIT = {
+  DAI: 18,
+  UNION: 18,
+  USDC: 6,
+};
+
 export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
 export const STALE_TIME = 30_000; // 30 seconds

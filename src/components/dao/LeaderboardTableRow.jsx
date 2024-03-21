@@ -5,13 +5,7 @@ import { ZERO } from "constants";
 import { compactFormattedNumber } from "utils/format";
 
 export function LeaderboardTableRow({ data }) {
-  const {
-    address,
-    unionBalance = ZERO,
-    votes = ZERO,
-    delegatedVotes = ZERO,
-    voteCount = 0,
-  } = data;
+  const { address, unionBalance = ZERO, votes = ZERO, delegatedVotes = ZERO, voteCount = 0 } = data;
 
   return (
     <TableRow key={address}>
@@ -29,15 +23,11 @@ export function LeaderboardTableRow({ data }) {
         </Box>
       </TableCell>
       <TableCell align="right">{voteCount}</TableCell>
+      <TableCell align="right">{compactFormattedNumber(unionBalance, "UNION")}</TableCell>
       <TableCell align="right">
-        {compactFormattedNumber(unionBalance)}
+        {compactFormattedNumber(delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes, "UNION")}
       </TableCell>
-      <TableCell align="right">
-        {compactFormattedNumber(
-          delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes
-        )}
-      </TableCell>
-      <TableCell align="right">{compactFormattedNumber(votes)}</TableCell>
+      <TableCell align="right">{compactFormattedNumber(votes, "UNION")}</TableCell>
     </TableRow>
   );
 }

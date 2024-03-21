@@ -37,7 +37,7 @@ export default function ProtocolData() {
       <Card.Body>
         <ProtocolBalances protocol={protocol} useToken={useToken} />
         <ProtocolLimits mt="16px" protocol={protocol} useToken={useToken} />
-        <ProtocolFees mt="16px" protocol={protocol} chainId={network.chainId} />
+        <ProtocolFees mt="16px" protocol={protocol} chainId={network.chainId} useToken={useToken} />
         <ProtocolPeriods mt="16px" protocol={protocol} chainId={network.chainId} />
       </Card.Body>
     </Card>
