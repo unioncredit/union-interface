@@ -40,13 +40,11 @@ export function Approval({
     Contract Functions
    --------------------------------------------------------------*/
 
-  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead(
-    {
-      ...tokenConfig,
-      functionName: "allowance",
-      args: [owner, spender],
-    }
-  );
+  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead({
+    ...tokenConfig,
+    functionName: "allowance",
+    args: [owner, spender],
+  });
 
   const permitApproveProps = usePermit({
     type: permit.type,
@@ -63,18 +61,19 @@ export function Approval({
     method: "approve",
     args: [spender, ethers.constants.MaxUint256],
     enabled: amount.gt(0) && allowance.lt(amount),
-    onComplete: refetchAllowance,
+    onComplete: async () => {
+      await refetchAllowance();
+    },
   });
 
   const txButtonProps = useWrite({
     contract: actionProps.contract,
-    method:
-      requireApproval && permitArgs ? permit.functionName : actionProps.method,
+    method: requireApproval && permitArgs ? permit.functionName : actionProps.method,
     args: requireApproval && permitArgs ? permitArgs : actionProps.args,
     enabled: !requireApproval || allowance.gte(amount) || permitArgs,
-    onComplete: () => {
+    onComplete: async () => {
+      await refetchMember();
       close();
-      refetchMember();
     },
     overrides: actionProps.overrides,
   });
@@ -102,17 +101,13 @@ export function Approval({
   useEffect(() => {
     if (amount.gt(0)) {
       if (requireApproval && amount.gt(allowance) && !permitArgs) {
-        const buttonProps = gasless
-          ? permitApproveProps
-          : transactionApproveProps;
+        const buttonProps = gasless ? permitApproveProps : transactionApproveProps;
 
         // The amount is more than the allowance so we
         // need to prompt the user to approve this contract
         setAction({
           ...buttonProps,
-          label: buttonProps.loading
-            ? "Approving..."
-            : "Approve",
+          label: buttonProps.loading ? "Approving..." : "Approve",
           loading: false,
           disabled: buttonProps.loading,
         });
@@ -127,14 +122,7 @@ export function Approval({
       // Display an initial state while we wait for the user input
       setAction(initialButtonProps);
     }
-  }, [
-    permitArgs,
-    gasless,
-    amount,
-    transactionApproveProps,
-    txButtonProps,
-    permitApproveProps,
-  ]);
+  }, [permitArgs, gasless, amount, transactionApproveProps, txButtonProps, permitApproveProps]);
 
   /**
    * Handle setting the items props for the multi step button based
