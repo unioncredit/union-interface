@@ -1,9 +1,9 @@
 import "./HeaderMobileMenu.scss";
-import { Box, NavItem } from "@unioncredit/ui";
+import { Box, NavItem, Toggle } from "@unioncredit/ui";
 import { Link } from "react-router-dom";
 import { createElement } from "react";
 
-export function HeaderMobileMenu({ navLinks, footerLinks, closeMenu }) {
+export function HeaderMobileMenu({ navLinks, footerLinks, closeMenu, settings, showTestNets }) {
   return (
     <Box className="HeaderMobileMenu" direction="vertical">
       <Box className="HeaderMobileMenu__navigation" direction="vertical">
@@ -29,6 +29,15 @@ export function HeaderMobileMenu({ navLinks, footerLinks, closeMenu }) {
             </>
           );
         })}
+        <Toggle
+          active={settings.showTestnets}
+          color="secondary"
+          label="Show TestNets"
+          labelPosition="start"
+          onChange={() => {
+            showTestNets();
+          }}
+        />
       </Box>
     </Box>
   );
