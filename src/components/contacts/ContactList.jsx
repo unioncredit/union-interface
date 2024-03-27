@@ -1,7 +1,7 @@
 import "./ContactList.scss";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
+import { Box, Card, EmptyState, Pagination } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
 import { filterFunctions } from "components/contacts/FiltersPopover";
@@ -19,6 +19,7 @@ import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/
 import { compareAddresses } from "utils/compare";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import { useModals } from "providers/ModalManager";
+import { PROVIDING_FILTERS, RECEIVING_FILTERS, useSettings } from "../../providers/Settings";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -70,6 +71,7 @@ export default function ContactList({ initialType }) {
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
+  const { settings, setSetting } = useSettings();
 
   const [contactIndex, setContactIndex] = useState(null);
   const [query, setQuery] = useState(null);
@@ -89,7 +91,17 @@ export default function ContactList({ initialType }) {
 
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
-    return urlSearchParams.has("filters") ? urlSearchParams.get("filters").split(",") : [];
+    if (urlSearchParams.has("filters")) {
+      return urlSearchParams.get("filters").split(",");
+    }
+
+    const storedFilters =
+      settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
+    if (storedFilters) {
+      return storedFilters;
+    }
+
+    return [];
   });
 
   const setContact = (contact) => {
@@ -108,6 +120,11 @@ export default function ContactList({ initialType }) {
     if (contactIndex > 0) {
       setContactIndex((index) => index - 1);
     }
+  };
+
+  const handleSetFilters = (filters) => {
+    setFilters(filters);
+    setSetting(type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS, filters);
   };
 
   useEffect(() => {
@@ -210,13 +227,13 @@ export default function ContactList({ initialType }) {
             setSort({ type: null, order: null });
             setType(t);
           }}
-          clearFilters={() => setFilters([])}
+          clearFilters={() => handleSetFilters([])}
         />
         <ContactsFilterControls
           type={type}
           filters={filters}
           setQuery={setQuery}
-          setFilers={setFilters}
+          setFilers={handleSetFilters}
         />
       </Box>
 
