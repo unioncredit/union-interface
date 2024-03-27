@@ -18,6 +18,8 @@ const SettingsContext = createContext({
 export const GASLESS_APPROVALS = "gasless-approvals";
 export const PROVIDING_FILTERS = "providing-filters";
 export const RECEIVING_FILTERS = "receiving-filters";
+export const PROVIDING_SORT = "providing-sort";
+export const RECEIVING_SORT = "receiving-sort";
 
 export const useSettings = () => useContext(SettingsContext);
 
