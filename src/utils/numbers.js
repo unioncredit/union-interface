@@ -70,8 +70,8 @@ export const calculateMinPayment = (interest, useToken) => {
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };
 
-export const calculateInterestRate = (borrowRatePerUnit, chainId) => {
-  return borrowRatePerUnit.mul(BlocksPerYear[chainId]);
+export const calculateInterestRate = (borrowRatePerUnit, chainId, useToken) => {
+  return borrowRatePerUnit.mul(BlocksPerYear[chainId]).div(10 ** (18 - UNIT[useToken]));
 };
 
 export const calculateExpectedMinimumPayment = (

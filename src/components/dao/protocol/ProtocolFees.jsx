@@ -13,9 +13,10 @@ export function ProtocolFees({ protocol, chainId, useToken, ...props }) {
   const { borrowRatePerSecond = ZERO, borrowRatePerBlock = ZERO, originationFee = ZERO } = protocol;
 
   const borrowRatePerUnit = versioned(borrowRatePerBlock, borrowRatePerSecond);
-
   const interest = formatUnits(
-    borrowRatePerUnit.mul(versioned(BlocksPerYear[chainId], SECONDS_PER_YEAR)),
+    borrowRatePerUnit
+      .mul(versioned(BlocksPerYear[chainId], SECONDS_PER_YEAR))
+      .div(10 ** (18 - UNIT[useToken])),
     decimals
   );
 

@@ -12,7 +12,7 @@ import {
   NumericalRows,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
-
+import { BigNumber } from "ethers";
 import format from "utils/format";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
@@ -79,7 +79,7 @@ export default function BorrowModal() {
 
   const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
-  const fee = amount.raw.mul(originationFee).div(WAD[useToken]);
+  const fee = amount.raw.mul(originationFee).div(BigNumber.from("1000000000000000000"));
 
   const borrow = amount.raw.add(fee);
 
@@ -102,7 +102,6 @@ export default function BorrowModal() {
       close();
     },
   });
-
   /*--------------------------------------------------------------
     Render Component 
    --------------------------------------------------------------*/
@@ -161,7 +160,7 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100),
+                  calculateInterestRate(borrowRatePerUnit, chain.id, useToken).mul(100),
                   useToken
                 )}% APR`,
                 tooltip: {

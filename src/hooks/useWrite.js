@@ -32,7 +32,7 @@ export default function useWrite({
 
   const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
 
-  const { config } = usePrepareContractWrite({
+  let { config } = usePrepareContractWrite({
     ...contractConfig,
     functionName: method,
     args: memoisedArgs,
