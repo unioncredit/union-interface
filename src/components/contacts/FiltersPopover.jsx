@@ -20,7 +20,6 @@ export const filterFunctions = {
 };
 
 export default function FiltersPopover({ type, filters, setFilters }) {
-  console.log({ filters });
   const { isMobile } = useResponsive();
   const setScrollLock = useScrollLock();
 
