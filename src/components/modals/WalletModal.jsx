@@ -7,6 +7,8 @@ import {
   NumericalRows,
   ClaimIcon,
   GovernanceIcon,
+  Tooltip,
+  LockIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -16,6 +18,7 @@ import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
 import { Link } from "react-router-dom";
 import { useNetwork } from "wagmi";
+import { VOUCH_MODAL } from "./VouchModal";
 
 export const WALLET_MODAL = "wallet-modal";
 
@@ -25,7 +28,7 @@ export default function WalletModal() {
 
   const { data: member = {}, refetch } = useMember();
 
-  const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
+  const { isOverdue, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
   const totalBalance = unionBalance.add(unclaimedRewards);
 
@@ -73,13 +76,21 @@ export default function WalletModal() {
             ]}
           />
 
-          <Button
-            fluid
-            size="large"
-            icon={ClaimIcon}
-            label="Claim UNION"
-            {...buttonProps}
-          />
+          {isOverdue ? (
+            <Tooltip content="You cannot claim rewards while in default" w="100%">
+              <Button
+                size="large"
+                icon={LockIcon}
+                label="Claim UNION"
+                {...buttonProps}
+                disabled={true}
+                fluid
+              />
+            </Tooltip>
+          ) : (
+            <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
+          )}
+
           <Button
             fluid
             as={Link}
