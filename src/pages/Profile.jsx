@@ -1,6 +1,15 @@
 import "./Profile.scss";
 
-import { ArrowLeftIcon, Box, Button, Card, Layout, UnionIcon } from "@unioncredit/ui";
+import {
+  ArrowLeftIcon,
+  Box,
+  Button,
+  Card,
+  InfoBanner,
+  Layout,
+  UnionIcon,
+  WarningIcon,
+} from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
 import { Helmet } from "react-helmet";
@@ -12,7 +21,7 @@ import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
 
-function ProfileInner({ address, member, chainId }) {
+function ProfileInner({ address, member, chainId, legacyTag }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -31,6 +40,24 @@ function ProfileInner({ address, member, chainId }) {
         label={historyExists ? "Back" : "Union dashboard"}
         icon={historyExists ? ArrowLeftIcon : UnionIcon}
       />
+
+      {legacyTag && (
+        <a
+          target="_blank"
+          rel="noreferrer"
+          style={{ width: "100%" }}
+          href={`https://v1.union.finance/profile/${legacyTag}:${address}`}
+        >
+          <InfoBanner
+            mb="16px"
+            icon={WarningIcon}
+            variant="warning"
+            label={
+              "You seem to be looking for a legacy (v1) profile, click here to view their profile on the v1 mirror."
+            }
+          />
+        </a>
+      )}
 
       {/*--------------------------------------------------------------
         Profile Header 
@@ -82,7 +109,12 @@ export default function Profile() {
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <Layout.Columned mt="24px" maxw="653px">
-        <ProfileInner chainId={chainId} address={profileAddress} member={member} />
+        <ProfileInner
+          chainId={chainId}
+          address={profileAddress}
+          member={member}
+          legacyTag={addressOrEnsParam.match(/^(eth|arb1|goe):/)?.[1]}
+        />
       </Layout.Columned>
     </>
   );
