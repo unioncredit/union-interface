@@ -46,11 +46,11 @@ export function ProfileSidebar({ address, member, chainId }) {
             items={[
               {
                 value: formattedNumber(owed),
-                color: "blue300",
+                color: "blue100",
               },
               {
                 value: formattedNumber(creditLimit, 2, false),
-                color: "blue800",
+                color: "blue900",
               },
               {
                 value: formattedNumber(unavailableBalance),
@@ -66,7 +66,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               token="dai"
               size="regular"
               title="Borrowed"
-              dotColor="blue300"
+              dotColor="blue900"
               value={format(owed)}
               titleTooltip={{
                 content: "The amount of DAI you are currently borrowing",
@@ -79,7 +79,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               token="dai"
               size="regular"
               title="Available"
-              dotColor="blue800"
+              dotColor="blue100"
               value={format(creditLimit, 2, false)}
               titleTooltip={{
                 content: "The amount of DAI currently available to borrow",
