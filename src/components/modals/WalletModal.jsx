@@ -1,12 +1,12 @@
 import {
-  Modal,
-  ModalOverlay,
   Box,
   Button,
-  NumericalBlock,
-  NumericalRows,
   ClaimIcon,
   GovernanceIcon,
+  Modal,
+  ModalOverlay,
+  NumericalBlock,
+  NumericalRows,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -37,7 +37,10 @@ export default function WalletModal() {
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unclaimedRewards.gt(0),
-    onComplete: refetch,
+    onComplete: async () => {
+      await refetch();
+      close();
+    },
   });
 
   /*--------------------------------------------------------------
@@ -73,13 +76,7 @@ export default function WalletModal() {
             ]}
           />
 
-          <Button
-            fluid
-            size="large"
-            icon={ClaimIcon}
-            label="Claim UNION"
-            {...buttonProps}
-          />
+          <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
           <Button
             fluid
             as={Link}
