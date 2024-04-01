@@ -40,7 +40,7 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
     }
 
     staker !== ZERO_ADDRESS && loadData();
-  }, [version, chain.id, borrower, staker]);
+  }, [version, chain.id, borrower, staker, cached, cacheKey, cache]);
 
   return { data, loading };
 }

@@ -4,7 +4,12 @@ import { ZERO } from "constants";
 import format from "utils/format";
 
 export function ProtocolLimits({ protocol, useToken, ...props }) {
-  const { minBorrow = ZERO, maxBorrow = ZERO, debtCeiling = ZERO } = protocol;
+  const {
+    minBorrow = ZERO,
+    maxBorrow = ZERO,
+    maxStakeAmount = ZERO,
+    debtCeiling = ZERO,
+  } = protocol;
 
   const limits = [
     {
@@ -14,6 +19,10 @@ export function ProtocolLimits({ protocol, useToken, ...props }) {
     {
       title: "Max. Borrow",
       value: format(maxBorrow, useToken),
+    },
+    {
+      title: "Max. Stake",
+      value: format(maxStakeAmount),
     },
     {
       title: "Global Max.",

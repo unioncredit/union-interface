@@ -8,7 +8,10 @@ export function LeaderboardTableRow({ data }) {
   const { address, unionBalance = ZERO, votes = ZERO, delegatedVotes = ZERO, voteCount = 0 } = data;
 
   return (
-    <TableRow key={address}>
+    <TableRow
+      key={address}
+      onClick={() => window.open(`https://www.tally.xyz/gov/union/delegate/${address}`, "_blank")}
+    >
       <TableCell fixedSize>
         <Avatar size={24} address={address} />
       </TableCell>

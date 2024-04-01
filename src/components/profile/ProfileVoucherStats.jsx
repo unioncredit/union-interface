@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getProfileUrl } from "../../utils/generateLinks";
 
 export function ProfileVoucherStats({ vouchers, vouchees, chainId, useToken }) {
-  const topVouchers = [...vouchers].sort((a, b) => a.vouch.lt(b.vouch)).slice(0, 3);
+  const topVouchers = [...vouchers].sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1)).slice(0, 3);
 
   return (
     vouchers.length > 0 && (

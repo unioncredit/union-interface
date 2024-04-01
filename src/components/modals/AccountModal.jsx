@@ -112,7 +112,7 @@ export default function AccountModal() {
             />
           </Box>
 
-          <Box direction="vertical">
+          <Box direction="vertical" fluid>
             {logs.length <= 0 ? (
               <Text grey={400} size="small" m={0}>
                 No activity logs

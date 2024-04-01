@@ -31,7 +31,6 @@ import { useAppNetwork } from "./providers/Network";
 import useReferrer from "./hooks/useReferrer";
 
 export default function App() {
-  useMemberListener();
   useChainParams();
 
   const location = useLocation();
@@ -108,6 +107,7 @@ function AppReadyShim() {
   const { isConnected } = useAccount();
   const { data: member } = useMember();
   const { forceAppReady } = useAppNetwork();
+  useMemberListener();
 
   const appReady =
     forceAppReady ||

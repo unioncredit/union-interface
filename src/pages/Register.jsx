@@ -98,7 +98,7 @@ export default function RegisterPage() {
                 <a href="#step-3" style={{ textDecoration: "underline" }}>
                   skip to the end
                 </a>{" "}
-                if impatient)
+                and register)
               </>
             </Text>
 
