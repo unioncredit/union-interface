@@ -13,9 +13,11 @@ export function useVoteParticipation(address) {
 
       setVoteCount(userVotes.length);
       setProposalCount(proposals.length);
-      setPercentage((parseFloat(userVotes.length) / parseFloat(proposals.length)) * 100);
+      setPercentage(
+        ((parseFloat(userVotes.length) / parseFloat(proposals.length)) * 100).toFixed(2)
+      );
     })();
-  }, []);
+  }, [address]);
 
   return { voteCount, proposalCount, percentage };
 }
