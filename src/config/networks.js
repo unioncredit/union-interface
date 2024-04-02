@@ -1,6 +1,4 @@
-import { optimismGoerli } from "wagmi/chains";
-
-export const testNetworkIds = [optimismGoerli.id, 84532];
+export const testNetworkIds = [84532];
 
 export const unsupportedNetwork = {
   type: "unsupported",
@@ -31,20 +29,6 @@ export const supportedNetworks = [
     chainId: 10,
     networkData: {
       chainId: "0xa",
-    },
-  },
-  {
-    type: "optimism-goerli",
-    id: "optimism-goerli",
-    imageSrc: "/networks/gorli.png",
-    value: "optimism-goerli",
-    label: "Optimism Goerli",
-    labelWithVersion: "Optimism Goerli (v2)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/gorli-avatar.png",
-    chainId: 420,
-    networkData: {
-      chainId: "0x1A4",
     },
   },
   {
