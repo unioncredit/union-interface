@@ -1,5 +1,6 @@
 import "./FiltersPopover.scss";
 
+import cn from "classnames";
 import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
 
 import useScrollLock from "hooks/useScrollLock";
@@ -9,7 +10,7 @@ import { ContactsType, ZERO } from "constants";
 // prettier-ignore
 export const filterFunctions = {
   // vouchee filters
-  borrowing:  (item) => item.locking.gt(ZERO),
+  borrowing:  (item) => item.locking?.gt(ZERO),
   notMember:  (item) => !item.isMember,
   inactive:   (item) => !item.isOverdue && item.isMember,
   overdue:    (item) => item.isOverdue,
@@ -44,6 +45,9 @@ export default function FiltersPopover({ type, filters, setFilters }) {
           fluid
           icon={FilterIcon}
           color="secondary"
+          className={cn("FiltersPopover__button", {
+            "FiltersPopover__button--active": Array.isArray(filters) && filters.length > 0,
+          })}
           variant="light"
           onClick={() => {
             toggleOpen();

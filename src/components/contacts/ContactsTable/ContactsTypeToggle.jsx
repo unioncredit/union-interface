@@ -2,7 +2,7 @@ import { Box, SegmentedControl } from "@unioncredit/ui";
 import { ContactsType } from "constants";
 import { Link } from "react-router-dom";
 
-export const ContactsTypeToggle = ({ type, setType, clearFilters }) => (
+export const ContactsTypeToggle = ({ type, setType }) => (
   <Box fluid>
     <SegmentedControl
       value={type}
@@ -10,7 +10,6 @@ export const ContactsTypeToggle = ({ type, setType, clearFilters }) => (
       initialActive={type === ContactsType.VOUCHEES ? 0 : 1}
       onChange={(tab) => {
         setType(tab.id);
-        clearFilters();
       }}
       items={[
         {

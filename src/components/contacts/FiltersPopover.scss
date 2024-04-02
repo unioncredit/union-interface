@@ -13,4 +13,12 @@
       margin-bottom: 8px;
     }
   }
+
+  &__button--active {
+    border: 1px solid $blue600 !important;
+
+    path {
+      fill: $blue600;
+    }
+  }
 }

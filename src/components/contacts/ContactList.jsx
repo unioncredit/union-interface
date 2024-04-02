@@ -1,7 +1,7 @@
 import "./ContactList.scss";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
+import { Box, Card, EmptyState, Pagination } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
 import { filterFunctions } from "components/contacts/FiltersPopover";
@@ -19,6 +19,13 @@ import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/
 import { compareAddresses } from "utils/compare";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import { useModals } from "providers/ModalManager";
+import {
+  PROVIDING_FILTERS,
+  PROVIDING_SORT,
+  RECEIVING_FILTERS,
+  RECEIVING_SORT,
+  useSettings,
+} from "../../providers/Settings";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -70,13 +77,19 @@ export default function ContactList({ initialType }) {
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
+  const { settings, setSetting } = useSettings();
 
   const [contactIndex, setContactIndex] = useState(null);
   const [query, setQuery] = useState(null);
   const [type, setType] = useState(initialType);
 
-  const [sort, setSort] = useState(
-    type === ContactsType.VOUCHEES
+  const [sort, setSort] = useState(() => {
+    const storedSort = settings[type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT];
+    if (storedSort && storedSort.order !== null) {
+      return storedSort;
+    }
+
+    return type === ContactsType.VOUCHEES
       ? {
           type: PROVIDING_COLUMNS.LOAN_STATUS.id,
           order: SortOrder.DESC,
@@ -84,12 +97,22 @@ export default function ContactList({ initialType }) {
       : {
           type: null,
           order: null,
-        }
-  );
+        };
+  });
 
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
-    return urlSearchParams.has("filters") ? urlSearchParams.get("filters").split(",") : [];
+    if (urlSearchParams.has("filters")) {
+      return urlSearchParams.get("filters").split(",");
+    }
+
+    const storedFilters =
+      settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
+    if (storedFilters) {
+      return storedFilters;
+    }
+
+    return [];
   });
 
   const setContact = (contact) => {
@@ -110,6 +133,11 @@ export default function ContactList({ initialType }) {
     }
   };
 
+  const handleSetFilters = (newFilters) => {
+    setFilters(newFilters);
+    setSetting(type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS, newFilters);
+  };
+
   useEffect(() => {
     const urlSearchParams = locationSearch();
     if (urlSearchParams.has("address")) {
@@ -120,6 +148,19 @@ export default function ContactList({ initialType }) {
       );
     }
   }, []);
+
+  useEffect(() => {
+    const storedFilters =
+      settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
+    const storedSort = settings[type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT];
+
+    if (storedFilters) {
+      setFilters(storedFilters);
+    }
+    if (storedSort && storedSort.order !== null) {
+      setSort(storedSort);
+    }
+  }, [settings, type]);
 
   useEffect(() => {
     const contact = filteredAndSorted[contactIndex];
@@ -183,20 +224,25 @@ export default function ContactList({ initialType }) {
       : searched;
 
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
-  }, [sort, filters, JSON.stringify(searched)]);
+  }, [filters, searched, sort.type, sort.order]);
 
   const handleSort = (sortType) => {
     if (sort.type !== sortType) {
-      return setSort({
+      const newSort = {
         type: sortType,
         order: SortOrder.DESC,
-      });
+      };
+      setSetting(type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT, newSort);
+      setSort(newSort);
+      return;
     }
 
-    setSort({
+    const newSort = {
       ...sort,
       order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
-    });
+    };
+    setSetting(type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT, newSort);
+    setSort(newSort);
   };
 
   const { data: contactsPage, maxPages, activePage, onChange } = usePagination(filteredAndSorted);
@@ -204,19 +250,12 @@ export default function ContactList({ initialType }) {
   return (
     <Card className="ContactList" overflow="visible">
       <Box className="ContactList__header" p="24px" align="center">
-        <ContactsTypeToggle
-          type={type}
-          setType={(t) => {
-            setSort({ type: null, order: null });
-            setType(t);
-          }}
-          clearFilters={() => setFilters([])}
-        />
+        <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
           type={type}
           filters={filters}
           setQuery={setQuery}
-          setFilers={setFilters}
+          setFilers={handleSetFilters}
         />
       </Box>
 
@@ -235,7 +274,7 @@ export default function ContactList({ initialType }) {
               data={contactsPage}
               setContact={setContact}
               sort={sort}
-              setSort={setSort}
+              setSort={handleSort}
             />
           ) : (
             <DesktopContactsTable
