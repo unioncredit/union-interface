@@ -28,12 +28,16 @@ import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
+import { useSettings } from "providers/Settings";
 
 export default function VouchersStep() {
   const { data: vouchersData = [] } = useVouchers();
   const { open } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const profileUrl = `https://app.union.finance${getProfileUrl(address, chain.id)}`;
 
@@ -79,7 +83,7 @@ export default function VouchersStep() {
                     </TableCell>
                     <TableCell align="right">
                       <Text grey={800} size="medium" weight="medium" m={0}>
-                        {format(trust)} DAI
+                        {format(trust, useToken)} {useToken}
                       </Text>
                     </TableCell>
                   </TableRow>

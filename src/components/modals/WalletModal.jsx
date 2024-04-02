@@ -54,7 +54,7 @@ export default function WalletModal() {
               align="center"
               size="large"
               title={`Total ${chain.name} Balance`}
-              value={format(totalBalance)}
+              value={format(totalBalance, "UNION")}
               token="union"
             />
           </Box>
@@ -64,22 +64,16 @@ export default function WalletModal() {
             items={[
               {
                 label: "Wallet",
-                value: `${format(unionBalance)} UNION`,
+                value: `${format(unionBalance, "UNION")} UNION`,
               },
               {
                 label: "Unclaimed",
-                value: `${format(unclaimedRewards)} UNION`,
+                value: `${format(unclaimedRewards, "UNION")} UNION`,
               },
             ]}
           />
 
-          <Button
-            fluid
-            size="large"
-            icon={ClaimIcon}
-            label="Claim UNION"
-            {...buttonProps}
-          />
+          <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
           <Button
             fluid
             as={Link}

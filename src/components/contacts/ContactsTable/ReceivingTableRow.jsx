@@ -34,7 +34,7 @@ export const COLUMNS = {
   },
 };
 
-export function ReceivingTableRow({ data, active, setContact, providing, receiving }) {
+export function ReceivingTableRow({ data, active, setContact, providing, receiving, useToken }) {
   const { address, locking = ZERO, trust = ZERO, vouch = ZERO } = data;
 
   const borrowable = vouch.sub(locking);
@@ -48,7 +48,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
-          value={`${format(trust)} DAI`}
+          value={`${format(trust, useToken)} ${useToken}`}
         />
       ),
     },
@@ -58,7 +58,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch)} DAI`}
+          value={`${format(vouch, useToken)} ${useToken}`}
         />
       ),
     },
@@ -68,7 +68,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.REAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch)} DAI`}
+          value={`${format(vouch, useToken)} ${useToken}`}
         />
       ),
     },
@@ -78,7 +78,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.LOCKING.id}
           dimmed={locking.eq(ZERO)}
-          value={`${format(locking)} DAI`}
+          value={`${format(locking, useToken)} ${useToken}`}
         />
       ),
     },
@@ -88,7 +88,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.BORROWABLE.id}
           dimmed={borrowable.eq(ZERO)}
-          value={`${format(borrowable)} DAI`}
+          value={`${format(borrowable, useToken)} ${useToken}`}
         />
       ),
     },

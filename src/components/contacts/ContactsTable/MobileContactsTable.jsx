@@ -13,10 +13,14 @@ import {
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import { compareAddresses } from "utils/compare";
+import { useSettings } from "providers/Settings";
 
 export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const [selectedColumn, setSelectedColumn] = useState(
     type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS.LOAN_STATUS : RECEIVING_COLUMNS.TRUST_SET
@@ -65,6 +69,7 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
             setContact={setContact}
             providing={vouchees.find((v) => compareAddresses(v.address, row.address))}
             receiving={vouchers.find((v) => compareAddresses(v.address, row.address))}
+            useToken={useToken}
           />
         )
       )}

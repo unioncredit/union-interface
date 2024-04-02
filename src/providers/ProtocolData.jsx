@@ -4,6 +4,7 @@ import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
 import { ZERO } from "constants";
+import { useSettings } from "providers/Settings";
 import { getVersion, Versions } from "./Version";
 
 const ProtocolContext = createContext({});
@@ -20,9 +21,12 @@ const buildContractConfigs = (contract, calls, chainId) =>
 export const useProtocolData = (chainId) => {
   const version = getVersion(chainId);
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const isMainnet = chainId === mainnet.id;
-  const daiContract = useContract("dai", chainId, version);
+  const tokenContract = useContract(useToken.toLowerCase(), chainId, version);
   const uTokenContract = useContract("uToken", chainId, version);
   const userManagerContract = useContract("userManager", chainId, version);
   const comptrollerContract = useContract("comptroller", chainId, version);
@@ -35,7 +39,7 @@ export const useProtocolData = (chainId) => {
   const assetManagerCalls = [
     {
       functionName: "getLoanableAmount",
-      args: [daiContract.address],
+      args: [tokenContract.address],
     },
   ];
 

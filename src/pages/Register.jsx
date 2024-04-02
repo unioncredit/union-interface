@@ -25,6 +25,7 @@ import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useRef } from "react";
 import useResponsive from "hooks/useResponsive";
 import { EthRegisterButton } from "../components/register/EthRegisterButton";
+import { useSettings } from "providers/Settings";
 
 export default function RegisterPage() {
   const { open } = useModals();
@@ -32,6 +33,9 @@ export default function RegisterPage() {
   const { data: vouchersData = [] } = useVouchers();
   const { data: member = {} } = useMember();
   const { isTablet } = useResponsive();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance?.gt(ZERO));
 
@@ -67,7 +71,7 @@ export default function RegisterPage() {
   };
 
   const vouchComplete = vouchers.length > 0;
-  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(WAD);
+  const stakeComplete = isMember || unionBalance?.add(unclaimedRewards).gte(WAD["UNION"]);
 
   const items = [
     { number: 1, complete: stakeComplete, scrollTo: stakeStep },
@@ -133,8 +137,9 @@ export default function RegisterPage() {
                       </Heading>
                       <Text grey={500} size="medium">
                         Register your address in order to access{" "}
-                        {creditLimit.gt(ZERO) && `your $${format(creditLimit)} in credit and`} all
-                        the benefits of being a member of the union credit network
+                        {creditLimit.gt(ZERO) &&
+                          `your $${format(creditLimit, useToken)} in credit and`}{" "}
+                        all the benefits of being a member of the union credit network
                       </Text>
 
                       <Box mt="16px" className="Register__container" justify="center">
@@ -146,7 +151,7 @@ export default function RegisterPage() {
 
                             <Box className="Register__fee-container" align="center">
                               <Text size="large" grey={700} m={0} weight="medium">
-                                {format(ethRegisterFee, 10, false, true, false)}
+                                {format(ethRegisterFee, "UNION", 10, false, true, false)}
                               </Text>
 
                               <EthereumIcon width="16px" style={{ marginLeft: "5px" }} />

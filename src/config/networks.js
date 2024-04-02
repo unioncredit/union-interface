@@ -1,6 +1,6 @@
 import { optimismGoerli } from "wagmi/chains";
 
-export const testNetworkIds = [optimismGoerli.id];
+export const testNetworkIds = [optimismGoerli.id, 84532];
 
 export const unsupportedNetwork = {
   type: "unsupported",
@@ -59,6 +59,20 @@ export const supportedNetworks = [
     chainId: 1,
     networkData: {
       chainId: "0x1",
+    },
+  },
+  {
+    type: "base-sepolia",
+    id: "base-sepolia",
+    imageSrc: "/networks/gorli.png",
+    value: "base-sepolia",
+    label: "Base Sepolia",
+    labelWithVersion: "Base Sepolia (v2)",
+    description: "Use Union on a testnet",
+    avatar: "/networks/gorli-avatar.png",
+    chainId: 84532,
+    networkData: {
+      chainId: "0x14A34",
     },
   },
 ];

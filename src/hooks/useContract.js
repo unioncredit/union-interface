@@ -57,6 +57,19 @@ import {
   vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
 } from "config/contracts/v2/optimism";
 
+import {
+  assetManagerContract as BASE_SEPOLIA_V2_assetManagerContract,
+  comptrollerContract as BASE_SEPOLIA_V2_comptrollerContract,
+  usdcContract as BASE_SEPOLIA_V2_usdcContract,
+  referralContract as BASE_SEPOLIA_V2_referralContract,
+  registerHelperContract as BASE_SEPOLIA_V2_registerHelperContract,
+  unionContract as BASE_SEPOLIA_V2_unionContract,
+  unionLensContract as BASE_SEPOLIA_V2_unionLensContract,
+  userManagerContract as BASE_SEPOLIA_V2_userManagerContract,
+  uTokenContract as BASE_SEPOLIA_V2_uTokenContract,
+  vouchFaucetContract as BASE_SEPOLIA_V2_vouchFaucet,
+} from "config/contracts/v2/base-sepolia";
+
 import { useVersion, Versions } from "providers/Version";
 
 export default function useContract(name, chainId, forceVersion) {
@@ -117,6 +130,19 @@ export default function useContract(name, chainId, forceVersion) {
       vouchFaucet: OPTIMISM_V2_vouchFaucet,
       registerHelper: OPTIMISM_V2_registerHelperContract,
       referral: OPTIMISM_V2_referralContract,
+    },
+    [84532]: {
+      // base sepolia
+      userManager: BASE_SEPOLIA_V2_userManagerContract,
+      uToken: BASE_SEPOLIA_V2_uTokenContract,
+      union: BASE_SEPOLIA_V2_unionContract,
+      usdc: BASE_SEPOLIA_V2_usdcContract,
+      comptroller: BASE_SEPOLIA_V2_comptrollerContract,
+      assetManager: BASE_SEPOLIA_V2_assetManagerContract,
+      unionLens: BASE_SEPOLIA_V2_unionLensContract,
+      vouchFaucet: BASE_SEPOLIA_V2_vouchFaucet,
+      registerHelper: BASE_SEPOLIA_V2_registerHelperContract,
+      referral: BASE_SEPOLIA_V2_referralContract,
     },
   };
 

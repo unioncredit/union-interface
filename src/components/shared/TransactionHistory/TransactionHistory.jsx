@@ -3,6 +3,7 @@ import "./TransactionHistory.scss";
 import { Table, TableCell, TableRow, Skeleton, Pagination, TableHead, Box } from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
+import { useSettings } from "providers/Settings";
 import useTxHistory from "hooks/useTxHistory";
 import usePagination from "hooks/usePagination";
 import { TransactionHistoryRow } from "./TransactionHistoryRow";
@@ -14,7 +15,9 @@ export function TransactionHistory({
   showEmptyRows = false,
 }) {
   const { data = [], loading = true } = useTxHistory({ staker, borrower });
-
+  const {
+    settings: { useToken },
+  } = useSettings();
   const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
 
   return (
@@ -23,7 +26,7 @@ export function TransactionHistory({
         <TableRow>
           <TableHead></TableHead>
           <TableHead>Transaction</TableHead>
-          <TableHead align="right">Value (DAI)</TableHead>
+          <TableHead align="right">Value ({useToken})</TableHead>
         </TableRow>
 
         {transactionPage.map((tx, i) => (

@@ -8,6 +8,7 @@ import useContract from "hooks/useContract";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
+import { useSettings } from "providers/Settings";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -25,10 +26,13 @@ export default function useWrite({
   const { addToast, closeToast } = useToasts();
   const contractConfig = useContract(contract);
   const [loading, setLoading] = useState(false);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
 
-  const { config } = usePrepareContractWrite({
+  let { config } = usePrepareContractWrite({
     ...contractConfig,
     functionName: method,
     args: memoisedArgs,
@@ -49,7 +53,7 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, chain.id, version);
+    const parseToast = createParseToast(method, memoisedArgs, chain.id, version, useToken);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
@@ -67,7 +71,7 @@ export default function useWrite({
 
       onComplete && (await onComplete());
 
-      addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
+      addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx, useToken));
       addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
 
       return true;

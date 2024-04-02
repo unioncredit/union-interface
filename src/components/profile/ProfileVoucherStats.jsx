@@ -6,7 +6,7 @@ import format from "utils/format";
 import { Link } from "react-router-dom";
 import { getProfileUrl } from "../../utils/generateLinks";
 
-export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
+export function ProfileVoucherStats({ vouchers, vouchees, chainId, useToken }) {
   const topVouchers = [...vouchers].sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1)).slice(0, 3);
 
   return (
@@ -52,7 +52,11 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
                 </Box>
               </Link>
 
-              <Badge color="grey" label={`${format(vouch)} DAI`} borderColor="#E4E4E7" />
+              <Badge
+                color="grey"
+                label={`${format(vouch, useToken)} ${useToken}`}
+                borderColor="#E4E4E7"
+              />
             </Box>
           ))}
         </Box>

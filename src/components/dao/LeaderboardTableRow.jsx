@@ -26,11 +26,11 @@ export function LeaderboardTableRow({ data }) {
         </Box>
       </TableCell>
       <TableCell align="right">{voteCount}</TableCell>
-      <TableCell align="right">{compactFormattedNumber(unionBalance)}</TableCell>
+      <TableCell align="right">{compactFormattedNumber(unionBalance, "UNION")}</TableCell>
       <TableCell align="right">
-        {compactFormattedNumber(delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes)}
+        {compactFormattedNumber(delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes, "UNION")}
       </TableCell>
-      <TableCell align="right">{compactFormattedNumber(votes)}</TableCell>
+      <TableCell align="right">{compactFormattedNumber(votes, "UNION")}</TableCell>
     </TableRow>
   );
 }
