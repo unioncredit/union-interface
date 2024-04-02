@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { isAddress } from "ethers/lib/utils";
-import { useEnsName, useEnsAddress } from "wagmi";
-import { Input, Text, Box, LoadingSpinner, EnsIcon } from "@unioncredit/ui";
+import { useEnsAddress, useEnsName } from "wagmi";
+import { Box, EnsIcon, Input, LoadingSpinner, Text } from "@unioncredit/ui";
 
 import { Errors } from "constants";
 import { Avatar } from "components/shared";
 
 export function AddressInput(props) {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(props.defaultValue);
   const [error, setError] = useState(null);
 
   const { data: ens, isLoading: isLoadingName } = useEnsName({
@@ -38,6 +38,10 @@ export function AddressInput(props) {
     } else if (value.startsWith("0x") && value.length >= 42) {
       // Input value is not an address OR ENS so set an error
       setError(Errors.INVALID_ADDRESS_OR_ENS);
+    } else {
+      setValue(value);
+      setError(null);
+      props.onChange(null);
     }
   };
 
@@ -49,6 +53,11 @@ export function AddressInput(props) {
   useEffect(() => {
     if (address && props.onChange) {
       props.onChange(address);
+    }
+
+    // Input value looks like an ENS but it is not valid
+    if (value?.endsWith(".eth") && !isLoadingAddress && !addressFromEns) {
+      setError(Errors.INVALID_ADDRESS_OR_ENS);
     }
   }, [address, props.onChange]);
 

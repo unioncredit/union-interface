@@ -5,7 +5,11 @@
     flex-direction: column !important;
   }
 
-  .AvatarBadgeRow {
+  .DepositButton {
+    border: 1px solid $blue800;
+  }
+
+  .AvatarBadgeRow:not(.Withdrawable) {
     &:hover {
       background: $grey100;
     }
@@ -37,6 +41,9 @@
 
       &:not(:last-of-type) {
         margin-bottom: 8px;
+      }
+      .NumericalBlock__value {
+        margin: 0 !important;
       }
     }
 

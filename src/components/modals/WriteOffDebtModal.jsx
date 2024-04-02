@@ -1,6 +1,7 @@
 import {
   Button,
   Dai,
+  Usdc,
   Input,
   Text,
   Modal,
@@ -18,6 +19,9 @@ import { Errors } from "constants";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
+import { useAccount } from "wagmi";
+import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
@@ -29,9 +33,12 @@ export default function WriteOffDebtModal({
   contactsCount,
   clearContact,
 }) {
+  const { address: connectedAddress } = useAccount();
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
-
+  const {
+    settings: { useToken },
+  } = useSettings();
   const vouchee = useVouchee(address);
 
   const { locking = ZERO, isOverdue } = vouchee;
@@ -63,14 +70,14 @@ export default function WriteOffDebtModal({
     errors = {},
     values = {},
     empty,
-  } = useForm({ validate });
+  } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
   const buttonProps = useWrite({
     contract: "userManager",
     method: "debtWriteOff",
-    args: [vouchee.address, amount.raw],
+    args: [connectedAddress, vouchee.address, amount.raw],
     enabled: isOverdue && vouchee?.address && amount.raw.gt(ZERO),
     onComplete: async () => {
       await refetchVouchees();
@@ -88,9 +95,9 @@ export default function WriteOffDebtModal({
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               title="Balance owed"
-              value={format(locking)}
+              value={format(locking, useToken)}
             />
 
             <Input
@@ -101,9 +108,9 @@ export default function WriteOffDebtModal({
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(locking)} DAI`}
+              rightLabel={`Max. ${format(locking, useToken)} ${useToken}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
-              suffix={<Dai />}
+              suffix={<Token />}
             />
 
             <NumericalRows
@@ -111,24 +118,17 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw))} DAI`,
+                  value: `${format(locking.sub(amount.raw), useToken)} ${useToken}`,
                 },
               ]}
             />
 
             <Button fluid label="Write-off debt" {...buttonProps} />
-            <Button
-              fluid
-              mt="8px"
-              label="Cancel"
-              color="secondary"
-              variant="light"
-              onClick={back}
-            />
+            <Button fluid mt="8px" label="Back" color="secondary" variant="light" onClick={back} />
 
             <Text m="16px 0 0" grey={600}>
-              When you write-off the debt of a vouchee, your locked funds are
-              consumed and cannot be redeemed.
+              When you write-off the debt of a vouchee, your locked funds are consumed and cannot be
+              redeemed.
             </Text>
           </Modal.Container>
         </Modal.Body>

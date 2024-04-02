@@ -5,7 +5,7 @@ import { truncateAddress, truncateEns } from "utils/truncateAddress";
 import useLabels from "hooks/useLabels";
 import { vouchFaucetContract } from "config/contracts/v2/optimismGoerli";
 
-export function PrimaryLabel({ address }) {
+export function PrimaryLabel({ address, shouldTruncate = true }) {
   const { chain } = useNetwork();
   const { data } = useEnsName({
     address,
@@ -18,5 +18,9 @@ export function PrimaryLabel({ address }) {
     return "Testnet Vouch Faucet";
   }
 
-  return getLabel(address) || truncateEns(data) || truncateAddress(address);
+  return (
+    getLabel(address) ||
+    (data && (shouldTruncate ? truncateEns(data) : data)) ||
+    (shouldTruncate ? truncateAddress(address) : address)
+  );
 }

@@ -1,6 +1,10 @@
 @import "@unioncredit/ui/src/variables";
 
 .ContactList {
+  .table {
+    overflow: visible;
+  }
+
   .table-head {
     color: $grey700;
   }
@@ -33,10 +37,12 @@
       }
 
       .button {
-        height: 40px;
-        padding-left: 8px !important;
-        padding-right: 12px !important;
-        font-size: 14px !important;
+        &:not(.ResetAccountStatusButton) {
+          height: 40px;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+          font-size: 14px !important;
+        }
 
         &--noLabel {
           width: 40px;

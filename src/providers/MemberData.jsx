@@ -1,14 +1,15 @@
 import { useAccount, useContractReads } from "wagmi";
 import { createContext, useContext } from "react";
 
-import { STALE_TIME, CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
 import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
 import usePollMemberData from "hooks/usePollMember";
 import useRelatedAddresses from "hooks/useRelatedAddresses";
+import { useSettings } from "providers/Settings";
 
-const selectMemberData = (data) => {
+const selectMemberData = (data, useToken) => {
   const [
     isMember = false,
     creditLimit = ZERO,
@@ -16,16 +17,17 @@ const selectMemberData = (data) => {
     totalLockedStake = ZERO,
     memberFrozen = ZERO,
     unionBalance = ZERO,
-    daiBalance = ZERO,
+    tokenBalance = ZERO,
     unclaimedRewards = ZERO,
     owed = ZERO,
     interest = ZERO,
     lastRepay = ZERO,
-    votes = ZERO,
-    delegate = ZERO_ADDRESS,
     isOverdue = false,
     rewardsMultiplier = ZERO,
+    referrer = ZERO_ADDRESS,
     // Versioned values
+    votes = ZERO,
+    delegate = ZERO_ADDRESS,
     totalFrozenAmount = ZERO,
     borrowerAddresses = [],
     stakerAddresses = [],
@@ -41,11 +43,12 @@ const selectMemberData = (data) => {
     borrowerAddresses,
     stakerAddresses,
     unionBalance,
-    daiBalance,
+    tokenBalance,
     unclaimedRewards,
     owed,
     interest,
     lastRepay,
+    referrer,
     votes: votes || ZERO,
     delegate,
     isOverdue,
@@ -54,7 +57,7 @@ const selectMemberData = (data) => {
   };
 
   if (owed.gt(ZERO)) {
-    result.minPayment = calculateMinPayment(interest);
+    result.minPayment = calculateMinPayment(interest, useToken);
   }
 
   return result;
@@ -64,14 +67,18 @@ const MemberContext = createContext({});
 
 export const useMember = () => useContext(MemberContext);
 
-export function useMemberData(address, chainId) {
+export function useMemberData(address, chainId, forceVersion) {
   const { version } = useVersion();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
-  const daiContract = useContract("dai", chainId);
-  const unionContract = useContract("union", chainId);
-  const uTokenContract = useContract("uToken", chainId);
-  const userManagerContract = useContract("userManager", chainId);
-  const comptrollerContract = useContract("comptroller", chainId);
+  const tokenContract = useContract(useToken.toLowerCase(), chainId, forceVersion);
+  const unionContract = useContract("union", chainId, forceVersion);
+  const uTokenContract = useContract("uToken", chainId, forceVersion);
+  const userManagerContract = useContract("userManager", chainId, forceVersion);
+  const comptrollerContract = useContract("comptroller", chainId, forceVersion);
+  const referralContract = useContract("referral", chainId, forceVersion);
 
   const contracts = address
     ? [
@@ -106,17 +113,20 @@ export function useMemberData(address, chainId) {
           args: [address],
         },
         {
-          ...daiContract,
+          ...tokenContract,
           functionName: "balanceOf",
           args: [address],
         },
         {
           ...comptrollerContract,
-          functionName: version === Versions.V1 ? "calculateRewardsByBlocks" : "calculateRewards",
+          functionName:
+            (forceVersion || version) === Versions.V1
+              ? "calculateRewardsByBlocks"
+              : "calculateRewards",
           args:
-            version === Versions.V1
-              ? [address, daiContract.address, ZERO]
-              : [address, daiContract.address],
+            (forceVersion || version) === Versions.V1
+              ? [address, tokenContract.address, ZERO]
+              : [address, tokenContract.address],
         },
         {
           ...uTokenContract,
@@ -134,16 +144,6 @@ export function useMemberData(address, chainId) {
           args: [address],
         },
         {
-          ...unionContract,
-          functionName: "getCurrentVotes",
-          args: [address],
-        },
-        {
-          ...unionContract,
-          functionName: "delegates",
-          args: [address],
-        },
-        {
           ...uTokenContract,
           functionName: "checkIsOverdue",
           args: [address],
@@ -151,11 +151,26 @@ export function useMemberData(address, chainId) {
         {
           ...comptrollerContract,
           functionName: "getRewardsMultiplier",
-          args: [address, daiContract.address],
+          args: [address, tokenContract.address],
+        },
+        {
+          ...referralContract,
+          functionName: "referrers",
+          args: [address],
         },
         // Versioned values
-        ...(version === Versions.V1
+        ...((forceVersion || version) === Versions.V1
           ? [
+              {
+                ...unionContract,
+                functionName: "getCurrentVotes",
+                args: [address],
+              },
+              {
+                ...unionContract,
+                functionName: "delegates",
+                args: [address],
+              },
               {
                 ...userManagerContract,
                 functionName: "getTotalFrozenAmount",
@@ -179,12 +194,12 @@ export function useMemberData(address, chainId) {
   const { data, ...resp } = useContractReads({
     enabled:
       !!address &&
-      !!daiContract?.address &&
+      !!tokenContract?.address &&
       !!userManagerContract?.address &&
       !!unionContract?.address &&
       !!uTokenContract?.address &&
       !!comptrollerContract?.address,
-    select: (data) => selectMemberData(data),
+    select: (data) => selectMemberData(data, useToken),
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
@@ -197,7 +212,7 @@ export function useMemberData(address, chainId) {
     stakerAddresses = data?.stakerAddresses,
     borrowerAddresses = data?.borrowerAddresses,
     refetch: refetchRelated,
-  } = useRelatedAddresses(address, chainId);
+  } = useRelatedAddresses(address, chainId, forceVersion);
 
   return {
     data: {

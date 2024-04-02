@@ -18,6 +18,10 @@
   width: 100%;
   box-sizing: border-box;
 
+  .avatar {
+    background-color: transparent;
+  }
+
   .UnionWallet.button,
   .wallet.button,
   .Header__context-menu .PopoverMenu__button,
@@ -54,7 +58,7 @@
 }
 .Header__hamburger {
   padding: 11px !important;
-  background: #fafaf9 !important;
+  background: $grey50 !important;
 
   svg {
     height: 24px;
@@ -66,6 +70,8 @@
 }
 
 .Header__context-menu {
+  z-index: 1000;
+
   .PopoverMenu__button {
     border: 1px solid $grey200;
     border-radius: 8px;

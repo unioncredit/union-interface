@@ -21,34 +21,31 @@ import { STAKE_MODAL } from "components/modals/StakeModal";
 import { StakeType } from "constants";
 import { AddressesAvatarBadgeRow } from "components/shared";
 import { Link } from "react-router-dom";
+import { useSettings } from "providers/Settings";
 
 export default function StakeStats() {
   const { open } = useModals();
   const { data: member = {} } = useMember();
   const { data: vouchees = [] } = useVouchees();
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const withdrawableStake = stakedBalance.sub(totalLockedStake);
   const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
   const defaultedVouchees = vouchees.filter((v) => v.isOverdue);
-  const defaulted = defaultedVouchees
-    .map((v) => v.locking)
-    .reduce(reduceBnSum, ZERO);
+  const defaulted = defaultedVouchees.map((v) => v.locking).reduce(reduceBnSum, ZERO);
 
   return (
     <Card className="StakeStats">
       <Card.Body>
-        <Box
-          fluid
-          align="center"
-          justify="space-between"
-          className="StakeStats__top"
-        >
+        <Box fluid align="center" justify="space-between" className="StakeStats__top">
           <NumericalBlock
-            token="dai"
+            token={useToken.toLowerCase()}
             align="left"
             title="Your staked balance"
-            value={format(stakedBalance)}
+            value={format(stakedBalance, useToken)}
           />
 
           <ButtonRow>
@@ -65,6 +62,7 @@ export default function StakeStats() {
               size="large"
               label="Deposit"
               icon={DepositIcon}
+              className="DepositButton"
               onClick={() => open(STAKE_MODAL, { type: StakeType.STAKE })}
             />
           </ButtonRow>
@@ -74,56 +72,49 @@ export default function StakeStats() {
           m="24px 0"
           items={[
             {
-              value: formattedNumber(withdrawableStake),
+              value: formattedNumber(withdrawableStake, useToken),
               color: "blue500",
             },
             {
-              value: formattedNumber(totalLockedStake),
+              value: formattedNumber(totalLockedStake, useToken),
               color: "violet500",
             },
             {
-              value: formattedNumber(defaulted),
+              value: formattedNumber(defaulted, useToken),
               color: "red500",
             },
           ]}
         />
 
-        <Box
-          align="center"
-          justify="space-between"
-          className="StakeStats__bottom"
-        >
+        <Box align="center" justify="space-between" className="StakeStats__bottom">
           <Box fluid className="StakeStats__item">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Withdrawable"
               dotColor="blue500"
-              value={format(withdrawableStake)}
+              value={format(withdrawableStake, useToken)}
             />
 
-            <Link to="/contacts/providing">
-              <AddressesAvatarBadgeRow
-                mt="8px"
-                addresses={vouchees.map((v) => v.address)}
-                showLabel={!vouchees.length || vouchees.length > 6}
-                label={`Providing to ${
-                  vouchees.length ? vouchees.length : "no"
-                } contacts`}
-              />
-            </Link>
+            <AddressesAvatarBadgeRow
+              mt="8px"
+              className="Withdrawable"
+              addresses={vouchees.map((v) => v.address)}
+              showLabel={true}
+              label={`Providing to ${vouchees.length ? vouchees.length : "no"} contacts`}
+            />
           </Box>
 
           <Box fluid className="StakeStats__item">
             <NumericalBlock
               fluid
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Locked"
               dotColor="violet500"
-              value={format(totalLockedStake)}
+              value={format(totalLockedStake, useToken)}
             />
 
             <Link to="/contacts/providing?filters=borrowing">
@@ -132,10 +123,8 @@ export default function StakeStats() {
                 addresses={borrowingVouchees.map((v) => v.address)}
                 label={`${
                   borrowingVouchees.length ? borrowingVouchees.length : "No"
-                } contacts borrowing`}
-                showLabel={
-                  !borrowingVouchees.length || borrowingVouchees.length > 6
-                }
+                } Contacts Borrowing`}
+                showLabel={!borrowingVouchees.length || borrowingVouchees.length > 6}
               />
             </Link>
           </Box>
@@ -144,23 +133,19 @@ export default function StakeStats() {
             <NumericalBlock
               fluid
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               size="regular"
               title="Frozen"
               dotColor="red500"
-              value={format(defaulted)}
+              value={format(defaulted, useToken)}
             />
 
             <Link to="/contacts/providing?filters=overdue">
               <AddressesAvatarBadgeRow
                 mt="8px"
                 addresses={defaultedVouchees.map((v) => v.address)}
-                label={`${
-                  defaultedVouchees.length ? defaultedVouchees.length : "No"
-                } defaulters`}
-                showLabel={
-                  !defaultedVouchees.length || defaultedVouchees.length > 6
-                }
+                label={`${defaultedVouchees.length ? defaultedVouchees.length : "No"} Defaulters`}
+                showLabel={!defaultedVouchees.length || defaultedVouchees.length > 6}
               />
             </Link>
           </Box>

@@ -1,3 +1,5 @@
+import "./VouchModal.scss";
+
 import React, { useState } from "react";
 import {
   ExpandingInfo,
@@ -5,6 +7,7 @@ import {
   ModalOverlay,
   Input,
   Dai,
+  Usdc,
   Button,
   Box,
   WarningIcon,
@@ -23,10 +26,10 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
-import { BlockSpeed, SECONDS_PER_DAY, ZERO } from "constants";
-import { useVersion } from "providers/Version";
+import { SECONDS_PER_DAY, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
-import { useNetwork } from "wagmi";
+import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -38,32 +41,29 @@ export default function VouchModal({
   showAddressSummary = true,
   address: initialAddress = null,
 }) {
-  const { isV2 } = useVersion();
   const { close } = useModals();
-  const { chain } = useNetwork();
 
   const { data: protocol } = useProtocol();
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
-
-  const { values, errors = {}, register } = useForm();
+  const {
+    settings: { useToken },
+  } = useSettings();
+  const { values, errors = {}, register } = useForm({ useToken });
   const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);
 
-  const { overdueTime = ZERO, overdueBlocks = ZERO, maxOverdueTime = ZERO } = protocol;
+  const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const versioned = (v1, v2) => (isV2 ? v2 : v1);
-
-  const overdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
-    .mul(versioned(BlockSpeed[chain.id], 1))
+  const overdueDays = overdueTime
+    .mul(1000)
     .div(SECONDS_PER_DAY * 1000)
     .toNumber();
 
   const maxOverdueDays = maxOverdueTime
     .mul(1000)
-    .mul(versioned(BlockSpeed[chain.id], 1))
     .div(SECONDS_PER_DAY * 1000)
     .toNumber();
 
@@ -72,6 +72,7 @@ export default function VouchModal({
     method: "updateTrust",
     args: [address, values?.trust?.raw],
     enabled: values?.trust?.raw.gt(0) && address,
+    disabled: !address || values?.trust?.raw.lte(0),
     onComplete: async () => {
       await refetchMember();
       await refetchVouchees();
@@ -102,76 +103,64 @@ export default function VouchModal({
             onChange={setAddress}
           />
 
-          {address && (
-            <>
-              <Input
-                mt="16px"
-                type="number"
-                suffix={<Dai />}
-                error={errors.trust}
-                label="Trust amount"
-                onChange={register("trust")}
-              />
+          <Input
+            mt="16px"
+            type="number"
+            suffix={<Token />}
+            error={errors.trust}
+            label="Trust amount"
+            onChange={register("trust")}
+          />
 
-              <Box fluid mt="16px">
-                <HiddenInput
-                  w="100%"
-                  title="Contact alias"
-                  buttonProps={{
-                    w: "100%",
-                    h: "40px",
-                    icon: AddIcon,
-                    size: "small",
-                    color: "secondary",
-                    variant: "light",
-                    label: "Add a contact alias",
-                  }}
-                >
-                  <Input error={errors.name} onChange={register("name")} />
-                </HiddenInput>
-              </Box>
-
-              <NumericalRows
-                mt="24px"
-                items={[
-                  {
-                    label: "Time to default",
-                    value: `${overdueDays} days`,
-                    tooltip: {
-                      content:
-                        "How long an account can go without making at least a minimum payment",
-                    },
-                  },
-                  ...(isV2
-                    ? [
-                        {
-                          label: "Time to write-off",
-                          value: `${maxOverdueDays} days`,
-                          tooltip: {
-                            content:
-                              "Time an account can be in default until it can be publicly written-off",
-                          },
-                        },
-                      ]
-                    : []),
-                ]}
-              />
-            </>
-          )}
-
-          {isV2 && (
-            <ExpandingInfo
-              mt="16px"
-              icon={WarningIcon}
-              title="Vouching puts your staked funds at risk"
+          <Box fluid mt="16px">
+            <HiddenInput
+              w="100%"
+              title="Contact alias"
+              buttonProps={{
+                w: "100%",
+                h: "40px",
+                icon: AddIcon,
+                size: "small",
+                color: "secondary",
+                variant: "light",
+                label: "Add a contact alias",
+              }}
             >
-              <Text m={0}>
-                If an account you vouch for doesn't pay the minimum due within {overdueDays} days,
-                they'll be in a defaulted state. If they stay that way for {maxOverdueDays} days,
-                your stake could be lost permanently to cover their debt.
-              </Text>
-            </ExpandingInfo>
-          )}
+              <Input error={errors.name} onChange={register("name")} />
+            </HiddenInput>
+          </Box>
+
+          <NumericalRows
+            mt="24px"
+            items={[
+              {
+                label: "Time to default",
+                value: `${overdueDays} days`,
+                tooltip: {
+                  content: "How long an account can go without making at least a minimum payment",
+                },
+              },
+              {
+                label: "Time to write-off",
+                value: `${maxOverdueDays} days`,
+                tooltip: {
+                  content: "Time an account can be in default until it can be publicly written-off",
+                },
+              },
+            ]}
+          />
+
+          <ExpandingInfo
+            mt="16px"
+            icon={WarningIcon}
+            title="Vouching puts your staked funds at risk"
+          >
+            <Text m={0}>
+              If an account you vouch for doesn't pay the minimum due within {overdueDays} days,
+              they'll be in a defaulted state. If they stay that way for {maxOverdueDays} days, your
+              stake could be lost permanently to cover their debt.
+            </Text>
+          </ExpandingInfo>
 
           {newMember ? (
             <>

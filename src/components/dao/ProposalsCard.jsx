@@ -25,11 +25,9 @@ export default function ProposalsCard({
 }) {
   const { proposals: allProposals } = useGovernance();
 
-  const proposals = (
-    filter
-      ? allProposals.filter(filter)
-      : allProposals
-  ).sort((a, b) => b.startBlock.toNumber() - a.startBlock.toNumber());
+  const proposals = (filter ? allProposals.filter(filter) : allProposals).sort(
+    (a, b) => b.startBlock?.toNumber() - a.startBlock?.toNumber()
+  );
 
   return (
     <Card mt="24px">
@@ -61,12 +59,9 @@ export default function ProposalsCard({
 
 function ProposalRow({ chainId, hash, status, description, startBlock }) {
   const navigate = useNavigate();
-  const { relative: relativeProposalEndsTime } = useBlockTime(
-    startBlock,
-    chainId
-  );
+  const { relative: relativeProposalEndsTime } = useBlockTime(startBlock, chainId);
 
-  const id = description.split(":")[0];
+  const id = description.match(/UIP-\d+/)[0];
   const title =
     String(description)
       ?.replace(/\\{1,2}n/g, "\n")
@@ -81,9 +76,7 @@ function ProposalRow({ chainId, hash, status, description, startBlock }) {
           {title.length > maxStrLength && "..."}
         </Text>
         <Text color="grey500">
-          {status === "pending" || status === "active"
-            ? "Voting ends "
-            : "Ended "}
+          {status === "pending" || status === "active" ? "Voting ends " : "Ended "}
           {relativeProposalEndsTime}
         </Text>
       </TableCell>

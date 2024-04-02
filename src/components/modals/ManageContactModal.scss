@@ -2,9 +2,14 @@
 
 .ManageContactModal {
   overflow: visible;
+  max-height: calc(100% - 75px) !important;
 
   .modalHeader {
     position: relative;
+
+    @media screen and (max-width: 400px) {
+      padding: 26px 12px
+    }
   }
 
   .Card__body {
@@ -32,7 +37,7 @@
       font-weight: 500;
       height: 32px;
       padding: 6px 12px;
-      background: #5C5958;
+      background: #5c5958;
       margin: 0;
       box-sizing: border-box;
       border-radius: 16px;
@@ -45,7 +50,21 @@
       height: 32px;
       padding: 5px !important;
       border-radius: 50%;
-      background: #5C5958;
+      background: rgba(41, 37, 36, 0.75);
+
+      svg {
+        width: 100%;
+        max-width: 24px;
+        max-height: 24px;
+      }
+
+      &:hover {
+        background: rgba(41, 37, 36, 0.9);
+      }
+
+      &:active {
+        background: rgba(41, 37, 36, 1);
+      }
     }
 
     .button + * {
@@ -93,3 +112,4 @@
     }
   }
 }
+

@@ -1,33 +1,33 @@
 import "./AccountModal.scss";
 
 import {
-  Modal,
-  ModalOverlay,
+  Badge,
   Box,
   Button,
-  Heading,
-  Badge,
   ButtonRow,
   Card,
-  Text,
-  LinkOutIcon,
   DisconnectWalletIcon,
-  SuccessIcon,
   FailedIcon,
+  Heading,
+  LinkOutIcon,
+  Modal,
+  ModalOverlay,
   ProfileIcon,
+  SuccessIcon,
+  Text,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
-
 import { useModals } from "providers/ModalManager";
 import { Link } from "react-router-dom";
 import format from "utils/format";
 import { useAppLogs } from "providers/AppLogs";
-import { Status } from "constants";
+import { EIP3770, Status } from "constants";
 import { truncateAddress } from "utils/truncateAddress";
 import { Avatar, PrimaryLabel } from "components/shared";
-import { EIP3770 } from "constants";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
-import { blockExplorerAddress } from "utils/blockExplorer";
+import { InvitedByInput } from "./AccountModal/InvitedByInput";
+import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
+import { useSettings } from "providers/Settings";
 
 export const ACCOUNT_MODAL = "account-modal";
 
@@ -39,6 +39,9 @@ export default function AccountModal() {
   const { disconnect } = useDisconnect();
   const [copied, copy] = useCopyToClipboard();
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   return (
     <ModalOverlay onClick={close}>
@@ -91,6 +94,8 @@ export default function AccountModal() {
               }}
             />
           </ButtonRow>
+
+          <InvitedByInput />
         </Modal.Body>
 
         <Card.Footer direction="vertical" fluid>
@@ -107,7 +112,7 @@ export default function AccountModal() {
             />
           </Box>
 
-          <Box direction="vertical">
+          <Box direction="vertical" fluid>
             {logs.length <= 0 ? (
               <Text grey={400} size="small" m={0}>
                 No activity logs
@@ -129,9 +134,9 @@ export default function AccountModal() {
                   </Box>
                   <Box align="center">
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
-                      {format(value)}
+                      {format(value, useToken)}
                     </Text>
-                    <a href="#" target="_blank">
+                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
                       <LinkOutIcon width="16px" />
                     </a>
                   </Box>

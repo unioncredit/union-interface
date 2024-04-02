@@ -1,12 +1,13 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useContractReads, useNetwork } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import useContract from "hooks/useContract";
-import { useMember } from "providers/MemberData";
+import { useMemberData } from "providers/MemberData";
 import usePopulateEns from "hooks/usePopulateEns";
-import { ZERO, STALE_TIME, CACHE_TIME } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
+import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "./Version";
 
 const VoucheesContext = createContext({});
@@ -34,21 +35,23 @@ const selectVouchee = (version) => (data) => ({
   lastRepay: data[4],
 });
 
-export default function VoucheesData({ children }) {
+export const useVoucheesData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
-  const { data: member = {} } = useMember();
-  const { address, isConnected } = useAccount();
+  const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
-  const daiContract = useContract("dai");
-  const unionLens = useContract("unionLens");
-  const uTokenContract = useContract("uToken");
-  const userManagerContract = useContract("userManager");
+  const tokenContract = useContract(useToken.toLowerCase(), chainId, forcedVersion);
+  const unionLens = useContract("unionLens", chainId, forcedVersion);
+  const uTokenContract = useContract("uToken", chainId, forcedVersion);
+  const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
   const { borrowerAddresses } = member;
 
   const buildVoucheeQueries = (staker, borrower) => [
     { ...userManagerContract, functionName: "checkIsMember", args: [borrower] },
-    version === Versions.V1
+    (forcedVersion || version) === Versions.V1
       ? {
           ...userManagerContract,
           functionName: "getBorrowerAsset",
@@ -57,7 +60,7 @@ export default function VoucheesData({ children }) {
       : {
           ...unionLens,
           functionName: "getRelatedInfo",
-          args: [daiContract.address, staker, borrower],
+          args: [tokenContract.address, staker, borrower],
         },
     {
       ...uTokenContract,
@@ -89,24 +92,29 @@ export default function VoucheesData({ children }) {
       const chunked = chunk(data, chunkSize);
 
       return chunked.map((chunk, i) => ({
-        ...selectVouchee(version)(chunk),
+        ...selectVouchee(forcedVersion || version)(chunk),
         address: borrowerAddresses[i],
       }));
     },
-    contracts: contracts,
+    contracts: contracts.map((contract) => ({
+      ...contract,
+      chainId,
+    })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
   });
 
   useEffect(() => {
-    if (address && isConnected && borrowerAddresses?.length > 0) resp.refetch();
-  }, [address, resp.refetch, borrowerAddresses?.length, isConnected]);
+    if (address && borrowerAddresses?.length > 0) resp.refetch();
+  }, [address, resp.refetch, borrowerAddresses?.length]);
 
-  const data = usePopulateEns(resp.data);
+  return { ...resp, data: usePopulateEns(resp.data) };
+};
 
-  return (
-    <VoucheesContext.Provider value={{ ...resp, data }}>
-      {children}
-    </VoucheesContext.Provider>
-  );
+export default function VoucheesData({ children }) {
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const data = useVoucheesData(address, chain?.id);
+
+  return <VoucheesContext.Provider value={{ ...data }}>{children}</VoucheesContext.Provider>;
 }

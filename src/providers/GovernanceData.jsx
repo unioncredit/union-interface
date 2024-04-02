@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { request, gql } from "graphql-request";
 import { useContractReads } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -92,11 +86,7 @@ const selectProposals = (data) => {
         Number(
           proposal.forVotes
             .mul("1000")
-            .div(
-              proposal.againstVotes
-                .add(proposal.forVotes)
-                .add(proposal.abstainVotes)
-            )
+            .div(proposal.againstVotes.add(proposal.forVotes).add(proposal.abstainVotes))
             .toString()
         ) / 1000,
     };
@@ -109,10 +99,7 @@ function useProposals() {
   const governorContract = useContract("governor", mainnet.id, Versions.V1);
 
   const getProposals = useCallback(async () => {
-    const resp = await request(
-      TheGraphUrls[Versions.V1][mainnet.id],
-      proposalsQuery
-    );
+    const resp = await request(TheGraphUrls[Versions.V1][mainnet.id], proposalsQuery);
     const proposals = resp.proposals;
 
     return Promise.all(
@@ -141,7 +128,7 @@ function useProposals() {
   );
 
   const { data: proposalsMetadata } = useContractReads({
-    enables: proposals?.length > 0,
+    enabled: proposals?.length > 0,
     select: selectProposals,
     contracts,
   });
@@ -169,9 +156,5 @@ function useProposals() {
 export default function GovernanceData({ children }) {
   const { data: proposals } = useProposals();
 
-  return (
-    <GovernanceContext.Provider value={{ proposals }}>
-      {children}
-    </GovernanceContext.Provider>
-  );
+  return <GovernanceContext.Provider value={{ proposals }}>{children}</GovernanceContext.Provider>;
 }

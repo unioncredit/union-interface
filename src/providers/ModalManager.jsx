@@ -1,11 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { createContext, useContext, useEffect, useState } from "react";
 
-import VouchLinkModal, {
-  VOUCH_LINK_MODAL,
-} from "components/modals/VouchLinkModal";
-import ManageContactModal, {
-  MANAGE_CONTACT_MODAL,
-} from "components/modals/ManageContactModal";
+import VouchLinkModal, { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
+import ManageContactModal, { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import VouchModal from "components/modals/VouchModal";
 import AccountModal, { ACCOUNT_MODAL } from "components/modals/AccountModal";
 import StakeModal, { STAKE_MODAL } from "components/modals/StakeModal";
@@ -14,10 +11,12 @@ import RepayModal, { REPAY_MODAL } from "components/modals/RepayModal";
 import BorrowModal, { BORROW_MODAL } from "components/modals/BorrowModal";
 import DelegateModal, { DELEGATE_MODAL } from "components/modals/DelegateModal";
 import EditVouchModal, { EDIT_VOUCH_MODAL } from "components/modals/EditVouch";
-import WriteOffDebtModal, {
-  WRITE_OFF_DEBT_MODAL,
-} from "components/modals/WriteOffDebtModal";
+import WriteOffDebtModal, { WRITE_OFF_DEBT_MODAL } from "components/modals/WriteOffDebtModal";
 import WelcomeModal, { WELCOME_MODAL } from "components/modals/WelcomeModal";
+import PublicWriteOffDebtModal, {
+  PUBLIC_WRITE_OFF_DEBT_MODAL,
+} from "../components/modals/PublicWriteOffDebtModal";
+import ShareReferralModal, { SHARE_REFERRAL_MODAL } from "../components/modals/ShareReferralModal";
 
 const ModalContext = createContext({});
 
@@ -32,16 +31,23 @@ const modals = {
   [REPAY_MODAL]: RepayModal,
   [STAKE_MODAL]: StakeModal,
   [VOUCH_LINK_MODAL]: VouchLinkModal,
+  [SHARE_REFERRAL_MODAL]: ShareReferralModal,
   // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
   ["vouch-modal"]: VouchModal,
   [WALLET_MODAL]: WalletModal,
   [WELCOME_MODAL]: WelcomeModal,
   [WRITE_OFF_DEBT_MODAL]: WriteOffDebtModal,
+  [PUBLIC_WRITE_OFF_DEBT_MODAL]: PublicWriteOffDebtModal,
 };
 
 export default function ModalManager({ children }) {
+  const location = useLocation();
   const [props, setProps] = useState(null);
   const [modal, setModal] = useState(null);
+
+  useEffect(() => {
+    close();
+  }, [location]);
 
   const close = () => {
     document.body.classList.remove("no-scroll");

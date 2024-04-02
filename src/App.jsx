@@ -1,14 +1,13 @@
-import { useEffect } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { Box, Layout, Grid } from "@unioncredit/ui";
-import { matchRoutes, useLocation } from "react-router-dom";
+import { Box, Grid, Layout } from "@unioncredit/ui";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { Analytics } from "@vercel/analytics/react";
 
 import Routes from "./Routes";
 
 import ConnectPage from "pages/Connect";
 import { Header } from "components/shared/Header";
-import { allRoutes, general as generalRoutes } from "App.routes";
 import ScrollToTop from "components/misc/ScrollToTop";
 
 import Cache from "providers/Cache";
@@ -16,7 +15,6 @@ import ModalManager from "providers/ModalManager";
 import VouchersData from "providers/VouchersData";
 import VoucheesData from "providers/VoucheesData";
 import ProtocolData from "providers/ProtocolData";
-import { useAppNetwork } from "providers/Network";
 import useMemberListener from "hooks/useMemberListener";
 import GovernanceData from "providers/GovernanceData";
 import MemberData, { useMember } from "providers/MemberData";
@@ -24,80 +22,50 @@ import { isVersionSupported, useVersion } from "providers/Version";
 import Settings from "providers/Settings";
 import useChainParams from "hooks/useChainParams";
 import ErrorPage from "pages/Error";
-import { BuildInfo } from "components/shared/BuildInfo";
+import { FooterLinks } from "components/shared/FooterLinks";
 import LoadingPage from "pages/Loading";
 import NotFoundPage from "pages/NotFoundPage";
-
-/**
- * Shim component that checks if the App is ready
- */
-function AppReadyShim({ children }) {
-  const location = useLocation();
-
-  const { chain } = useNetwork();
-  const { isDisconnected } = useAccount();
-  const { data: member = {} } = useMember();
-  const { appReady, setAppReady } = useAppNetwork();
-
-  const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
-
-  useMemberListener();
-  useChainParams();
-
-  useEffect(() => {
-    // If we are viewing a general route such as governance or
-    // a member profile then we skip the ready (connect) page
-    if (isGeneralRoute) {
-      !appReady && setAppReady(true);
-      return;
-    }
-
-    if (chain && appReady && (isDisconnected || chain?.unsupported)) {
-      setAppReady(false);
-    }
-  }, [
-    appReady,
-    member?.isMember,
-    chain?.unsupported,
-    isDisconnected,
-    isGeneralRoute,
-    JSON.stringify(chain),
-  ]);
-
-  return <>{children}</>;
-}
+import { useSupportedNetwork } from "./hooks/useSupportedNetwork";
+import { is404, isGeneralRoute } from "./utils/routes";
+import { useAppNetwork } from "./providers/Network";
+import useReferrer from "./hooks/useReferrer";
 
 export default function App() {
+  useChainParams();
+
   const location = useLocation();
 
   const { chain } = useNetwork();
   const { version } = useVersion();
   const { isConnected } = useAccount();
-  const { appReady } = useAppNetwork();
+  const { set: setReferrer } = useReferrer();
 
-  const isGeneralRoute = Boolean(matchRoutes(generalRoutes, location));
+  // Parses referrer address from "refAddress" query parameter and
+  // stores it in local storage
+  const [searchParams] = useSearchParams();
+  const referrer = searchParams.get("refAddress");
+  if (referrer) {
+    setReferrer(referrer);
+  }
 
-  const is404 = !allRoutes.some((r) => r.path === location.pathname);
-
-  if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute)) {
+  if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute(location))) {
     return (
-      <AppReadyShim>
-        <Layout>
-          <ScrollToTop />
-          <Layout.Main>
-            <Header showNav={false} />
-            <Grid style={{ display: "flex", flexGrow: 1 }}>
-              <Grid.Row style={{ width: "100%", margin: 0 }}>
-                <Grid.Col>
-                  <ErrorBoundary FallbackComponent={ErrorPage}>
-                    {is404 ? <NotFoundPage /> : <ConnectPage />}
-                  </ErrorBoundary>
-                </Grid.Col>
-              </Grid.Row>
-            </Grid>
-          </Layout.Main>
-        </Layout>
-      </AppReadyShim>
+      <Layout>
+        <ScrollToTop />
+        <Layout.Main>
+          <Header />
+          <Grid style={{ display: "flex", flexGrow: 1 }}>
+            <Grid.Row style={{ width: "100%", margin: 0 }}>
+              <Grid.Col>
+                <ErrorBoundary FallbackComponent={ErrorPage}>
+                  {is404(location) ? <NotFoundPage /> : <ConnectPage />}
+                </ErrorBoundary>
+              </Grid.Col>
+            </Grid.Row>
+          </Grid>
+        </Layout.Main>
+        <Analytics />
+      </Layout>
     );
   }
 
@@ -113,32 +81,8 @@ export default function App() {
                   <VouchersData>
                     <VoucheesData>
                       <ModalManager>
-                        <AppReadyShim>
-                          <Header />
-                          {isVersionSupported(version, chain.id) ? (
-                            <Grid style={{ display: "flex", flexGrow: 1 }}>
-                              <Grid.Row style={{ width: "100%", margin: 0 }}>
-                                <Grid.Col>
-                                  {is404 ? (
-                                    <NotFoundPage />
-                                  ) : appReady ? (
-                                    <>
-                                      <ErrorBoundary FallbackComponent={ErrorPage}>
-                                        <Layout.Columned>
-                                          <Routes />
-                                        </Layout.Columned>
-                                      </ErrorBoundary>
-                                    </>
-                                  ) : (
-                                    <ConnectPage />
-                                  )}
-                                </Grid.Col>
-                              </Grid.Row>
-                            </Grid>
-                          ) : (
-                            <LoadingPage />
-                          )}
-                        </AppReadyShim>
+                        <Header />
+                        <AppReadyShim />
                       </ModalManager>
                     </VoucheesData>
                   </VouchersData>
@@ -148,9 +92,49 @@ export default function App() {
           </Cache>
         </Settings>
         <Box mt="56px" mb="24px" w="100%">
-          <BuildInfo />
+          <FooterLinks />
         </Box>
       </Layout.Main>
     </Layout>
+  );
+}
+
+function AppReadyShim() {
+  const location = useLocation();
+  const { chain } = useNetwork();
+  const { version } = useVersion();
+  const { isSupported } = useSupportedNetwork();
+  const { isConnected } = useAccount();
+  const { data: member } = useMember();
+  const { forceAppReady } = useAppNetwork();
+  useMemberListener();
+
+  const appReady =
+    forceAppReady ||
+    isGeneralRoute(location) ||
+    (isConnected && !chain?.unsupported && isSupported(chain?.id) && member?.isMember);
+
+  return isGeneralRoute(location) || isVersionSupported(version, chain?.id) ? (
+    <Grid style={{ display: "flex", flexGrow: 1 }}>
+      <Grid.Row style={{ width: "100%", margin: 0 }}>
+        <Grid.Col>
+          {is404(location) ? (
+            <NotFoundPage />
+          ) : appReady ? (
+            <>
+              <ErrorBoundary FallbackComponent={ErrorPage}>
+                <Layout.Columned>
+                  <Routes />
+                </Layout.Columned>
+              </ErrorBoundary>
+            </>
+          ) : (
+            <ConnectPage />
+          )}
+        </Grid.Col>
+      </Grid.Row>
+    </Grid>
+  ) : (
+    <LoadingPage />
   );
 }

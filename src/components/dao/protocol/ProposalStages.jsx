@@ -41,7 +41,7 @@ export function ProposalStages({ protocol, ...props }) {
             value: `~${votingDelayHours}h · ${commify(votingDelay, 0)} blocks`,
             tooltip: {
               shrink: true,
-              content: "TODO",
+              content: "The review period between when a proposal has been proposed and when you can vote",
               position: "right",
             },
           },
@@ -53,7 +53,7 @@ export function ProposalStages({ protocol, ...props }) {
             )} blocks`,
             tooltip: {
               shrink: true,
-              content: "TODO",
+              content: "The period in which UNION dao members cast their votes. If you transfer your tokens in this period they wont count as votes",
               position: "right",
             },
           },
@@ -62,7 +62,7 @@ export function ProposalStages({ protocol, ...props }) {
             value: `~${timelockHours}h · ${commify(getMinDelay, 0)} blocks`,
             tooltip: {
               shrink: true,
-              content: "TODO",
+              content: "The period between when a proposal is passed and when it is executed",
               position: "right",
             },
           },

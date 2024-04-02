@@ -3,6 +3,7 @@ import {
   ModalOverlay,
   Button,
   Dai,
+  Usdc,
   Input,
   NumericalBlock,
   NumericalRows,
@@ -23,6 +24,8 @@ import { AddressSummary } from "components/shared";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
+import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -40,9 +43,11 @@ export default function EditVouchModal({
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
   const { address: stakerAddress } = useAccount();
-
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
@@ -65,7 +70,7 @@ export default function EditVouchModal({
     close();
   };
 
-  const { register, errors = {}, values = {}, empty } = useForm({ validate });
+  const { register, errors = {}, values = {}, empty } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -93,22 +98,22 @@ export default function EditVouchModal({
   return (
     <ModalOverlay onClick={handleClose}>
       <Modal className="EditVouchModal">
-        <Modal.Header onClose={handleClose} noHeight>
+        <Modal.Header onClose={handleClose} noHeight hideClose>
           <AddressSummary m={0} address={address} />
         </Modal.Header>
         <Modal.Body>
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               title="Trust you provide"
-              value={format(trust)}
+              value={format(trust, useToken)}
             />
 
             <Input
               mt="16px"
               type="number"
-              suffix={<Dai />}
+              suffix={<Token />}
               label="New trust amount"
               onChange={register("amount")}
               error={errors.amount}
@@ -120,11 +125,11 @@ export default function EditVouchModal({
               m="20px 0"
               items={[
                 {
-                  label: "Minimum trust",
-                  value: `${format(locking)} DAI`,
+                  label: "Utilized trust",
+                  value: `${format(locking, useToken)} ${useToken}`,
                   tooltip: {
                     shrink: true,
-                    content: "TODO",
+                    content: "Your stake currently backing someone you vouched for",
                     position: "right",
                   },
                 },
@@ -148,8 +153,8 @@ export default function EditVouchModal({
 
             {revokeVouch && (
               <Text m="0 0 8px" size="small" grey={600}>
-                Revoking a vouch sets the trust you provide to zero and
-                completely cancels the vouch this contact receives from you.
+                Revoking a vouch sets the trust you provide to zero and completely cancels the vouch
+                this contact receives from you.
               </Text>
             )}
 
@@ -157,19 +162,10 @@ export default function EditVouchModal({
               fluid
               mt="4px"
               label={`${revokeVouch ? "Revoke" : "Update"} trust`}
-              {...(revokeVouch
-                ? cancelVouchButtonProps
-                : updateTrustButtonProps)}
+              {...(revokeVouch ? cancelVouchButtonProps : updateTrustButtonProps)}
             />
 
-            <Button
-              fluid
-              mt="8px"
-              label="Cancel"
-              color="secondary"
-              variant="light"
-              onClick={back}
-            />
+            <Button fluid mt="8px" label="Back" color="secondary" variant="light" onClick={back} />
           </Modal.Container>
         </Modal.Body>
       </Modal>

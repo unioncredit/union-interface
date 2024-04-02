@@ -9,7 +9,7 @@ import {
   TableCell,
   TableHead,
   Box,
-  Text
+  Text,
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
 
@@ -20,11 +20,15 @@ import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
 import { ZERO } from "constants";
 import useResponsive from "hooks/useResponsive";
+import { useSettings } from "providers/Settings";
 
 export default function BorrowersCard() {
   const navigate = useNavigate();
   const { isMicro } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const borrowers = vouchees
     .filter((vouchee) => vouchee.locking.gt(ZERO))
@@ -57,7 +61,9 @@ export default function BorrowersCard() {
             <TableHead></TableHead>
             <TableHead>Account</TableHead>
             <TableHead align="center">Status</TableHead>
-            <TableHead align="right">{isMicro ? "Owed (DAI)" : "Balance owed (DAI)"}</TableHead>
+            <TableHead align="right">
+              {isMicro ? `Owed (${useToken})` : `Balance owed (${useToken})`}
+            </TableHead>
           </TableRow>
           {borrowersPage.map(({ address, locking }) => (
             <TableRow
@@ -80,7 +86,7 @@ export default function BorrowersCard() {
               <TableCell align="center">
                 <StatusBadge address={address} />
               </TableCell>
-              <TableCell align="right">{format(locking)}</TableCell>
+              <TableCell align="right">{format(locking, useToken)}</TableCell>
             </TableRow>
           ))}
         </Table>

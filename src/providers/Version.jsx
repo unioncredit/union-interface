@@ -15,7 +15,7 @@ export const DefaultVersion = Versions.V2;
 
 const versionSupport = {
   [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [optimismGoerli.id, optimism.id],
+  [Versions.V2]: [optimismGoerli.id, optimism.id, 84532],
 };
 
 export function isVersionSupported(version, chainId) {
@@ -23,7 +23,7 @@ export function isVersionSupported(version, chainId) {
 }
 
 export function getVersion(chainId) {
-  return isVersionSupported(Versions.V2, chainId) ? Versions.V2 : Versions.V1;
+  return isVersionSupported(Versions.V2, parseInt(chainId)) ? Versions.V2 : Versions.V1;
 }
 
 export default function Version({ children }) {
@@ -34,9 +34,7 @@ export default function Version({ children }) {
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
   useEffect(() => {
-    if (!connectedChain?.id) {
-      return;
-    }
+    if (!connectedChain?.id) return;
 
     const checkVersion = (_version) =>
       isVersionSupported(_version, connectedChain.id) && version !== _version;
@@ -67,7 +65,12 @@ export default function Version({ children }) {
 
   return (
     <VersionContext.Provider
-      value={{ isV2: _version === Versions.V2, version: _version, setVersion, versioned }}
+      value={{
+        isV2: _version === Versions.V2,
+        version: _version,
+        setVersion,
+        versioned,
+      }}
     >
       {children}
     </VersionContext.Provider>

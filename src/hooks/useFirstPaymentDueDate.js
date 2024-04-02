@@ -1,21 +1,18 @@
 import { useNetwork } from "wagmi";
 import { useProtocol } from "providers/ProtocolData";
 import { BlockSpeed, ZERO } from "constants";
-import { useVersion } from "providers/Version";
 import { format } from "date-fns";
 
 export default function useFirstPaymentDueDate() {
-  const { isV2 } = useVersion();
   const { chain } = useNetwork();
   const { data: protocol } = useProtocol();
-  const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
+  const { overdueTime = ZERO } = protocol;
 
-  const milliseconds = (isV2 ? overdueTime : overdueBlocks).mul(
-    BlockSpeed[chain.id]
-  );
+  const milliseconds = overdueTime.mul(BlockSpeed[chain.id]);
 
   let date = new Date();
-  date.setSeconds(date.getSeconds() + milliseconds / 1000);
+  date.setMilliseconds(date.getMilliseconds() + Number(milliseconds));
 
-  return format(date, "LLL d, yy");
+  // we do the weird double formatting as the ' character causes the yy to not format ?!
+  return `${format(date, "d LLL")} '${format(date, "yy")}`;
 }

@@ -8,6 +8,7 @@ import format from "utils/format";
 import { DimmableTableCell } from "components/contacts/ContactsTable";
 
 import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
+import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
 import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
 
 export const COLUMNS = {
@@ -33,12 +34,12 @@ export const COLUMNS = {
   },
 };
 
-export function ReceivingTableRow({ data, active, setContact, providing }) {
+export function ReceivingTableRow({ data, active, setContact, providing, receiving, useToken }) {
   const { address, locking = ZERO, trust = ZERO, vouch = ZERO } = data;
 
   const borrowable = vouch.sub(locking);
 
-  const Icon = providing ? BothRow : ReceivingRow;
+  const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
   const columns = [
     {
@@ -47,7 +48,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
-          value={`${format(trust)} DAI`}
+          value={`${format(trust, useToken)} ${useToken}`}
         />
       ),
     },
@@ -57,7 +58,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch)} DAI`}
+          value={`${format(vouch, useToken)} ${useToken}`}
         />
       ),
     },
@@ -67,7 +68,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
         <DimmableTableCell
           key={COLUMNS.REAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch)} DAI`}
+          value={`${format(vouch, useToken)} ${useToken}`}
         />
       ),
     },
@@ -77,7 +78,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
         <DimmableTableCell
           key={COLUMNS.LOCKING.id}
           dimmed={locking.eq(ZERO)}
-          value={`${format(locking)} DAI`}
+          value={`${format(locking, useToken)} ${useToken}`}
         />
       ),
     },
@@ -87,7 +88,7 @@ export function ReceivingTableRow({ data, active, setContact, providing }) {
         <DimmableTableCell
           key={COLUMNS.BORROWABLE.id}
           dimmed={borrowable.eq(ZERO)}
-          value={`${format(borrowable)} DAI`}
+          value={`${format(borrowable, useToken)} ${useToken}`}
         />
       ),
     },

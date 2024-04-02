@@ -1,62 +1,74 @@
 import { useNetwork } from "wagmi";
-import {
-  mainnet,
-  arbitrum,
-  goerli,
-  optimismGoerli,
-  optimism,
-} from "wagmi/chains";
+import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
 
 import {
+  assetManagerContract as GOERLI_assetManagerContract,
+  comptrollerContract as GOERLI_comptrollerContract,
+  daiContract as GOERLI_daiContract,
+  unionContract as GOERLI_unionContract,
   userManagerContract as GOERLI_userManagerContract,
   uTokenContract as GOERLI_uTokenContract,
-  unionContract as GOERLI_unionContract,
-  daiContract as GOERLI_daiContract,
-  comptrollerContract as GOERLI_comptrollerContract,
-  assetManagerContract as GOERLI_assetManagerContract,
 } from "config/contracts/goerli";
 
 import {
+  assetManagerContract as OPTIMISM_GOERLI_V2_assetManagerContract,
+  comptrollerContract as OPTIMISM_GOERLI_V2_comptrollerContract,
+  daiContract as OPTIMISM_GOERLI_V2_daiContract,
+  referralContract as OPTIMISM_GOERLI_V2_referralContract,
+  registerHelperContract as OPTIMISM_GOERLI_V2_registerHelperContract,
+  unionContract as OPTIMISM_GOERLI_V2_unionContract,
+  unionLensContract as OPTIMISM_GOERLI_V2_unionLensContract,
   userManagerContract as OPTIMISM_GOERLI_V2_userManagerContract,
   uTokenContract as OPTIMISM_GOERLI_V2_uTokenContract,
-  unionContract as OPTIMISM_GOERLI_V2_unionContract,
-  daiContract as OPTIMISM_GOERLI_V2_daiContract,
-  comptrollerContract as OPTIMISM_GOERLI_V2_comptrollerContract,
-  assetManagerContract as OPTIMISM_GOERLI_V2_assetManagerContract,
-  unionLensContract as OPTIMISM_GOERLI_V2_unionLensContract,
   vouchFaucetContract as OPTIMISM_GOERLI_V2_vouchFaucet,
 } from "config/contracts/v2/optimismGoerli";
 
 import {
+  assetManagerContract as MAINNET_assetManagerContract,
+  comptrollerContract as MAINNET_comptrollerContract,
+  daiContract as MAINNET_daiContract,
+  governorContract,
+  referralContract as MAINNET_referralContract,
+  timelockContract,
+  unionContract as MAINNET_unionContract,
   userManagerContract as MAINNET_userManagerContract,
   uTokenContract as MAINNET_uTokenContract,
-  unionContract as MAINNET_unionContract,
-  daiContract as MAINNET_daiContract,
-  comptrollerContract as MAINNET_comptrollerContract,
-  assetManagerContract as MAINNET_assetManagerContract,
-  governorContract,
-  timelockContract,
 } from "config/contracts/mainnet";
 
 import {
+  assetManagerContract as ARBITRUM_assetManagerContract,
+  comptrollerContract as ARBITRUM_comptrollerContract,
+  daiContract as ARBITRUM_daiContract,
+  unionContract as ARBITRUM_unionContract,
   userManagerContract as ARBITRUM_userManagerContract,
   uTokenContract as ARBITRUM_uTokenContract,
-  unionContract as ARBITRUM_unionContract,
-  daiContract as ARBITRUM_daiContract,
-  comptrollerContract as ARBITRUM_comptrollerContract,
-  assetManagerContract as ARBITRUM_assetManagerContract,
 } from "config/contracts/arbitrum";
 
 import {
+  assetManagerContract as OPTIMISM_V2_assetManagerContract,
+  comptrollerContract as OPTIMISM_V2_comptrollerContract,
+  daiContract as OPTIMISM_V2_daiContract,
+  referralContract as OPTIMISM_V2_referralContract,
+  registerHelperContract as OPTIMISM_V2_registerHelperContract,
+  unionContract as OPTIMISM_V2_unionContract,
+  unionLensContract as OPTIMISM_V2_unionLensContract,
   userManagerContract as OPTIMISM_V2_userManagerContract,
   uTokenContract as OPTIMISM_V2_uTokenContract,
-  unionContract as OPTIMISM_V2_unionContract,
-  daiContract as OPTIMISM_V2_daiContract,
-  comptrollerContract as OPTIMISM_V2_comptrollerContract,
-  assetManagerContract as OPTIMISM_V2_assetManagerContract,
-  unionLensContract as OPTIMISM_V2_unionLensContract,
   vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
 } from "config/contracts/v2/optimism";
+
+import {
+  assetManagerContract as BASE_SEPOLIA_V2_assetManagerContract,
+  comptrollerContract as BASE_SEPOLIA_V2_comptrollerContract,
+  usdcContract as BASE_SEPOLIA_V2_usdcContract,
+  referralContract as BASE_SEPOLIA_V2_referralContract,
+  registerHelperContract as BASE_SEPOLIA_V2_registerHelperContract,
+  unionContract as BASE_SEPOLIA_V2_unionContract,
+  unionLensContract as BASE_SEPOLIA_V2_unionLensContract,
+  userManagerContract as BASE_SEPOLIA_V2_userManagerContract,
+  uTokenContract as BASE_SEPOLIA_V2_uTokenContract,
+  vouchFaucetContract as BASE_SEPOLIA_V2_vouchFaucet,
+} from "config/contracts/v2/base-sepolia";
 
 import { useVersion, Versions } from "providers/Version";
 
@@ -82,6 +94,7 @@ export default function useContract(name, chainId, forceVersion) {
       dai: MAINNET_daiContract,
       comptroller: MAINNET_comptrollerContract,
       assetManager: MAINNET_assetManagerContract,
+      referral: MAINNET_referralContract,
     },
     [arbitrum.id]: {
       userManager: ARBITRUM_userManagerContract,
@@ -103,6 +116,8 @@ export default function useContract(name, chainId, forceVersion) {
       assetManager: OPTIMISM_GOERLI_V2_assetManagerContract,
       unionLens: OPTIMISM_GOERLI_V2_unionLensContract,
       vouchFaucet: OPTIMISM_GOERLI_V2_vouchFaucet,
+      registerHelper: OPTIMISM_GOERLI_V2_registerHelperContract,
+      referral: OPTIMISM_GOERLI_V2_referralContract,
     },
     [optimism.id]: {
       userManager: OPTIMISM_V2_userManagerContract,
@@ -113,6 +128,21 @@ export default function useContract(name, chainId, forceVersion) {
       assetManager: OPTIMISM_V2_assetManagerContract,
       unionLens: OPTIMISM_V2_unionLensContract,
       vouchFaucet: OPTIMISM_V2_vouchFaucet,
+      registerHelper: OPTIMISM_V2_registerHelperContract,
+      referral: OPTIMISM_V2_referralContract,
+    },
+    [84532]: {
+      // base sepolia
+      userManager: BASE_SEPOLIA_V2_userManagerContract,
+      uToken: BASE_SEPOLIA_V2_uTokenContract,
+      union: BASE_SEPOLIA_V2_unionContract,
+      usdc: BASE_SEPOLIA_V2_usdcContract,
+      comptroller: BASE_SEPOLIA_V2_comptrollerContract,
+      assetManager: BASE_SEPOLIA_V2_assetManagerContract,
+      unionLens: BASE_SEPOLIA_V2_unionLensContract,
+      vouchFaucet: BASE_SEPOLIA_V2_vouchFaucet,
+      registerHelper: BASE_SEPOLIA_V2_registerHelperContract,
+      referral: BASE_SEPOLIA_V2_referralContract,
     },
   };
 
@@ -121,9 +151,5 @@ export default function useContract(name, chainId, forceVersion) {
     [Versions.V2]: v2Contracts,
   };
 
-  return (
-    contracts[forceVersion || version]?.[chainId || connectedChain?.id]?.[
-      name
-    ] || {}
-  );
+  return contracts[forceVersion || version]?.[chainId || connectedChain?.id]?.[name] || {};
 }
