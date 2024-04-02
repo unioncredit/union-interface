@@ -73,6 +73,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { isConnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
   const { data: connectedMember = {} } = useMember();
+  const { address: connectedAddress } = useAccount();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
@@ -216,10 +217,20 @@ export default function ProfileHeader({ address, chainId }) {
           />
         ) : !connectedMember.isMember ? (
           <Button color="secondary" variant="light" to="/" as={Link} label="Register to vouch" />
-        ) : (
+        ) : connectedAddress === address ? (
           <Button
             color="secondary"
             variant="light"
+            icon={ProfileIcon}
+            disabled={true}
+            label="Your Public Profile"
+            style={{
+              opacity: 1,
+            }}
+          />
+        ) : (
+          <Button
+            color="primary"
             icon={VouchIcon}
             onClick={() => {
               open(VOUCH_MODAL, { address });
@@ -231,8 +242,7 @@ export default function ProfileHeader({ address, chainId }) {
         <Button
           icon={CopyIcon}
           mt="12px"
-          color="secondary"
-          variant="light"
+          color="primary"
           label={"Share profile"}
           onClick={() =>
             open(SHARE_REFERRAL_MODAL, {

@@ -7,6 +7,8 @@ import {
   ModalOverlay,
   NumericalBlock,
   NumericalRows,
+  Tooltip,
+  LockIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -25,7 +27,7 @@ export default function WalletModal() {
 
   const { data: member = {}, refetch } = useMember();
 
-  const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
+  const { isOverdue, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
   const totalBalance = unionBalance.add(unclaimedRewards);
 
@@ -76,7 +78,21 @@ export default function WalletModal() {
             ]}
           />
 
-          <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
+          {isOverdue ? (
+            <Tooltip content="You cannot claim rewards while in default" w="100%">
+              <Button
+                size="large"
+                icon={LockIcon}
+                label="Claim UNION"
+                {...buttonProps}
+                disabled={true}
+                fluid
+              />
+            </Tooltip>
+          ) : (
+            <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
+          )}
+
           <Button
             fluid
             as={Link}

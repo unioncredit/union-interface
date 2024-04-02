@@ -113,11 +113,11 @@ export default function CreditStats({ vouchers }) {
           items={[
             {
               value: formattedNumber(owed),
-              color: "blue300",
+              color: "blue900",
             },
             {
               value: formattedNumber(creditLimit, 2, false),
-              color: "blue800",
+              color: "blue100",
             },
             {
               value: formattedNumber(unavailableBalance),
@@ -128,7 +128,7 @@ export default function CreditStats({ vouchers }) {
 
         <Box className="CreditStats__BorrowStats" align="center">
           <Box align="center" className="CreditStats__Legend">
-            <Dot color="blue300" mr="4px" />
+            <Dot color="blue900" mr="4px" />
 
             <Heading level={3} grey={500} m={0} weight="medium" size="small">
               Borrowed
@@ -143,7 +143,7 @@ export default function CreditStats({ vouchers }) {
           </Box>
 
           <Box align="center" className="CreditStats__Legend">
-            <Dot color="blue800" mr="4px" />
+            <Dot color="blue100" mr="4px" />
 
             <Heading level={3} grey={500} m={0} weight="medium" size="small">
               Available
