@@ -218,8 +218,7 @@ export default function ProfileHeader({ address, chainId }) {
           <Button color="secondary" variant="light" to="/" as={Link} label="Register to vouch" />
         ) : (
           <Button
-            color="secondary"
-            variant="light"
+            color="primary"
             icon={VouchIcon}
             onClick={() => {
               open(VOUCH_MODAL, { address });
