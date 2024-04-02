@@ -1,12 +1,12 @@
 import {
-  Modal,
-  ModalOverlay,
   Box,
   Button,
-  NumericalBlock,
-  NumericalRows,
   ClaimIcon,
   GovernanceIcon,
+  Modal,
+  ModalOverlay,
+  NumericalBlock,
+  NumericalRows,
   Tooltip,
   LockIcon,
 } from "@unioncredit/ui";
@@ -18,7 +18,6 @@ import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
 import { Link } from "react-router-dom";
 import { useNetwork } from "wagmi";
-import { VOUCH_MODAL } from "./VouchModal";
 
 export const WALLET_MODAL = "wallet-modal";
 
@@ -40,7 +39,10 @@ export default function WalletModal() {
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unclaimedRewards.gt(0),
-    onComplete: refetch,
+    onComplete: async () => {
+      await refetch();
+      close();
+    },
   });
 
   /*--------------------------------------------------------------
