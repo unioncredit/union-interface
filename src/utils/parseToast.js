@@ -7,12 +7,7 @@ import { truncateAddress } from "./truncateAddress";
 import { ethers } from "ethers";
 import { Versions } from "providers/Version";
 
-export default function createParseToast(
-  method,
-  args,
-  chainId = mainnet.id,
-  version
-) {
+export default function createParseToast(method, args, chainId = mainnet.id, version, contract) {
   return function (status, tx) {
     const sharedProps = {
       link: tx ? blockExplorerTx(chainId, tx.hash) : null,
@@ -41,9 +36,7 @@ export default function createParseToast(
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouched ${format(args[1])} for ${truncateAddress(
-              args[0]
-            )} successfully`,
+            content: `Vouched ${format(args[1])} for ${truncateAddress(args[0])} successfully`,
             title: "Vouched",
           };
         case "approve":
@@ -105,9 +98,7 @@ export default function createParseToast(
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(
-              args[0]
-            )} failed`,
+            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(args[0])} failed`,
             title: "Vouching",
           };
         case "approve":
@@ -167,15 +158,13 @@ export default function createParseToast(
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(
-              args[0]
-            )}`,
+            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(args[0])}`,
             title: "Vouching",
           };
         case "approve":
           return {
             ...sharedProps,
-            content: "Approving",
+            content: `Approving DAI for ${contract === "userManager" ? "Staking" : "Repay"}`,
             title: "Approving",
           };
         case "borrow":
