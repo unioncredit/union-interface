@@ -7,6 +7,7 @@ const SETTINGS_STORAGE_KEY = "union:settings";
 
 const DEFAULT_SETTINGS = {
   showTestnets: false,
+  useToken: "DAI",
   ...JSON.parse(window.localStorage.getItem(SETTINGS_STORAGE_KEY)),
 };
 
