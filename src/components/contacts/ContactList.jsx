@@ -50,11 +50,11 @@ const sortFns = {
   },
   [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
     [SortOrder.ASC]: (a, b) =>
-      score([a.locking.gt(ZERO) && a.isOverdue, a.isMember, a.locking.gt(ZERO)]) -
-      score([b.locking.gt(ZERO) && b.isOverdue, b.isMember, b.locking.gt(ZERO)]),
+      score([a.locking?.gt(ZERO) && a.isOverdue, a.isMember, a.locking?.gt(ZERO)]) -
+      score([b.locking?.gt(ZERO) && b.isOverdue, b.isMember, b.locking?.gt(ZERO)]),
     [SortOrder.DESC]: (a, b) =>
-      score([b.isOverdue && b.locking.gt(ZERO), b.isMember, b.locking.gt(ZERO)]) -
-      score([a.isOverdue && a.locking.gt(ZERO), a.isMember, a.locking.gt(ZERO)]),
+      score([b.isOverdue && b.locking?.gt(ZERO), b.isMember, b.locking?.gt(ZERO)]) -
+      score([a.isOverdue && a.locking?.gt(ZERO), a.isMember, a.locking?.gt(ZERO)]),
   },
   [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
@@ -222,6 +222,8 @@ export default function ContactList({ initialType }) {
           filters.map((filter) => filterFunctions[filter](item)).every((x) => x === true)
         )
       : searched;
+
+    console.log(sort.type);
 
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
   }, [filters, searched, sort.type, sort.order]);
