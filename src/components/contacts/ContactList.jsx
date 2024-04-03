@@ -223,8 +223,6 @@ export default function ContactList({ initialType }) {
         )
       : searched;
 
-    console.log(sort.type);
-
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
   }, [filters, searched, sort.type, sort.order]);
 
