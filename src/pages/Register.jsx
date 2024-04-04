@@ -140,9 +140,7 @@ export default function RegisterPage() {
                       <Box mt="16px" className="Register__container" justify="center">
                         <Box w="380px" direction="vertical" align="center">
                           <Box className="Register__fee" direction="vertical">
-                            <Text className="Register__fee-title" grey={500} m={0} weight="light">
-                              Registration fee
-                            </Text>
+      
 
                             <Box className="Register__fee-container" align="center">
                               <Text size="large" grey={700} m={0} weight="medium">
