@@ -1,0 +1,24 @@
+.TextSeparator {
+  display: flex;
+  align-items: center !important;
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  &::before,
+  &::after {
+    content: ' ';
+    display: block;
+    flex: 1;
+    background: #EEE;
+    height: 1px;
+  }
+  &::before {
+    margin-right: 8px;
+  }
+  &::after {
+    margin-left: 8px;
+  }
+}
