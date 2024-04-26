@@ -113,7 +113,15 @@ export default function ShareReferralModal({ address, chainId }) {
             <ConfettiIcon />
 
             <Text m={0} size="regular">
-              Earn 0.00021 ETH in rewards when someone registers from your link.
+              Earn 0.00021 ETH in rewards when someone registers from your link.{" "}
+              <a
+                target="_blank"
+                rel="noreferrer"
+                href="https://union.mirror.xyz/xXmgVkG3usy0b8x2kfRmtY27zl7qLnrAQmQcMUwz68c"
+                style={{ textDecoration: "underline" }}
+              >
+                Learn more -&gt;
+              </a>
             </Text>
           </Modal.Container>
         </Modal.Body>
