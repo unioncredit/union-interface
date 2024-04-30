@@ -106,6 +106,7 @@ export default function VouchModal({
             suffix={<Dai />}
             error={errors.trust}
             label="Trust amount"
+            placeholder="0.0"
             onChange={register("trust")}
           />
 
