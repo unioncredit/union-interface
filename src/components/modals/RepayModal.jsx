@@ -170,7 +170,7 @@ export default function RepayModal() {
                 rightLabelAction={() => setRawValue("amount", maxRepay, false)}
                 suffix={<Dai />}
                 placeholder="0.0"
-                value={amount.formatted}
+                value={amount.raw !== ZERO ? amount.formatted : ""}
                 error={isCustomSelected ? errors.amount : null}
                 onChange={register("amount")}
               />

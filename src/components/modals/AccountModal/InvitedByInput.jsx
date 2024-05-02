@@ -12,7 +12,7 @@ export function InvitedByInput() {
   const { data: member, refetch: refetchMember } = useMember();
   const { referrer } = member;
 
-  const initialReferrer = referrer === ZERO_ADDRESS ? "None" : referrer;
+  const initialReferrer = referrer === ZERO_ADDRESS ? "" : referrer;
 
   const [address, setAddress] = useState(initialReferrer);
 
@@ -40,7 +40,12 @@ export function InvitedByInput() {
         />
       </Box>
 
-      <AddressInput defaultValue={initialReferrer} label="Invited by:" onChange={setAddress} />
+      <AddressInput
+        placeholder="None"
+        defaultValue={initialReferrer}
+        label="Invited by:"
+        onChange={setAddress}
+      />
     </Box>
   );
 }
