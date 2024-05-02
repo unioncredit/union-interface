@@ -29,7 +29,7 @@ export default function RegisterPage() {
       </Helmet>
       <Card size="fluid" className="Register">
         <Card.Body>
-          <Heading level={2} size="large" grey={700} align="center">
+          <Heading m="6px 0 16px" level={2} size="large" grey={700} align="center">
             Become a Member
           </Heading>
           <Text grey={500} size="medium" align="center">
@@ -55,7 +55,7 @@ export default function RegisterPage() {
 
               <EthRegisterButton onComplete={() => open(WELCOME_MODAL)} />
             </Box>
-            <TextSeparator m="24px 0" w="90%" maxw="350px">
+            <TextSeparator m="12px 0" w="90%" maxw="350px">
               or
             </TextSeparator>
             <a

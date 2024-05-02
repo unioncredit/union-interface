@@ -64,4 +64,25 @@
       }
     }
   }
+
+  .Card__footer {
+    background: #fafafa;
+
+    svg {
+      opacity: 70%;
+      width: 28px;
+      height: 28px;
+    }
+    h2 {
+      font-size: 16px;
+    }
+    li {
+      margin: 8px 0;
+      opacity: 80%;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
 }

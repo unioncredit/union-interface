@@ -38,9 +38,17 @@ export function EthRegisterButton({ onComplete }) {
       <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
 
       {!canRegister && (
-        <Text color="red500" m="2px 0 -4px" weight="light">
-          You do not have enough funds to register
-        </Text>
+        <a
+          rel="noreferrer"
+          target="_blank"
+          href="https://relay.link/bridge/optimism?fromChainId=1&lockCurrency=true&lockToChain=true"
+        >
+          <Text color="red500" m="2px 0 -4px" weight="light">
+            You do not have enough funds to register
+            <br />
+            Click here to bridge ETH
+          </Text>
+        </a>
       )}
     </div>
   );
