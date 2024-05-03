@@ -2,7 +2,10 @@
 
 .EthRegisterButton {
   &__container {
-    margin-top: 24px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     @media screen and (min-width: $breakpoint-micro) {
       min-width: 320px;
@@ -12,6 +15,17 @@
       width: 100%;
       font-size: 13px;
       text-align: center;
+    }
+
+    svg {
+      width: 30px !important;
+      height: 30px !important;
+    }
+
+    button {
+      max-width: 280px;
+      font-size: 22px;
+      min-height: 64px;
     }
   }
 }

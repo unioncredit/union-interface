@@ -3,7 +3,7 @@ import "./EthRegisterButton.scss";
 import { useAccount, useBalance } from "wagmi";
 import useWrite from "hooks/useWrite";
 import { useProtocol } from "providers/ProtocolData";
-import { Button, PlayIcon, Text } from "@unioncredit/ui";
+import { Button, CheckIcon, Text } from "@unioncredit/ui";
 import { ZERO, ZERO_ADDRESS } from "constants";
 import useReferrer from "../../hooks/useReferrer";
 
@@ -35,18 +35,21 @@ export function EthRegisterButton({ onComplete }) {
 
   return (
     <div className="EthRegisterButton__container">
-      <Button
-        fluid
-        size="large"
-        label="Click to Become a Member ->"
-        icon={PlayIcon}
-        {...registerButtonProps}
-      />
+      <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
 
       {!canRegister && (
-        <Text color="red500" m="2px 0 -4px" weight="light">
-          You do not have enough funds to register
-        </Text>
+        <a
+          rel="noreferrer"
+          target="_blank"
+          href="https://relay.link/bridge/optimism?fromChainId=1&lockCurrency=true&lockToChain=true"
+        >
+          <Text color="red500" m="2px 0" weight="light">
+            You do not have enough funds to register
+          </Text>
+          <Text grey={500} style={{ textDecoration: "underline" }}>
+            Bridge ETH
+          </Text>
+        </a>
       )}
     </div>
   );
