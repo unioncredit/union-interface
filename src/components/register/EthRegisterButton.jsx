@@ -43,10 +43,11 @@ export function EthRegisterButton({ onComplete }) {
           target="_blank"
           href="https://relay.link/bridge/optimism?fromChainId=1&lockCurrency=true&lockToChain=true"
         >
-          <Text color="red500" m="2px 0 -4px" weight="light">
+          <Text color="red500" m="2px 0" weight="light">
             You do not have enough funds to register
-            <br />
-            Click here to bridge ETH
+          </Text>
+          <Text grey={500} style={{ textDecoration: "underline" }}>
+            Bridge ETH
           </Text>
         </a>
       )}

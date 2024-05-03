@@ -79,15 +79,15 @@ export default function RegisterPage() {
           <ul className="Register__benefits">
             <li>
               <CheckIcon />
-              Borrow against your Union credit line
+              Give credit to your trusted friends
             </li>
             <li>
               <CheckIcon />
-              Vouch for and onboard your friends
+              Borrow without collateral
             </li>
             <li>
               <CheckIcon />
-              Earn UNION at a faster rate
+              Build a credit system free from bankers
             </li>
             <li>
               <CheckIcon />
