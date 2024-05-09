@@ -226,7 +226,7 @@ export default function ContactList({ initialType }) {
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
   }, [filters, searched, sort.type, sort.order]);
 
-  const handleSort = (sortType) => {
+  const handleSortType = (sortType) => {
     if (sort.type !== sortType) {
       const newSort = {
         type: sortType,
@@ -243,6 +243,13 @@ export default function ContactList({ initialType }) {
     };
     setSetting(type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT, newSort);
     setSort(newSort);
+  };
+
+  const handleSortOrder = (order) => {
+    setSort((s) => ({
+      ...s,
+      order,
+    }));
   };
 
   const { data: contactsPage, maxPages, activePage, onChange } = usePagination(filteredAndSorted);
@@ -274,7 +281,8 @@ export default function ContactList({ initialType }) {
               data={contactsPage}
               setContact={setContact}
               sort={sort}
-              setSort={handleSort}
+              setSortType={handleSortType}
+              setSortOrder={handleSortOrder}
             />
           ) : (
             <DesktopContactsTable
@@ -282,7 +290,7 @@ export default function ContactList({ initialType }) {
               data={contactsPage}
               setContact={setContact}
               sort={sort}
-              setSortType={handleSort}
+              setSortType={handleSortType}
             />
           )}
         </div>
