@@ -1,30 +1,33 @@
 import "./MobileColumnToggle.scss";
 
 import {
-  Text,
   Button,
+  ControlGroup,
+  Divider,
   Modal,
   Popover,
-  ControlGroup,
+  Sort,
   SortAscending,
   SortDescending,
-  Sort,
-  Divider,
+  Text,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { SortOrder } from "constants";
 import useScrollLock from "hooks/useScrollLock";
 
-export default function MobileColumnToggle({ active, columns, setSelectedColumn, sort, setSort }) {
+export default function MobileColumnToggle({
+  active,
+  columns,
+  setSelectedColumn,
+  sort,
+  setSortType,
+  setSortOrder,
+}) {
   const setScrollLock = useScrollLock();
 
   const [open, setOpen] = useState(false);
 
-  const Icon = sort.order
-    ? sort.order === SortOrder.ASC
-      ? SortAscending
-      : SortDescending
-    : Sort;
+  const Icon = sort.order ? (sort.order === SortOrder.ASC ? SortAscending : SortDescending) : Sort;
 
   return (
     <Popover
@@ -78,10 +81,8 @@ export default function MobileColumnToggle({ active, columns, setSelectedColumn,
               checked: column.id === active.id,
             }))}
             onChange={(selectedId) => {
-              setSelectedColumn(
-                columns.find((column) => column.id === selectedId)
-              );
-              setSort({ ...sort, type: selectedId });
+              setSelectedColumn(columns.find((column) => column.id === selectedId));
+              setSortType(selectedId);
               setOpen(false);
             }}
           />
@@ -104,11 +105,7 @@ export default function MobileColumnToggle({ active, columns, setSelectedColumn,
               },
             ]}
             onChange={(selectedId) => {
-              setSort({
-                ...sort,
-                order: sort.order === selectedId ? null : selectedId,
-              });
-
+              setSortOrder(sort.order === selectedId ? null : selectedId);
               setOpen(false);
             }}
           />

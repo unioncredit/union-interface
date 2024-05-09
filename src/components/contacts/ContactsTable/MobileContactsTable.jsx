@@ -14,7 +14,7 @@ import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
 import { compareAddresses } from "utils/compare";
 
-export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
+export function MobileContactsTable({ type, data, setContact, sort, setSortType, setSortOrder }) {
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
 
@@ -37,7 +37,8 @@ export function MobileContactsTable({ type, data, setContact, sort, setSort }) {
         <TableHead align="right">
           <MobileColumnToggle
             sort={sort}
-            setSort={setSort}
+            setSortType={setSortType}
+            setSortOrder={setSortOrder}
             columns={Object.values(
               type === ContactsType.VOUCHEES ? PROVIDING_COLUMNS : RECEIVING_COLUMNS
             )}
