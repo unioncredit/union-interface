@@ -119,6 +119,10 @@ export default function ProfileHeader({ address, chainId }) {
     }
   }, [address]);
 
+  const isManageContactButton = isConnected && alreadyVouching;
+  const isVouchButton =
+    !isManageContactButton && connectedAddress !== address && connectedMember.isMember;
+
   return (
     <Box fluid justify="space-between" align="flex-start" className="ProfileHeader">
       <Box className="ProfileHeader__card" fluid>
@@ -197,8 +201,6 @@ export default function ProfileHeader({ address, chainId }) {
           />
         ) : isMaxOverdue ? (
           <Button
-            color="secondary"
-            variant="light"
             icon={CancelIcon}
             label="Write-off debt"
             onClick={() =>
@@ -242,7 +244,8 @@ export default function ProfileHeader({ address, chainId }) {
         <Button
           icon={CopyIcon}
           mt="12px"
-          color="primary"
+          variant={!isConnected || isVouchButton || !isManageContactButton ? "light" : "regular"}
+          color={!isConnected || isVouchButton || !isManageContactButton ? "secondary" : "primary"}
           label={"Share profile"}
           onClick={() =>
             open(SHARE_REFERRAL_MODAL, {
