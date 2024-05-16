@@ -200,8 +200,6 @@ const VoucheeDetails = ({
 
   const { paymentDue, formatted: lastRepayFormatted } = useLastRepayData(lastRepay);
 
-  console.log({ locking });
-
   const stats = [
     {
       title: "Trust",
