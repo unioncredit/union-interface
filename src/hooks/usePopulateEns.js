@@ -37,17 +37,17 @@ export default function usePopulateEns(inputData) {
     staleTime: STALE_TIME,
   });
 
-  const mappedData = inputData?.map((row, i) => ({
+  const ensData = inputData?.map((row, i) => ({
     ...row,
     ens: ensNames?.[i],
     label: getLabel(row.address),
   }));
 
-  return addCustomData(mappedData);
+  return addAddressMappings(ensData || []);
 }
 
-const addCustomData = (mappedData) => {
-  return mappedData.map((data) => ({
+const addAddressMappings = (ensData) => {
+  return ensData.map((data) => ({
     ...data,
     ens: AddressEnsMappings[data.address.toLowerCase()] || data.ens,
   }));
