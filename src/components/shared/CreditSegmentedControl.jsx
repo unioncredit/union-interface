@@ -1,17 +1,10 @@
 import "./CreditSegmentedControl.scss";
 
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AddressBookIcon, IdentityIcon, SegmentedControl, StakeIcon } from "@unioncredit/ui";
 import { Links } from "constants";
 
 export const CreditSegmentedControl = ({ value, ...props }) => {
-  const [searchParams] = useSearchParams();
-
-  const filters = searchParams
-    .getAll("filters")
-    .map((f) => `filters=${f}`)
-    .join("&");
-
   return (
     <SegmentedControl
       fluid
@@ -39,7 +32,7 @@ export const CreditSegmentedControl = ({ value, ...props }) => {
         {
           id: "contacts",
           label: "Contacts",
-          to: filters.length > 0 ? `${Links.CONTACTS}?${filters}` : Links.CONTACTS,
+          to: Links.CONTACTS,
           as: Link,
           icon: AddressBookIcon,
         },
