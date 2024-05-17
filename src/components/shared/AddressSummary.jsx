@@ -14,7 +14,7 @@ import {
   Text,
 } from "@unioncredit/ui";
 
-import { EIP3770 } from "constants";
+import { AddressEnsMappings, EIP3770 } from "constants";
 import { Avatar, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
@@ -34,7 +34,8 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
 
   const chainId = chainIdProp || chain?.id;
   const label = getLabel(address);
-  const primaryLabel = label || ensName || truncateAddress(address);
+  const primaryLabel =
+    AddressEnsMappings[address.toLowerCase()] || label || ensName || truncateAddress(address);
 
   const [copied, copy] = useCopyToClipboard();
   const [labelText, setLabelText] = useState(primaryLabel);
