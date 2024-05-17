@@ -42,12 +42,14 @@ export function StatusBadge({ address, chainId: chainIdProp }) {
 
   return (
     <>
-      {borrowed.gt(0) ? (
+      {isOverdue ? (
         <BadgeIndicator
-          color={isOverdue ? "red500" : "green500"}
-          label={isMaxOverdue ? "Write-Off" : isOverdue ? "Overdue" : "Borrowing"}
+          color="red500"
+          label={isMaxOverdue ? "Write-Off" : "Overdue"}
           textColor={isMaxOverdue && "red500"}
         />
+      ) : borrowed.gt(ZERO) ? (
+        <BadgeIndicator color="green500" label="Borrowing" />
       ) : isMember ? (
         <BadgeIndicator color="blue500" label="Member" />
       ) : (
