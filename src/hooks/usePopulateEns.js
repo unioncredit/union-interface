@@ -1,9 +1,9 @@
-import { CACHE_TIME, STALE_TIME } from "constants";
+import { STALE_TIME } from "constants";
+import { CACHE_TIME } from "constants";
 import { useContractRead } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
 import useLabels from "./useLabels";
-import { AddressEnsMappings } from "../constants";
 
 /**
  * Given an input array of objects that have an address property
@@ -18,12 +18,16 @@ export default function usePopulateEns(inputData) {
     address: "0x3671ae578e63fdf66ad4f3e12cc0c0d71ac7510c",
     abi: [
       {
-        inputs: [{ internalType: "contract ENS", name: "_ens", type: "address" }],
+        inputs: [
+          { internalType: "contract ENS", name: "_ens", type: "address" },
+        ],
         stateMutability: "nonpayable",
         type: "constructor",
       },
       {
-        inputs: [{ internalType: "address[]", name: "addresses", type: "address[]" }],
+        inputs: [
+          { internalType: "address[]", name: "addresses", type: "address[]" },
+        ],
         name: "getNames",
         outputs: [{ internalType: "string[]", name: "r", type: "string[]" }],
         stateMutability: "view",
@@ -37,18 +41,9 @@ export default function usePopulateEns(inputData) {
     staleTime: STALE_TIME,
   });
 
-  const mappedData = inputData?.map((row, i) => ({
+  return inputData?.map((row, i) => ({
     ...row,
     ens: ensNames?.[i],
     label: getLabel(row.address),
   }));
-
-  return addCustomData(mappedData);
 }
-
-const addCustomData = (mappedData) => {
-  return mappedData.map((data) => ({
-    ...data,
-    ens: AddressEnsMappings[data.address.toLowerCase()] || data.ens,
-  }));
-};

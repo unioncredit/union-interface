@@ -1,10 +1,9 @@
-import { useEnsName, useNetwork } from "wagmi";
+import { useNetwork, useEnsName } from "wagmi";
 import { mainnet, optimismGoerli } from "wagmi/chains";
 
 import { truncateAddress, truncateEns } from "utils/truncateAddress";
 import useLabels from "hooks/useLabels";
 import { vouchFaucetContract } from "config/contracts/v2/optimismGoerli";
-import { AddressEnsMappings } from "../../constants";
 
 export function PrimaryLabel({ address, shouldTruncate = true }) {
   const { chain } = useNetwork();
@@ -12,8 +11,6 @@ export function PrimaryLabel({ address, shouldTruncate = true }) {
     address,
     chainId: mainnet.id,
   });
-
-  const ens = AddressEnsMappings[address.toLowerCase()] || data;
 
   const { getLabel } = useLabels();
 
@@ -23,7 +20,7 @@ export function PrimaryLabel({ address, shouldTruncate = true }) {
 
   return (
     getLabel(address) ||
-    (ens && (shouldTruncate ? truncateEns(ens) : ens)) ||
+    (data && (shouldTruncate ? truncateEns(data) : data)) ||
     (shouldTruncate ? truncateAddress(address) : address)
   );
 }
