@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
-import { mainnet, arbitrum, goerli, optimismGoerli, optimism } from "wagmi/chains";
+import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -141,4 +141,12 @@ export const Links = {
 export const SortOrder = {
   ASC: "ascending",
   DESC: "descending",
+};
+
+export const AddressEnsMappings = {
+  "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "CreditCub.Club",
+};
+
+export const AddressAvatarMappings = {
+  "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "https://euc.li/creditcub.eth",
 };
