@@ -13,7 +13,7 @@ export const filterFunctions = {
   borrowing:  (item) => item.locking?.gt(ZERO),
   notMember:  (item) => !item.isMember,
   member:     (item) => item.isMember,
-  inactive:   (item) => !(item.isOverdue && item.locking?.gt(ZERO)) && item.locking?.lte(ZERO) && item.isMember,
+  inactive:   (item) => !item.isOverdue && item.locking?.lte(ZERO) && item.isMember,
   overdue:    (item) => item.isOverdue,
 
   // voucher filters
