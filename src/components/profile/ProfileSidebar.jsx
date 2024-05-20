@@ -46,11 +46,11 @@ export function ProfileSidebar({ address, member, chainId }) {
             items={[
               {
                 value: formattedNumber(owed),
-                color: "blue100",
+                color: "blue900",
               },
               {
                 value: formattedNumber(creditLimit, 2, false),
-                color: "blue900",
+                color: "blue100",
               },
               {
                 value: formattedNumber(unavailableBalance),
