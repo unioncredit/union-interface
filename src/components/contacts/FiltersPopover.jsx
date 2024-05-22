@@ -12,7 +12,8 @@ export const filterFunctions = {
   // vouchee filters
   borrowing:  (item) => item.locking?.gt(ZERO),
   notMember:  (item) => !item.isMember,
-  inactive:   (item) => !item.isOverdue && item.isMember,
+  member:     (item) => item.isMember,
+  inactive:   (item) => !item.isOverdue && item.locking?.lte(ZERO) && item.isMember,
   overdue:    (item) => item.isOverdue,
 
   // voucher filters
@@ -29,6 +30,7 @@ export default function FiltersPopover({ type, filters, setFilters }) {
           { id: "borrowing", label: "Borrowing" },
           { id: "overdue", label: "Overdue" },
           { id: "inactive", label: "Inactive" },
+          { id: "member", label: "Member" },
           { id: "notMember", label: "Not a member" },
         ]
       : [{ id: "borrowing_from", label: "Borrowing from" }];
