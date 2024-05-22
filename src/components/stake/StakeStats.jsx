@@ -1,24 +1,23 @@
 import "./StakeStats.scss";
 
 import {
-  Button,
-  Card,
-  NumericalBlock,
-  ButtonRow,
   Box,
-  WithdrawIcon,
+  Button,
+  ButtonRow,
+  Card,
   DepositIcon,
   DistributionBar,
+  NumericalBlock,
+  WithdrawIcon,
 } from "@unioncredit/ui";
 
 import format, { formattedNumber } from "utils/format";
-import { ZERO } from "constants";
+import { StakeType, ZERO } from "constants";
 import { reduceBnSum } from "utils/reduce";
 import { useVouchees } from "providers/VoucheesData";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { STAKE_MODAL } from "components/modals/StakeModal";
-import { StakeType } from "constants";
 import { AddressesAvatarBadgeRow } from "components/shared";
 import { Link } from "react-router-dom";
 
@@ -93,13 +92,15 @@ export default function StakeStats() {
               value={format(withdrawableStake)}
             />
 
-            <AddressesAvatarBadgeRow
-              mt="8px"
-              className="Withdrawable"
-              addresses={vouchees.map((v) => v.address)}
-              showLabel={true}
-              label={`Providing to ${vouchees.length ? vouchees.length : "no"} contacts`}
-            />
+            <Link to="/contacts/providing">
+              <AddressesAvatarBadgeRow
+                mt="8px"
+                className="Withdrawable"
+                addresses={vouchees.map((v) => v.address)}
+                showLabel={true}
+                label={`Providing to ${vouchees.length ? vouchees.length : "no"} contacts`}
+              />
+            </Link>
           </Box>
 
           <Box fluid className="StakeStats__item">

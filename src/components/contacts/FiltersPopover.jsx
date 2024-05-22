@@ -1,22 +1,22 @@
 import "./FiltersPopover.scss";
 
 import cn from "classnames";
-import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
+import { Box, Button, Control, FilterIcon, Modal, Popover, Text } from "@unioncredit/ui";
 
 import useScrollLock from "hooks/useScrollLock";
 import useResponsive from "hooks/useResponsive";
 import { ContactsType, ZERO } from "constants";
 
 // prettier-ignore
-export const filterFunctions = {
-  // vouchee filters
+export const providingFilterFns = {
   borrowing:  (item) => item.locking?.gt(ZERO),
   notMember:  (item) => !item.isMember,
   member:     (item) => item.isMember,
   inactive:   (item) => !item.isOverdue && item.locking?.lte(ZERO) && item.isMember,
   overdue:    (item) => item.isOverdue,
+};
 
-  // voucher filters
+export const receivingFilterFns = {
   borrowing_from: (item) => item.locking?.gt(ZERO),
 };
 

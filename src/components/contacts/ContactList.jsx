@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Box, Card, EmptyState, Pagination } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
-import { filterFunctions } from "components/contacts/FiltersPopover";
+import { providingFilterFns, receivingFilterFns } from "components/contacts/FiltersPopover";
 import usePagination from "hooks/usePagination";
 import useContactSearch from "hooks/useContactSearch";
 import { locationSearch } from "utils/location";
@@ -26,6 +26,7 @@ import {
   RECEIVING_SORT,
   useSettings,
 } from "../../providers/Settings";
+import { useSearchParams } from "react-router-dom";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -79,6 +80,7 @@ export default function ContactList({ initialType }) {
   const { data: vouchers = [] } = useVouchers();
   const { settings, setSetting } = useSettings();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [contactIndex, setContactIndex] = useState(null);
   const [query, setQuery] = useState(null);
   const [type, setType] = useState(initialType);
@@ -103,7 +105,7 @@ export default function ContactList({ initialType }) {
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
     if (urlSearchParams.has("filters")) {
-      return urlSearchParams.get("filters").split(",");
+      return urlSearchParams.getAll("filters");
     }
 
     const storedFilters =
@@ -114,6 +116,12 @@ export default function ContactList({ initialType }) {
 
     return [];
   });
+
+  const typeFilters = filters.filter((f) =>
+    type === ContactsType.VOUCHEES
+      ? Object.keys(providingFilterFns).includes(f)
+      : Object.keys(receivingFilterFns).includes(f)
+  );
 
   const setContact = (contact) => {
     setContactIndex(
@@ -134,6 +142,9 @@ export default function ContactList({ initialType }) {
   };
 
   const handleSetFilters = (newFilters) => {
+    const newSearchParams = new URLSearchParams();
+    newFilters.forEach((filter) => newSearchParams.append("filters", filter));
+    setSearchParams(newSearchParams);
     setFilters(newFilters);
     setSetting(type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS, newFilters);
   };
@@ -154,13 +165,13 @@ export default function ContactList({ initialType }) {
       settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
     const storedSort = settings[type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT];
 
-    if (storedFilters) {
-      setFilters(storedFilters);
+    if (storedFilters && storedFilters.length > 0 && !searchParams.has("filters")) {
+      handleSetFilters(storedFilters);
     }
     if (storedSort && storedSort.order !== null) {
       setSort(storedSort);
     }
-  }, [settings, type]);
+  }, [searchParams, settings, type]);
 
   useEffect(() => {
     const contact = filteredAndSorted[contactIndex];
@@ -217,14 +228,17 @@ export default function ContactList({ initialType }) {
   const searched = useContactSearch(contacts, query);
 
   const filteredAndSorted = useMemo(() => {
-    const filtered = filters
-      ? searched.filter((item) =>
-          filters.map((filter) => filterFunctions[filter](item)).every((x) => x === true)
-        )
-      : searched;
+    const filtered =
+      typeFilters.length > 0
+        ? searched.filter((item) =>
+            typeFilters
+              .map((filter) => (providingFilterFns[filter] || receivingFilterFns[filter])(item))
+              .some((x) => x === true)
+          )
+        : searched;
 
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
-  }, [filters, searched, sort.type, sort.order]);
+  }, [typeFilters, searched, sort.type, sort.order]);
 
   const handleSortType = (sortType) => {
     if (sort.type !== sortType) {
@@ -260,7 +274,7 @@ export default function ContactList({ initialType }) {
         <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
           type={type}
-          filters={filters}
+          filters={typeFilters}
           setQuery={setQuery}
           setFilers={handleSetFilters}
         />
