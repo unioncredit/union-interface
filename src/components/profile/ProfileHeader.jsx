@@ -50,7 +50,7 @@ const ProfileAddress = ({ member, chainId }) => {
     chainId,
   });
 
-  const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
+  const { isMember = false, isOverdue = false, lastRepay = ZERO, owed = ZERO } = member;
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const maxOverdueTotal = overdueTime.add(maxOverdueTime);
@@ -60,6 +60,10 @@ const ProfileAddress = ({ member, chainId }) => {
 
   return isMaxOverdue ? (
     <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
+  ) : isOverdue ? (
+    <BadgeIndicator label="Overdue" color="red500" textColor="red500" />
+  ) : owed.gt(ZERO) ? (
+    <BadgeIndicator label="Borrowing" color="green500" />
   ) : isMember ? (
     <BadgeIndicator label="Member" color="blue500" />
   ) : (
