@@ -56,7 +56,7 @@ export function StatusBadge({ address, type, chainId: chainIdProp }) {
       ) : isMember ? (
         <BadgeIndicator color="blue500" label="Member" />
       ) : (
-        <BadgeIndicator label="Not-member" />
+        <BadgeIndicator label="Non-member" />
       )}
     </>
   );
