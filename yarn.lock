@@ -3222,10 +3222,10 @@
   resolved "https://registry.npmmirror.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@unioncredit/data@^1.0.19":
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.19.tgz#ecd708574eac19e72dcd11ea63e01049762d35a4"
-  integrity sha512-/VG93IXqW7Uvo8I+kBsseX7/exxCpiHxjJ0279Y2aFi2hBlN9TFoFoNQCWC/oRmO5KLXo+rUlJbinHP7vX9isg==
+"@unioncredit/data@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.20.tgz#3a545a2441ff1a11e36d1b34e4680cbedaf709cc"
+  integrity sha512-c66RF0VqrpsH5zkWsfKAKHK6YiWbRN8bURQSYl0ISgWr9lF1utdhaVyGlviynDuIHkAs8QEt9KnS4fwT3Sptxw==
   dependencies:
     graphql "^16.5.0"
     graphql-request "^4.2.0"

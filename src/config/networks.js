@@ -67,18 +67,4 @@ export const allNetworks = [
       chainName: "Arbitrum One",
     },
   },
-  {
-    type: "goerli",
-    id: "goerli",
-    imageSrc: "/networks/gorli.png",
-    value: "goerli",
-    label: "Goerli",
-    labelWithVersion: "Goerli (v1)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/gorli-avatar.png",
-    chainId: 5,
-    networkData: {
-      chainId: "0x5",
-    },
-  },
 ];

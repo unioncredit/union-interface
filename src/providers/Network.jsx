@@ -3,7 +3,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { createContext, useContext, useState } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
 // eslint-disable-next-line no-undef
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
@@ -13,7 +13,7 @@ const NetworkContext = createContext({});
 export const useAppNetwork = () => useContext(NetworkContext);
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, arbitrum, goerli, optimismGoerli, optimism],
+  [mainnet, arbitrum, optimism],
   [
     // eslint-disable-next-line no-undef
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
