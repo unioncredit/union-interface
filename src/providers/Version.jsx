@@ -1,6 +1,6 @@
 import { useAccount, useNetwork } from "wagmi";
-import { mainnet, goerli, arbitrum, optimismGoerli, optimism } from "wagmi/chains";
-import { createContext, useContext, useState, useEffect } from "react";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const VersionContext = createContext({});
 
@@ -14,8 +14,8 @@ export const Versions = {
 export const DefaultVersion = Versions.V2;
 
 const versionSupport = {
-  [Versions.V1]: [mainnet.id, goerli.id, arbitrum.id],
-  [Versions.V2]: [optimismGoerli.id, optimism.id],
+  [Versions.V1]: [mainnet.id, arbitrum.id],
+  [Versions.V2]: [optimism.id],
 };
 
 export function isVersionSupported(version, chainId) {

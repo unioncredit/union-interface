@@ -1,16 +1,8 @@
-import {
-  mainnet,
-  goerli,
-  arbitrum,
-  optimismGoerli,
-  optimism,
-} from "wagmi/chains";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
 const urls = {
   [mainnet.id]: "https://etherscan.io",
-  [goerli.id]: "https://goerli.etherscan.io",
   [arbitrum.id]: "https://arbiscan.io",
-  [optimismGoerli.id]: "https://goerli-optimism.etherscan.io",
   [optimism.id]: "https://optimistic.etherscan.io",
 };
 

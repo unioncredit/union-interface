@@ -1,27 +1,5 @@
 import { useNetwork } from "wagmi";
-import { arbitrum, goerli, mainnet, optimism, optimismGoerli } from "wagmi/chains";
-
-import {
-  assetManagerContract as GOERLI_assetManagerContract,
-  comptrollerContract as GOERLI_comptrollerContract,
-  daiContract as GOERLI_daiContract,
-  unionContract as GOERLI_unionContract,
-  userManagerContract as GOERLI_userManagerContract,
-  uTokenContract as GOERLI_uTokenContract,
-} from "config/contracts/goerli";
-
-import {
-  assetManagerContract as OPTIMISM_GOERLI_V2_assetManagerContract,
-  comptrollerContract as OPTIMISM_GOERLI_V2_comptrollerContract,
-  daiContract as OPTIMISM_GOERLI_V2_daiContract,
-  referralContract as OPTIMISM_GOERLI_V2_referralContract,
-  registerHelperContract as OPTIMISM_GOERLI_V2_registerHelperContract,
-  unionContract as OPTIMISM_GOERLI_V2_unionContract,
-  unionLensContract as OPTIMISM_GOERLI_V2_unionLensContract,
-  userManagerContract as OPTIMISM_GOERLI_V2_userManagerContract,
-  uTokenContract as OPTIMISM_GOERLI_V2_uTokenContract,
-  vouchFaucetContract as OPTIMISM_GOERLI_V2_vouchFaucet,
-} from "config/contracts/v2/optimismGoerli";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
 import {
   assetManagerContract as MAINNET_assetManagerContract,
@@ -64,14 +42,6 @@ export default function useContract(name, chainId, forceVersion) {
   const { version } = useVersion();
 
   const v1Contracts = {
-    [goerli.id]: {
-      userManager: GOERLI_userManagerContract,
-      uToken: GOERLI_uTokenContract,
-      union: GOERLI_unionContract,
-      dai: GOERLI_daiContract,
-      comptroller: GOERLI_comptrollerContract,
-      assetManager: GOERLI_assetManagerContract,
-    },
     [mainnet.id]: {
       governor: governorContract,
       timelock: timelockContract,
@@ -94,18 +64,6 @@ export default function useContract(name, chainId, forceVersion) {
   };
 
   const v2Contracts = {
-    [optimismGoerli.id]: {
-      userManager: OPTIMISM_GOERLI_V2_userManagerContract,
-      uToken: OPTIMISM_GOERLI_V2_uTokenContract,
-      union: OPTIMISM_GOERLI_V2_unionContract,
-      dai: OPTIMISM_GOERLI_V2_daiContract,
-      comptroller: OPTIMISM_GOERLI_V2_comptrollerContract,
-      assetManager: OPTIMISM_GOERLI_V2_assetManagerContract,
-      unionLens: OPTIMISM_GOERLI_V2_unionLensContract,
-      vouchFaucet: OPTIMISM_GOERLI_V2_vouchFaucet,
-      registerHelper: OPTIMISM_GOERLI_V2_registerHelperContract,
-      referral: OPTIMISM_GOERLI_V2_referralContract,
-    },
     [optimism.id]: {
       userManager: OPTIMISM_V2_userManagerContract,
       uToken: OPTIMISM_V2_uTokenContract,
