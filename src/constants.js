@@ -135,8 +135,10 @@ export const SortOrder = {
 
 export const AddressEnsMappings = {
   "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "CreditCub.Club",
+  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "CreditClub",
 };
 
 export const AddressAvatarMappings = {
   "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "https://euc.li/creditcub.eth",
+  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "https://euc.li/creditcub.eth",
 };
