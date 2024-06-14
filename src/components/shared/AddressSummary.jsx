@@ -130,8 +130,12 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 }
                 onClick={(e) => {
                   if (editMode) {
-                    handleSave();
+                    if (navigator?.virtualKeyboard) {
+                      navigator.virtualKeyboard.hide();
+                    }
+
                     e.target.focus();
+                    handleSave();
                   } else {
                     setLabelText(primaryLabel);
                     setEditMode(true);
