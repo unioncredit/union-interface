@@ -138,6 +138,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                     e.target.focus();
                     handleSave();
                   } else {
+                    alert(1);
                     setLabelText(primaryLabel);
                     setEditMode(true);
                   }
