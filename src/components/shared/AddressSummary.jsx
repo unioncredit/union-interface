@@ -20,12 +20,11 @@ import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { getProfileUrl } from "utils/generateLinks";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useLabels from "hooks/useLabels";
 import { mainnet } from "wagmi/chains";
 
 export function AddressSummary({ address, chainId: chainIdProp, allowEdit = false, ...props }) {
-  const inputRef = useRef();
   const { chain } = useNetwork();
   const { getLabel, setLabel } = useLabels();
   const { data: ensName } = useEnsName({
@@ -91,8 +90,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
           <Box fluid justify="space-between">
             {editMode ? (
               <input
-                autoFocus
-                ref={inputRef}
+                ref={(input) => input && input.focus()}
                 type="text"
                 value={labelText}
                 onfocusout={(e) =>
@@ -130,17 +128,13 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 label={
                   editMode ? (labelText === primaryLabel ? "Cancel" : "Save Alias") : "Edit Alias"
                 }
-                onClick={() => {
+                onClick={(e) => {
                   if (editMode) {
-                    const event = new KeyboardEvent("keydown", {
-                      key: "Enter",
-                      code: "Enter",
-                      which: 13,
-                      keyCode: 13,
-                    });
+                    if (navigator?.virtualKeyboard) {
+                      navigator.virtualKeyboard.hide();
+                    }
 
-                    inputRef.current.dispatchEvent(event);
-
+                    e.target.focus();
                     handleSave();
                   } else {
                     setLabelText(primaryLabel);
