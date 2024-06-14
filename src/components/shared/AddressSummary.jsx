@@ -92,6 +92,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
               <input
                 ref={(input) => input && input.focus()}
                 type="text"
+                inputMode="none"
                 value={labelText}
                 onfocusout={(e) =>
                   (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
