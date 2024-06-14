@@ -90,7 +90,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
           <Box fluid justify="space-between">
             {editMode ? (
               <input
-                autoFocus
+                ref={(input) => input && input.focus()}
                 type="text"
                 value={labelText}
                 onfocusout={(e) =>
