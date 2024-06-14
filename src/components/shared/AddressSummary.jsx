@@ -135,7 +135,6 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                         handleSave();
                       }
                     : () => {
-                        alert(1);
                         setLabelText(primaryLabel);
                         setEditMode(true);
                       }
