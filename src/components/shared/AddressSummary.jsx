@@ -20,7 +20,7 @@ import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { getProfileUrl } from "utils/generateLinks";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import useLabels from "hooks/useLabels";
 import { mainnet } from "wagmi/chains";
 
@@ -61,18 +61,6 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
       setEditMode(false);
     }
   };
-
-  const handleOnClick = useCallback(() => {
-    if (editMode) {
-      alert(0);
-
-      handleSave();
-    } else {
-      alert(1);
-      setLabelText(primaryLabel);
-      setEditMode(true);
-    }
-  }, [editMode, handleSave, primaryLabel]);
 
   if (!address) {
     return (
@@ -140,7 +128,18 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 label={
                   editMode ? (labelText === primaryLabel ? "Cancel" : "Save Alias") : "Edit Alias"
                 }
-                onClick={handleOnClick}
+                onClick={
+                  editMode
+                    ? () => {
+                        alert(0);
+                        handleSave();
+                      }
+                    : () => {
+                        alert(1);
+                        setLabelText(primaryLabel);
+                        setEditMode(true);
+                      }
+                }
               />
             )}
           </Box>
