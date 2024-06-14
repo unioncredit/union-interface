@@ -128,8 +128,10 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 label={
                   editMode ? (labelText === primaryLabel ? "Cancel" : "Save Alias") : "Edit Alias"
                 }
-                onClick={(e) => {
-                  e.target.focus();
+                onClick={() => {
+                  if (document.activeElement && document.activeElement.blur) {
+                    document.activeElement.blur();
+                  }
                   if (editMode) {
                     handleSave();
                   } else {
