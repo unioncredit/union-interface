@@ -20,12 +20,11 @@ import { truncateAddress } from "utils/truncateAddress";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import { getProfileUrl } from "utils/generateLinks";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import useLabels from "hooks/useLabels";
 import { mainnet } from "wagmi/chains";
 
 export function AddressSummary({ address, chainId: chainIdProp, allowEdit = false, ...props }) {
-  const inputRef = useRef();
   const { chain } = useNetwork();
   const { getLabel, setLabel } = useLabels();
   const { data: ensName } = useEnsName({
@@ -91,7 +90,6 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
           <Box fluid justify="space-between">
             {editMode ? (
               <input
-                ref={inputRef}
                 autoFocus
                 type="text"
                 value={labelText}
@@ -133,7 +131,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 onClick={() => {
                   if (editMode) {
                     handleSave();
-                    inputRef.current.blur();
+                    setEditMode(false);
                   } else {
                     setLabelText(primaryLabel);
                     setEditMode(true);
