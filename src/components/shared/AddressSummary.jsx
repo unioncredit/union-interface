@@ -94,7 +94,11 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 type="text"
                 value={labelText}
                 onBlur={(e) => {
-                  if (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) {
+                  if (
+                    !e.relatedTarget ||
+                    !e.relatedTarget.classList.contains("AliasButton") ||
+                    window.innerWidth > 767
+                  ) {
                     setEditMode(false);
                   }
                 }}
