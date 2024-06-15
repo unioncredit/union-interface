@@ -174,7 +174,7 @@ export default function ProfileHeader({ address, chainId }) {
                   type="account"
                   chainId={chainId}
                   address={address}
-                  label={data.account.is_contract_address ? "Contract" : "EOA"}
+                  label={data?.account?.is_contract_address ? "Contract" : "EOA"}
                 />
 
                 {data.socials?.map((item, idx) => (
