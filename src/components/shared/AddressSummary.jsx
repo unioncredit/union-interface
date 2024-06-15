@@ -90,16 +90,20 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
           <Box fluid justify="space-between">
             {editMode ? (
               <input
-                autoFocus
+                ref={(input) => input && input.focus()}
                 type="text"
                 value={labelText}
-                onfocusout={(e) =>
-                  (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
-                  setEditMode(false)
-                }
-                onBlur={(e) =>
-                  (!e.relatedTarget || !e.relatedTarget.classList.contains("AliasButton")) &&
-                  setEditMode(false)
+                onBlur={
+                  window.innerWidth > 767
+                    ? (e) => {
+                        if (
+                          !e.relatedTarget ||
+                          !e.relatedTarget.classList.contains("AliasButton")
+                        ) {
+                          setEditMode(false);
+                        }
+                      }
+                    : undefined
                 }
                 onKeyDown={handleKeyDown}
                 onChange={(e) => setLabelText(e.target.value)}
@@ -128,14 +132,17 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 label={
                   editMode ? (labelText === primaryLabel ? "Cancel" : "Save Alias") : "Edit Alias"
                 }
-                onClick={() => {
-                  if (editMode) {
-                    handleSave();
-                  } else {
-                    setLabelText(primaryLabel);
-                    setEditMode(true);
-                  }
-                }}
+                onClick={
+                  editMode
+                    ? () => {
+                        alert(0);
+                        handleSave();
+                      }
+                    : () => {
+                        setLabelText(primaryLabel);
+                        setEditMode(true);
+                      }
+                }
               />
             )}
           </Box>
