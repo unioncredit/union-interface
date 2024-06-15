@@ -114,14 +114,14 @@ export default function ProfileHeader({ address, chainId }) {
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
-      fetch(`https://identity.union.finance/address/${address}`)
+      fetch(`https://identity.union.finance/${connectedChain?.id}/address/${address}`)
         .then((res) => res.json())
         .then(setData)
         .catch((err) => {
           console.log(err.message);
         });
     }
-  }, [address]);
+  }, [connectedChain?.id, address]);
 
   const isManageContactButton = isConnected && alreadyVouching;
   const isVouchButton =
@@ -174,7 +174,7 @@ export default function ProfileHeader({ address, chainId }) {
                   type="account"
                   chainId={chainId}
                   address={address}
-                  label={data.account.is_contract_address ? "Contract address" : "EOA"}
+                  label={data.account.is_contract_address ? "Contract" : "EOA"}
                 />
 
                 {data.socials?.map((item, idx) => (
