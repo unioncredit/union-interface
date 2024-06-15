@@ -93,15 +93,18 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 ref={(input) => input && input.focus()}
                 type="text"
                 value={labelText}
-                onBlur={(e) => {
-                  if (
-                    !e.relatedTarget ||
-                    !e.relatedTarget.classList.contains("AliasButton") ||
-                    window.innerWidth > 767
-                  ) {
-                    setEditMode(false);
-                  }
-                }}
+                onBlur={
+                  window.innerWidth > 767
+                    ? (e) => {
+                        if (
+                          !e.relatedTarget ||
+                          !e.relatedTarget.classList.contains("AliasButton")
+                        ) {
+                          setEditMode(false);
+                        }
+                      }
+                    : undefined
+                }
                 onKeyDown={handleKeyDown}
                 onChange={(e) => setLabelText(e.target.value)}
                 className="AddressSummary__alias-input"
