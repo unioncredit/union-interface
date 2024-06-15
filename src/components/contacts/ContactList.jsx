@@ -188,38 +188,7 @@ export default function ContactList({ initialType }) {
     }
   }, [contactIndex]);
 
-  const contacts =
-    (type === ContactsType.VOUCHEES
-      ? [
-          ...vouchees,
-          ...vouchers
-            .filter(
-              (voucher) =>
-                !vouchees.find((vouchee) => compareAddresses(vouchee.address, voucher.address))
-            )
-            .map(({ address }) => ({
-              address,
-              isOverdue: false,
-              locking: ZERO,
-              trust: ZERO,
-              vouch: ZERO,
-              lastRepay: ZERO,
-            })),
-        ]
-      : [
-          ...vouchers,
-          ...vouchees
-            .filter(
-              (vouchee) =>
-                !vouchers.find((voucher) => compareAddresses(voucher.address, vouchee.address))
-            )
-            .map(({ address }) => ({
-              address,
-              locked: ZERO,
-              trust: ZERO,
-              vouch: ZERO,
-            })),
-        ]) || [];
+  const contacts = type === ContactsType.VOUCHEES ? vouchees : vouchers;
 
   /*--------------------------------------------------------------
     Search, Filter, Paginate 
