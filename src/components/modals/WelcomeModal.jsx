@@ -7,7 +7,7 @@ import {
   ModalOverlay,
   Heading,
   TwitterIcon,
-  ConfettiIcon
+  ConfettiIcon,
 } from "@unioncredit/ui";
 import React, { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
@@ -31,12 +31,12 @@ const ConfettiCanvas = React.memo(() => (
       left: "0px",
       width: "100%",
       height: "100%",
-      pointerEvents: "none"
+      pointerEvents: "none",
     }}
   />
 ));
 
-export default function WelcomeModal() {
+export default function WelcomeModal({ onClose }) {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { open, close } = useModals();
@@ -49,6 +49,11 @@ export default function WelcomeModal() {
 
   const profileUrl = getProfileUrl(address, chain.id);
   const twitterUrl = generateTwitterLink(profileUrl);
+
+  const handleClose = () => {
+    onClose?.();
+    close();
+  };
 
   useEffect(() => {
     const el = document.getElementById("confettiCanvas");
@@ -71,7 +76,7 @@ export default function WelcomeModal() {
   }, []);
 
   return (
-    <ModalOverlay onClick={close}>
+    <ModalOverlay onClick={handleClose}>
       <ConfettiCanvas />
       <Modal className="WelcomeModal">
         <Modal.Body>
@@ -117,11 +122,11 @@ export default function WelcomeModal() {
             variant="light"
             label="Continue"
             onClick={() => {
+              refetchMember();
               open(VOUCH_MODAL, {
                 title: "Welcome a friend to Union",
                 subTitle: "Send your first vouch",
                 newMember: true,
-                onClose: () => refetchMember()
               });
             }}
           />
