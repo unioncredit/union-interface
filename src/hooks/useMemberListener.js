@@ -57,17 +57,6 @@ export default function useMemberListener() {
   });
 
   useContractEvent({
-    ...userManager,
-    eventName: "LogRegisterMember",
-    listener: (_, account) => {
-      console.debug("Listener: LogRegisterMember received", { account, address });
-      if (compareAddresses(account, address)) {
-        refreshMember();
-      }
-    },
-  });
-
-  useContractEvent({
     ...daiContract,
     eventName: "Transfer",
     listener: (from, to) => {

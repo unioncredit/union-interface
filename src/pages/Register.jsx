@@ -16,7 +16,7 @@ import { TextSeparator } from "components/shared/TextSeparator";
 export default function RegisterPage() {
   const { open } = useModals();
   const { data: protocol = {} } = useProtocol();
-  const { data: member = {} } = useMember();
+  const { data: member = {}, refetch: refetchMember } = useMember();
 
   const { creditLimit = ZERO } = member;
   const { regFee = ZERO, rebate = ZERO } = protocol;
@@ -53,7 +53,13 @@ export default function RegisterPage() {
                 <NetworkSelect />
               </Box>
 
-              <EthRegisterButton onComplete={() => open(WELCOME_MODAL)} />
+              <EthRegisterButton
+                onComplete={() =>
+                  open(WELCOME_MODAL, {
+                    onClose: refetchMember,
+                  })
+                }
+              />
             </Box>
             <TextSeparator m="12px 0" w="90%" maxw="350px">
               or
