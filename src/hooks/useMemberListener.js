@@ -15,6 +15,7 @@ export default function useMemberListener() {
 
   const userManager = useContract("userManager", connectedChain?.id ?? mainnet.id);
   const daiContract = useContract("dai", connectedChain?.id ?? mainnet.id);
+  const unionContract = useContract("union", connectedChain?.id ?? mainnet.id);
 
   const refreshMember = () => {
     console.log("Listener: refreshing member");
@@ -61,6 +62,17 @@ export default function useMemberListener() {
     eventName: "Transfer",
     listener: (from, to) => {
       console.debug("Listener: DAI Transfer received", { address, from, to });
+      if (compareAddresses(address, from) || compareAddresses(address, to)) {
+        refreshMember();
+      }
+    },
+  });
+
+  useContractEvent({
+    ...unionContract,
+    eventName: "Transfer",
+    listener: (from, to) => {
+      console.debug("Listener: UNION Transfer received", { address, from, to });
       if (compareAddresses(address, from) || compareAddresses(address, to)) {
         refreshMember();
       }
