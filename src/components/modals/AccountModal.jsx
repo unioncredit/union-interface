@@ -7,13 +7,14 @@ import {
   ButtonRow,
   Card,
   DisconnectWalletIcon,
-  FailedIcon,
+  FailedStatusIcon,
   Heading,
   LinkOutIcon,
   Modal,
   ModalOverlay,
+  PendingStatusIcon,
   ProfileIcon,
-  SuccessIcon,
+  SuccessStatusIcon,
   Text,
 } from "@unioncredit/ui";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
@@ -109,33 +110,43 @@ export default function AccountModal() {
             />
           </Box>
 
-          <Box direction="vertical" fluid>
+          <Box className="WalletActivity" direction="vertical" fluid>
             {logs.length <= 0 ? (
               <Text grey={400} size="small" m={0}>
                 No activity logs
               </Text>
             ) : (
-              logs.map(({ txHash, status, label, value }) => (
-                <Box key={txHash} align="center" justify="space-between" fluid>
+              logs.slice(3).map(({ txHash, status, label, value }) => (
+                <Box
+                  className="WalletActivity__row"
+                  key={txHash}
+                  align="center"
+                  justify="space-between"
+                  fluid
+                >
                   <Box align="center">
-                    <div className="AccountModal__Activity__statusIcon">
+                    <div className="WalletActivity__icon">
                       {status === Status.SUCCESS ? (
-                        <SuccessIcon width="20px" />
+                        <SuccessStatusIcon width="24px" />
+                      ) : status === Status.PENDING ? (
+                        <PendingStatusIcon width="24px" />
                       ) : (
-                        <FailedIcon width="20px" />
+                        <FailedStatusIcon width="24px" />
                       )}
                     </div>
                     <Text size="medium" weight="medium" grey={500} m={0}>
                       {label}
                     </Text>
                   </Box>
-                  <Box align="center">
+                  <Box className="WalletActivity__value" align="center">
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
                       {format(value)}
                     </Text>
-                    <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
-                      <LinkOutIcon width="16px" />
-                    </a>
+                    {txHash && (
+                      <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
+                        <LinkOutIcon width="22px" />
+                      </a>
+                    )}
                   </Box>
                 </Box>
               ))

@@ -1,13 +1,6 @@
 @import "@unioncredit/ui/src/variables";
 
 .AccountModal {
-  &__Activity {
-    &__statusIcon {
-      display: flex;
-      align-items: center;
-      margin-right: 4px;
-    }
-  }
   &__Buttons {
     & > a,
     & > button {
@@ -23,6 +16,29 @@
 
     @media screen and (max-width: $breakpoint-micro) {
       flex-direction: column !important;
+    }
+  }
+
+  .WalletActivity {
+    &__row {
+      margin: 5px 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &__icon {
+      display: flex;
+      align-items: center;
+      margin-right: 4px;
+    }
+
+    &__value svg path {
+      fill: $grey400;
     }
   }
 }
