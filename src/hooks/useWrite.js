@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, usePrepareContractWrite, useNetwork, useSigner } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite, useSigner } from "wagmi";
 
 import { Status } from "constants";
-import praseAppLog from "utils/praseAppLog";
+import parseAppLog from "utils/parseAppLog";
 import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
 import { useToasts } from "providers/Toasts";
@@ -67,7 +67,7 @@ export default function useWrite({
 
       onComplete && (await onComplete());
 
-      addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
+      addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
       addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
 
       return true;
@@ -86,6 +86,7 @@ export default function useWrite({
           id: `${Status.FAILED}__${method}__${Date.now()}`,
         });
       } else {
+        addLog(parseAppLog(Status.FAILED, method, memoisedArgs, null));
         addToast(parseToast(Status.FAILED, null));
       }
 

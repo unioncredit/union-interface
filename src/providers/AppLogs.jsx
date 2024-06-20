@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
 
 const AppLogsContext = createContext({});
@@ -16,9 +16,7 @@ export default function AppLogs({ children }) {
   useEffect(() => {
     if (!chain?.id) return;
 
-    const initialValue = JSON.parse(
-      window.localStorage.getItem(getKey(chain.id)) || "[]"
-    );
+    const initialValue = JSON.parse(window.localStorage.getItem(getKey(chain.id)) || "[]");
 
     setLogs(initialValue);
   }, [chain?.id]);
@@ -27,7 +25,6 @@ export default function AppLogs({ children }) {
     if (!props) return;
     const { status, label, value, txHash } = props;
     const newLogs = [...logs, { status, label, value, txHash }];
-
     setLogs(newLogs);
     window.localStorage.setItem(getKey(chain.id), JSON.stringify(newLogs));
   };
@@ -43,9 +40,5 @@ export default function AppLogs({ children }) {
     clearLogs,
   };
 
-  return (
-    <AppLogsContext.Provider value={appLogsCtx}>
-      {children}
-    </AppLogsContext.Provider>
-  );
+  return <AppLogsContext.Provider value={appLogsCtx}>{children}</AppLogsContext.Provider>;
 }
