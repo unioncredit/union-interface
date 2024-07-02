@@ -1,4 +1,4 @@
-# Contributing
+## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
@@ -6,7 +6,7 @@ When contributing to this repository, please first discuss the change you wish t
 
 Issues should be used to report bugs or request new features. If you find an Issue that is related to a problem you're having, please add your own reproduction information to the existing issue rather than creating a new one. Adding a reaction can also help be indicating to our maintainers that a particular problem is affecting more than just the reporter.
 
-### Noticed a bug?
+## Noticed a bug?
 
 (╯°□°)╯︵ ┻━┻
 
