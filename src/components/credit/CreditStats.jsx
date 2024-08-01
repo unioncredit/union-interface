@@ -103,6 +103,7 @@ export default function CreditStats({ vouchers }) {
             size="large"
             label="Borrow"
             icon={BorrowIcon}
+            disabled={isOverdue}
             className="BorrowButton"
             onClick={() => open(BORROW_MODAL)}
           />
