@@ -20,6 +20,8 @@ import { EIP3770, ZERO_ADDRESS } from "constants";
 import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
+import NotFoundPage from "./NotFoundPage";
+import ProfileHeaderLoading from "../components/profile/ProfileHeaderLoading";
 
 function ProfileInner({ address, member, chainId, legacyTag }) {
   const navigate = useNavigate();
@@ -28,6 +30,8 @@ function ProfileInner({ address, member, chainId, legacyTag }) {
   // True if the user has navigated other pages previously, false if they landed
   // on the profile directly.
   const historyExists = location.key !== "default";
+
+  const memberLoaded = address !== ZERO_ADDRESS;
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
@@ -64,15 +68,21 @@ function ProfileInner({ address, member, chainId, legacyTag }) {
       *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body p={0}>
-          <ProfileHeader address={address} chainId={chainId} />
+          {memberLoaded ? (
+            <ProfileHeader address={address} chainId={chainId} />
+          ) : (
+            <ProfileHeaderLoading />
+          )}
         </Card.Body>
       </Card>
       {/*--------------------------------------------------------------
         Profile details 
       *--------------------------------------------------------------*/}
-      <Box fluid>
-        <ProfileSidebar chainId={chainId} address={address} member={member} />
-      </Box>
+      {memberLoaded && (
+        <Box fluid>
+          <ProfileSidebar chainId={chainId} address={address} member={member} />
+        </Box>
+      )}
     </Box>
   );
 }
@@ -90,7 +100,7 @@ export default function Profile() {
         addressOrEnsParts.length > 1 ? addressOrEnsParts[1] : addressOrEnsParam,
       ];
 
-  const { data: addressFromEns } = useEnsAddress({
+  const { data: addressFromEns, isLoading } = useEnsAddress({
     name: addressOrEns,
     chainId: mainnet.id,
   });
@@ -103,7 +113,9 @@ export default function Profile() {
 
   const profileAddress = member.address || ZERO_ADDRESS;
 
-  return (
+  return !isLoading && !address ? (
+    <NotFoundPage />
+  ) : (
     <>
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
