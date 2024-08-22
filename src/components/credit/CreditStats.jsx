@@ -1,10 +1,11 @@
 import "./CreditStats.scss";
 
 import cn from "classnames";
-import { BigNumber } from "ethers";
 import { useNetwork } from "wagmi";
 import {
+  Badge,
   BadgeIndicator,
+  BadgeRow,
   BorrowIcon,
   Box,
   Button,
@@ -33,6 +34,8 @@ import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import useResponsive from "hooks/useResponsive";
 import makeUrls from "add-event-to-calendar";
+import React from "react";
+import { BigNumber } from "ethers";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
@@ -175,7 +178,12 @@ export default function CreditStats({ vouchers }) {
         </Box>
       </Card.Body>
 
-      <Card.Footer direction="vertical">
+      <Card.Footer
+        direction="vertical"
+        className={cn("Card__footer", {
+          MaxOverdue: isMaxOverdue,
+        })}
+      >
         <Box mb="24px" align="center" justify="space-between" fluid>
           <NumericalBlock
             token="dai"
@@ -207,19 +215,30 @@ export default function CreditStats({ vouchers }) {
         >
           <Box className="PaymentDueInfo" direction="vertical">
             <Box align="center">
-              {isOverdue && <WarningIcon width="21px" style={{ marginRight: "6px" }} />}
+              {isOverdue && (
+                <WarningIcon className="WarningIcon" width="21px" style={{ marginRight: "6px" }} />
+              )}
 
-              <Text m={0} size="medium" weight="medium" grey={500}>
+              <Text m={0} size="medium" weight="medium" grey={600}>
                 {isOverdue ? `${relativeDueDate} Overdue` : "Next payment due"}
               </Text>
             </Box>
 
             {isMaxOverdue ? (
-              <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
+              <BadgeRow mt="8px">
+                <Badge color="white" label={`${format(minPayment)} DAI · ${absoluteDueDate}`} />
+                <BadgeIndicator color="red500" textColor="red500" label="Write-Off" />
+              </BadgeRow>
             ) : (
-              <Text m="4px 0 0" size="medium">
-                {owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`}
-              </Text>
+              <BadgeIndicator
+                mt="8px"
+                color="orange500"
+                textColor="grey500"
+                ml="-3px"
+                label={
+                  owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`
+                }
+              />
             )}
           </Box>
 
