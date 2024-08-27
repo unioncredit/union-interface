@@ -51,6 +51,7 @@ export default function ModalManager({ children }) {
 
   const close = () => {
     document.body.classList.remove("no-scroll");
+    document.documentElement.classList.remove("no-scroll");
     document.querySelector("#scroll-wrap").classList.remove("no-scroll");
     setModal(null);
     setProps(null);
@@ -58,6 +59,7 @@ export default function ModalManager({ children }) {
 
   const open = (key, props) => {
     document.body.classList.add("no-scroll");
+    document.documentElement.classList.add("no-scroll");
     document.querySelector("#scroll-wrap").classList.add("no-scroll");
     setModal(key);
     if (props) setProps(props);
