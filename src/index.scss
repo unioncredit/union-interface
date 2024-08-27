@@ -13,10 +13,6 @@ body {
   &.white-background {
     background-color: white;
   }
-
-  &.no-scroll {
-    overflow: hidden !important;
-  }
 }
 
 a {
@@ -75,4 +71,8 @@ a {
     padding: 4px 8px !important;
     min-height: 0;
   }
+}
+
+.no-scroll {
+  overflow: hidden !important;
 }
