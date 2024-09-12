@@ -74,6 +74,7 @@ a {
 }
 
 .no-scroll {
-  position: relative;
   overflow: hidden !important;
+  position: fixed;
+  width: 100%;
 }
