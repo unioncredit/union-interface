@@ -78,11 +78,11 @@ export const EIP3770Map = {
 
 export const TheGraphUrls = {
   [Versions.V1]: {
-    [mainnet.id]: "https://api.studio.thegraph.com/query/78581/union-v1-mainnet/1.0.0",
-    [arbitrum.id]: "https://api.studio.thegraph.com/query/78581/union-v1-arbitrum/1.0.0",
+    [mainnet.id]: "https://api.studio.thegraph.com/query/78581/union-v1-mainnet/version/latest",
+    [arbitrum.id]: "https://api.studio.thegraph.com/query/78581/union-v1-arbitrum/version/latest",
   },
   [Versions.V2]: {
-    [optimism.id]: "https://api.studio.thegraph.com/query/78581/union-finance/2.0.1",
+    [optimism.id]: "https://api.studio.thegraph.com/query/78581/union-finance/version/latest",
   },
 };
 
