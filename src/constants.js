@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
-import { mainnet, arbitrum, goerli, optimismGoerli, optimism } from "wagmi/chains";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
 import format from "./utils/format";
 
 export const ZERO = BigNumber.from(0);
@@ -69,8 +69,6 @@ export const ContactsType = {
 export const BlockSpeed = {
   [mainnet.id]: 12e3,
   [arbitrum.id]: 12e3,
-  [goerli.id]: 12e3,
-  [optimismGoerli.id]: 1e3,
   [optimism.id]: 1e3,
   [84532]: 1e3,
 };
@@ -78,8 +76,6 @@ export const BlockSpeed = {
 export const BlocksPerYear = {
   [mainnet.id]: 2628333,
   [arbitrum.id]: 2628333,
-  [goerli.id]: 2407328,
-  [optimismGoerli.id]: 31540000,
   [optimism.id]: 31540000,
   [84532]: 31540000,
 };
@@ -87,8 +83,6 @@ export const BlocksPerYear = {
 export const EIP3770 = {
   [mainnet.id]: "eth",
   [arbitrum.id]: "arb1",
-  [goerli.id]: "goe",
-  [optimismGoerli.id]: "optgoe",
   [optimism.id]: "opt",
   [84532]: "basesep",
 };
@@ -96,21 +90,17 @@ export const EIP3770 = {
 export const EIP3770Map = {
   eth: mainnet.id,
   arb1: arbitrum.id,
-  goe: goerli.id,
   opt: optimism.id,
-  optgoe: optimismGoerli.id,
   basesep: 84532,
 };
 
 export const TheGraphUrls = {
   [Versions.V1]: {
-    [mainnet.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union",
-    [arbitrum.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union-arbitrum",
-    [goerli.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union-goerli",
+    [mainnet.id]: "https://api.studio.thegraph.com/query/78581/union-v1-mainnet/version/latest",
+    [arbitrum.id]: "https://api.studio.thegraph.com/query/78581/union-v1-arbitrum/version/latest",
   },
   [Versions.V2]: {
-    [optimismGoerli.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union-v2-goerli",
-    [optimism.id]: "https://api.thegraph.com/subgraphs/name/geraldhost/union-optimism",
+    [optimism.id]: "https://api.studio.thegraph.com/query/78581/union-finance/version/latest",
   },
 };
 
@@ -159,4 +149,14 @@ export const Links = {
 export const SortOrder = {
   ASC: "ascending",
   DESC: "descending",
+};
+
+export const AddressEnsMappings = {
+  "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "CreditCub.Club",
+  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "CreditClub",
+};
+
+export const AddressAvatarMappings = {
+  "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "https://euc.li/creditcub.eth",
+  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "https://beta.creditclub.cc/glasses.png",
 };

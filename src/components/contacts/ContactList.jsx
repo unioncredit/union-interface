@@ -1,10 +1,10 @@
 import "./ContactList.scss";
 
 import { useEffect, useMemo, useState } from "react";
-import { Card, Pagination, EmptyState, Box } from "@unioncredit/ui";
+import { Box, Card, EmptyState, Pagination } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
-import { filterFunctions } from "components/contacts/FiltersPopover";
+import { providingFilterFns, receivingFilterFns } from "components/contacts/FiltersPopover";
 import usePagination from "hooks/usePagination";
 import useContactSearch from "hooks/useContactSearch";
 import { locationSearch } from "utils/location";
@@ -19,6 +19,14 @@ import { COLUMNS as RECEIVING_COLUMNS } from "components/contacts/ContactsTable/
 import { compareAddresses } from "utils/compare";
 import { MANAGE_CONTACT_MODAL } from "components/modals/ManageContactModal";
 import { useModals } from "providers/ModalManager";
+import {
+  PROVIDING_FILTERS,
+  PROVIDING_SORT,
+  RECEIVING_FILTERS,
+  RECEIVING_SORT,
+  useSettings,
+} from "../../providers/Settings";
+import { useSearchParams } from "react-router-dom";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -43,11 +51,11 @@ const sortFns = {
   },
   [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
     [SortOrder.ASC]: (a, b) =>
-      score([a.locking.gt(ZERO) && a.isOverdue, a.isMember, a.locking.gt(ZERO)]) -
-      score([b.locking.gt(ZERO) && b.isOverdue, b.isMember, b.locking.gt(ZERO)]),
+      score([a.locking?.gt(ZERO) && a.isOverdue, a.isMember, a.locking?.gt(ZERO)]) -
+      score([b.locking?.gt(ZERO) && b.isOverdue, b.isMember, b.locking?.gt(ZERO)]),
     [SortOrder.DESC]: (a, b) =>
-      score([b.isOverdue && b.locking.gt(ZERO), b.isMember, b.locking.gt(ZERO)]) -
-      score([a.isOverdue && a.locking.gt(ZERO), a.isMember, a.locking.gt(ZERO)]),
+      score([b.isOverdue && b.locking?.gt(ZERO), b.isMember, b.locking?.gt(ZERO)]) -
+      score([a.isOverdue && a.locking?.gt(ZERO), a.isMember, a.locking?.gt(ZERO)]),
   },
   [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
     [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
@@ -70,13 +78,20 @@ export default function ContactList({ initialType }) {
   const { isMobile } = useResponsive();
   const { data: vouchees = [] } = useVouchees();
   const { data: vouchers = [] } = useVouchers();
+  const { settings, setSetting } = useSettings();
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [contactIndex, setContactIndex] = useState(null);
   const [query, setQuery] = useState(null);
   const [type, setType] = useState(initialType);
 
-  const [sort, setSort] = useState(
-    type === ContactsType.VOUCHEES
+  const [sort, setSort] = useState(() => {
+    const storedSort = settings[type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT];
+    if (storedSort && storedSort.order !== null) {
+      return storedSort;
+    }
+
+    return type === ContactsType.VOUCHEES
       ? {
           type: PROVIDING_COLUMNS.LOAN_STATUS.id,
           order: SortOrder.DESC,
@@ -84,13 +99,29 @@ export default function ContactList({ initialType }) {
       : {
           type: null,
           order: null,
-        }
-  );
+        };
+  });
 
   const [filters, setFilters] = useState(() => {
     const urlSearchParams = locationSearch();
-    return urlSearchParams.has("filters") ? urlSearchParams.get("filters").split(",") : [];
+    if (urlSearchParams.has("filters")) {
+      return urlSearchParams.getAll("filters");
+    }
+
+    const storedFilters =
+      settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
+    if (storedFilters) {
+      return storedFilters;
+    }
+
+    return [];
   });
+
+  const typeFilters = filters.filter((f) =>
+    type === ContactsType.VOUCHEES
+      ? Object.keys(providingFilterFns).includes(f)
+      : Object.keys(receivingFilterFns).includes(f)
+  );
 
   const setContact = (contact) => {
     setContactIndex(
@@ -110,6 +141,14 @@ export default function ContactList({ initialType }) {
     }
   };
 
+  const handleSetFilters = (newFilters) => {
+    const newSearchParams = new URLSearchParams();
+    newFilters.forEach((filter) => newSearchParams.append("filters", filter));
+    setSearchParams(newSearchParams);
+    setFilters(newFilters);
+    setSetting(type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS, newFilters);
+  };
+
   useEffect(() => {
     const urlSearchParams = locationSearch();
     if (urlSearchParams.has("address")) {
@@ -120,6 +159,19 @@ export default function ContactList({ initialType }) {
       );
     }
   }, []);
+
+  useEffect(() => {
+    const storedFilters =
+      settings[type === ContactsType.VOUCHEES ? PROVIDING_FILTERS : RECEIVING_FILTERS];
+    const storedSort = settings[type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT];
+
+    if (storedFilters && storedFilters.length > 0 && !searchParams.has("filters")) {
+      handleSetFilters(storedFilters);
+    }
+    if (storedSort && storedSort.order !== null) {
+      setSort(storedSort);
+    }
+  }, [searchParams, settings, type]);
 
   useEffect(() => {
     const contact = filteredAndSorted[contactIndex];
@@ -136,38 +188,7 @@ export default function ContactList({ initialType }) {
     }
   }, [contactIndex]);
 
-  const contacts =
-    (type === ContactsType.VOUCHEES
-      ? [
-          ...vouchees,
-          ...vouchers
-            .filter(
-              (voucher) =>
-                !vouchees.find((vouchee) => compareAddresses(vouchee.address, voucher.address))
-            )
-            .map(({ address }) => ({
-              address,
-              isOverdue: false,
-              locking: ZERO,
-              trust: ZERO,
-              vouch: ZERO,
-              lastRepay: ZERO,
-            })),
-        ]
-      : [
-          ...vouchers,
-          ...vouchees
-            .filter(
-              (vouchee) =>
-                !vouchers.find((voucher) => compareAddresses(voucher.address, vouchee.address))
-            )
-            .map(({ address }) => ({
-              address,
-              locked: ZERO,
-              trust: ZERO,
-              vouch: ZERO,
-            })),
-        ]) || [];
+  const contacts = type === ContactsType.VOUCHEES ? vouchees : vouchers;
 
   /*--------------------------------------------------------------
     Search, Filter, Paginate 
@@ -176,27 +197,42 @@ export default function ContactList({ initialType }) {
   const searched = useContactSearch(contacts, query);
 
   const filteredAndSorted = useMemo(() => {
-    const filtered = filters
-      ? searched.filter((item) =>
-          filters.map((filter) => filterFunctions[filter](item)).every((x) => x === true)
-        )
-      : searched;
+    const filtered =
+      typeFilters.length > 0
+        ? searched.filter((item) =>
+            typeFilters
+              .map((filter) => (providingFilterFns[filter] || receivingFilterFns[filter])(item))
+              .some((x) => x === true)
+          )
+        : searched;
 
     return sort.type ? filtered.sort(sortFns[sort.type][sort.order]) : filtered;
-  }, [sort, filters, JSON.stringify(searched)]);
+  }, [typeFilters, searched, sort.type, sort.order]);
 
-  const handleSort = (sortType) => {
+  const handleSortType = (sortType) => {
     if (sort.type !== sortType) {
-      return setSort({
+      const newSort = {
         type: sortType,
         order: SortOrder.DESC,
-      });
+      };
+      setSetting(type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT, newSort);
+      setSort(newSort);
+      return;
     }
 
-    setSort({
+    const newSort = {
       ...sort,
       order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
-    });
+    };
+    setSetting(type === ContactsType.VOUCHEES ? PROVIDING_SORT : RECEIVING_SORT, newSort);
+    setSort(newSort);
+  };
+
+  const handleSortOrder = (order) => {
+    setSort((s) => ({
+      ...s,
+      order,
+    }));
   };
 
   const { data: contactsPage, maxPages, activePage, onChange } = usePagination(filteredAndSorted);
@@ -204,19 +240,12 @@ export default function ContactList({ initialType }) {
   return (
     <Card className="ContactList" overflow="visible">
       <Box className="ContactList__header" p="24px" align="center">
-        <ContactsTypeToggle
-          type={type}
-          setType={(t) => {
-            setSort({ type: null, order: null });
-            setType(t);
-          }}
-          clearFilters={() => setFilters([])}
-        />
+        <ContactsTypeToggle type={type} setType={setType} />
         <ContactsFilterControls
           type={type}
-          filters={filters}
+          filters={typeFilters}
           setQuery={setQuery}
-          setFilers={setFilters}
+          setFilers={handleSetFilters}
         />
       </Box>
 
@@ -235,7 +264,8 @@ export default function ContactList({ initialType }) {
               data={contactsPage}
               setContact={setContact}
               sort={sort}
-              setSort={setSort}
+              setSortType={handleSortType}
+              setSortOrder={handleSortOrder}
             />
           ) : (
             <DesktopContactsTable
@@ -243,7 +273,7 @@ export default function ContactList({ initialType }) {
               data={contactsPage}
               setContact={setContact}
               sort={sort}
-              setSortType={handleSort}
+              setSortType={handleSortType}
             />
           )}
         </div>

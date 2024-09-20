@@ -298,8 +298,8 @@ const VoucheeDetails = ({
           {
             label: "Payment due",
             value:
-              paymentDue.formatted === "N/A"
-                ? paymentDue.formatted
+              paymentDue.formatted === "N/A" || locking.lte(ZERO)
+                ? "N/A"
                 : isOverdue
                 ? `${format(minPayment, useToken)} ${useToken} - ${paymentDue.formatted} ago`
                 : `${format(minPayment, useToken)} ${useToken} in ${paymentDue.formatted}`,

@@ -18,6 +18,10 @@ export function ConnectButton({ connectedElement, buttonProps }) {
 
         const isConnected = mounted && account && chain;
 
+        if (!mounted) {
+          return null;
+        }
+
         if (isConnected) {
           return (
             connectedElement || (

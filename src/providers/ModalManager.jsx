@@ -44,6 +44,7 @@ export default function ModalManager({ children }) {
   const location = useLocation();
   const [props, setProps] = useState(null);
   const [modal, setModal] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     close();
@@ -51,12 +52,19 @@ export default function ModalManager({ children }) {
 
   const close = () => {
     document.body.classList.remove("no-scroll");
+    document.body.style.top = "";
+    window.scrollTo(0, scrollPosition);
+
     setModal(null);
     setProps(null);
   };
 
   const open = (key, props) => {
+    const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+    setScrollPosition(scrollPosition);
+
     document.body.classList.add("no-scroll");
+    document.body.style.top = `-${scrollPosition}px`;
     setModal(key);
     if (props) setProps(props);
   };

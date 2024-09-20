@@ -50,7 +50,7 @@ const ProfileAddress = ({ member, chainId }) => {
     chainId,
   });
 
-  const { isMember = false, isOverdue = false, lastRepay = ZERO } = member;
+  const { isMember = false, isOverdue = false, lastRepay = ZERO, owed = ZERO } = member;
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const maxOverdueTotal = overdueTime.add(maxOverdueTime);
@@ -60,6 +60,10 @@ const ProfileAddress = ({ member, chainId }) => {
 
   return isMaxOverdue ? (
     <BadgeIndicator label="Write-Off" color="red500" textColor="red500" />
+  ) : isOverdue ? (
+    <BadgeIndicator label="Overdue" color="red500" textColor="red500" />
+  ) : owed.gt(ZERO) ? (
+    <BadgeIndicator label="Borrowing" color="green500" />
   ) : isMember ? (
     <BadgeIndicator label="Member" color="blue500" />
   ) : (
@@ -73,6 +77,7 @@ export default function ProfileHeader({ address, chainId }) {
   const { isConnected } = useAccount();
   const { chain: connectedChain } = useNetwork();
   const { data: connectedMember = {} } = useMember();
+  const { address: connectedAddress } = useAccount();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: protocol } = useProtocol();
   const { switchNetworkAsync } = useSwitchNetwork();
@@ -109,14 +114,18 @@ export default function ProfileHeader({ address, chainId }) {
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
-      fetch(`https://identity.union.finance/address/${address}`)
+      fetch(`https://identity.union.finance/${connectedChain?.id}/address/${address}`)
         .then((res) => res.json())
         .then(setData)
         .catch((err) => {
           console.log(err.message);
         });
     }
-  }, [address]);
+  }, [connectedChain?.id, address]);
+
+  const isManageContactButton = isConnected && alreadyVouching;
+  const isVouchButton =
+    !isManageContactButton && connectedAddress !== address && connectedMember.isMember;
 
   return (
     <Box fluid justify="space-between" align="flex-start" className="ProfileHeader">
@@ -165,10 +174,10 @@ export default function ProfileHeader({ address, chainId }) {
                   type="account"
                   chainId={chainId}
                   address={address}
-                  label={data.account.is_contract_address ? "Contract address" : "EOA"}
+                  label={data?.account?.is_contract_address ? "Contract" : "EOA"}
                 />
 
-                {data.socials?.map((item, idx) => (
+                {data?.socials?.map((item, idx) => (
                   <VerificationBadge
                     key={idx}
                     chainId={chainId}
@@ -196,8 +205,6 @@ export default function ProfileHeader({ address, chainId }) {
           />
         ) : isMaxOverdue ? (
           <Button
-            color="secondary"
-            variant="light"
             icon={CancelIcon}
             label="Write-off debt"
             onClick={() =>
@@ -216,10 +223,20 @@ export default function ProfileHeader({ address, chainId }) {
           />
         ) : !connectedMember.isMember ? (
           <Button color="secondary" variant="light" to="/" as={Link} label="Register to vouch" />
-        ) : (
+        ) : connectedAddress === address ? (
           <Button
             color="secondary"
             variant="light"
+            icon={ProfileIcon}
+            disabled={true}
+            label="Your Public Profile"
+            style={{
+              opacity: 1,
+            }}
+          />
+        ) : (
+          <Button
+            color="primary"
             icon={VouchIcon}
             onClick={() => {
               open(VOUCH_MODAL, { address });
@@ -231,8 +248,8 @@ export default function ProfileHeader({ address, chainId }) {
         <Button
           icon={CopyIcon}
           mt="12px"
-          color="secondary"
-          variant="light"
+          variant={!isConnected || isVouchButton || !isManageContactButton ? "light" : "regular"}
+          color={!isConnected || isVouchButton || !isManageContactButton ? "secondary" : "primary"}
           label={"Share profile"}
           onClick={() =>
             open(SHARE_REFERRAL_MODAL, {

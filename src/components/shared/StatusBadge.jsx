@@ -1,5 +1,5 @@
 import { BadgeIndicator } from "@unioncredit/ui";
-import { ZERO } from "constants";
+import { ContactsType, ZERO } from "constants";
 import { useMemberData } from "providers/MemberData";
 
 import { useVouchees } from "providers/VoucheesData";
@@ -11,7 +11,7 @@ import { useNetwork } from "wagmi";
 import { BigNumber } from "ethers";
 import { getVersion } from "../../providers/Version";
 
-export function StatusBadge({ address, chainId: chainIdProp }) {
+export function StatusBadge({ address, type, chainId: chainIdProp }) {
   const { chain } = useNetwork();
   const chainId = chainIdProp || chain?.id;
 
@@ -27,8 +27,11 @@ export function StatusBadge({ address, chainId: chainIdProp }) {
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
   const voucherOrVouchee =
-    vouchees.find((vouchee) => compareAddresses(vouchee.address, address)) ||
-    vouchers.find((voucher) => compareAddresses(voucher.address, address));
+    type === ContactsType.VOUCHEES
+      ? vouchees.find((vouchee) => compareAddresses(vouchee.address, address))
+      : type === ContactsType.VOUCHERS
+      ? vouchers.find((voucher) => compareAddresses(voucher.address, address))
+      : null;
 
   const contact = voucherOrVouchee || member;
 
@@ -42,16 +45,18 @@ export function StatusBadge({ address, chainId: chainIdProp }) {
 
   return (
     <>
-      {borrowed.gt(0) ? (
+      {isOverdue ? (
         <BadgeIndicator
-          color={isOverdue ? "red500" : "green500"}
-          label={isMaxOverdue ? "Write-Off" : isOverdue ? "Overdue" : "Borrowing"}
+          color="red500"
+          label={isMaxOverdue ? "Write-Off" : "Overdue"}
           textColor={isMaxOverdue && "red500"}
         />
+      ) : borrowed.gt(ZERO) ? (
+        <BadgeIndicator color="green500" label="Borrowing" />
       ) : isMember ? (
         <BadgeIndicator color="blue500" label="Member" />
       ) : (
-        <BadgeIndicator label="Not-member" />
+        <BadgeIndicator label="Non-member" />
       )}
     </>
   );

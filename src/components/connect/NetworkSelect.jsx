@@ -1,7 +1,7 @@
 import "./NetworkSelect.scss";
 
 import cn from "classnames";
-import { mainnet, optimismGoerli } from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
 import { Box, Button, WalletIcon } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
@@ -30,10 +30,7 @@ export default function NetworkSelect() {
 
   const isMainnet = chain?.id === mainnet.id;
   const availableNetworks = supportedNetworks.filter((x) => ![mainnet.id].includes(x.chainId));
-
-  const networks = availableNetworks.filter(
-    (x) => settings.showTestnets || ![optimismGoerli.id].includes(x.chainId)
-  );
+  const networks = availableNetworks;
 
   const handleChangeNetwork = async (network) => {
     if (!isConnected) return;

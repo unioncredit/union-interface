@@ -1,6 +1,4 @@
-import { optimismGoerli } from "wagmi/chains";
-
-export const testNetworkIds = [optimismGoerli.id, 84532];
+export const testNetworkIds = [84532];
 
 export const unsupportedNetwork = {
   type: "unsupported",
@@ -34,20 +32,6 @@ export const supportedNetworks = [
     },
   },
   {
-    type: "optimism-goerli",
-    id: "optimism-goerli",
-    imageSrc: "/networks/gorli.png",
-    value: "optimism-goerli",
-    label: "Optimism Goerli",
-    labelWithVersion: "Optimism Goerli (v2)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/gorli-avatar.png",
-    chainId: 420,
-    networkData: {
-      chainId: "0x1A4",
-    },
-  },
-  {
     type: "ethereum",
     id: "ethereum",
     imageSrc: "/networks/ethereum.png",
@@ -59,20 +43,6 @@ export const supportedNetworks = [
     chainId: 1,
     networkData: {
       chainId: "0x1",
-    },
-  },
-  {
-    type: "base-sepolia",
-    id: "base-sepolia",
-    imageSrc: "/networks/gorli.png",
-    value: "base-sepolia",
-    label: "Base Sepolia",
-    labelWithVersion: "Base Sepolia (v2)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/gorli-avatar.png",
-    chainId: 84532,
-    networkData: {
-      chainId: "0x14A34",
     },
   },
 ];
@@ -95,20 +65,6 @@ export const allNetworks = [
       chainId: "0xA4B1",
       rpcUrls: ["https://arb1.arbitrum.io/rpc"],
       chainName: "Arbitrum One",
-    },
-  },
-  {
-    type: "goerli",
-    id: "goerli",
-    imageSrc: "/networks/gorli.png",
-    value: "goerli",
-    label: "Goerli",
-    labelWithVersion: "Goerli (v1)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/gorli-avatar.png",
-    chainId: 5,
-    networkData: {
-      chainId: "0x5",
     },
   },
 ];

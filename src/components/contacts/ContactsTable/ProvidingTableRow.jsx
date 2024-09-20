@@ -3,7 +3,7 @@ import "./ProvidingTableRow.scss";
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
-import { ZERO } from "constants";
+import { ContactsType, ZERO } from "constants";
 import format from "utils/format";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
@@ -104,7 +104,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
       value: (
         <TableCell key={COLUMNS.LOAN_STATUS.id} align="right">
           <Box justify="flex-end" minw="120px">
-            <StatusBadge address={address} />
+            <StatusBadge address={address} type={ContactsType.VOUCHEES} />
           </Box>
         </TableCell>
       ),

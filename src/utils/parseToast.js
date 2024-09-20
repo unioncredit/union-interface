@@ -7,7 +7,7 @@ import { truncateAddress } from "./truncateAddress";
 import { ethers } from "ethers";
 import { Versions } from "providers/Version";
 
-export default function createParseToast(method, args, chainId = mainnet.id, version, useToken) {
+export default function createParseToast(method, args, chainId = mainnet.id, version, contract) {
   return function (status, tx) {
     const sharedProps = {
       link: tx ? blockExplorerTx(chainId, tx.hash) : null,
@@ -24,28 +24,26 @@ export default function createParseToast(method, args, chainId = mainnet.id, ver
         case "stake":
           return {
             ...sharedProps,
-            content: `Staked ${format(args[0], useToken)} ${useToken} successfully`,
-            title: `Staked ${useToken}`,
+            content: `Staked ${format(args[0])} DAI successfully`,
+            title: "Staked DAI",
           };
         case "unstake":
           return {
             ...sharedProps,
-            content: `Unstaked ${format(args[0], useToken)} ${useToken} successfully`,
-            title: `Unstaked ${useToken}`,
+            content: `Unstaked ${format(args[0])} DAI successfully`,
+            title: "Unstaked DAI",
           };
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouched ${format(args[1], useToken)} for ${truncateAddress(
-              args[0]
-            )} successfully`,
+            content: `Vouched ${format(args[1])} for ${truncateAddress(args[0])} successfully`,
             title: "Vouched",
           };
         case "approve":
           return {
             ...sharedProps,
             content: `Approved ${
-              ethers.constants.MaxUint256.eq(args[1]) ? "max" : format(args[1], useToken)
+              ethers.constants.MaxUint256.eq(args[1]) ? "max" : format(args[1])
             } successfully`,
             title: "Approved",
           };
@@ -53,17 +51,17 @@ export default function createParseToast(method, args, chainId = mainnet.id, ver
           const borrowAmount = version === Versions.V2 ? args[1] : args[0];
           return {
             ...sharedProps,
-            content: `Borrowed ${format(borrowAmount, useToken)} ${useToken} successfully`,
+            content: `Borrowed ${format(borrowAmount)} DAI successfully`,
             title: "Borrowed",
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
           const amount = ethers.constants.MaxUint256.eq(repayAmount)
             ? "maximum"
-            : format(repayAmount, useToken);
+            : format(repayAmount);
           return {
             ...sharedProps,
-            content: `Repaid ${amount} ${useToken} successfully`,
+            content: `Repaid ${amount} DAI successfully`,
             title: "Repaid borrow",
           };
         case "delegate":
@@ -88,21 +86,19 @@ export default function createParseToast(method, args, chainId = mainnet.id, ver
         case "stake":
           return {
             ...sharedProps,
-            content: `Staking ${format(args[0], useToken)} ${useToken} failed`,
-            title: `Staking ${useToken}`,
+            content: `Staking ${format(args[0])} DAI failed`,
+            title: "Staking DAI",
           };
         case "unstake":
           return {
             ...sharedProps,
-            content: `Unstaking ${format(args[0], useToken)} ${useToken} failed`,
-            title: `Unstake ${useToken}`,
+            content: `Unstaking ${format(args[0])} DAI failed`,
+            title: "Unstake DAI",
           };
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouching ${format(args[1], useToken)} ${useToken} for ${truncateAddress(
-              args[0]
-            )} failed`,
+            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(args[0])} failed`,
             title: "Vouching",
           };
         case "approve":
@@ -115,17 +111,17 @@ export default function createParseToast(method, args, chainId = mainnet.id, ver
           const borrowAmount = version === Versions.V2 ? args[1] : args[0];
           return {
             ...sharedProps,
-            content: `Borrowing ${format(borrowAmount, useToken)} failed`,
+            content: `Borrowing ${format(borrowAmount)} failed`,
             title: "Borrowing",
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
           const amount = ethers.constants.MaxUint256.eq(repayAmount)
             ? "maximum"
-            : format(repayAmount, useToken);
+            : format(repayAmount);
           return {
             ...sharedProps,
-            content: `Repaying ${amount} ${useToken} failed`,
+            content: `Repaying ${amount} DAI failed`,
             title: "Repaying",
           };
         case "delegate":
@@ -150,44 +146,42 @@ export default function createParseToast(method, args, chainId = mainnet.id, ver
         case "stake":
           return {
             ...sharedProps,
-            content: `Staking ${format(args[0], useToken)} ${useToken}`,
-            title: `Staking ${useToken}`,
+            content: `Staking ${format(args[0])} DAI`,
+            title: "Staking DAI",
           };
         case "unstake":
           return {
             ...sharedProps,
-            content: `Unstaking ${format(args[0], useToken)} ${useToken}`,
-            title: `Unstake ${useToken}`,
+            content: `Unstaking ${format(args[0])} DAI`,
+            title: "Unstake DAI",
           };
         case "updateTrust":
           return {
             ...sharedProps,
-            content: `Vouching ${format(args[1], useToken)} ${useToken} for ${truncateAddress(
-              args[0]
-            )}`,
+            content: `Vouching ${format(args[1])} DAI for ${truncateAddress(args[0])}`,
             title: "Vouching",
           };
         case "approve":
           return {
             ...sharedProps,
-            content: "Approving",
+            content: `Approving DAI for ${contract === "userManager" ? "Staking" : "Repay"}`,
             title: "Approving",
           };
         case "borrow":
           const borrowAmount = version === Versions.V2 ? args[1] : args[0];
           return {
             ...sharedProps,
-            content: `Borrowing ${format(borrowAmount, useToken)}`,
+            content: `Borrowing ${format(borrowAmount)}`,
             title: "Borrowing",
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
           const amount = ethers.constants.MaxUint256.eq(repayAmount)
             ? "maximum"
-            : format(repayAmount, useToken);
+            : format(repayAmount);
           return {
             ...sharedProps,
-            content: `Repaying ${amount} ${useToken}`,
+            content: `Repaying ${amount} DAI`,
             title: "Repaying",
           };
         case "delegate":

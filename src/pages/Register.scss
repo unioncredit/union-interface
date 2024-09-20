@@ -1,80 +1,88 @@
 @import "@unioncredit/ui/src/variables";
 
 .Register {
-  &__heading {
-    font-size: 24px;
-    line-height: 32px;
-    margin-top: 48px;
+  margin-top: 80px;
+  max-width: 500px;
 
-    @media screen and (max-width: $breakpoint-mobile) {
-      margin-top: 24px;
-    }
+  @media all and (max-width: 767px) {
+    margin-top: 40px;
   }
-  &__col {
 
-    @media screen and (max-width: $breakpoint-small) {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-    @media screen and (max-width: $breakpoint-small) and (min-width: $breakpoint-tablet) {
-      width: 75% !important;
-      flex: 0 75% !important;
-      max-width: none !important;
-    }
-    @media screen and (max-width: $breakpoint-tablet) {
-      overflow: hidden;
-    }
-  }
   &__container {
-    padding: 40px 24px;
-    border-radius: 12px;
-    background: $grey50;
+    padding: 1px;
+    background: #f8fafc;
+    border: 0.5px solid $grey200;
+    border-radius: 8px;
 
-    @media screen and (max-width: $breakpoint-mobile) {
-      padding: 24px;
+    p {
+      color: #64748b;
+      margin: 0 8px 0 12px;
+      font-size: 16px;
     }
-    @media screen and (max-width: 480px) {
-      padding: 16px;
+
+    .networkSwitcher__buttonContainer {
+      width: auto;
     }
   }
-  &__fee {
-    background: white;
-    border: 0.5px solid $grey200;
-    border-radius: 12px;
 
-    &-title {
-      width: 100%;
-      font-size: 12px;
-      line-height: 16px;
-      border-bottom: 0.5px solid $grey300;
-      padding: 2px 12px;
-      box-sizing: border-box;
-      text-align: center;
+  &__icon {
+    width: 30px;
+    height: 30px;
+    background: white;
+    padding: 3px;
+    border-radius: 50%;
+    margin: 0 8px 0 0;
+
+    svg {
+      height: 100%;
+    }
+  }
+
+  &__mogo {
+    font-size: 20px;
+    padding: 14px 16px;
+    color: $blue600;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+    font-weight: 600;
+  }
+
+  &__benefits {
+    li {
+      display: flex;
+      align-items: center;
     }
 
-    &-container {
-      padding: 8px 12px;
+    svg {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
 
-      p {
-        font-size: 30px;
-        line-height: 36px;
-        margin-right: 4px !important;
+      path {
+        fill: green;
       }
     }
   }
-}
 
-.MiniProgressListContainer {
-  position: fixed;
-  bottom: 24px;
-  left: 0;
-  right: 0;
-  display: none;
-  justify-content: center;
-  z-index: 9999;
+  .Card__footer {
+    background: #fafafa;
 
+    svg {
+      opacity: 70%;
+      width: 28px;
+      height: 28px;
+    }
+    h2 {
+      font-size: 16px;
+    }
+    li {
+      margin: 8px 0;
+      opacity: 80%;
 
-  @media screen and (max-width: 600px) {
-    display: flex;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
   }
 }

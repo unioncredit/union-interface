@@ -11,7 +11,6 @@ import React, { useEffect } from "react";
 import format, { formattedNumber } from "../../utils/format";
 import { ZERO } from "constants";
 import { reduceBnSum } from "../../utils/reduce";
-import { useSettings } from "providers/Settings";
 
 export function ProfileSidebar({ address, member, chainId }) {
   const { data: vouchees = [], refetch: refetchVouchees } = useVoucheesData(
@@ -24,9 +23,6 @@ export function ProfileSidebar({ address, member, chainId }) {
     chainId,
     getVersion(chainId)
   );
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const { creditLimit = ZERO, owed = ZERO } = member;
 
@@ -49,15 +45,15 @@ export function ProfileSidebar({ address, member, chainId }) {
             m="24px 0"
             items={[
               {
-                value: formattedNumber(owed, useToken),
-                color: "blue300",
+                value: formattedNumber(owed),
+                color: "blue900",
               },
               {
-                value: formattedNumber(creditLimit, useToken, 2, false),
-                color: "blue800",
+                value: formattedNumber(creditLimit, 2, false),
+                color: "blue100",
               },
               {
-                value: formattedNumber(unavailableBalance, useToken),
+                value: formattedNumber(unavailableBalance),
                 color: "amber500",
               },
             ]}
@@ -67,37 +63,37 @@ export function ProfileSidebar({ address, member, chainId }) {
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token="dai"
               size="regular"
               title="Borrowed"
-              dotColor="blue300"
-              value={format(owed, useToken)}
+              dotColor="blue900"
+              value={format(owed)}
               titleTooltip={{
-                content: `The amount of ${useToken} you are currently borrowing`,
+                content: "The amount of DAI you are currently borrowing",
               }}
             />
 
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token="dai"
               size="regular"
               title="Available"
-              dotColor="blue800"
-              value={format(creditLimit, useToken, 2, false)}
+              dotColor="blue100"
+              value={format(creditLimit, 2, false)}
               titleTooltip={{
-                content: `The amount of ${useToken} currently available to borrow`,
+                content: "The amount of DAI currently available to borrow",
               }}
             />
 
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token="dai"
               size="regular"
               title="Unavailable"
               dotColor="amber500"
-              value={format(unavailableBalance, useToken)}
+              value={format(unavailableBalance)}
               titleTooltip={{
                 content:
                   "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time",
@@ -114,12 +110,7 @@ export function ProfileSidebar({ address, member, chainId }) {
           {vouchers.length > 0 && (
             <>
               <Divider m="24px 0" />
-              <ProfileVoucherStats
-                vouchers={vouchers}
-                vouchees={vouchees}
-                chainId={chainId}
-                useToken={useToken}
-              />
+              <ProfileVoucherStats vouchers={vouchers} vouchees={vouchees} chainId={chainId} />
             </>
           )}
 

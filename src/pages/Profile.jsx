@@ -1,6 +1,15 @@
 import "./Profile.scss";
 
-import { ArrowLeftIcon, Box, Button, Card, Layout, UnionIcon } from "@unioncredit/ui";
+import {
+  ArrowLeftIcon,
+  Box,
+  Button,
+  Card,
+  InfoBanner,
+  Layout,
+  UnionIcon,
+  WarningIcon,
+} from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
 import { Helmet } from "react-helmet";
@@ -11,14 +20,18 @@ import { EIP3770, ZERO_ADDRESS } from "constants";
 import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
 import { ProfileSidebar } from "components/profile/ProfileSidebar";
+import NotFoundPage from "./NotFoundPage";
+import ProfileHeaderLoading from "../components/profile/ProfileHeaderLoading";
 
-function ProfileInner({ address, member, chainId }) {
+function ProfileInner({ address, member, chainId, legacyTag }) {
   const navigate = useNavigate();
   const location = useLocation();
 
   // True if the user has navigated other pages previously, false if they landed
   // on the profile directly.
   const historyExists = location.key !== "default";
+
+  const memberLoaded = address !== ZERO_ADDRESS;
 
   return (
     <Box fluid justify="center" direction="vertical" className="ProfileInner">
@@ -32,20 +45,44 @@ function ProfileInner({ address, member, chainId }) {
         icon={historyExists ? ArrowLeftIcon : UnionIcon}
       />
 
+      {legacyTag && (
+        <a
+          target="_blank"
+          rel="noreferrer"
+          style={{ width: "100%" }}
+          href={`https://v1.union.finance/profile/${legacyTag}:${address}`}
+        >
+          <InfoBanner
+            mb="16px"
+            icon={WarningIcon}
+            variant="warning"
+            label={
+              "You seem to be looking for a legacy (v1) profile, click here to view their profile on the v1 mirror."
+            }
+          />
+        </a>
+      )}
+
       {/*--------------------------------------------------------------
         Profile Header 
       *--------------------------------------------------------------*/}
       <Card mb="24px">
         <Card.Body p={0}>
-          <ProfileHeader address={address} chainId={chainId} />
+          {memberLoaded ? (
+            <ProfileHeader address={address} chainId={chainId} />
+          ) : (
+            <ProfileHeaderLoading />
+          )}
         </Card.Body>
       </Card>
       {/*--------------------------------------------------------------
         Profile details 
       *--------------------------------------------------------------*/}
-      <Box fluid>
-        <ProfileSidebar chainId={chainId} address={address} member={member} />
-      </Box>
+      {memberLoaded && (
+        <Box fluid>
+          <ProfileSidebar chainId={chainId} address={address} member={member} />
+        </Box>
+      )}
     </Box>
   );
 }
@@ -63,7 +100,7 @@ export default function Profile() {
         addressOrEnsParts.length > 1 ? addressOrEnsParts[1] : addressOrEnsParam,
       ];
 
-  const { data: addressFromEns } = useEnsAddress({
+  const { data: addressFromEns, isLoading } = useEnsAddress({
     name: addressOrEns,
     chainId: mainnet.id,
   });
@@ -76,13 +113,20 @@ export default function Profile() {
 
   const profileAddress = member.address || ZERO_ADDRESS;
 
-  return (
+  return !isLoading && !address ? (
+    <NotFoundPage />
+  ) : (
     <>
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
       <Layout.Columned mt="24px" maxw="653px">
-        <ProfileInner chainId={chainId} address={profileAddress} member={member} />
+        <ProfileInner
+          chainId={chainId}
+          address={profileAddress}
+          member={member}
+          legacyTag={addressOrEnsParam.match(/^(eth|arb1|goe):/)?.[1]}
+        />
       </Layout.Columned>
     </>
   );

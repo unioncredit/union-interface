@@ -1,20 +1,22 @@
 import "./FiltersPopover.scss";
 
-import { Box, Text, Button, Control, FilterIcon, Modal, Popover } from "@unioncredit/ui";
+import cn from "classnames";
+import { Box, Button, Control, FilterIcon, Modal, Popover, Text } from "@unioncredit/ui";
 
 import useScrollLock from "hooks/useScrollLock";
 import useResponsive from "hooks/useResponsive";
 import { ContactsType, ZERO } from "constants";
 
 // prettier-ignore
-export const filterFunctions = {
-  // vouchee filters
-  borrowing:  (item) => item.locking.gt(ZERO),
+export const providingFilterFns = {
+  borrowing:  (item) => item.locking?.gt(ZERO),
   notMember:  (item) => !item.isMember,
-  inactive:   (item) => !item.isOverdue && item.isMember,
+  member:     (item) => item.isMember,
+  inactive:   (item) => !item.isOverdue && item.locking?.lte(ZERO) && item.isMember,
   overdue:    (item) => item.isOverdue,
+};
 
-  // voucher filters
+export const receivingFilterFns = {
   borrowing_from: (item) => item.locking?.gt(ZERO),
 };
 
@@ -28,6 +30,7 @@ export default function FiltersPopover({ type, filters, setFilters }) {
           { id: "borrowing", label: "Borrowing" },
           { id: "overdue", label: "Overdue" },
           { id: "inactive", label: "Inactive" },
+          { id: "member", label: "Member" },
           { id: "notMember", label: "Not a member" },
         ]
       : [{ id: "borrowing_from", label: "Borrowing from" }];
@@ -44,6 +47,9 @@ export default function FiltersPopover({ type, filters, setFilters }) {
           fluid
           icon={FilterIcon}
           color="secondary"
+          className={cn("FiltersPopover__button", {
+            "FiltersPopover__button--active": Array.isArray(filters) && filters.length > 0,
+          })}
           variant="light"
           onClick={() => {
             toggleOpen();

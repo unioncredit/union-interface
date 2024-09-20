@@ -1,12 +1,14 @@
 import {
-  Modal,
-  ModalOverlay,
   Box,
   Button,
-  NumericalBlock,
-  NumericalRows,
   ClaimIcon,
   GovernanceIcon,
+  Modal,
+  ModalOverlay,
+  NumericalBlock,
+  NumericalRows,
+  Tooltip,
+  LockIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -25,7 +27,7 @@ export default function WalletModal() {
 
   const { data: member = {}, refetch } = useMember();
 
-  const { unclaimedRewards = ZERO, unionBalance = ZERO } = member;
+  const { isOverdue, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
   const totalBalance = unionBalance.add(unclaimedRewards);
 
@@ -37,7 +39,10 @@ export default function WalletModal() {
     contract: "userManager",
     method: "withdrawRewards",
     enabled: unclaimedRewards.gt(0),
-    onComplete: refetch,
+    onComplete: async () => {
+      await refetch();
+      close();
+    },
   });
 
   /*--------------------------------------------------------------
@@ -54,7 +59,7 @@ export default function WalletModal() {
               align="center"
               size="large"
               title={`Total ${chain.name} Balance`}
-              value={format(totalBalance, "UNION")}
+              value={format(totalBalance)}
               token="union"
             />
           </Box>
@@ -64,16 +69,30 @@ export default function WalletModal() {
             items={[
               {
                 label: "Wallet",
-                value: `${format(unionBalance, "UNION")} UNION`,
+                value: `${format(unionBalance)} UNION`,
               },
               {
                 label: "Unclaimed",
-                value: `${format(unclaimedRewards, "UNION")} UNION`,
+                value: `${format(unclaimedRewards)} UNION`,
               },
             ]}
           />
 
-          <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
+          {isOverdue ? (
+            <Tooltip content="You cannot claim rewards while in default" w="100%">
+              <Button
+                size="large"
+                icon={LockIcon}
+                label="Claim UNION"
+                {...buttonProps}
+                disabled={true}
+                fluid
+              />
+            </Tooltip>
+          ) : (
+            <Button fluid size="large" icon={ClaimIcon} label="Claim UNION" {...buttonProps} />
+          )}
+
           <Button
             fluid
             as={Link}

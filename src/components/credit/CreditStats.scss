@@ -21,6 +21,8 @@
   }
 
   .Card__footer {
+    background: #FAFAFA;
+    border-top: 0.5px solid #e4e4e7;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 
@@ -82,8 +84,6 @@
 
 .CreditStats--overdue {
   .Card__footer {
-    background: $red50;
-
     button {
       color: white;
       background: $red500;
@@ -101,10 +101,20 @@
       }
     }
 
+    .PaymentDueInfo path {
+      fill: $orange500;
+    }
+  }
+  .Card__footer.MaxOverdue {
+    background: $red50;
+
+    .badge--white {
+      border: 1px solid #e4e4e7
+    }
+
     .PaymentDueInfo p, .MaxOverdueNotice {
       color: $red600 !important;
     }
-
     .PaymentDueInfo path {
       fill: $red600;
     }
