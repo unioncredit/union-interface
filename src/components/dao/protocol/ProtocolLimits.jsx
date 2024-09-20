@@ -22,7 +22,7 @@ export function ProtocolLimits({ protocol, useToken, ...props }) {
     },
     {
       title: "Max. Stake",
-      value: format(maxStakeAmount),
+      value: format(maxStakeAmount, useToken),
     },
     {
       title: "Global Max.",

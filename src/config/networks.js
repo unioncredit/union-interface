@@ -45,6 +45,20 @@ export const supportedNetworks = [
       chainId: "0x1",
     },
   },
+  {
+    type: "base-sepolia",
+    id: "base-sepolia",
+    imageSrc: "/networks/gorli.png",
+    value: "base-sepolia",
+    label: "Base Sepolia",
+    labelWithVersion: "Base Sepolia (v2)",
+    description: "Use Union on a testnet",
+    avatar: "/networks/gorli-avatar.png",
+    chainId: 84532,
+    networkData: {
+      chainId: "0x14A34",
+    },
+  },
 ];
 
 // Consists of all networks for both V1 and V2

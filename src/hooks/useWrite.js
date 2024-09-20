@@ -53,7 +53,14 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, chain.id, version, useToken);
+    const parseToast = createParseToast(
+      method,
+      memoisedArgs,
+      useToken,
+      chain.id,
+      version,
+      useToken
+    );
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
