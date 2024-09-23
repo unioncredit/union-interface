@@ -50,11 +50,11 @@ export const vouchFaucetContract = {
 };
 
 export const registerHelperContract = {
-  address: "0x8353d610689A4C87865fdbE95535453B0d685805",
+  address: "0x2cF7A73b7aE43CcEF9994F9b6a4e8D2E8c763090",
   abi: registerHelperAbi,
 };
 
 export const referralContract = {
-  address: "0xCF0FBd75efcE5485452b6E44D6D3fBd915a6c166",
+  address: "0x736a4aE549b86CC3AD56469E177AD3479d3F2d0D",
   abi: referralAbi,
 };
