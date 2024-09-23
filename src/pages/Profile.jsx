@@ -19,11 +19,12 @@ import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
 import { getVersion } from "providers/Version";
 import ProfileHeader from "components/profile/ProfileHeader";
-import { ProfileSidebar } from "components/profile/ProfileSidebar";
 import NotFoundPage from "./NotFoundPage";
-import ProfileHeaderLoading from "../components/profile/ProfileHeaderLoading";
+import ProfileHeaderLoading from "components/profile/ProfileHeaderLoading";
+import { ProfileBannerCta } from "components/profile/ProfileBannerCta";
+import { ProfileColumns } from "../components/profile/ProfileColumns";
 
-function ProfileInner({ address, member, chainId, legacyTag }) {
+function ProfileInner({ address, chainId, legacyTag }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -75,13 +76,15 @@ function ProfileInner({ address, member, chainId, legacyTag }) {
           )}
         </Card.Body>
       </Card>
+
       {/*--------------------------------------------------------------
         Profile details 
       *--------------------------------------------------------------*/}
       {memberLoaded && (
-        <Box fluid>
-          <ProfileSidebar chainId={chainId} address={address} member={member} />
-        </Box>
+        <>
+          <ProfileBannerCta address={address} />
+          <ProfileColumns address={address} chainId={chainId} />
+        </>
       )}
     </Box>
   );
@@ -120,7 +123,7 @@ export default function Profile() {
       <Helmet>
         <title>{`Profile ${address} | Union Credit Protocol`}</title>
       </Helmet>
-      <Layout.Columned mt="24px" maxw="653px">
+      <Layout.Columned mt="24px">
         <ProfileInner
           chainId={chainId}
           address={profileAddress}

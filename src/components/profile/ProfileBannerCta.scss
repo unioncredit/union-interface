@@ -1,0 +1,28 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileBannerCta {
+  background: $blue50;
+  border-color: $blue200;
+
+  &--purple {
+    background: #F5F3FF;
+    border-color: #DDD6FE;
+
+    p, h2 {
+      color: #7C3AED !important;
+    }
+    button {
+      background: #7C3AED;
+      &:hover {
+        background: #6b28de !important;
+      }
+    }
+  }
+
+  p, h2 {
+    color: $blue600;
+  }
+  p {
+    max-width: 600px;
+  }
+}

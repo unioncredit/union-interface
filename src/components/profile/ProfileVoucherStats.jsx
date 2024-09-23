@@ -1,6 +1,6 @@
 import "./ProfileVoucherStats.scss";
 
-import { Badge, Box, Heading, Text } from "@unioncredit/ui";
+import { ArrowRightIcon, Box, Heading, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "../shared";
 import format from "utils/format";
 import { Link } from "react-router-dom";
@@ -10,34 +10,22 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
   const topVouchers = [...vouchers].sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1)).slice(0, 3);
 
   return (
-    vouchers.length > 0 && (
-      <Box className="ProfileVoucherStats" direction="vertical">
-        <Box
-          className="ProfileVoucherStats__header"
-          mb="16px"
-          justify="space-between"
-          align="center"
-          fluid
-        >
-          <Heading m={0} level={2} size="small" weight="medium" grey={500}>
-            Top Vouchers
-          </Heading>
+    <Box className="ProfileVoucherStats" direction="vertical" fluid>
+      <Heading mb="16px" level={2}>
+        Notable Connections
+      </Heading>
 
-          <Text m={0} grey={500} size="medium">
-            {topVouchers.length} of {vouchers.length}
-          </Text>
-        </Box>
-
+      {topVouchers.length > 0 ? (
         <Box className="ProfileVoucherStats__TopVouchers" direction="vertical" fluid>
           {topVouchers.map(({ address, vouch }) => (
-            <Box
-              key={address}
-              className="ProfileVoucherStats__TopVoucher"
-              justify="space-between"
-              align="center"
-              fluid
-            >
-              <Link to={getProfileUrl(address, chainId)}>
+            <Link key={address} to={getProfileUrl(address, chainId)}>
+              <Box
+                key={address}
+                className="ProfileVoucherStats__TopVoucher"
+                justify="space-between"
+                align="center"
+                fluid
+              >
                 <Box>
                   <Avatar address={address} size={40} />
 
@@ -46,17 +34,23 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
                       <PrimaryLabel address={address} />
                     </Text>
                     <Text m={0} size="small" grey={500}>
-                      {vouchees.find((v) => v.address === address) ? "Mutuals" : "Top Voucher"}
+                      {`${format(vouch, 0)} DAI`}
                     </Text>
                   </Box>
                 </Box>
-              </Link>
 
-              <Badge color="grey" label={`${format(vouch)} DAI`} borderColor="#E4E4E7" />
-            </Box>
+                <Box className="ProfileVoucherStats__arrow">
+                  <ArrowRightIcon width={24} height={24} />
+                </Box>
+              </Box>
+            </Link>
           ))}
         </Box>
-      </Box>
-    )
+      ) : (
+        <Text size="medium" grey={500}>
+          This user has no vouchers.
+        </Text>
+      )}
+    </Box>
   );
 }

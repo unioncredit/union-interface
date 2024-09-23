@@ -1,0 +1,15 @@
+.ProfileColumns {
+  width: calc(100% + 32px);
+  margin: 0 -16px;
+
+  &__column {
+    margin: 0 16px;
+
+    &:first-of-type {
+      flex: 0 66.6%;
+    }
+    &:last-of-type {
+      flex: 0 33.3%;
+    }
+  }
+}

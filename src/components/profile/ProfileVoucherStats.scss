@@ -1,15 +1,28 @@
 @import "@unioncredit/ui/src/variables";
 
 .ProfileVoucherStats {
-  &__header {
-    h2 {
-      font-size: 16px;
+  padding: 24px 0;
+
+  &__TopVouchers {
+    & > a {
+      width: 100%;
     }
   }
-
   &__TopVoucher {
+    padding: 8px 0;
+    border-top: 1px solid #E4E4E7;
+
     &:not(:last-of-type) {
       margin-bottom: 12px;
     }
+    &:last-of-type {
+      border-bottom: 1px solid #E4E4E7;
+    }
+  }
+  &__arrow {
+    padding: 6px;
+    background: #F4F4F5;
+    border: 1px solid #E4E4E7;
+    border-radius: 50%;
   }
 }

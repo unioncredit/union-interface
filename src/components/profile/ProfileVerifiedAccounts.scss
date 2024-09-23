@@ -1,0 +1,56 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileVerifiedAccounts {
+
+  &__badges {
+    flex-wrap: wrap;
+
+    & > a:first-child .ProfileVerifiedAccounts__item {
+      margin-left: 0;
+    }
+  }
+
+  &__item {
+    padding: 4px 10px 4px 8px;
+    background: #F1F1F1;
+    border-radius: 20px;
+    margin-top: 8px;
+    margin-left: 4px;
+    color: $grey600;
+
+    &.lens {
+      color: #3D4B41;
+      background: #E6EBE7;
+      path {
+        fill: #3D4B41;
+      }
+    }
+
+    &.farcaster {
+      color: #845FC9;
+      background: #F5F0FF;
+      path {
+        fill: #845FC9;
+      }
+    }
+    &.twitter {
+      color: #60a5fa;
+      background: #ddecff;
+      path {
+        fill: #60a5fa;
+      }
+    }
+
+    p {
+      margin: 0;
+    }
+    svg + p {
+      margin-left: 4px;
+      margin-top: -1px;
+    }
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
