@@ -57,9 +57,9 @@ export default function ProposalsCard({
   );
 }
 
-function ProposalRow({ chainId, hash, status, description, startBlock }) {
+function ProposalRow({ chainId, hash, status, description, endBlock }) {
   const navigate = useNavigate();
-  const { relative: relativeProposalEndsTime } = useBlockTime(startBlock, chainId);
+  const { relative: relativeProposalEndsTime } = useBlockTime(endBlock, chainId);
 
   const id = description.match(/UIP-\d+/)[0];
   const title =
