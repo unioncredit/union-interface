@@ -26,7 +26,11 @@ export default function ProfileHeader({ address, chainId }) {
           <ProfileHeaderContent address={address} chainId={chainId} />
         </Box>
 
-        <ProfileCtaButtons address={address} chainId={chainId} />
+        <ProfileCtaButtons
+          address={address}
+          chainId={chainId}
+          className="ProfileCtaButtons--desktop"
+        />
       </Box>
 
       {bio && (

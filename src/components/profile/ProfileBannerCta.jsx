@@ -6,26 +6,28 @@ import { useMember, useMemberData } from "../../providers/MemberData";
 import { useModals } from "../../providers/ModalManager";
 import { VOUCH_MODAL } from "../modals/VouchModal";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import format from "utils/format";
 import { ZERO } from "constants";
 import { usePrimaryName } from "hooks/usePrimaryName";
 import { compareAddresses } from "../../utils/compare";
+import useWrite from "../../hooks/useWrite";
+import { useProtocol } from "../../providers/ProtocolData";
 
 export const ProfileBannerCta = ({ address }) => {
   const navigate = useNavigate();
   const { address: connectedAddress, isConnected } = useAccount();
   const { open: openModal } = useModals();
+  const { data: protocol } = useProtocol();
   const { data: connectedMember } = useMember();
-  const { data: profileMember, isLoading } = useMemberData(address);
+  const { data: profileMember, isLoading, refetch: refetchProfileMember } = useMemberData(address);
   const { data: name } = usePrimaryName({
     address,
     defaultValue: "them",
   });
-
-  if (!isConnected || isLoading) {
-    return null;
-  }
+  const { data: balance } = useBalance({
+    address: connectedAddress,
+  });
 
   const {
     isMember: connectedIsMember = false,
@@ -36,6 +38,28 @@ export const ProfileBannerCta = ({ address }) => {
   const { isMember: profileIsMember = false, creditLimit: profileCreditLimit = ZERO } =
     profileMember;
 
+  const {
+    regFee = ZERO,
+    rebate = ZERO,
+    value: connectedEthBalance = ZERO,
+  } = { ...protocol, ...balance };
+
+  const ethRegisterFee = regFee.add(rebate);
+  const canRegisterUser = ethRegisterFee.lte(connectedEthBalance);
+  const registerButtonProps = useWrite({
+    contract: "registerHelper",
+    method: "register",
+    args: [address, connectedAddress],
+    enabled: connectedIsMember && !profileIsMember && canRegisterUser,
+    disabled: !canRegisterUser,
+    onComplete: async () => {
+      await refetchProfileMember();
+    },
+    overrides: {
+      value: ethRegisterFee,
+    },
+  });
+
   const alreadyVouching = connectedBorrowers.some((borrower) =>
     compareAddresses(borrower, address)
   );
@@ -44,12 +68,12 @@ export const ProfileBannerCta = ({ address }) => {
     ? profileIsMember
       ? connectedAddress === address || alreadyVouching
         ? {
-            title: "Vouch for a new contact",
+            title: "Edit your profile",
             content:
-              "Vouch for a friend or trusted contact by using your staked assets. Make sure it's someone you really trust.",
+              "Add a bio to your profile by linking your farcaster account to your union address",
             buttonProps: {
-              label: "Vouch for someone",
-              onClick: () => openModal(VOUCH_MODAL),
+              label: "Edit on Warpcast",
+              onClick: () => open("https://warpcast.com/~/settings"),
             },
           }
         : {
@@ -68,11 +92,8 @@ export const ProfileBannerCta = ({ address }) => {
               : ""
           }Mint a membership NFT and gift it to them for free membership.`,
           buttonProps: {
-            label: "Mint to gift a membership",
-            onClick: () =>
-              open(
-                "https://zora.co/collect/oeth:0xa73be24fb5df82f45c5848f099451b5bea427474/2?referrer=0x729dF3924822C9a2CA1995c05Eb801A395329F35"
-              ),
+            label: canRegisterUser ? "Mint to gift a membership" : "Not enough funds",
+            ...registerButtonProps,
           },
         }
     : {
@@ -92,11 +113,16 @@ export const ProfileBannerCta = ({ address }) => {
 
   const { title, content, buttonProps } = data;
 
+  if (!isConnected || isLoading) {
+    return null;
+  }
+
   return (
     <Card
       mb="24px"
       className={cn("ProfileBannerCta", {
-        "ProfileBannerCta--purple": connectedIsMember && !profileIsMember,
+        "ProfileBannerCta--purple":
+          (connectedIsMember && !profileIsMember) || connectedAddress === address,
       })}
     >
       <Card.Body>

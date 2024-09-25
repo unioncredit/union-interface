@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   DistributionBar,
+  Dot,
   Heading,
   NumericalRows,
   Text,
@@ -53,7 +54,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
         <Box mt="16px" justify="space-between">
           <Box direction="vertical">
             <Heading mb="2px" size="large" level={3}>
-              ${format(creditLimit, 0)}
+              ${format(vouch, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
               Credit limit
@@ -64,6 +65,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
               ${format(owed, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
+              <Dot color="blue900" mr="4px" mb="1px" />
               Balance owed
             </Text>
           </Box>
@@ -77,12 +79,8 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
               color: "blue900",
             },
             {
-              value: formattedNumber(creditLimit, 2, false),
-              color: "blue100",
-            },
-            {
-              value: formattedNumber(unavailableBalance),
-              color: "amber500",
+              value: formattedNumber(vouch.sub(owed), 2, false),
+              color: "blue50",
             },
           ]}
         />

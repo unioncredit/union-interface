@@ -6,9 +6,22 @@
     margin-top: 16px;
   }
 
-  &--mobile {
-    @media screen and (min-width: $breakpoint-mobile) {
+  &--desktop {
+    .button:first-of-type {
+      height: 64px;
+      font-size: 18px;
+    }
+    .button:last-of-type {
       display: none;
+    }
+  }
+  &--mobile {
+    margin-top: 16px;
+
+    .button:first-of-type {
+      @media (min-width: $breakpoint-mobile) {
+        display: none;
+      }
     }
   }
 
