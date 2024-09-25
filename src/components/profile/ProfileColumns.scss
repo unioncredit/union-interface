@@ -1,9 +1,23 @@
+@import "@unioncredit/ui/src/variables";
+
 .ProfileColumns {
   width: calc(100% + 32px);
   margin: 0 -16px;
 
+  @media screen and (max-width: 680px) {
+    margin: 0;
+    width: 100%;
+    flex-direction: column-reverse !important;
+  }
+
   &__column {
     margin: 0 16px;
+
+    @media screen and (max-width: 680px) {
+      width: 100%;
+      flex: 1 !important;
+      margin: 0;
+    }
 
     &:first-of-type {
       flex: 0 66.6%;

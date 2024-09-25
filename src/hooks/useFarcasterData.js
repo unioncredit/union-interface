@@ -1,4 +1,5 @@
-import { useQuery } from "@airstack/airstack-react";
+import { useLazyQuery } from "@airstack/airstack-react";
+import { useEffect } from "react";
 
 const query = `
 query RetrieveFarcasterData ($address: Address!) {
@@ -14,13 +15,16 @@ query RetrieveFarcasterData ($address: Address!) {
 `;
 
 export const useFarcasterData = ({ address }) => {
-  const {
-    data: response,
-    error,
-    loading,
-  } = useQuery(query, {
-    address,
-  });
+  // We have to use lazy loading and manual fetching because of a bug in the useQuery function that doesn't detect changes in our addresses variable
+  const [fetch, { data: response, loading, error }] = useLazyQuery(
+    query,
+    { address },
+    { cache: true }
+  );
+
+  useEffect(() => {
+    fetch();
+  }, [fetch, address]);
 
   const data = response?.Socials?.Social?.[0] || {
     name: null,

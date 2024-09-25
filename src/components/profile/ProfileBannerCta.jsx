@@ -10,39 +10,56 @@ import { useAccount } from "wagmi";
 import format from "utils/format";
 import { ZERO } from "constants";
 import { usePrimaryName } from "hooks/usePrimaryName";
+import { compareAddresses } from "../../utils/compare";
 
 export const ProfileBannerCta = ({ address }) => {
   const navigate = useNavigate();
-  const { isConnected } = useAccount();
+  const { address: connectedAddress, isConnected } = useAccount();
   const { open: openModal } = useModals();
   const { data: connectedMember } = useMember();
-  const { data: profileMember } = useMemberData(address);
+  const { data: profileMember, isLoading } = useMemberData(address);
   const { data: name } = usePrimaryName({
     address,
     defaultValue: "them",
   });
 
-  const { isMember: connectedIsMember = false, creditLimit: connectedCreditLimit = ZERO } =
-    connectedMember;
+  if (!isConnected || isLoading) {
+    return null;
+  }
+
+  const {
+    isMember: connectedIsMember = false,
+    creditLimit: connectedCreditLimit = ZERO,
+    borrowerAddresses: connectedBorrowers = [],
+  } = connectedMember;
 
   const { isMember: profileIsMember = false, creditLimit: profileCreditLimit = ZERO } =
     profileMember;
 
-  if (!isConnected) {
-    return null;
-  }
+  const alreadyVouching = connectedBorrowers.some((borrower) =>
+    compareAddresses(borrower, address)
+  );
 
   const data = connectedIsMember
     ? profileIsMember
-      ? {
-          title: "Vouch for a new contact",
-          content:
-            "Vouch for a friend or trusted contact by using your staked assets. Make sure it's someone you really trust.",
-          buttonProps: {
-            label: "Vouch for someone",
-            onClick: () => openModal(VOUCH_MODAL),
-          },
-        }
+      ? connectedAddress === address || alreadyVouching
+        ? {
+            title: "Vouch for a new contact",
+            content:
+              "Vouch for a friend or trusted contact by using your staked assets. Make sure it's someone you really trust.",
+            buttonProps: {
+              label: "Vouch for someone",
+              onClick: () => openModal(VOUCH_MODAL),
+            },
+          }
+        : {
+            title: `Vouch for ${name}`,
+            content: `Vouch for ${name} by using your staked assets. Make sure they are someone you really trust.`,
+            buttonProps: {
+              label: "Vouch",
+              onClick: () => openModal(VOUCH_MODAL, { address }),
+            },
+          }
       : {
           title: "Gift a Membership",
           content: `${

@@ -188,7 +188,6 @@ export function useCreditData(address, chainId) {
   }, [borrows, overduePeriodSeconds, owed, repays]);
 
   useEffect(() => {
-    console.log({ address, chainId });
     if (address && chainId) {
       config.set("chainId", chainId);
       fetchBorrowsAndRepays(address);

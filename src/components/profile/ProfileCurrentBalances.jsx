@@ -52,7 +52,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
 
         <Box mt="16px" justify="space-between">
           <Box direction="vertical">
-            <Heading mb={0} size="large" level={3}>
+            <Heading mb="2px" size="large" level={3}>
               ${format(creditLimit, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
@@ -60,7 +60,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
             </Text>
           </Box>
           <Box direction="vertical" align="flex-end">
-            <Heading mb={0} size="large" level={3}>
+            <Heading mb="2px" size="large" level={3}>
               ${format(owed, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
@@ -70,7 +70,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
         </Box>
 
         <DistributionBar
-          m="24px 0"
+          m="18px 0"
           items={[
             {
               value: formattedNumber(owed),
@@ -100,7 +100,8 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
         </Box>
 
         <NumericalRows
-          m="24px 0"
+          m="12px 0 0"
+          weight="regular"
           items={[
             {
               label: "Became member",

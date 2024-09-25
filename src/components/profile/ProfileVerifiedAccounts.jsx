@@ -24,7 +24,7 @@ export const ProfileVerifiedAccounts = ({ address, chainId }) => {
 
   return (
     <Box mt="24px" direction="vertical" className="ProfileVerifiedAccounts" fluid>
-      <Text grey={500} size="small" mb="0">
+      <Text grey={500} size="small" weight="medium" mb="0">
         VERIFIED ACCOUNTS
       </Text>
 

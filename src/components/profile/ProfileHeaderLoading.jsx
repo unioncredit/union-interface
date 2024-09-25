@@ -26,7 +26,7 @@ export default function ProfileHeaderLoading() {
         </Box>
       </Box>
 
-      <Box className="ProfilePrimaryCta" direction="vertical" justify="space-between" minw="200px">
+      <Box className="ProfileCtaButtons" direction="vertical" justify="space-between" minw="200px">
         <Skeleton height={48} width={200} shimmer />
         <Skeleton mt="12px" height={48} width={200} shimmer />
       </Box>

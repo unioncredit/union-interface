@@ -3,26 +3,55 @@
 .ProfileVoucherStats {
   padding: 24px 0;
 
+  @media screen and (max-width: 680px) {
+    padding: 24px 12px;
+    background: white;
+    border: 0.5px solid #e4e4e7;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    align-items: center !important;
+  }
+
   &__TopVouchers {
+    @media screen and (max-width: 680px) {
+      flex-wrap: wrap;
+      flex-direction: row !important;
+    }
+
     & > a {
       width: 100%;
+
+      @media screen and (max-width: 680px) {
+        display: block;
+        flex: 0 50%;
+        width: 50%;
+      }
     }
   }
   &__TopVoucher {
     padding: 8px 0;
-    border-top: 1px solid #E4E4E7;
+    border-top: 1px solid #f1f1f1;
+
+    @media screen and (max-width: 680px) {
+      padding-left: 0;
+      justify-content: center !important;
+    }
 
     &:not(:last-of-type) {
       margin-bottom: 12px;
     }
     &:last-of-type {
-      border-bottom: 1px solid #E4E4E7;
+      border-bottom: 1px solid #f1f1f1;
     }
   }
   &__arrow {
-    padding: 6px;
+    padding: 8px;
     background: #F4F4F5;
     border: 1px solid #E4E4E7;
     border-radius: 50%;
+
+    @media screen and (max-width: 680px) {
+      display: none;
+    }
   }
 }

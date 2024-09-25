@@ -8,6 +8,16 @@
     flex-direction: column !important;
   }
 
+  &__header {
+    @media screen and (max-width: $breakpoint-mobile) {
+      flex-direction: column !important;
+
+      .ProfileCtaButtons {
+        display: none;
+      }
+    }
+  }
+
   &__NetworkSelect {
     position: absolute;
     right: 0;
@@ -52,6 +62,8 @@
     position: relative;
 
     & > .avatar {
+      border-color: transparent;
+
       @media screen and (max-width: $breakpoint-mobile) {
         width: 80px !important;
         height: 80px !important;
@@ -74,6 +86,15 @@
   }
 
   &__address {
+    .Tooltip {
+      cursor: pointer;
+      &__content {
+        width: auto;
+        padding: 6px;
+        color: white;
+        white-space: nowrap;
+      }
+    }
     a {
       margin-top: 2px;
     }

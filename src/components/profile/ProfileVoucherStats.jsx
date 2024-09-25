@@ -1,6 +1,6 @@
 import "./ProfileVoucherStats.scss";
 
-import { ArrowRightIcon, Box, Heading, Text } from "@unioncredit/ui";
+import { ArrowRightThickIcon, Box, Heading, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "../shared";
 import format from "utils/format";
 import { Link } from "react-router-dom";
@@ -40,7 +40,7 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
                 </Box>
 
                 <Box className="ProfileVoucherStats__arrow">
-                  <ArrowRightIcon width={24} height={24} />
+                  <ArrowRightThickIcon width={18} height={18} />
                 </Box>
               </Box>
             </Link>

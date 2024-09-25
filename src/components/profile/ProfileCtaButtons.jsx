@@ -1,7 +1,18 @@
-import "./ProfilePrimaryCta.scss";
+import "./ProfileCtaButtons.scss";
 
 import { ConnectButton } from "../shared";
-import { Box, Button, CancelIcon, ManageIcon, SwitchIcon, VouchIcon } from "@unioncredit/ui";
+import {
+  Box,
+  Button,
+  CancelIcon,
+  FarcasterIcon,
+  ManageIcon,
+  SwitchIcon,
+  VouchIcon,
+  WalletIcon,
+  WithdrawIcon,
+} from "@unioncredit/ui";
+import cn from "classnames";
 import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../modals/PublicWriteOffDebtModal";
 import { Link, useNavigate } from "react-router-dom";
 import { VOUCH_MODAL } from "../modals/VouchModal";
@@ -17,8 +28,9 @@ import { compareAddresses } from "../../utils/compare";
 import { supportedNetworks } from "../../config/networks";
 import { useMemo } from "react";
 import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
+import { SHARE_REFERRAL_MODAL } from "../modals/ShareReferralModal";
 
-export const ProfilePrimaryCta = ({ address, chainId }) => {
+export const ProfileCtaButtons = ({ address, chainId, className }) => {
   const navigate = useNavigate();
   const { open: openModal } = useModals();
   const { isConnected } = useAccount();
@@ -56,21 +68,24 @@ export const ProfilePrimaryCta = ({ address, chainId }) => {
     BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
 
   return (
-    <Box className="ProfilePrimaryCta" direction="vertical" justify="space-between" minw="200px">
+    <Box
+      className={cn("ProfileCtaButtons", className)}
+      direction="vertical"
+      justify="space-between"
+      minw="200px"
+    >
       {!isConnected ? (
         <ConnectButton
           buttonProps={{
+            icon: WalletIcon,
             style: {
               borderRadius: "12px",
-              height: "64px",
-              fontSize: "18px",
               backgroundColor: "transparent",
             },
           }}
         />
       ) : connectedChain?.id !== Number(chainId) ? (
         <Button
-          size="large"
           color="secondary"
           variant="light"
           icon={SwitchIcon}
@@ -79,8 +94,8 @@ export const ProfilePrimaryCta = ({ address, chainId }) => {
         />
       ) : isMaxOverdue ? (
         <Button
-          size="large"
           icon={CancelIcon}
+          color="red"
           label="Write-off debt"
           onClick={() =>
             openModal(PUBLIC_WRITE_OFF_DEBT_MODAL, {
@@ -90,7 +105,6 @@ export const ProfilePrimaryCta = ({ address, chainId }) => {
         />
       ) : alreadyVouching ? (
         <Button
-          size="large"
           color="secondary"
           variant="light"
           icon={ManageIcon}
@@ -103,16 +117,15 @@ export const ProfilePrimaryCta = ({ address, chainId }) => {
           variant="light"
           to="/"
           as={Link}
-          label="Register to vouch"
-          size="large"
+          icon={VouchIcon}
+          label="Join to Back"
         />
       ) : connectedAddress === address ? (
         <Button
           color="secondary"
           variant="light"
-          icon={ManageIcon}
+          icon={FarcasterIcon}
           label="Edit on Farcaster"
-          size="large"
           onClick={() => open("https://warpcast.com/~/settings")}
           style={{
             opacity: 1,
@@ -120,15 +133,28 @@ export const ProfilePrimaryCta = ({ address, chainId }) => {
         />
       ) : (
         <Button
-          size="large"
           color="primary"
           icon={VouchIcon}
           onClick={() => {
             openModal(VOUCH_MODAL, { address });
           }}
-          label={network ? `Vouch on ${network.label}` : "Vouch"}
+          label="Back this account"
         />
       )}
+
+      <Button
+        icon={WithdrawIcon}
+        mt="6px"
+        variant="light"
+        color="secondary"
+        label={"Share profile"}
+        onClick={() =>
+          openModal(SHARE_REFERRAL_MODAL, {
+            address,
+            chainId,
+          })
+        }
+      />
     </Box>
   );
 };

@@ -1,10 +1,15 @@
 .ProfileCurrentBalances {
+  h3.heading {
+    font-size: 27px;
+  }
+
   &__vouch {
     font-size: 24px;
 
     span {
       color: #71717a !important;
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 500;
     }
   }
 }
