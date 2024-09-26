@@ -13,8 +13,9 @@ import { usePrimaryName } from "hooks/usePrimaryName";
 import { compareAddresses } from "../../utils/compare";
 import useWrite from "../../hooks/useWrite";
 import { useProtocol } from "../../providers/ProtocolData";
+import { reduceBnSum } from "../../utils/reduce";
 
-export const ProfileBannerCta = ({ address }) => {
+export const ProfileBannerCta = ({ vouchers, address }) => {
   const navigate = useNavigate();
   const { address: connectedAddress, isConnected } = useAccount();
   const { open: openModal } = useModals();
@@ -35,8 +36,9 @@ export const ProfileBannerCta = ({ address }) => {
     borrowerAddresses: connectedBorrowers = [],
   } = connectedMember;
 
-  const { isMember: profileIsMember = false, creditLimit: profileCreditLimit = ZERO } =
-    profileMember;
+  const { isMember: profileIsMember = false } = profileMember;
+
+  const profileCreditLimit = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const {
     regFee = ZERO,
@@ -76,6 +78,15 @@ export const ProfileBannerCta = ({ address }) => {
               onClick: () => open("https://warpcast.com/~/settings"),
             },
           }
+        : vouchers.length <= 0
+        ? {
+            title: `Be ${name === "them" ? "their" : name} first backer!`,
+            content: "If you trust them, vouch for them and be their first supporter.",
+            buttonProps: {
+              label: `Vouch for ${name}`,
+              onClick: () => openModal(VOUCH_MODAL, { address }),
+            },
+          }
         : {
             title: `Vouch for ${name}`,
             content: `Vouch for ${name} by using your staked assets. Make sure they are someone you really trust.`,
@@ -88,7 +99,9 @@ export const ProfileBannerCta = ({ address }) => {
           title: "Gift a Membership",
           content: `${
             profileCreditLimit.gt(ZERO)
-              ? `This account has $${format(profileCreditLimit)} in credit. `
+              ? `This account has $${format(profileCreditLimit)} in credit from ${
+                  vouchers.length
+                } members. `
               : ""
           }Mint a membership NFT and gift it to them for free membership.`,
           buttonProps: {

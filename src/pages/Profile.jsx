@@ -23,10 +23,15 @@ import NotFoundPage from "./NotFoundPage";
 import ProfileHeaderLoading from "components/profile/ProfileHeaderLoading";
 import { ProfileBannerCta } from "components/profile/ProfileBannerCta";
 import { ProfileColumns } from "../components/profile/ProfileColumns";
+import { useVoucheesData } from "../providers/VoucheesData";
+import { useVouchersData } from "../providers/VouchersData";
 
 function ProfileInner({ address, chainId, legacyTag }) {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { data: vouchees = [] } = useVoucheesData(address, chainId, getVersion(chainId));
+  const { data: vouchers = [] } = useVouchersData(address, chainId, getVersion(chainId));
 
   // True if the user has navigated other pages previously, false if they landed
   // on the profile directly.
@@ -82,8 +87,13 @@ function ProfileInner({ address, chainId, legacyTag }) {
       *--------------------------------------------------------------*/}
       {memberLoaded && (
         <>
-          <ProfileBannerCta address={address} />
-          <ProfileColumns address={address} chainId={chainId} />
+          <ProfileBannerCta vouchers={vouchers} address={address} />
+          <ProfileColumns
+            vouchees={vouchees}
+            vouchers={vouchers}
+            address={address}
+            chainId={chainId}
+          />
         </>
       )}
     </Box>

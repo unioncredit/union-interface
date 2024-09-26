@@ -5,14 +5,8 @@ import { Box } from "@unioncredit/ui";
 import { ProfileCurrentBalances } from "./ProfileCurrentBalances";
 import React from "react";
 import { ProfileVoucherStats } from "./ProfileVoucherStats";
-import { useVoucheesData } from "../../providers/VoucheesData";
-import { getVersion } from "../../providers/Version";
-import { useVouchersData } from "../../providers/VouchersData";
 
-export const ProfileColumns = ({ address, chainId }) => {
-  const { data: vouchees = [] } = useVoucheesData(address, chainId, getVersion(chainId));
-  const { data: vouchers = [] } = useVouchersData(address, chainId, getVersion(chainId));
-
+export const ProfileColumns = ({ vouchees, vouchers, address, chainId }) => {
   return (
     <Box className="ProfileColumns" fluid>
       <Box className="ProfileColumns__column">
