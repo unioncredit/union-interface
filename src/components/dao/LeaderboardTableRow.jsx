@@ -1,11 +1,14 @@
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
-import { ZERO } from "constants";
-import { compactFormattedNumber } from "utils/format";
+import { isAddress } from "ethers/lib/utils";
 
 export function LeaderboardTableRow({ data }) {
-  const { address, unionBalance = ZERO, votes = ZERO, delegatedVotes = ZERO, voteCount = 0 } = data;
+  const address = data?.[0] || null;
+
+  if (!address || !isAddress(address)) {
+    throw new Error("Invalid address provided: " + address);
+  }
 
   return (
     <TableRow
@@ -25,12 +28,12 @@ export function LeaderboardTableRow({ data }) {
           </Text>
         </Box>
       </TableCell>
-      <TableCell align="right">{voteCount}</TableCell>
-      <TableCell align="right">{compactFormattedNumber(unionBalance)}</TableCell>
-      <TableCell align="right">
-        {compactFormattedNumber(delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes)}
-      </TableCell>
-      <TableCell align="right">{compactFormattedNumber(votes)}</TableCell>
+
+      {data.slice(1).map((row, i) => (
+        <TableCell key={i} align="right">
+          {row}
+        </TableCell>
+      ))}
     </TableRow>
   );
 }

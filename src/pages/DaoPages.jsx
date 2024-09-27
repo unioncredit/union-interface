@@ -10,34 +10,30 @@ export const PAGES = {
     id: "voting",
     maxw: "653px",
     initialActive: 0,
-    component: <GovernancePage />,
+    component: GovernancePage,
   },
   PROTOCOL: {
     id: "protocol",
     maxw: "653px",
     initialActive: 1,
-    component: <ProtocolPage />,
+    component: ProtocolPage,
   },
   LEADERBOARD: {
     id: "leaderboard",
     maxw: "none",
     initialActive: 2,
-    component: <LeaderboardPage />,
+    component: LeaderboardPage,
   },
 };
 
-export default function DaoPages({ page }) {
-  const { id, maxw, initialActive, component } = page;
+export default function DaoPages({ page, props }) {
+  const { id, maxw, initialActive, component: Component } = page;
 
   return (
     <Layout.Columned align="center" maxw={maxw}>
-      <DaoSegmentedControl
-        value={id}
-        maxw="653px"
-        initialActive={initialActive}
-      />
+      <DaoSegmentedControl value={id} maxw="653px" initialActive={initialActive} />
 
-      {component}
+      <Component {...props} />
     </Layout.Columned>
   );
 }

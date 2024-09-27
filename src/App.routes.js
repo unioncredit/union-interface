@@ -5,6 +5,7 @@ import ProfilePage from "pages/Profile";
 import RegisterPage from "pages/Register";
 import CreditPages, { PAGES as CREDIT_PAGES } from "pages/CreditPages";
 import DaoPages, { PAGES as DAO_PAGES } from "pages/DaoPages";
+import { BOARDS } from "./pages/Leaderboard";
 
 // prettier-ignore
 export const member = [
@@ -26,7 +27,9 @@ export const general = [
   { path: Links.GOVERNANCE,                component: DaoPages,   props: { page: DAO_PAGES.VOTING } },
   { path: Links.PROTOCOL,                  component: DaoPages,     props: { page: DAO_PAGES.PROTOCOL } },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
-  { path: Links.LEADERBOARD,               component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD } },
+  { path: BOARDS.DELEGATES.to,             component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.DELEGATES } } },
+  { path: BOARDS.MOST_TRUSTED.to,          component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.MOST_TRUSTED } } },
+  { path: BOARDS.SAMARITANS.to,            component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.SAMARITANS } } },
 ]
 
 export const allRoutes = [...member, ...nonMember, ...general];
