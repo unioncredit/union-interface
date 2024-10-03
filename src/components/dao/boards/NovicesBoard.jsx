@@ -28,7 +28,7 @@ const columns = {
   },
 };
 
-export const NoobsBoard = () => {
+export const NovicesBoard = () => {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     type: "CREDIT_LIMIT",

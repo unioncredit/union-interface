@@ -7,8 +7,8 @@ import { DelegatesBoard } from "components/dao/boards/DelegatesBoard";
 import { useCallback } from "react";
 import { MostTrustedBoard } from "../components/dao/boards/MostTrustedBoard";
 import { TopCreditLimitsBoard } from "../components/dao/boards/TopCreditLimitsBoard";
-import { NoobsBoard } from "../components/dao/boards/NoobsBoard";
-import { WorstBoard } from "../components/dao/boards/WorstBoard";
+import { NovicesBoard } from "../components/dao/boards/NovicesBoard";
+import { DelinquentsBoard } from "../components/dao/boards/DelinquentsBoard";
 import { SamaritansBoard } from "../components/dao/boards/SamaritansBoard";
 import useCopyToClipboard from "../hooks/useCopyToClipboard";
 
@@ -38,20 +38,20 @@ export const BOARDS = {
     component: <TopCreditLimitsBoard />,
   },
   NOOBS: {
-    id: "noobs",
-    label: "Noobs",
-    to: "/leaderboard/noobs",
+    id: "novices",
+    label: "Novices",
+    to: "/leaderboard/novices",
     initialActive: 3,
     as: Link,
-    component: <NoobsBoard />,
+    component: <NovicesBoard />,
   },
   WORST: {
     id: "worst",
-    label: "Worst",
-    to: "/leaderboard/worst",
+    label: "Delinquents",
+    to: "/leaderboard/delinquents",
     initialActive: 4,
     as: Link,
-    component: <WorstBoard />,
+    component: <DelinquentsBoard />,
   },
   SAMARITANS: {
     id: "samaritans",

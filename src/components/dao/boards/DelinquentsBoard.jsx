@@ -28,7 +28,7 @@ const columns = {
   },
 };
 
-export const WorstBoard = () => {
+export const DelinquentsBoard = () => {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
     type: "BALANCE_OWED",
