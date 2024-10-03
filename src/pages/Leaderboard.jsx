@@ -1,8 +1,16 @@
+import "./Leaderboard.scss";
+
 import { Helmet } from "react-helmet";
-import { Button, Card, SegmentedControl } from "@unioncredit/ui";
-import { LeaderboardTable } from "components/dao/LeaderboardTable";
+import { Button, Card, CheckIcon, SegmentedControl, WithdrawIcon } from "@unioncredit/ui";
 import { Link } from "react-router-dom";
 import { DelegatesBoard } from "components/dao/boards/DelegatesBoard";
+import { useCallback } from "react";
+import { MostTrustedBoard } from "../components/dao/boards/MostTrustedBoard";
+import { TopCreditLimitsBoard } from "../components/dao/boards/TopCreditLimitsBoard";
+import { NoobsBoard } from "../components/dao/boards/NoobsBoard";
+import { WorstBoard } from "../components/dao/boards/WorstBoard";
+import { SamaritansBoard } from "../components/dao/boards/SamaritansBoard";
+import useCopyToClipboard from "../hooks/useCopyToClipboard";
 
 export const BOARDS = {
   DELEGATES: {
@@ -19,22 +27,50 @@ export const BOARDS = {
     to: "/leaderboard/most-trusted",
     initialActive: 1,
     as: Link,
+    component: <MostTrustedBoard />,
+  },
+  CREDIT_LIMITS: {
+    id: "top-credit-limits",
+    label: "Top Credit Limits",
+    to: "/leaderboard/top-credit-limits",
+    initialActive: 2,
+    as: Link,
+    component: <TopCreditLimitsBoard />,
+  },
+  NOOBS: {
+    id: "noobs",
+    label: "Noobs",
+    to: "/leaderboard/noobs",
+    initialActive: 3,
+    as: Link,
+    component: <NoobsBoard />,
+  },
+  WORST: {
+    id: "worst",
+    label: "Worst",
+    to: "/leaderboard/worst",
+    initialActive: 4,
+    as: Link,
+    component: <WorstBoard />,
   },
   SAMARITANS: {
     id: "samaritans",
     label: "Samaritans",
     to: "/leaderboard/samaritans",
-    initialActive: 2,
+    initialActive: 5,
     as: Link,
+    component: <SamaritansBoard />,
   },
 };
 
 export default function LeaderboardPage({ board }) {
+  const [copied, copy] = useCopyToClipboard();
+
   const { id, initialActive } = board;
 
-  const BoardComponent = () => {
-    return BOARDS.DELEGATES.component;
-  };
+  const BoardComponent = useCallback(() => {
+    return board.component;
+  }, [board]);
 
   return (
     <>
@@ -42,20 +78,20 @@ export default function LeaderboardPage({ board }) {
         <title>Leaderboard | Union Credit Protocol</title>
       </Helmet>
 
-      <Card>
+      <Card className="Leaderboard">
         <Card.Header
           pb="24px"
           title="Leaderboard"
           action={
             <Button
-              as="a"
-              href="#"
               target="_blank"
               rel="noopener"
               size="pill"
               variant="light"
               color="secondary"
-              label={<>Share Board</>}
+              icon={copied ? CheckIcon : WithdrawIcon}
+              label={copied ? <>Link copied!</> : <>Share Board</>}
+              onClick={() => copy(`https://app.union.finance${board.to}`)}
             />
           }
         />
@@ -66,8 +102,8 @@ export default function LeaderboardPage({ board }) {
           initialActive={initialActive}
           w="calc(100% - 48px)"
           m="24px"
-          className="DaoSegmentedControl"
-          items={[BOARDS.DELEGATES, BOARDS.MOST_TRUSTED, BOARDS.SAMARITANS].map((item) => ({
+          className="Leaderboard__TabControl"
+          items={Object.values(BOARDS).map((item) => ({
             id: item.id,
             to: item.to,
             as: item.as,

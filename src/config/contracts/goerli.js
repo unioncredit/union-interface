@@ -3,7 +3,7 @@ import uTokenAbi from "abis/uToken.json";
 import unionAbi from "abis/union.json";
 import erc20Abi from "abis/erc20.json";
 import comptrollerAbi from "abis/comptroller.json";
-import assetManagerAbi from "../../abis/assetManager.json";
+import assetManagerAbi from "abis/assetManager.json";
 
 export const userManagerContract = {
   address: "0xba25eb32f42B1A4c31711B3d4967e4D74561C37B",

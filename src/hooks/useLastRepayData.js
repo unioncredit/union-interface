@@ -3,6 +3,7 @@ import { ZERO } from "constants";
 import { useNetwork } from "wagmi";
 import { useBlockTime } from "hooks/useBlockTime";
 import { parseMilliseconds } from "utils/date";
+import { optimism } from "wagmi/chains";
 
 const formatTimestamp = (milliseconds) => {
   if (!milliseconds) {
@@ -27,7 +28,7 @@ export function useLastRepayData(lastRepay) {
   const { overdueTime = ZERO } = protocol;
 
   const today = new Date();
-  const lastRepayData = useBlockTime(lastRepay, chain.id);
+  const lastRepayData = useBlockTime(lastRepay, chain?.id || optimism.id);
   const overdueInMilliseconds = overdueTime.mul(1000).toNumber();
 
   const paymentDueTimestamp =

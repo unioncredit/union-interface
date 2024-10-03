@@ -11,10 +11,7 @@ export function LeaderboardTableRow({ data }) {
   }
 
   return (
-    <TableRow
-      key={address}
-      onClick={() => window.open(`https://www.tally.xyz/gov/union/delegate/${address}`, "_blank")}
-    >
+    <TableRow key={address}>
       <TableCell fixedSize>
         <Avatar size={24} address={address} />
       </TableCell>

@@ -27,9 +27,12 @@ export const general = [
   { path: Links.GOVERNANCE,                component: DaoPages,   props: { page: DAO_PAGES.VOTING } },
   { path: Links.PROTOCOL,                  component: DaoPages,     props: { page: DAO_PAGES.PROTOCOL } },
   { path: "/governance/proposals/:hash",   component: ProposalPage,     props: {} },
-  { path: BOARDS.DELEGATES.to,             component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.DELEGATES } } },
-  { path: BOARDS.MOST_TRUSTED.to,          component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.MOST_TRUSTED } } },
-  { path: BOARDS.SAMARITANS.to,            component: DaoPages,  props: { page: DAO_PAGES.LEADERBOARD, props: { board: BOARDS.SAMARITANS } } },
+  // Leaderboard routes
+  ...Object.values(BOARDS).map(board => ({
+    path: board.to,
+    component: DaoPages,
+    props: { page: DAO_PAGES.LEADERBOARD, props: { board } }
+  }))
 ]
 
 export const allRoutes = [...member, ...nonMember, ...general];

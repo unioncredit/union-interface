@@ -1,0 +1,12 @@
+@import "@unioncredit/ui/src/variables";
+
+.GiftMembershipButton {
+  background: $purple600;
+  margin-left: auto;
+  height: 36px;
+  padding: 12px;
+
+  &:hover {
+    background: $purple700 !important;
+  }
+}

@@ -1,16 +1,19 @@
 import "./LeaderboardTable.scss";
 
-import { Table, TableRow, Pagination, EmptyState, TableHead, Card } from "@unioncredit/ui";
-import usePagination from "hooks/usePagination";
+import { Card, EmptyState, Pagination, Table, TableHead, TableRow } from "@unioncredit/ui";
+
 import { LeaderboardTableRow } from "components/dao/LeaderboardTableRow";
-import { useState } from "react";
-import { SortOrder } from "constants";
 import { SortableTableHead } from "components/shared/SortableTableHead";
-import useVoters from "hooks/useVoters";
 
-export function LeaderboardTable({ columns, rows: rowsData, sort, handleSort, pageSize = 15 }) {
-  const { data: rows, maxPages, activePage, onChange } = usePagination(rowsData, pageSize);
-
+export function LeaderboardTable({
+  columns,
+  rows,
+  sort,
+  handleSort,
+  maxPages,
+  activePage,
+  paginationOnChange,
+}) {
   if (rows.length <= 0) {
     return (
       <Card.Body>
@@ -26,16 +29,22 @@ export function LeaderboardTable({ columns, rows: rowsData, sort, handleSort, pa
           <TableHead></TableHead>
           <TableHead>Account</TableHead>
 
-          {Object.entries(columns).map(([key, { label }], index) => (
-            <SortableTableHead
-              key={index}
-              align="right"
-              order={sort.type === key && sort.order}
-              onClick={() => handleSort(key)}
-            >
-              {label}
-            </SortableTableHead>
-          ))}
+          {Object.entries(columns).map(([key, { sort: hasSort, label }], index) =>
+            hasSort ? (
+              <SortableTableHead
+                key={index}
+                align="right"
+                order={sort.type === key && sort.order}
+                onClick={() => handleSort(key)}
+              >
+                {label}
+              </SortableTableHead>
+            ) : (
+              <TableHead key={index} align="right">
+                {label}
+              </TableHead>
+            )
+          )}
         </TableRow>
 
         {rows.map((data) => (
@@ -43,7 +52,7 @@ export function LeaderboardTable({ columns, rows: rowsData, sort, handleSort, pa
         ))}
       </Table>
 
-      <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
+      <Pagination pages={maxPages} activePage={activePage} onClick={paginationOnChange} />
     </div>
   );
 }

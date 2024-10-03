@@ -1,8 +1,9 @@
 import { SortOrder, ZERO } from "constants";
-import useVoters from "../../../hooks/useVoters";
-import { LeaderboardTable } from "../LeaderboardTable";
+import useVoters from "hooks/useVoters";
+import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { useState } from "react";
-import { compactFormattedNumber } from "../../../utils/format";
+import { compactFormattedNumber } from "utils/format";
+import usePagination from "hooks/usePagination";
 
 const columns = {
   VOTES_CAST: {
@@ -61,6 +62,8 @@ export const DelegatesBoard = () => {
     ];
   });
 
+  const { data: rows, maxPages, activePage, onChange } = usePagination(data, 15);
+
   const handleSort = (sortType) => {
     if (sort.type !== sortType) {
       return setSort({
@@ -75,5 +78,15 @@ export const DelegatesBoard = () => {
     });
   };
 
-  return <LeaderboardTable columns={columns} sort={sort} handleSort={handleSort} rows={data} />;
+  return (
+    <LeaderboardTable
+      columns={columns}
+      rows={rows}
+      sort={sort}
+      handleSort={handleSort}
+      maxPages={maxPages}
+      activePage={activePage}
+      paginationOnChange={onChange}
+    />
+  );
 };
