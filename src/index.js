@@ -11,9 +11,13 @@ import Toasts from "providers/Toasts";
 import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
 import Version from "providers/Version";
+import { init } from "@airstack/airstack-react";
 
 // eslint-disable-next-line no-undef
 window.Buffer = window.Buffer || require("buffer").Buffer;
+
+// eslint-disable-next-line no-undef
+init(process.env.REACT_APP_AIRSTACK_API_KEY);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

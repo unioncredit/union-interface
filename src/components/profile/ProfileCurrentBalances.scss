@@ -1,0 +1,24 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileCurrentBalances {
+  h3.heading {
+    font-size: 27px;
+  }
+  .DistributionBar {
+    border: 0.5px solid $blue50;
+
+    .DistributionBar__item--separated + .DistributionBar__item--separated::before {
+      display: none;
+    }
+  }
+
+  &__vouch {
+    font-size: 24px;
+
+    span {
+      color: #71717a !important;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
