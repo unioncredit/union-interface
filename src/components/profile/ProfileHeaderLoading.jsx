@@ -19,14 +19,14 @@ export default function ProfileHeaderLoading() {
             <Skeleton height={24} width={200} shimmer />
           </Box>
 
-          <Box mt="12px" align="center" className="ProfileHeader__verification" fluid>
+          <Box mt="12px" align="center" className="ProfileVerifiedAccounts" fluid>
             <Skeleton height={20} width={40} shimmer />
             <Skeleton height={20} width={40} shimmer ml="6px" />
           </Box>
         </Box>
       </Box>
 
-      <Box className="ProfileButtons" direction="vertical" justify="space-between" minw="200px">
+      <Box className="ProfileCtaButtons" direction="vertical" justify="space-between" minw="200px">
         <Skeleton height={48} width={200} shimmer />
         <Skeleton mt="12px" height={48} width={200} shimmer />
       </Box>

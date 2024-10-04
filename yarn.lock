@@ -12,6 +12,13 @@
   resolved "https://registry.npmmirror.com/@adobe/css-tools/-/css-tools-4.3.1.tgz#abfccb8ca78075a2b6187345c26243c1a0842f28"
   integrity sha512-/62yikz7NLScCGAAST5SHdnjaDJQBDq0M2muyRTpf2VQhw6StBg2ALiu73zSJQ4fMVLA+0uBhBHAle7Wg+2kSg==
 
+"@airstack/airstack-react@^0.6.4":
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/@airstack/airstack-react/-/airstack-react-0.6.4.tgz#38b093ef932df6b14bb2132898a9e399d28a8a09"
+  integrity sha512-eCGeAahSj9eTi+PbI6GeTtqyQ6sgfiZ65GgoZF5z4go7EjSsG6fxtUvcLnkvBc3pSBZ7n+EvNFhN2kKKtcfutA==
+  dependencies:
+    graphql "16.6.0"
+
 "@alloc/quick-lru@^5.2.0":
   version "5.2.0"
   resolved "https://registry.npmmirror.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#7bf68b20c0a350f936915fcae06f58e32007ce30"
@@ -3232,10 +3239,10 @@
     jsdoc-to-markdown "^7.1.1"
     typescript "^4.6.4"
 
-"@unioncredit/ui@2.0.32":
-  version "2.0.32"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.32.tgz#10839bb5682cc82f05e28eed6463fdc1dfb748db"
-  integrity sha512-IoybXKiq3AU0kGoGMMxVT8+f2NJ7utRcrr3+ToQQYh6tKTT5IKqkTjAqYmuXfnI+3Q7wPfmuidu+PwODSIyNxQ==
+"@unioncredit/ui@2.0.37":
+  version "2.0.37"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.37.tgz#27c28085ecbc2fe96b047bafed90745a9aeb4735"
+  integrity sha512-hu8G9gcQO8E4qRqsULUHCpEF6VT77O1KZmP7zp7n/MtDn72hIcFxQpun91FiG9j7T+rPvFhkSoKtM42u1gSgZw==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
@@ -7052,6 +7059,11 @@ graphql-request@^5.0.0:
     cross-fetch "^3.1.5"
     extract-files "^9.0.0"
     form-data "^3.0.0"
+
+graphql@16.6.0:
+  version "16.6.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
+  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 graphql@^16.5.0, graphql@^16.6.0:
   version "16.8.1"

@@ -1,0 +1,32 @@
+@import "@unioncredit/ui/src/variables";
+
+.ProfileCtaButtons {
+  @media screen and (max-width: $breakpoint-mobile) {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  &--desktop {
+    .button:first-of-type {
+      height: 64px;
+      font-size: 18px;
+    }
+    .button:last-of-type {
+      display: none;
+    }
+  }
+  &--mobile {
+    margin-top: 16px;
+
+    .button:first-of-type {
+      @media (min-width: $breakpoint-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  .button {
+    width: 100%;
+    border-radius: 12px !important;
+  }
+}

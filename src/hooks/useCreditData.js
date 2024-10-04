@@ -11,6 +11,7 @@ import { getVersion, Versions } from "providers/Version";
 import { useMemberData } from "providers/MemberData";
 import { BlockSpeed, ZERO } from "constants";
 import { SECONDS_PER_DAY } from "../constants";
+import { format } from "date-fns";
 
 export function useCreditData(address, chainId) {
   const [borrows, setBorrows] = useState([]);
@@ -18,6 +19,7 @@ export function useCreditData(address, chainId) {
   const [application, setApplication] = useState({});
   const [history, setHistory] = useState({});
   const [daysInDefault, setDaysInDefault] = useState(0);
+  const [joinDate, setJoinDate] = useState(null);
   const [daysSinceMembership, setDaysSinceMembership] = useState(0);
   const [borrowedVolume, setBorrowedVolume] = useState(ZERO);
   const [repaidVolume, setRepaidVolume] = useState(ZERO);
@@ -74,7 +76,10 @@ export function useCreditData(address, chainId) {
   useEffect(() => {
     if (application) {
       const startDate = new Date(application.timestamp * 1000);
-      setDaysSinceMembership(getDaysBetweenDates(startDate, new Date()));
+      if (!isNaN(startDate.getTime())) {
+        setJoinDate(format(startDate, "d LLL yyyy"));
+        setDaysSinceMembership(getDaysBetweenDates(startDate, new Date()));
+      }
     }
   }, [application]);
 
@@ -193,6 +198,7 @@ export function useCreditData(address, chainId) {
     borrows,
     repays,
     history,
+    joinDate,
     daysInDefault,
     daysSinceMembership,
     borrowedVolume,

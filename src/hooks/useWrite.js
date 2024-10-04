@@ -95,7 +95,7 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [writeAsync, method, memoisedArgs, chain.id, signer, JSON.stringify(contractConfig)]);
+  }, [writeAsync, method, memoisedArgs, chain?.id, signer, JSON.stringify(contractConfig)]);
 
   /*--------------------------------------------------------------
     Return  
