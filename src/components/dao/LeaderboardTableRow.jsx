@@ -3,7 +3,7 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
 import { isAddress } from "ethers/lib/utils";
 
-export function LeaderboardTableRow({ data }) {
+export function LeaderboardTableRow({ num, data }) {
   const address = data?.[0] || null;
 
   if (!address || !isAddress(address)) {
@@ -12,6 +12,7 @@ export function LeaderboardTableRow({ data }) {
 
   return (
     <TableRow key={address}>
+      <TableCell fixedSize>{num}</TableCell>
       <TableCell fixedSize>
         <Avatar size={24} address={address} />
       </TableCell>

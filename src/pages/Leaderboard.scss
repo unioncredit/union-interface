@@ -1,29 +1,56 @@
+@import "@unioncredit/ui/src/variables";
+
 .Leaderboard {
+  h1 span {
+    @media all and (max-width: 500px) {
+      display: none;
+    }
+  }
+
+  td.table-cell:first-of-type {
+    padding-left: 12px;
+    padding-right: 12px;
+    color: $grey500;
+    font-size: 12px;
+  }
+  td.table-cell:not(:nth-of-type(3)) {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
   &__TabControl {
     margin-top: 0 !important;
 
-    .SegmentedControl__wrap {
-      @media all and (max-width: 600px) {
-        grid-auto-flow: row;
-        grid-template-columns: 1fr 1fr !important;
-      }
+    @media all and (max-width: 580px) {
+      width: calc(100% - 32px) !important;
+      margin: 0 16px 24px !important;
     }
+
     .SegmentedControl__item {
       padding: 9px 0;
 
-      @media all and (max-width: 767px) {
+      span {
+        margin-left: 4px;
+
+        @media all and (max-width: 780px) {
+          display: none;
+        }
+      }
+
+      @media all and (max-width: 1200px) {
         padding: 9px 4px;
       }
 
       &.SegmentedControl__item--active {
-        @media all and (max-width: 767px) {
+        @media all and (max-width: 1200px) {
           background: #ffffff;
           box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.2);
         }
       }
     }
     .SegmentedControl__item--slider {
-      @media all and (max-width: 767px) {
+      @media all and (max-width: 1200px) {
         display: none;
       }
     }

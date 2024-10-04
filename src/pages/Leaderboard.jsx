@@ -11,11 +11,18 @@ import { NovicesBoard } from "../components/dao/boards/NovicesBoard";
 import { DelinquentsBoard } from "../components/dao/boards/DelinquentsBoard";
 import { SamaritansBoard } from "../components/dao/boards/SamaritansBoard";
 import useCopyToClipboard from "../hooks/useCopyToClipboard";
+import { useModals } from "../providers/ModalManager";
+import { SHARE_LINK_MODAL } from "../components/modals/ShareLinkModal";
 
 export const BOARDS = {
   DELEGATES: {
     id: "delegates",
-    label: "Delegates",
+    title: "🗳️ Delegates",
+    label: (
+      <p>
+        🗳️<span>Delegates</span>
+      </p>
+    ),
     to: "/leaderboard/delegates",
     initialActive: 0,
     as: Link,
@@ -23,7 +30,12 @@ export const BOARDS = {
   },
   MOST_TRUSTED: {
     id: "most-trusted",
-    label: "Most Trusted",
+    title: "🤝🏻 Most Trusted",
+    label: (
+      <p>
+        🤝🏻<span>Most Trusted</span>
+      </p>
+    ),
     to: "/leaderboard/most-trusted",
     initialActive: 1,
     as: Link,
@@ -31,7 +43,12 @@ export const BOARDS = {
   },
   CREDIT_LIMITS: {
     id: "top-credit-limits",
-    label: "Top Credit Limits",
+    title: "💳 Top Credit Limits",
+    label: (
+      <p>
+        💳<span>Top Credit Limits</span>
+      </p>
+    ),
     to: "/leaderboard/top-credit-limits",
     initialActive: 2,
     as: Link,
@@ -39,7 +56,12 @@ export const BOARDS = {
   },
   NOOBS: {
     id: "novices",
-    label: "Novices",
+    title: "🐣 Novices",
+    label: (
+      <p>
+        🐣<span>Novices</span>
+      </p>
+    ),
     to: "/leaderboard/novices",
     initialActive: 3,
     as: Link,
@@ -47,7 +69,12 @@ export const BOARDS = {
   },
   WORST: {
     id: "worst",
-    label: "Delinquents",
+    title: "🏺 Delinquents",
+    label: (
+      <p>
+        🏺<span>Delinquents</span>
+      </p>
+    ),
     to: "/leaderboard/delinquents",
     initialActive: 4,
     as: Link,
@@ -55,7 +82,12 @@ export const BOARDS = {
   },
   SAMARITANS: {
     id: "samaritans",
-    label: "Samaritans",
+    title: "💸 Samaritans",
+    label: (
+      <p>
+        💸<span>Samaritans</span>
+      </p>
+    ),
     to: "/leaderboard/samaritans",
     initialActive: 5,
     as: Link,
@@ -65,6 +97,8 @@ export const BOARDS = {
 
 export default function LeaderboardPage({ board }) {
   const [copied, copy] = useCopyToClipboard();
+
+  const { open } = useModals();
 
   const { id, initialActive } = board;
 
@@ -81,7 +115,11 @@ export default function LeaderboardPage({ board }) {
       <Card className="Leaderboard">
         <Card.Header
           pb="24px"
-          title="Leaderboard"
+          title={
+            <>
+              {board.title} <span>Leaderboard</span>
+            </>
+          }
           action={
             <Button
               target="_blank"
@@ -91,7 +129,13 @@ export default function LeaderboardPage({ board }) {
               color="secondary"
               icon={copied ? CheckIcon : WithdrawIcon}
               label={copied ? <>Link copied!</> : <>Share Board</>}
-              onClick={() => copy(`https://app.union.finance${board.to}`)}
+              onClick={() =>
+                open(SHARE_LINK_MODAL, {
+                  url: `https://app.union.finance${board.to}`,
+                  title: board.title,
+                  text: "Check out the top ranking users and track your progress on our leaderboard.",
+                })
+              }
             />
           }
         />

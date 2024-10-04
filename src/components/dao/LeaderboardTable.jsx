@@ -27,6 +27,7 @@ export function LeaderboardTable({
       <Table>
         <TableRow>
           <TableHead></TableHead>
+          <TableHead></TableHead>
           <TableHead>Account</TableHead>
 
           {Object.entries(columns).map(([key, { sort: hasSort, label }], index) =>
@@ -47,8 +48,8 @@ export function LeaderboardTable({
           )}
         </TableRow>
 
-        {rows.map((data) => (
-          <LeaderboardTableRow key={data.address} data={data} />
+        {rows.map((data, i) => (
+          <LeaderboardTableRow key={data.address} data={data} num={(activePage - 1) * 15 + i + 1} />
         ))}
       </Table>
 
