@@ -18,7 +18,7 @@ export const useFarcasterData = ({ address }) => {
   // We have to use lazy loading and manual fetching because of a bug in the useQuery function that doesn't detect changes in our addresses variable
   const [fetch, { data: response, loading, error }] = useLazyQuery(
     query,
-    { address },
+    { address: address.toLowerCase() },
     { cache: true }
   );
 

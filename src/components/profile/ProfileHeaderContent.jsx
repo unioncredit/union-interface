@@ -14,7 +14,7 @@ export const ProfileHeaderContent = ({ address, chainId }) => {
   const [copied, copy] = useCopyToClipboard();
   const { data: farcasterData, loading: farcasterLoading } = useFarcasterData({ address });
   const { data } = useEnsName({
-    address,
+    address: address.toLowerCase(),
     chainId: mainnet.id,
   });
 
