@@ -1,4 +1,4 @@
-import { formatUnits } from "ethers/lib/utils";
+import { formatEther, formatUnits } from "ethers/lib/utils";
 import { DUST_THRESHOLD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 
@@ -57,3 +57,24 @@ export function commify(num, digits, rounded = true, stripTrailingZeros = false)
 
   return rhs ? `${lhs}.${rhs}` : lhs;
 }
+
+export const formatScientific = (value, digits = 2) => {
+  if (!value) {
+    value = 0;
+  }
+
+  // Parsed JSON response formats the bigints in scientific notation, we need to
+  // expand into its full form.
+  const expanded = expandToString(value);
+  const formatted = commify(formatEther(expanded), digits);
+  if (value > 0 && formatted === "0.0000") {
+    return "<0.0001";
+  }
+
+  return formatted;
+};
+
+// Takes an int/float value and casts it to string, helps to remove scientific notation
+export const expandToString = (value) => {
+  return value.toLocaleString("fullwide", { useGrouping: false });
+};

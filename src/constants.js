@@ -21,6 +21,14 @@ export const SECONDS_PER_DAY = 86400;
 
 export const SECONDS_PER_YEAR = 31540000;
 
+export const LEADERBOARD_PAGE_SIZE = 15;
+
+export const DataApiNetworks = {
+  [mainnet.id]: "mainnet",
+  [optimism.id]: "optimism-mainnet",
+  [arbitrum.id]: "arbitrum-mainnet",
+};
+
 export const StakeType = {
   STAKE: "stake",
   UNSTAKE: "unstake",
@@ -125,12 +133,11 @@ export const Links = {
   CONTACTS: "/contacts/providing",
   GOVERNANCE: "/governance",
   PROTOCOL: "/protocol",
-  LEADERBOARD: "/leaderboard",
 };
 
 export const SortOrder = {
-  ASC: "ascending",
-  DESC: "descending",
+  ASC: "asc",
+  DESC: "desc",
 };
 
 export const AddressEnsMappings = {
