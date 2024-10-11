@@ -86,14 +86,8 @@
   }
 
   &__address {
-    .Tooltip {
+    .address {
       cursor: pointer;
-      &__content {
-        width: auto;
-        padding: 6px;
-        color: white;
-        white-space: nowrap;
-      }
     }
     a {
       margin-top: 2px;
