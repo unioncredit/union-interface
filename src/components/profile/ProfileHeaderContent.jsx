@@ -1,6 +1,6 @@
 import { useEnsName } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { Badge, Box, Heading, LinkOutIcon, Skeleton, Text } from "@unioncredit/ui";
+import { Box, Heading, LinkOutIcon, Skeleton, Text } from "@unioncredit/ui";
 
 import { AddressEnsMappings } from "constants";
 import { truncateAddress, truncateEns } from "utils/truncateAddress";
@@ -31,17 +31,21 @@ export const ProfileHeaderContent = ({ address, chainId }) => {
         <Heading mb={0}>{title}</Heading>
       )}
 
-      <Box mt="4px" align="center" className="ProfileHeader__address">
+      <Box align="center" className="ProfileHeader__address">
         {farcasterLoading ? (
           <Skeleton shimmer width={100} grey={200} height={18} />
         ) : (
           <>
-            <Badge
-              p="2px 8px"
-              color="grey"
+            <Text
+              className="address"
+              m="0"
+              grey={500}
+              size="medium"
+              weight="medium"
               onClick={() => copy(address)}
-              label={copied ? "Copied" : address.slice(0, 6)}
-            />
+            >
+              {copied ? "Copied!" : address.slice(0, 6)}
+            </Text>
 
             {name && fname && (
               <Text m="0 4px" grey={500} size="medium" weight="medium">
