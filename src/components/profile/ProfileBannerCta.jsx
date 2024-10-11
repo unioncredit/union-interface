@@ -68,7 +68,7 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
 
   const data = connectedIsMember
     ? profileIsMember
-      ? connectedAddress === address || alreadyVouching
+      ? connectedAddress === address
         ? {
             title: "Edit your profile",
             content:
@@ -80,10 +80,19 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
           }
         : vouchers.length <= 0
         ? {
-            title: `Be ${name === "them" ? "their" : name} first backer!`,
+            title: `Be ${name === "them" ? "their" : name + "'s"} first backer!`,
             content: "If you trust them, vouch for them and be their first supporter.",
             buttonProps: {
               label: `Vouch for ${name}`,
+              onClick: () => openModal(VOUCH_MODAL, { address }),
+            },
+          }
+        : alreadyVouching
+        ? {
+            title: `Update Vouch`,
+            content: `You are already vouching for ${name}. Update your vouch for ${name} by using your staked assets.`,
+            buttonProps: {
+              label: "Vouch",
               onClick: () => openModal(VOUCH_MODAL, { address }),
             },
           }
