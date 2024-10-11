@@ -1,13 +1,13 @@
 import { useEnsName } from "wagmi";
 import { mainnet } from "wagmi/chains";
-import { Box, Heading, LinkOutIcon, Skeleton, Text, Tooltip } from "@unioncredit/ui";
+import { Badge, Box, Heading, LinkOutIcon, Skeleton, Text } from "@unioncredit/ui";
 
 import { AddressEnsMappings } from "constants";
 import { truncateAddress, truncateEns } from "utils/truncateAddress";
 import { blockExplorerAddress } from "utils/blockExplorer";
 import useLabels from "hooks/useLabels";
 import { useFarcasterData } from "hooks/useFarcasterData";
-import useCopyToClipboard from "../../hooks/useCopyToClipboard";
+import useCopyToClipboard from "hooks/useCopyToClipboard";
 
 export const ProfileHeaderContent = ({ address, chainId }) => {
   const { getLabel } = useLabels();
@@ -31,28 +31,23 @@ export const ProfileHeaderContent = ({ address, chainId }) => {
         <Heading mb={0}>{title}</Heading>
       )}
 
-      <Box align="center" className="ProfileHeader__address">
+      <Box mt="4px" align="center" className="ProfileHeader__address">
         {farcasterLoading ? (
           <Skeleton shimmer width={100} grey={200} height={18} />
         ) : (
           <>
+            <Badge
+              p="2px 8px"
+              color="grey"
+              onClick={() => copy(address)}
+              label={copied ? "Copied" : address.slice(0, 6)}
+            />
+
             {name && fname && (
-              <Text m="0 4px 0 0" grey={500} size="medium" weight="medium">
-                {name} ·
+              <Text m="0 4px" grey={500} size="medium" weight="medium">
+                · {name}
               </Text>
             )}
-
-            <Tooltip position="bottom" content={copied ? "Copied to clipboard!" : address}>
-              <Text
-                m="0 4px 0 0"
-                grey={500}
-                size="medium"
-                weight="medium"
-                onClick={() => copy(address)}
-              >
-                {address.slice(0, 6)}
-              </Text>
-            </Tooltip>
 
             <a href={blockExplorerAddress(chainId, address)} target="_blank" rel="noreferrer">
               <LinkOutIcon width="18px" fill="black" />
