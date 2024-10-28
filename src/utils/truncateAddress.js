@@ -1,4 +1,6 @@
-export const truncateAddress = (address) => `${address.slice(0, 6)}...${address.slice(-4)}`;
+export const truncateAddress = (address, short = false) => {
+  return short ? address.slice(0, 6) : `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
 
 export const truncateEns = (ens, cutoff = 16) => {
   if (!ens || ens.length <= cutoff) {

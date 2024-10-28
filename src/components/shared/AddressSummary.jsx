@@ -152,7 +152,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 mr="4px"
                 color="grey"
                 onClick={() => copy(address)}
-                label={copied ? "Copied" : truncateAddress(address)}
+                label={copied ? "Copied" : truncateAddress(address, true)}
               />
               <StatusBadge address={address} chainId={chainId} />
             </BadgeRow>
