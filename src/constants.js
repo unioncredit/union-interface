@@ -27,6 +27,7 @@ export const DataApiNetworks = {
   [mainnet.id]: "mainnet",
   [optimism.id]: "optimism-mainnet",
   [arbitrum.id]: "arbitrum-mainnet",
+  [8453]: "base",
 };
 
 export const StakeType = {
@@ -64,24 +65,28 @@ export const BlockSpeed = {
   [mainnet.id]: 12e3,
   [arbitrum.id]: 12e3,
   [optimism.id]: 1e3,
+  [8453]: 2e3,
 };
 
 export const BlocksPerYear = {
   [mainnet.id]: 2628333,
   [arbitrum.id]: 2628333,
   [optimism.id]: 31540000,
+  [8453]: 15770000,
 };
 
 export const EIP3770 = {
   [mainnet.id]: "eth",
   [arbitrum.id]: "arb1",
   [optimism.id]: "opt",
+  [8453]: "base",
 };
 
 export const EIP3770Map = {
   eth: mainnet.id,
   arb1: arbitrum.id,
   opt: optimism.id,
+  base: 8453,
 };
 
 export const TheGraphUrls = {
@@ -91,6 +96,7 @@ export const TheGraphUrls = {
   },
   [Versions.V2]: {
     [optimism.id]: "https://api.studio.thegraph.com/query/78581/union-finance/version/latest",
+    [8453]: "",
   },
 };
 

@@ -35,6 +35,19 @@ import {
   vouchFaucetContract as OPTIMISM_V2_vouchFaucet,
 } from "config/contracts/v2/optimism";
 
+import {
+  assetManagerContract as BASE_V2_assetManagerContract,
+  comptrollerContract as BASE_V2_comptrollerContract,
+  daiContract as BASE_V2_daiContract,
+  referralContract as BASE_V2_referralContract,
+  registerHelperContract as BASE_V2_registerHelperContract,
+  unionContract as BASE_V2_unionContract,
+  unionLensContract as BASE_V2_unionLensContract,
+  userManagerContract as BASE_V2_userManagerContract,
+  uTokenContract as BASE_V2_uTokenContract,
+  vouchFaucetContract as BASE_V2_vouchFaucet,
+} from "config/contracts/v2/base";
+
 import { useVersion, Versions } from "providers/Version";
 
 export default function useContract(name, chainId, forceVersion) {
@@ -75,6 +88,18 @@ export default function useContract(name, chainId, forceVersion) {
       vouchFaucet: OPTIMISM_V2_vouchFaucet,
       registerHelper: OPTIMISM_V2_registerHelperContract,
       referral: OPTIMISM_V2_referralContract,
+    },
+    [8453]: {
+      userManager: BASE_V2_userManagerContract,
+      uToken: BASE_V2_uTokenContract,
+      union: BASE_V2_unionContract,
+      usdc: OPTIMISM_V2_daiContract,
+      comptroller: BASE_V2_comptrollerContract,
+      assetManager: BASE_V2_assetManagerContract,
+      unionLens: BASE_V2_unionLensContract,
+      vouchFaucet: BASE_V2_vouchFaucet,
+      registerHelper: BASE_V2_registerHelperContract,
+      referral: BASE_V2_referralContract,
     },
   };
 

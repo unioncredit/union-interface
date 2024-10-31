@@ -45,6 +45,20 @@ export const supportedNetworks = [
       chainId: "0x1",
     },
   },
+  {
+    type: "base",
+    id: "base",
+    imageSrc: "/networks/optimism.png",
+    value: "base",
+    label: "Base",
+    labelWithVersion: "Base (v2)",
+    description: "Use Union on base mainnet",
+    avatar: "/networks/optimism-avatar.png",
+    chainId: 8453,
+    networkData: {
+      chainId: "0x2105",
+    },
+  },
 ];
 
 // Consists of all networks for both V1 and V2

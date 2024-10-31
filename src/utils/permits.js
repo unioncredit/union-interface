@@ -1,10 +1,4 @@
-import {
-  mainnet,
-  goerli,
-  arbitrum,
-  optimismGoerli,
-  optimism,
-} from "wagmi/chains";
+import { mainnet, goerli, arbitrum, optimismGoerli, optimism } from "wagmi/chains";
 
 export const PermitType = {
   DAI: "dai",
@@ -106,6 +100,33 @@ export const getPermitMethod = (chainId, method) => {
           name: "Dai Stablecoin",
           version: "2",
           chainId: optimism.id,
+        },
+      },
+      // tested && working
+      registerMember: {
+        functionName: "registerMemberWithPermit",
+        type: PermitType.ERC20,
+      },
+    },
+    [8453]: {
+      // tested && working
+      stake: {
+        functionName: "stakeWithERC20Permit",
+        type: PermitType.ERC20,
+        domain: {
+          name: "USDC",
+          version: "2",
+          chainId: 8453,
+        },
+      },
+      // tested && working
+      repayBorrow: {
+        functionName: "repayBorrowWithERC20Permit",
+        type: PermitType.ERC20,
+        domain: {
+          name: "USDC",
+          version: "2",
+          chainId: 8453,
         },
       },
       // tested && working

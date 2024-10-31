@@ -13,7 +13,7 @@ const NetworkContext = createContext({});
 export const useAppNetwork = () => useContext(NetworkContext);
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, arbitrum, optimism],
+  [mainnet, arbitrum, optimism, 8453],
   [
     // eslint-disable-next-line no-undef
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_ID }),
