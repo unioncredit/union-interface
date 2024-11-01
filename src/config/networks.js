@@ -27,6 +27,7 @@ export const supportedNetworks = [
     description: "Use Union on optimism mainnet",
     avatar: "/networks/optimism-avatar.png",
     chainId: 10,
+    token: "DAI",
     networkData: {
       chainId: "0xa",
     },
@@ -41,6 +42,7 @@ export const supportedNetworks = [
     description: "Use Union on Mainnet",
     avatar: "/networks/ethereum-avatar.png",
     chainId: 1,
+    token: "DAI",
     networkData: {
       chainId: "0x1",
     },
@@ -55,6 +57,7 @@ export const supportedNetworks = [
     description: "Use Union on base mainnet",
     avatar: "/networks/gorli-avatar.png",
     chainId: 8453,
+    token: "USDC",
     networkData: {
       chainId: "0x2105",
     },
@@ -69,6 +72,7 @@ export const supportedNetworks = [
     description: "Use Union on a testnet",
     avatar: "/networks/gorli-avatar.png",
     chainId: 84532,
+    token: "USDC",
     networkData: {
       chainId: "0x14A34",
     },
