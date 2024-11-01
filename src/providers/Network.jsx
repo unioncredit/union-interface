@@ -22,8 +22,8 @@ const base = {
     symbol: "ETH",
   },
   rpcUrls: {
-    public: { http: ["https://base.org"] },
-    default: { http: ["https://base.org"] },
+    public: { http: ["https://mainnet.base.org"] },
+    default: { http: ["https://mainnet.base.org"] },
   },
   blockExplorers: {
     etherscan: { name: "Block Scount", url: "https://base.blockscout.com" },

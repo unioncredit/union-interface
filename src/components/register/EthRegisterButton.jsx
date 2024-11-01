@@ -17,7 +17,6 @@ export function EthRegisterButton({ onComplete }) {
   });
 
   const { regFee = ZERO, rebate = ZERO, value: ethBalance = ZERO } = { ...protocol, ...balance };
-
   const ethRegisterFee = regFee.add(rebate);
   const canRegister = ethRegisterFee.lte(ethBalance);
 
