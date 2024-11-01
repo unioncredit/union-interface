@@ -27,6 +27,7 @@ import { useVouchee } from "providers/VoucheesData";
 import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { useSettings } from "providers/Settings";
 
 export function ContactDetailsTab({
   address,
@@ -117,6 +118,9 @@ const VoucherDetails = ({ voucher }) => {
 
   const { address: borrowerAddress } = useAccount();
   const { address: stakerAddress, trust = ZERO, vouch = ZERO, locking = ZERO } = voucher;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const cancelVouchButtonProps = useWrite({
     contract: "userManager",
@@ -134,21 +138,21 @@ const VoucherDetails = ({ voucher }) => {
         items={[
           {
             label: "Trust amount",
-            value: `${format(trust)} DAI`,
+            value: `${format(trust, useToken)} ${useToken}`,
             tooltip: {
               content: "Trust set for you by this contact",
             },
           },
           {
             label: "Vouch you receive",
-            value: `${format(vouch)} DAI`,
+            value: `${format(vouch, useToken)} ${useToken}`,
             tooltip: {
               content: "The max vouch you would receive based on their total stake",
             },
           },
           {
             label: "Available to you",
-            value: `${format(vouch.sub(locking))} DAI`,
+            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
             tooltip: {
               content: "The amount currently available to borrow via this contacts unlocked stake",
             },
@@ -188,6 +192,9 @@ const VoucheeDetails = ({
   const { address: voucheeAddress } = vouchee;
   const { open } = useModals();
   const { data: memberData = {} } = useMemberData(voucheeAddress);
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const {
     locking = ZERO,
@@ -203,7 +210,7 @@ const VoucheeDetails = ({
   const stats = [
     {
       title: "Trust",
-      value: format(trust),
+      value: format(trust, useToken),
       buttonProps: {
         label: "Change",
         onClick: () =>
@@ -219,7 +226,7 @@ const VoucheeDetails = ({
     },
     {
       title: "Owes you",
-      value: format(locking),
+      value: format(locking, useToken),
       buttonProps: {
         label: "Write-off",
         disabled: locking.lte(ZERO),
@@ -250,7 +257,13 @@ const VoucheeDetails = ({
             justify="space-between"
             className="ContactDetailsTab__stat"
           >
-            <NumericalBlock size="x-small" title={title} value={value} token="dai" align="left" />
+            <NumericalBlock
+              size="x-small"
+              title={title}
+              value={value}
+              token={useToken.toLowerCase()}
+              align="left"
+            />
 
             <Button size="pill" variant="light" color="secondary" {...buttonProps} />
           </Modal.Container>
@@ -262,15 +275,14 @@ const VoucheeDetails = ({
         items={[
           {
             label: "Vouch you provide",
-            value: `${format(vouch)} DAI`,
+            value: `${format(vouch, useToken)} ${useToken}`,
             tooltip: {
-              content:
-                "The theoretical max amount of DAI you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting",
+              content: `The theoretical max amount of ${useToken} you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting`,
             },
           },
           {
             label: "Available to borrow",
-            value: `${format(vouch.sub(locking))} DAI`,
+            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
             tooltip: {
               content:
                 "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
@@ -289,8 +301,8 @@ const VoucheeDetails = ({
               paymentDue.formatted === "N/A" || locking.lte(ZERO)
                 ? "N/A"
                 : isOverdue
-                ? `${format(minPayment)} DAI - ${paymentDue.formatted} ago`
-                : `${format(minPayment)} DAI in ${paymentDue.formatted}`,
+                ? `${format(minPayment, useToken)} ${useToken} - ${paymentDue.formatted} ago`
+                : `${format(minPayment, useToken)} ${useToken} in ${paymentDue.formatted}`,
             tooltip: {
               content: "Amount and time until their next minimum payment",
             },

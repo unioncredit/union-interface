@@ -44,11 +44,11 @@ export default function ProfileGovernanceStats({ address }) {
         items={[
           {
             label: "Voting Power",
-            value: `${format(votes)} Votes`,
+            value: `${format(votes, "UNION")} Votes`,
           },
           {
             label: "Delegated Power",
-            value: `${format(votesDelegated)} Votes`,
+            value: `${format(votesDelegatedm, "UNION")} Votes`,
           },
           {
             label: "Vote Participation",

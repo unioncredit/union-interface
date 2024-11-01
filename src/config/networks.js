@@ -48,15 +48,29 @@ export const supportedNetworks = [
   {
     type: "base",
     id: "base",
-    imageSrc: "/networks/optimism.png",
+    imageSrc: "/networks/gorli.png",
     value: "base",
     label: "Base",
     labelWithVersion: "Base (v2)",
     description: "Use Union on base mainnet",
-    avatar: "/networks/optimism-avatar.png",
+    avatar: "/networks/gorli-avatar.png",
     chainId: 8453,
     networkData: {
       chainId: "0x2105",
+    },
+  },
+  {
+    type: "base-sepolia",
+    id: "base-sepolia",
+    imageSrc: "/networks/gorli.png",
+    value: "base-sepolia",
+    label: "Base Sepolia",
+    labelWithVersion: "Base Sepolia (v2)",
+    description: "Use Union on a testnet",
+    avatar: "/networks/gorli-avatar.png",
+    chainId: 84532,
+    networkData: {
+      chainId: "0x14A34",
     },
   },
 ];

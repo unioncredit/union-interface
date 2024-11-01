@@ -1,6 +1,7 @@
 import {
   Button,
   Dai,
+  Usdc,
   Input,
   Text,
   Modal,
@@ -20,6 +21,8 @@ import { AddressSummary } from "components/shared";
 import { useMember, useMemberData } from "../../providers/MemberData";
 import React from "react";
 import { useAccount } from "wagmi";
+import { useSettings } from "providers/Settings";
+import Token from "components/Token";
 
 export const PUBLIC_WRITE_OFF_DEBT_MODAL = "public-write-off-debt-modal";
 
@@ -29,9 +32,12 @@ export default function PublicWriteOffDebtModal({ address }) {
 
   const { data: contact } = useMemberData(address);
   const { data: member } = useMember();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const { owed = ZERO, isOverdue } = contact;
-  const { daiBalance = ZERO } = member;
+  const { tokenBalance = ZERO } = member;
 
   const validate = (inputs) => {
     if (inputs.amount?.raw.gt(owed)) {
@@ -39,7 +45,13 @@ export default function PublicWriteOffDebtModal({ address }) {
     }
   };
 
-  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
+  const {
+    register,
+    setRawValue,
+    errors = {},
+    values = {},
+    empty,
+  } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -63,9 +75,9 @@ export default function PublicWriteOffDebtModal({ address }) {
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               title="Amount in default"
-              value={format(owed)}
+              value={format(owed, useToken)}
             />
 
             <Input
@@ -76,31 +88,38 @@ export default function PublicWriteOffDebtModal({ address }) {
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(daiBalance.gte(owed) ? owed : daiBalance)} DAI`}
+              rightLabel={`Max. ${format(
+                tokenBalance.gte(owed) ? owed : tokenBalance,
+                useToken
+              )} ${useToken}`}
               rightLabelAction={() =>
-                setRawValue("amount", daiBalance.gte(owed) ? owed : daiBalance, false)
+                setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
               }
-              suffix={<Dai />}
+              suffix={<Token />}
             />
 
             <NumericalRows
               m="16px 0"
               items={[
                 {
-                  label: "Your DAI balance",
-                  value: `${format(daiBalance)} DAI`,
+                  label: `Your ${useToken} balance`,
+                  value: `${format(tokenBalance, useToken)} ${useToken}`,
                 },
                 {
                   label: "New amount in default",
-                  value: `${format(owed.sub(amount.raw))} DAI`,
+                  value: `${format(owed.sub(amount.raw), useToken)} ${useToken}`,
                 },
               ]}
             />
 
-            <ExpandingInfo mb="16px" icon={WarningIcon} title="Write-off consumes your DAI balance">
+            <ExpandingInfo
+              mb="16px"
+              icon={WarningIcon}
+              title={`Write-off consumes your ${useToken} balance`}
+            >
               <Text m={0}>
-                When you publicly write-off the debt of a member, the DAI used is consumed and
-                cannot be redeemed.
+                When you publicly write-off the debt of a member, the {useToken} used is consumed
+                and cannot be redeemed.
               </Text>
             </ExpandingInfo>
 

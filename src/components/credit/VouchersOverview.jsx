@@ -20,10 +20,14 @@ import { truncateAddress } from "utils/truncateAddress";
 import { sumField } from "utils/sum";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 import { useModals } from "providers/ModalManager";
+import { useSettings } from "providers/Settings";
 
 export default function VouchersOverview({ vouchers, displayCount }) {
   const { open } = useModals();
   const navigate = useNavigate();
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const colors = ["#f59e0b", "#6366f1", "#14b8a6", "#f97316", "#0ea5e9", "#3730a3"];
 
@@ -74,8 +78,8 @@ export default function VouchersOverview({ vouchers, displayCount }) {
             size="large"
             align="left"
             title="Your credit limit"
-            value={format(vouch, 2, false)}
-            token="dai"
+            value={format(vouch, useToken, 2, false)}
+            token={useToken.toLowerCase()}
             subtitle={hasVouchers ? `Receiving from ${vouchers.length} contacts` : "No vouchers"}
           />
         </Box>

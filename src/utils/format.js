@@ -1,26 +1,28 @@
-import { formatEther, formatUnits } from "ethers/lib/utils";
-import { DUST_THRESHOLD, ZERO } from "constants";
+import { formatUnits } from "ethers/lib/utils";
+import { UNIT, DUST_THRESHOLD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 
 export default function format(
   n,
+  token = "DAI",
   digits = 2,
   rounded = true,
   stripTrailingZeros = false,
   formatDust = true
 ) {
   if (!n) n = "0";
-  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD) && n.gt(ZERO)) return "<0.01";
-  return commify(Number(formatUnits(n)), digits, rounded, stripTrailingZeros);
+  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD[token]) && n.gt(ZERO))
+    return "<0.01";
+  return commify(Number(formatUnits(n, UNIT[token])), digits, rounded, stripTrailingZeros);
 }
 
-export const formattedNumber = (n, digits = 2, rounded = true) => {
-  return parseFloat(format(n, digits, rounded, false, false).replace(",", ""));
+export const formattedNumber = (n, token, digits = 2, rounded = true) => {
+  return parseFloat(format(n, token, digits, rounded, false, false).replace(",", ""));
 };
 
-export const compactFormattedNumber = (n) => {
+export const compactFormattedNumber = (n, token) => {
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
-  return formatter.format(formatUnits(n));
+  return formatter.format(formatUnits(n, UNIT[token]));
 };
 
 export function commify(num, digits, rounded = true, stripTrailingZeros = false) {
@@ -66,7 +68,7 @@ export const formatScientific = (value, digits = 2) => {
   // Parsed JSON response formats the bigints in scientific notation, we need to
   // expand into its full form.
   const expanded = expandToString(value);
-  const formatted = commify(formatEther(expanded), digits);
+  const formatted = commify(formatUnits(expanded), digits);
   if (value > 0 && formatted === "0.0000") {
     return "<0.0001";
   }

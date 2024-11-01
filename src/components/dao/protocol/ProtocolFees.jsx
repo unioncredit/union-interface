@@ -1,21 +1,22 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
-import { BlocksPerYear, SECONDS_PER_YEAR, ZERO } from "constants";
+import { BlocksPerYear, UNIT, SECONDS_PER_YEAR, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { toPercent } from "utils/numbers";
 import { getVersion, Versions } from "providers/Version";
 
-export function ProtocolFees({ protocol, chainId, ...props }) {
-  const decimals = BigNumber.from(18);
+export function ProtocolFees({ protocol, chainId, useToken, ...props }) {
+  const decimals = BigNumber.from(UNIT[useToken]);
   const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
 
   const { borrowRatePerSecond = ZERO, borrowRatePerBlock = ZERO, originationFee = ZERO } = protocol;
 
   const borrowRatePerUnit = versioned(borrowRatePerBlock, borrowRatePerSecond);
-
   const interest = formatUnits(
-    borrowRatePerUnit.mul(versioned(BlocksPerYear[chainId], SECONDS_PER_YEAR)),
+    borrowRatePerUnit
+      .mul(versioned(BlocksPerYear[chainId], SECONDS_PER_YEAR))
+      .div(10 ** (18 - UNIT[useToken])),
     decimals
   );
 
@@ -24,12 +25,12 @@ export function ProtocolFees({ protocol, chainId, ...props }) {
   const fees = [
     {
       title: "APR",
-      value: toPercent(interest || 0, 2)
+      value: toPercent(interest || 0, 2),
     },
     {
       title: "Origination Fee",
-      value: toPercent(fee || 0, 2)
-    }
+      value: toPercent(fee || 0, 2),
+    },
   ];
 
   return (

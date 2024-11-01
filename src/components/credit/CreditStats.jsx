@@ -1,11 +1,10 @@
 import "./CreditStats.scss";
 
 import cn from "classnames";
+import { BigNumber } from "ethers";
 import { useNetwork } from "wagmi";
 import {
-  Badge,
   BadgeIndicator,
-  BadgeRow,
   BorrowIcon,
   Box,
   Button,
@@ -34,8 +33,7 @@ import { BORROW_MODAL } from "components/modals/BorrowModal";
 import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import useResponsive from "hooks/useResponsive";
 import makeUrls from "add-event-to-calendar";
-import React from "react";
-import { BigNumber } from "ethers";
+import { useSettings } from "providers/Settings";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
@@ -47,6 +45,9 @@ export default function CreditStats({ vouchers }) {
   const { data: blockNumber } = useVersionBlockNumber({
     chainId: connectedChain.id,
   });
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const {
     creditLimit = ZERO,
@@ -95,18 +96,17 @@ export default function CreditStats({ vouchers }) {
       <Card.Body>
         <Box align="center" justify="space-between">
           <NumericalBlock
-            token="dai"
+            token={`${useToken.toLowerCase()}`}
             title="Available to Borrow"
             align="left"
             smallDecimals={true}
-            value={format(creditLimit)}
+            value={format(creditLimit, useToken)}
           />
 
           <Button
             size="large"
             label="Borrow"
             icon={BorrowIcon}
-            disabled={isOverdue}
             className="BorrowButton"
             onClick={() => open(BORROW_MODAL)}
           />
@@ -116,15 +116,15 @@ export default function CreditStats({ vouchers }) {
           m="24px 0 12px"
           items={[
             {
-              value: formattedNumber(owed),
-              color: "blue900",
+              value: formattedNumber(owed, useToken),
+              color: "blue300",
             },
             {
-              value: formattedNumber(creditLimit, 2, false),
-              color: "blue100",
+              value: formattedNumber(creditLimit, useToken, 2, false),
+              color: "blue800",
             },
             {
-              value: formattedNumber(unavailableBalance),
+              value: formattedNumber(unavailableBalance, useToken),
               color: "amber500",
             },
           ]}
@@ -132,14 +132,14 @@ export default function CreditStats({ vouchers }) {
 
         <Box className="CreditStats__BorrowStats" align="center">
           <Box align="center" className="CreditStats__Legend">
-            <Dot color="blue900" mr="4px" />
+            <Dot color="blue300" mr="4px" />
 
             <Heading level={3} grey={500} m={0} weight="medium" size="small">
               Borrowed
               <Tooltip
                 ml="4px"
-                title={`${format(owed)} DAI`}
-                content="The amount of DAI you are currently borrowing"
+                title={`${format(owed, useToken)} ${useToken}`}
+                content={`The amount of ${useToken} you are currently borrowing`}
               >
                 <InfoOutlinedIcon width="13px" />
               </Tooltip>
@@ -147,14 +147,14 @@ export default function CreditStats({ vouchers }) {
           </Box>
 
           <Box align="center" className="CreditStats__Legend">
-            <Dot color="blue100" mr="4px" />
+            <Dot color="blue800" mr="4px" />
 
             <Heading level={3} grey={500} m={0} weight="medium" size="small">
               Available
               <Tooltip
                 ml="4px"
-                title={`${format(creditLimit, 2, false)} DAI`}
-                content="The amount of DAI currently available to borrow"
+                title={`${format(creditLimit, useToken, 2, false)} ${useToken}`}
+                content={`The amount of ${useToken} currently available to borrow`}
               >
                 <InfoOutlinedIcon width="13px" />
               </Tooltip>
@@ -168,7 +168,7 @@ export default function CreditStats({ vouchers }) {
               Unavailable
               <Tooltip
                 ml="4px"
-                title={`${format(unavailableBalance)} DAI`}
+                title={`${format(unavailableBalance, useToken)} ${useToken}`}
                 content="Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time"
               >
                 <InfoOutlinedIcon width="13px" />
@@ -178,18 +178,13 @@ export default function CreditStats({ vouchers }) {
         </Box>
       </Card.Body>
 
-      <Card.Footer
-        direction="vertical"
-        className={cn("Card__footer", {
-          MaxOverdue: isMaxOverdue,
-        })}
-      >
+      <Card.Footer direction="vertical">
         <Box mb="24px" align="center" justify="space-between" fluid>
           <NumericalBlock
-            token="dai"
+            token={`${useToken.toLowerCase()}`}
             title="Balance owed"
             align="left"
-            value={format(owed)}
+            value={format(owed, useToken)}
             smallDecimals={true}
           />
 
@@ -215,30 +210,21 @@ export default function CreditStats({ vouchers }) {
         >
           <Box className="PaymentDueInfo" direction="vertical">
             <Box align="center">
-              {isOverdue && (
-                <WarningIcon className="WarningIcon" width="21px" style={{ marginRight: "6px" }} />
-              )}
+              {isOverdue && <WarningIcon width="21px" style={{ marginRight: "6px" }} />}
 
-              <Text m={0} size="medium" weight="medium" grey={600}>
+              <Text m={0} size="medium" weight="medium" grey={500}>
                 {isOverdue ? `${relativeDueDate} Overdue` : "Next payment due"}
               </Text>
             </Box>
 
             {isMaxOverdue ? (
-              <BadgeRow mt="8px">
-                <Badge color="white" label={`${format(minPayment)} DAI · ${absoluteDueDate}`} />
-                <BadgeIndicator color="red500" textColor="red500" label="Write-Off" />
-              </BadgeRow>
+              <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
             ) : (
-              <BadgeIndicator
-                mt="8px"
-                color="orange500"
-                textColor="grey500"
-                ml="-3px"
-                label={
-                  owed.lte(0) ? "No payment due" : `${format(minPayment)} DAI · ${absoluteDueDate}`
-                }
-              />
+              <Text m="4px 0 0" size="medium">
+                {owed.lte(0)
+                  ? "No payment due"
+                  : `${format(minPayment, useToken)} ${useToken} · ${absoluteDueDate}`}
+              </Text>
             )}
           </Box>
 

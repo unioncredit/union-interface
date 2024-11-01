@@ -3,6 +3,7 @@ import {
   ModalOverlay,
   Button,
   Dai,
+  Usdc,
   Input,
   NumericalBlock,
   NumericalRows,
@@ -23,6 +24,8 @@ import { AddressSummary } from "components/shared";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
+import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -40,9 +43,11 @@ export default function EditVouchModal({
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
   const { address: stakerAddress } = useAccount();
-
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
+  const {
+    settings: { useToken },
+  } = useSettings();
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
@@ -65,7 +70,7 @@ export default function EditVouchModal({
     close();
   };
 
-  const { register, errors = {}, values = {}, empty } = useForm({ validate });
+  const { register, errors = {}, values = {}, empty } = useForm({ validate, useToken });
 
   const amount = values.amount || empty;
 
@@ -100,15 +105,15 @@ export default function EditVouchModal({
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token="dai"
+              token={useToken.toLowerCase()}
               title="Trust you provide"
-              value={format(trust)}
+              value={format(trust, useToken)}
             />
 
             <Input
               mt="16px"
               type="number"
-              suffix={<Dai />}
+              suffix={<Token />}
               label="New trust amount"
               onChange={register("amount")}
               error={errors.amount}
@@ -121,7 +126,7 @@ export default function EditVouchModal({
               items={[
                 {
                   label: "Utilized trust",
-                  value: `${format(locking)} DAI`,
+                  value: `${format(locking, useToken)} ${useToken}`,
                   tooltip: {
                     shrink: true,
                     content: "Your stake currently backing someone you vouched for",

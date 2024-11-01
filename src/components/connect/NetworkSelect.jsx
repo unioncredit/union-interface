@@ -66,6 +66,7 @@ export default function NetworkSelect() {
             key={network.id}
             address={address}
             network={network}
+            useToken={settings.useToken}
             disabled={!isConnected}
             onClick={() => handleChangeNetwork(network)}
             active={isConnected && selected?.chainId === network.chainId}

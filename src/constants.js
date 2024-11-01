@@ -7,13 +7,27 @@ export const ZERO = BigNumber.from(0);
 
 export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
-export const WAD = BigNumber.from("1000000000000000000");
+export const WAD = {
+  DAI: BigNumber.from("1000000000000000000"),
+  UNION: BigNumber.from("1000000000000000000"),
+  USDC: BigNumber.from("1000000"),
+};
+
+export const UNIT = {
+  DAI: 18,
+  UNION: 18,
+  USDC: 6,
+};
 
 export const CACHE_TIME = 60_000 * 5; // 5 minutes
 
 export const STALE_TIME = 30_000; // 30 seconds
 
-export const DUST_THRESHOLD = "10000000000000000";
+export const DUST_THRESHOLD = {
+  DAI: "10000000000000000",
+  UNION: "10000000000000000",
+  USDC: "10000",
+};
 
 export const SECONDS_PER_HOUR = 3600;
 
@@ -43,13 +57,13 @@ export const Status = {
 
 export const Errors = {
   MAX_USER_BALANCE_EXCEEDED: "Amount entered exceeds available balance",
-  MIN_STAKE_LIMIT_REQUIRED: "Deposit size must be at least 1 DAI",
+  MIN_STAKE_LIMIT_REQUIRED: "Deposit size must be at least 1 Token",
   MAX_STAKE_LIMIT_EXCEEDED: "Deposit size exceeds staking limit",
   INVALID_ADDRESS_OR_ENS: "Invalid address or ENS",
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   INSUFFICIENT_FUNDS: "Insufficient funds in protocol",
-  MIN_BORROW: (amount) => `Amount less than minimum borrow (${format(amount)})`,
+  MIN_BORROW: (amount, useToken) => `Amount less than minimum borrow (${format(amount, useToken)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
   EXCEEDED_LOCK: "Amount exceeded locked value",
@@ -66,6 +80,7 @@ export const BlockSpeed = {
   [arbitrum.id]: 12e3,
   [optimism.id]: 1e3,
   [8453]: 2e3,
+  [84532]: 1e3,
 };
 
 export const BlocksPerYear = {
@@ -73,6 +88,7 @@ export const BlocksPerYear = {
   [arbitrum.id]: 2628333,
   [optimism.id]: 31540000,
   [8453]: 15770000,
+  [84532]: 31540000,
 };
 
 export const EIP3770 = {
@@ -80,6 +96,7 @@ export const EIP3770 = {
   [arbitrum.id]: "arb1",
   [optimism.id]: "opt",
   [8453]: "base",
+  [84532]: "basesep",
 };
 
 export const EIP3770Map = {
@@ -87,6 +104,7 @@ export const EIP3770Map = {
   arb1: arbitrum.id,
   opt: optimism.id,
   base: 8453,
+  basesep: 84532,
 };
 
 export const TheGraphUrls = {
