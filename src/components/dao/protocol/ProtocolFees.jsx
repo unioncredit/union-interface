@@ -1,6 +1,6 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
-import { BlocksPerYear, UNIT, SECONDS_PER_YEAR, ZERO } from "constants";
+import { BlocksPerYear, SECONDS_PER_YEAR, UNIT, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
 import { toPercent } from "utils/numbers";
@@ -20,7 +20,7 @@ export function ProtocolFees({ protocol, chainId, useToken, ...props }) {
     decimals
   );
 
-  const fee = formatUnits(originationFee, decimals);
+  const fee = formatUnits(originationFee, 18);
 
   const fees = [
     {
