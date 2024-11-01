@@ -25,7 +25,7 @@ import { Approval } from "components/shared";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useContract from "hooks/useContract";
-import { ZERO } from "constants";
+import { ZERO, UNIT } from "constants";
 import format from "utils/format";
 import { useEffect, useState } from "react";
 import { Errors } from "constants";
@@ -82,13 +82,11 @@ export default function RepayModal() {
   // Factor in a 0.005% margin for the max repay as we can no longer use MaxUint256.
   // If 0.005% of the balance owed is less than 0.01 we default to 0.01
   const margin = owed.div(50000);
-  const minMargin = BigNumber.from("10000000000000000");
+  const minMargin = BigNumber.from((10 ** UNIT[useToken] / 100).toString());
   const owedBalanceWithMargin = owed.add(margin.lt(minMargin) ? minMargin : margin);
-
   // The maximum amount the user can repay, either their total token balance
   // or their balance owed + 0.005% margin
   const maxRepay = tokenBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : tokenBalance;
-
   const options = [
     {
       token: useToken.toLowerCase(),
