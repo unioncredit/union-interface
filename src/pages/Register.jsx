@@ -47,7 +47,7 @@ export default function RegisterPage() {
               <Box className="Register__container" align="center">
                 <Box className="Register__fee" align="center">
                   <Text size="large" weight="bold">
-                    Fee: {format(ethRegisterFee, useToken, 10, false, true, false)}
+                    Fee: {format(ethRegisterFee, "ETH", 10, false, true, false)}
                   </Text>
 
                   <Box className="Register__icon">
