@@ -29,7 +29,6 @@ const base = {
     etherscan: { name: "Block Scount", url: "https://base.blockscout.com" },
     default: { name: "Block Scount", url: "https://base.blockscout.com" },
   },
-  testnet: true,
   contracts: {
     multicall3: {
       address: "0xcA11bde05977b3631167028862bE2a173976CA11",
