@@ -7,7 +7,7 @@ import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
 import usePollMemberData from "hooks/usePollMember";
 import useRelatedAddresses from "hooks/useRelatedAddresses";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 const selectMemberData = (data, useToken) => {
   const [
@@ -69,11 +69,10 @@ export const useMember = () => useContext(MemberContext);
 
 export function useMemberData(address, chainId, forceVersion) {
   const { version } = useVersion();
-  const {
-    settings: { useToken },
-  } = useSettings();
+  const { token } = useToken(chainId);
 
-  const tokenContract = useContract(useToken.toLowerCase(), chainId, forceVersion);
+  const tokenContract = useContract(token.toLowerCase(), chainId, forceVersion);
+
   const unionContract = useContract("union", chainId, forceVersion);
   const uTokenContract = useContract("uToken", chainId, forceVersion);
   const userManagerContract = useContract("userManager", chainId, forceVersion);

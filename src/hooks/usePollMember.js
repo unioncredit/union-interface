@@ -4,20 +4,18 @@ import { useEffect, useRef } from "react";
 import { CACHE_TIME, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
   const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
-  const {
-    settings: { useToken },
-  } = useSettings();
+  const { token } = useToken(inputChainId);
 
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);
 
   const chainId = inputChainId || connectedChain?.id;
-  const tokenContract = useContract(useToken.toLowerCase(), chainId);
+  const tokenContract = useContract(token.toLowerCase(), chainId);
   const uTokenContract = useContract("uToken", chainId);
   const comptrollerContract = useContract("comptroller", chainId);
 

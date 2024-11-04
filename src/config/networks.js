@@ -62,21 +62,6 @@ export const supportedNetworks = [
       chainId: "0x2105",
     },
   },
-  {
-    type: "base-sepolia",
-    id: "base-sepolia",
-    imageSrc: "/networks/base-avatar.png",
-    value: "base-sepolia",
-    label: "Base Sepolia",
-    labelWithVersion: "Base Sepolia (v2)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/base-avatar.png",
-    chainId: 84532,
-    token: "USDC",
-    networkData: {
-      chainId: "0x14A34",
-    },
-  },
 ];
 
 // Consists of all networks for both V1 and V2
@@ -97,6 +82,21 @@ export const allNetworks = [
       chainId: "0xA4B1",
       rpcUrls: ["https://arb1.arbitrum.io/rpc"],
       chainName: "Arbitrum One",
+    },
+  },
+  {
+    type: "base-sepolia",
+    id: "base-sepolia",
+    imageSrc: "/networks/base-avatar.png",
+    value: "base-sepolia",
+    label: "Base Sepolia",
+    labelWithVersion: "Base Sepolia (v2)",
+    description: "Use Union on a testnet",
+    avatar: "/networks/base-avatar.png",
+    chainId: 84532,
+    token: "USDC",
+    networkData: {
+      chainId: "0x14A34",
     },
   },
 ];

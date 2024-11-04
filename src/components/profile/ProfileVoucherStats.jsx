@@ -4,9 +4,12 @@ import { Badge, Box, Heading, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "../shared";
 import format from "utils/format";
 import { Link } from "react-router-dom";
-import { getProfileUrl } from "../../utils/generateLinks";
+import { getProfileUrl } from "utils/generateLinks";
+import { useToken } from "hooks/useToken";
 
-export function ProfileVoucherStats({ vouchers, vouchees, chainId, useToken }) {
+export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
+  const { token } = useToken(chainId);
+
   const topVouchers = [...vouchers].sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1)).slice(0, 3);
 
   return (
@@ -54,7 +57,7 @@ export function ProfileVoucherStats({ vouchers, vouchees, chainId, useToken }) {
 
               <Badge
                 color="grey"
-                label={`${format(vouch, useToken)} ${useToken}`}
+                label={`${format(vouch, token)} ${token}`}
                 borderColor="#E4E4E7"
               />
             </Box>
