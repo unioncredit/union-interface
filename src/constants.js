@@ -7,6 +7,12 @@ export const ZERO = BigNumber.from(0);
 
 export const ZERO_ADDRESS = ethers.constants.AddressZero;
 
+export const TOKENS = {
+  DAI: "DAI",
+  USDC: "USDC",
+  UNION: "UNION",
+};
+
 export const WAD = {
   DAI: BigNumber.from("1000000000000000000"),
   UNION: BigNumber.from("1000000000000000000"),
