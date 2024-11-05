@@ -8,6 +8,8 @@ import { arbitrum, mainnet, optimism } from "wagmi/chains";
 // eslint-disable-next-line no-undef
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
 
+console.log({ projectId });
+
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
@@ -29,10 +31,9 @@ const base = {
     etherscan: { name: "Block Scount", url: "https://base.blockscout.com" },
     default: { name: "Block Scount", url: "https://base.blockscout.com" },
   },
-  testnet: true,
   contracts: {
     multicall3: {
-      address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+      address: "0xca11bde05977b3631167028862be2a173976ca11",
       blockCreated: 5022,
     },
   },
