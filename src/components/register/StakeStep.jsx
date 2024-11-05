@@ -30,16 +30,15 @@ import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { BlocksPerYear } from "constants";
 import useWrite from "hooks/useWrite";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function StakeStep() {
   const { open } = useModals();
   const { chain } = useNetwork();
+  const { token, wad } = useToken();
+
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const {
     unionBalance = ZERO,
@@ -64,10 +63,10 @@ export default function StakeStep() {
 
   const dailyEarnings = effectiveTotalStake.gt(ZERO)
     ? inflationPerUnit
-        .mul(WAD[useToken])
+        .mul(wad)
         .div(effectiveTotalStake)
         .mul(stakedBalance)
-        .div(WAD[useToken])
+        .div(wad)
         .mul(BlocksPerYear[chain.id])
         .div(365)
     : ZERO;
@@ -104,7 +103,7 @@ export default function StakeStep() {
 
     return {
       icon: WarningIcon,
-      label: `Deposit ${useToken} to start earning`,
+      label: `Deposit ${token} to start earning`,
     };
   }, [unionEarned, stakedBalance, percentage]);
 
@@ -112,11 +111,11 @@ export default function StakeStep() {
     <Card size="fluid" mb="24px">
       <Card.Body>
         <Heading level={2} size="large" grey={700}>
-          Stake {useToken} to provide credit to those you Trust
+          Stake {token} to provide credit to those you Trust
         </Heading>
         <Text grey={500} size="medium">
-          After registration, you can use this staked {useToken} to extend credit trusted contacts,
-          and continue to earn Union Tokens (UNION){" "}
+          After registration, you can use this staked {token} to extend credit trusted contacts, and
+          continue to earn Union Tokens (UNION){" "}
           <a
             href="https://docs.union.finance/user-guides/becoming-a-member"
             target="_blank"
@@ -131,10 +130,10 @@ export default function StakeStep() {
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               size="regular"
               title="Total Staked"
-              value={format(stakedBalance, useToken)}
+              value={format(stakedBalance, token)}
             />
             <NumericalBlock
               fluid

@@ -52,7 +52,7 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version, useToken);
+    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
@@ -70,7 +70,7 @@ export default function useWrite({
 
       onComplete && (await onComplete());
 
-      addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx, useToken));
+      addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
       addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
 
       return true;

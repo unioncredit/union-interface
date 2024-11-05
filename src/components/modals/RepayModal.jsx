@@ -5,8 +5,6 @@ import { BigNumber } from "ethers";
 import {
   Box,
   Text,
-  Dai,
-  Usdc,
   Grid,
   Input,
   Modal,
@@ -30,8 +28,8 @@ import format from "utils/format";
 import { useEffect, useState } from "react";
 import { Errors } from "constants";
 import { useVersion, Versions } from "providers/Version";
-import { useSettings } from "providers/Settings";
 import Token from "components/Token";
+import { useToken } from "hooks/useToken";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -42,14 +40,13 @@ const PaymentType = {
 };
 
 export default function RepayModal() {
+  const [paymentType, setPaymentType] = useState(null);
+
   const { close } = useModals();
   const { address } = useAccount();
   const { version } = useVersion();
   const { data: member } = useMember();
-  const [paymentType, setPaymentType] = useState(null);
-  const {
-    settings: { useToken },
-  } = useSettings();
+  const { token, unit } = useToken();
 
   const uTokenContract = useContract("uToken");
 
@@ -68,7 +65,7 @@ export default function RepayModal() {
     empty,
     setRawValue,
     isErrored,
-  } = useForm({ validate, useToken });
+  } = useForm({ validate });
 
   const handleSelect = (option) => {
     setPaymentType(option.paymentType);
@@ -82,23 +79,23 @@ export default function RepayModal() {
   // Factor in a 0.005% margin for the max repay as we can no longer use MaxUint256.
   // If 0.005% of the balance owed is less than 0.01 we default to 0.01
   const margin = owed.div(50000);
-  const minMargin = BigNumber.from((10 ** UNIT[useToken] / 100).toString());
+  const minMargin = BigNumber.from((10 ** unit / 100).toString());
   const owedBalanceWithMargin = owed.add(margin.lt(minMargin) ? minMargin : margin);
   // The maximum amount the user can repay, either their total token balance
   // or their balance owed + 0.005% margin
   const maxRepay = tokenBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : tokenBalance;
   const options = [
     {
-      token: useToken.toLowerCase(),
-      value: format(maxRepay, useToken),
+      token: token.toLowerCase(),
+      value: format(maxRepay, token),
       amount: maxRepay,
       paymentType: PaymentType.MAX,
-      title: maxRepay.gte(owed) ? "Pay-off entire loan" : `Pay maximum ${useToken} available`,
+      title: maxRepay.gte(owed) ? "Pay-off entire loan" : `Pay maximum ${token} available`,
       content: maxRepay.gte(owed)
         ? "Make a payment equal to the outstanding balance"
         : "Make a payment with the maximum amount available in your wallet",
       tooltip: maxRepay.gte(owed) &&
-        format(maxRepay, useToken) !== format(owed, useToken) && {
+        format(maxRepay, token) !== format(owed, token) && {
           title: "Why is this more than my balance owed?",
           content:
             "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
@@ -106,9 +103,9 @@ export default function RepayModal() {
         },
     },
     {
-      value: format(minPayment, useToken),
+      value: format(minPayment, token),
       amount: minPayment,
-      token: useToken.toLowerCase(),
+      token: token.toLowerCase(),
       paymentType: PaymentType.MIN,
       title: "Pay minimum due",
       content: "Make the payment required to cover the interest due on your loan",
@@ -136,19 +133,19 @@ export default function RepayModal() {
               <Grid.Col xs={6}>
                 <NumericalBlock
                   mb="16px"
-                  token={useToken.toLowerCase()}
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Balance owed"
-                  value={format(owed, useToken)}
+                  value={format(owed, token)}
                 />
               </Grid.Col>
               <Grid.Col xs={6}>
                 <NumericalBlock
                   mb="16px"
-                  token={useToken.toLowerCase()}
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Due today"
-                  value={format(minPayment, useToken)}
+                  value={format(minPayment, token)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -170,7 +167,7 @@ export default function RepayModal() {
                 type="number"
                 name="amount"
                 label="Amount to repay"
-                rightLabel={`Max. ${format(maxRepay, useToken)}`}
+                rightLabel={`Max. ${format(maxRepay, token)}`}
                 rightLabelAction={() => setRawValue("amount", maxRepay, false)}
                 suffix={<Token />}
                 placeholder="0.0"
@@ -213,19 +210,19 @@ export default function RepayModal() {
             items={[
               {
                 label: "Wallet balance",
-                value: `${format(tokenBalance, useToken)} ${useToken}`,
+                value: `${format(tokenBalance, token)} ${token}`,
                 error: errors.amount === Errors.INSUFFICIENT_BALANCE,
                 tooltip: {
-                  content: `How much ${useToken} you have in your connected wallet`,
+                  content: `How much ${token} you have in your connected wallet`,
                 },
               },
               {
                 label: "Next payment due",
-                value: `${format(minPayment, useToken)} ${useToken}`,
+                value: `${format(minPayment, token)} ${token}`,
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed, useToken)} ${useToken}`,
+                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed, token)} ${token}`,
                 tooltip: {
                   content:
                     "The total amount you will owe if this payment transaction is successful",
@@ -241,16 +238,16 @@ export default function RepayModal() {
             amount={amount.raw}
             spender={uTokenContract.address}
             requireApproval
-            tokenContract={useToken.toLowerCase()}
+            tokenContract={token.toLowerCase()}
             actionProps={{
               args: version === Versions.V1 ? [amount.raw] : [address, amount.raw],
               permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
-              label: `Repay ${amount.display} ${useToken}`,
+              label: `Repay ${amount.display} ${token}`,
             }}
-            approvalLabel={`Approve Union to spend your ${useToken}`}
+            approvalLabel={`Approve Union to spend your ${token}`}
             approvalCompleteLabel="You can now repay"
           />
         </Modal.Body>

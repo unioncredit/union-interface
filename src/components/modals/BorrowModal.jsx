@@ -1,8 +1,6 @@
 import {
   Box,
   Button,
-  Dai,
-  Usdc,
   Grid,
   Input,
   Modal,
@@ -19,14 +17,14 @@ import useWrite from "hooks/useWrite";
 import useFirstPaymentDueDate from "hooks/useFirstPaymentDueDate";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { ZERO, Errors, WAD } from "constants";
+import { ZERO, Errors } from "constants";
 import { useProtocol } from "providers/ProtocolData";
+import { useToken } from "hooks/useToken";
 import {
   calculateExpectedMinimumPayment,
   calculateInterestRate,
   calculateMaxBorrow,
 } from "utils/numbers";
-import { useSettings } from "providers/Settings";
 import Token from "components/Token";
 
 export const BORROW_MODAL = "borrow-modal";
@@ -37,10 +35,8 @@ export default function BorrowModal() {
   const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
+  const { token, unit, wad } = useToken();
   const firstPaymentDueDate = useFirstPaymentDueDate();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const {
     owed = ZERO,
@@ -61,19 +57,13 @@ export default function BorrowModal() {
     } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return Errors.MIN_BORROW(minBorrow, useToken);
+      return Errors.MIN_BORROW(minBorrow, token);
     } else if (inputs.amount.raw.gt(getLoanableAmount)) {
       return Errors.INSUFFICIENT_FUNDS;
     }
   };
 
-  const {
-    register,
-    setRawValue,
-    values = {},
-    errors = {},
-    empty,
-  } = useForm({ validate, useToken });
+  const { register, setRawValue, values = {}, errors = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -89,7 +79,8 @@ export default function BorrowModal() {
     borrow,
     borrowRatePerBlock,
     overdueTime,
-    useToken
+    unit,
+    wad
   );
 
   const buttonProps = useWrite({
@@ -109,7 +100,7 @@ export default function BorrowModal() {
   return (
     <ModalOverlay onClick={close}>
       <Modal className="BorrowModal">
-        <Modal.Header title={`Borrow ${useToken}`} onClose={close} />
+        <Modal.Header title={`Borrow ${token}`} onClose={close} />
         <Modal.Body>
           {/*--------------------------------------------------------------
             Stats Before 
@@ -118,18 +109,18 @@ export default function BorrowModal() {
             <Grid.Row>
               <Grid.Col>
                 <NumericalBlock
-                  token={useToken.toLowerCase()}
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Available to borrow"
-                  value={format(creditLimit, useToken, 2, false)}
+                  value={format(creditLimit, token, 2, false)}
                 />
               </Grid.Col>
               <Grid.Col>
                 <NumericalBlock
-                  token={useToken.toLowerCase()}
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Balance owed"
-                  value={format(owed, useToken)}
+                  value={format(owed, token)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -142,7 +133,7 @@ export default function BorrowModal() {
               type="number"
               name="amount"
               label="Amount to borrow"
-              rightLabel={`Max. ${format(maxBorrow, useToken)} ${useToken}`}
+              rightLabel={`Max. ${format(maxBorrow, token)} ${token}`}
               rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
               suffix={<Token />}
               placeholder="0.0"
@@ -160,8 +151,8 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id, useToken).mul(100),
-                  useToken
+                  calculateInterestRate(borrowRatePerUnit, chain.id, unit).mul(100),
+                  token
                 )}% APR`,
                 tooltip: {
                   content: "The interest rate accrued over a 12 month borrow period",
@@ -169,14 +160,14 @@ export default function BorrowModal() {
               },
               {
                 label: "Total incl. origination fee",
-                value: `${format(borrow, useToken)} ${useToken}`,
+                value: `${format(borrow, token)} ${token}`,
                 tooltip: {
                   content: "Total amount borrowed including fee",
                 },
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed, useToken)} ${useToken}`,
+                value: `${format(newOwed, token)} ${token}`,
                 tooltip: {
                   content: "The total amount you will owe if this borrow transaction is successful",
                 },
@@ -186,7 +177,7 @@ export default function BorrowModal() {
                 value:
                   amount.raw.lte(0) && owed.lte(0)
                     ? "N/A"
-                    : `${format(minPayment, useToken)} ${useToken} · ${firstPaymentDueDate}`,
+                    : `${format(minPayment, token)} ${token} · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",
@@ -202,7 +193,7 @@ export default function BorrowModal() {
             mt="16px"
             size="large"
             icon={BorrowIcon}
-            label={`Borrow ${amount.display} ${useToken}`}
+            label={`Borrow ${amount.display} ${token}`}
             disabled={amount.raw.lte(ZERO)}
             {...buttonProps}
           />

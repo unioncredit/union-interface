@@ -64,23 +64,24 @@ export const calculateMaxBorrow = (creditLimit, originationFee) => {
   return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
 };
 
-export const calculateMinPayment = (interest, useToken) => {
-  const floor = parseUnits("0.01", UNIT[useToken]);
+export const calculateMinPayment = (interest, unit) => {
+  const floor = parseUnits("0.01", unit);
   const interestWithMargin = interest.mul(10010).div(10000);
   return interestWithMargin.lt(floor) ? floor : interestWithMargin;
 };
 
-export const calculateInterestRate = (borrowRatePerUnit, chainId, useToken) => {
-  return borrowRatePerUnit.mul(BlocksPerYear[chainId]).div(10 ** (18 - UNIT[useToken]));
+export const calculateInterestRate = (borrowRatePerUnit, chainId, unit) => {
+  return borrowRatePerUnit.mul(BlocksPerYear[chainId]).div(10 ** (18 - unit));
 };
 
 export const calculateExpectedMinimumPayment = (
   borrowAmount,
   borrowRatePerBlock,
   overdueBlocks,
-  useToken
+  unit,
+  wad
 ) => {
-  const floor = parseUnits("0.01", UNIT[useToken]);
-  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(WAD[useToken]);
+  const floor = parseUnits("0.01", unit);
+  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(wad);
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };

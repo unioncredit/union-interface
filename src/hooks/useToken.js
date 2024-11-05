@@ -1,7 +1,7 @@
 import { useNetwork } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
 
-import { TOKENS, UNIT } from "constants";
+import { TOKENS, UNIT, WAD } from "constants";
 
 export const useToken = (chainId) => {
   const { chain: connectedChain } = useNetwork();
@@ -18,5 +18,6 @@ export const useToken = (chainId) => {
   return {
     token,
     unit: UNIT[token] || null,
+    wad: WAD[token] || null,
   };
 };

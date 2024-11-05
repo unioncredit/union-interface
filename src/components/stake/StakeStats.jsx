@@ -20,16 +20,16 @@ import { useModals } from "providers/ModalManager";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { AddressesAvatarBadgeRow } from "components/shared";
 import { Link } from "react-router-dom";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function StakeStats() {
   const { open } = useModals();
+  const { token } = useToken();
+
   const { data: member = {} } = useMember();
   const { data: vouchees = [] } = useVouchees();
+
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const withdrawableStake = stakedBalance.sub(totalLockedStake);
   const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
@@ -41,10 +41,10 @@ export default function StakeStats() {
       <Card.Body>
         <Box fluid align="center" justify="space-between" className="StakeStats__top">
           <NumericalBlock
-            token={useToken.toLowerCase()}
+            token={token.toLowerCase()}
             align="left"
             title="Your staked balance"
-            value={format(stakedBalance, useToken)}
+            value={format(stakedBalance, token)}
           />
 
           <ButtonRow>
@@ -71,15 +71,15 @@ export default function StakeStats() {
           m="24px 0"
           items={[
             {
-              value: formattedNumber(withdrawableStake, useToken),
+              value: formattedNumber(withdrawableStake, token),
               color: "blue500",
             },
             {
-              value: formattedNumber(totalLockedStake, useToken),
+              value: formattedNumber(totalLockedStake, token),
               color: "violet500",
             },
             {
-              value: formattedNumber(defaulted, useToken),
+              value: formattedNumber(defaulted, token),
               color: "red500",
             },
           ]}
@@ -89,11 +89,11 @@ export default function StakeStats() {
           <Box fluid className="StakeStats__item">
             <NumericalBlock
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               size="regular"
               title="Withdrawable"
               dotColor="blue500"
-              value={format(withdrawableStake, useToken)}
+              value={format(withdrawableStake, token)}
             />
 
             <Link to="/contacts/providing">
@@ -111,11 +111,11 @@ export default function StakeStats() {
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               size="regular"
               title="Locked"
               dotColor="violet500"
-              value={format(totalLockedStake, useToken)}
+              value={format(totalLockedStake, token)}
             />
 
             <Link to="/contacts/providing?filters=borrowing">
@@ -134,11 +134,11 @@ export default function StakeStats() {
             <NumericalBlock
               fluid
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               size="regular"
               title="Frozen"
               dotColor="red500"
-              value={format(defaulted, useToken)}
+              value={format(defaulted, token)}
             />
 
             <Link to="/contacts/providing?filters=overdue">

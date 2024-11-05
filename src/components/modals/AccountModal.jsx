@@ -28,21 +28,20 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { InvitedByInput } from "./AccountModal/InvitedByInput";
 import { blockExplorerAddress, blockExplorerTx } from "utils/blockExplorer";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export const ACCOUNT_MODAL = "account-modal";
 
 export default function AccountModal() {
+  const [copied, copy] = useCopyToClipboard();
+
   const { close } = useModals();
   const { chain } = useNetwork();
   const { address } = useAccount();
   const { logs = [], clearLogs } = useAppLogs();
   const { disconnect } = useDisconnect();
-  const [copied, copy] = useCopyToClipboard();
+  const { token } = useToken();
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   return (
     <ModalOverlay onClick={close}>
@@ -143,7 +142,7 @@ export default function AccountModal() {
                   </Box>
                   <Box className="WalletActivity__value" align="center">
                     <Text size="medium" weight="medium" m={0} mr="5px" grey={700}>
-                      {format(value, useToken)}
+                      {format(value, token)}
                     </Text>
                     {txHash && (
                       <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">

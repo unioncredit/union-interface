@@ -1,12 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
-import { chainUseTokens } from "config/chainUseTokens";
 
 const SETTINGS_STORAGE_KEY = "union:settings";
 
 const DEFAULT_SETTINGS = {
   showTestnets: false,
-  useToken: "DAI",
   ...JSON.parse(window.localStorage.getItem(SETTINGS_STORAGE_KEY)),
 };
 
@@ -44,7 +42,6 @@ export default function Settings({ children }) {
     if ([84532].includes(chain?.id)) {
       setSetting("showTestnets", true);
     }
-    setSetting("useToken", chainUseTokens[chain?.id] || "DAI");
   }, [chain?.id]);
 
   return (

@@ -69,7 +69,7 @@ export const Errors = {
   INSUFFICIENT_BALANCE: "Insufficient balance",
   INSUFFICIENT_CREDIT_LIMIT: "Insufficient credit limit",
   INSUFFICIENT_FUNDS: "Insufficient funds in protocol",
-  MIN_BORROW: (amount, useToken) => `Amount less than minimum borrow (${format(amount, useToken)})`,
+  MIN_BORROW: (amount, token) => `Amount less than minimum borrow (${format(amount, token)})`,
   ALREADY_DELEGATING: "You are already delegating to this address",
   TRUST_LT_LOCKING: "Trust cannot be less than the locked stake",
   EXCEEDED_LOCK: "Amount exceeded locked value",

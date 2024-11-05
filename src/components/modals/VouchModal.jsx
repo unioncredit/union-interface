@@ -47,10 +47,7 @@ export default function VouchModal({
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
-  const {
-    settings: { useToken },
-  } = useSettings();
-  const { values, errors = {}, register } = useForm({ useToken });
+  const { values, errors = {}, register } = useForm();
   const { setLabel } = useLabels();
 
   const [address, setAddress] = useState(initialAddress);
