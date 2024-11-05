@@ -12,7 +12,7 @@ export const useToken = (chainId) => {
     [8453]: TOKENS.USDC, // base
   };
 
-  const id = chainId || connectedChain?.id;
+  const id = chainId || connectedChain?.id || optimism.id;
   const token = tokens[id] || null;
 
   return {
