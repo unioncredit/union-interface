@@ -2,8 +2,6 @@ import {
   Modal,
   ModalOverlay,
   Button,
-  Dai,
-  Usdc,
   Input,
   NumericalBlock,
   NumericalRows,
@@ -25,7 +23,7 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import Token from "components/Token";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export const EDIT_VOUCH_MODAL = "edit-vouch-modal";
 
@@ -41,13 +39,11 @@ export default function EditVouchModal({
 
   const navigate = useNavigate();
   const { close, open } = useModals();
+  const { token } = useToken();
   const { refetch: refetchVouchees } = useVouchees();
   const { address: stakerAddress } = useAccount();
   const vouchee = useVouchee(address);
   const { locking = ZERO, trust = ZERO } = vouchee;
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const back = () =>
     open(MANAGE_CONTACT_MODAL, {
@@ -70,7 +66,7 @@ export default function EditVouchModal({
     close();
   };
 
-  const { register, errors = {}, values = {}, empty } = useForm({ validate, useToken });
+  const { register, errors = {}, values = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -105,9 +101,9 @@ export default function EditVouchModal({
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               title="Trust you provide"
-              value={format(trust, useToken)}
+              value={format(trust, token)}
             />
 
             <Input
@@ -126,7 +122,7 @@ export default function EditVouchModal({
               items={[
                 {
                   label: "Utilized trust",
-                  value: `${format(locking, useToken)} ${useToken}`,
+                  value: `${format(locking, token)} ${token}`,
                   tooltip: {
                     shrink: true,
                     content: "Your stake currently backing someone you vouched for",

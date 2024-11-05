@@ -16,14 +16,13 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function VouchersCard() {
   const navigate = useNavigate();
+  const { token } = useToken();
+
   const { data: vouchers = [] } = useVouchers();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const vouchersOrdered = vouchers.sort((a, b) => (a.vouch.gt(b.vouch) ? -1 : 1));
 
@@ -48,7 +47,7 @@ export default function VouchersCard() {
             <TableRow>
               <TableHead></TableHead>
               <TableHead>Account</TableHead>
-              <TableHead align="right">Vouch ({useToken})</TableHead>
+              <TableHead align="right">Vouch ({token})</TableHead>
             </TableRow>
             {vouchersPage.map(({ address, vouch }) => (
               <TableRow
@@ -68,7 +67,7 @@ export default function VouchersCard() {
                     </Text>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{format(vouch, useToken)}</TableCell>
+                <TableCell align="right">{format(vouch, token)}</TableCell>
               </TableRow>
             ))}
           </Table>

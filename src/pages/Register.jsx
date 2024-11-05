@@ -12,15 +12,13 @@ import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { EthRegisterButton } from "../components/register/EthRegisterButton";
 import { NetworkSelect } from "components/shared";
 import { TextSeparator } from "components/shared/TextSeparator";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function RegisterPage() {
   const { open } = useModals();
+  const { token } = useToken();
   const { data: protocol = {} } = useProtocol();
   const { data: member = {}, refetch: refetchMember } = useMember();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const { creditLimit = ZERO } = member;
   const { regFee = ZERO, rebate = ZERO } = protocol;
@@ -38,7 +36,7 @@ export default function RegisterPage() {
           </Heading>
           <Text grey={500} size="medium" align="center">
             Register your address in order to access{" "}
-            {creditLimit.gt(ZERO) && `your $${format(creditLimit, useToken)} in credit and`} all the
+            {creditLimit.gt(ZERO) && `your $${format(creditLimit, token)} in credit and`} all the
             benefits of being a member of the union credit network.
           </Text>
 

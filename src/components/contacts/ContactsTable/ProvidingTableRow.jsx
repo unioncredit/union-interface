@@ -8,10 +8,10 @@ import format from "utils/format";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
 import { useLastRepayData } from "hooks/useLastRepayData";
-import { useSettings } from "providers/Settings";
 import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
 import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
 import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
+import { useToken } from "hooks/useToken";
 
 export const COLUMNS = {
   TRUST_SET: {
@@ -38,11 +38,9 @@ export const COLUMNS = {
 
 export function ProvidingTableRow({ data, active, setContact, providing, receiving }) {
   const { address, isOverdue, locking = ZERO, trust = ZERO, vouch = ZERO, lastRepay = ZERO } = data;
-
+  const { token } = useToken();
   const { formatted: lastRepayFormatted, paymentDue } = useLastRepayData(lastRepay);
-  const {
-    settings: { useToken },
-  } = useSettings();
+
   const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
   const columns = [
@@ -52,7 +50,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
           dimmed={trust.eq(ZERO)}
-          value={`${format(trust, useToken)} ${useToken}`}
+          value={`${format(trust, token)} ${token}`}
         />
       ),
     },
@@ -62,7 +60,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
           dimmed={vouch.eq(ZERO)}
-          value={`${format(vouch, useToken)} ${useToken}`}
+          value={`${format(vouch, token)} ${token}`}
         />
       ),
     },
@@ -72,7 +70,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
         <DimmableTableCell
           key={COLUMNS.STAKE_LOCKED.id}
           dimmed={locking.eq(ZERO)}
-          value={`${format(locking, useToken)} ${useToken}`}
+          value={`${format(locking, token)} ${token}`}
           className={cn({
             "table-cell--overdue": isOverdue && locking.gt(ZERO),
           })}

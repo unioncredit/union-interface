@@ -28,6 +28,7 @@ import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
 import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export function ContactDetailsTab({
   address,
@@ -115,12 +116,10 @@ export function ContactDetailsTab({
 
 const VoucherDetails = ({ voucher }) => {
   const navigate = useNavigate();
+  const { token } = useToken();
 
   const { address: borrowerAddress } = useAccount();
   const { address: stakerAddress, trust = ZERO, vouch = ZERO, locking = ZERO } = voucher;
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const cancelVouchButtonProps = useWrite({
     contract: "userManager",
@@ -138,21 +137,21 @@ const VoucherDetails = ({ voucher }) => {
         items={[
           {
             label: "Trust amount",
-            value: `${format(trust, useToken)} ${useToken}`,
+            value: `${format(trust, token)} ${token}`,
             tooltip: {
               content: "Trust set for you by this contact",
             },
           },
           {
             label: "Vouch you receive",
-            value: `${format(vouch, useToken)} ${useToken}`,
+            value: `${format(vouch, token)} ${token}`,
             tooltip: {
               content: "The max vouch you would receive based on their total stake",
             },
           },
           {
             label: "Available to you",
-            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
+            value: `${format(vouch.sub(locking), token)} ${token}`,
             tooltip: {
               content: "The amount currently available to borrow via this contacts unlocked stake",
             },
@@ -189,12 +188,11 @@ const VoucheeDetails = ({
   contactsCount,
   clearContact,
 }) => {
-  const { address: voucheeAddress } = vouchee;
   const { open } = useModals();
+  const { token } = useToken();
+  const { address: voucheeAddress } = vouchee;
+
   const { data: memberData = {} } = useMemberData(voucheeAddress);
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const {
     locking = ZERO,
@@ -210,7 +208,7 @@ const VoucheeDetails = ({
   const stats = [
     {
       title: "Trust",
-      value: format(trust, useToken),
+      value: format(trust, token),
       buttonProps: {
         label: "Change",
         onClick: () =>
@@ -226,7 +224,7 @@ const VoucheeDetails = ({
     },
     {
       title: "Owes you",
-      value: format(locking, useToken),
+      value: format(locking, token),
       buttonProps: {
         label: "Write-off",
         disabled: locking.lte(ZERO),
@@ -261,7 +259,7 @@ const VoucheeDetails = ({
               size="x-small"
               title={title}
               value={value}
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               align="left"
             />
 
@@ -275,14 +273,14 @@ const VoucheeDetails = ({
         items={[
           {
             label: "Vouch you provide",
-            value: `${format(vouch, useToken)} ${useToken}`,
+            value: `${format(vouch, token)} ${token}`,
             tooltip: {
-              content: `The theoretical max amount of ${useToken} you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting`,
+              content: `The theoretical max amount of ${token} you’re underwriting to this contact. This is the lesser of your deposit stake and your trust setting`,
             },
           },
           {
             label: "Available to borrow",
-            value: `${format(vouch.sub(locking), useToken)} ${useToken}`,
+            value: `${format(vouch.sub(locking), token)} ${token}`,
             tooltip: {
               content:
                 "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
@@ -301,8 +299,8 @@ const VoucheeDetails = ({
               paymentDue.formatted === "N/A" || locking.lte(ZERO)
                 ? "N/A"
                 : isOverdue
-                ? `${format(minPayment, useToken)} ${useToken} - ${paymentDue.formatted} ago`
-                : `${format(minPayment, useToken)} ${useToken} in ${paymentDue.formatted}`,
+                ? `${format(minPayment, token)} ${token} - ${paymentDue.formatted} ago`
+                : `${format(minPayment, token)} ${token} in ${paymentDue.formatted}`,
             tooltip: {
               content: "Amount and time until their next minimum payment",
             },

@@ -7,7 +7,7 @@ import { TransactionTypes } from "constants";
 import { Address } from "./Address";
 import { TransactionIcon } from "./TransactionIcon";
 import { blockExplorerTx } from "utils/blockExplorer";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 // prettier-ignore
 const texts = {
@@ -29,9 +29,7 @@ export function TransactionHistoryRow({
   applicant,
 }) {
   const { chain } = useNetwork();
-  const {
-    settings: { useToken },
-  } = useSettings();
+  const { token } = useToken();
 
   const transactionId = id.split("-")[0];
   const text = texts[type]({ amount, staker, borrower });
@@ -62,7 +60,7 @@ export function TransactionHistoryRow({
       <TableCell align="right">
         {amount && (
           <Text grey={800} size="medium">
-            {format(amount, useToken)}
+            {format(amount, token)}
           </Text>
         )}
       </TableCell>

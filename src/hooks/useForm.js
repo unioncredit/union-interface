@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { formatUnits, parseUnits } from "ethers/lib/utils";
 
-import { ZERO, UNIT } from "constants";
+import { ZERO } from "constants";
 import format from "utils/format";
 import { toFixed } from "utils/numbers";
+import { useToken } from "hooks/useToken";
 
 const empty = {
   display: "",
@@ -11,11 +12,10 @@ const empty = {
   formatted: "",
 };
 
-const formatValue = (value, useToken, rounded) =>
-  format(value, useToken, 2, rounded).replace(/,/g, "");
+const formatValue = (value, token, rounded) => format(value, token, 2, rounded).replace(/,/g, "");
 
-export default function useForm(props = {}) {
-  const { validate, useToken } = props;
+export default function useForm({ validate }) {
+  const { token, unit } = useToken();
 
   const [values, setValues] = useState({});
   const [errors, setErrors] = useState({});
@@ -34,14 +34,14 @@ export default function useForm(props = {}) {
       const parsed =
         type === "display"
           ? {
-              raw: parseUnits(toFixed(value), UNIT[useToken]),
+              raw: parseUnits(toFixed(value), unit),
               display: value,
               formatted: value,
             }
           : {
               raw: value,
-              display: formatValue(value, useToken, rounded),
-              formatted: formatUnits(value, UNIT[useToken]),
+              display: formatValue(value, token, rounded),
+              formatted: formatUnits(value, unit),
             };
 
       newValues = { ...values, [name]: parsed };

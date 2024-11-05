@@ -2,8 +2,10 @@ import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Grid, NumericalBlock } from "@unioncredit/ui";
 import { ZERO } from "constants";
 import format from "utils/format";
+import { useToken } from "hooks/useToken";
 
-export function ProtocolBalances({ protocol, useToken }) {
+export function ProtocolBalances({ protocol, chainId }) {
+  const { token } = useToken(chainId);
   const {
     getLoanableAmount = ZERO,
     totalBorrows = ZERO,
@@ -16,35 +18,35 @@ export function ProtocolBalances({ protocol, useToken }) {
     [
       {
         title: "Available to borrow",
-        value: format(getLoanableAmount, useToken),
+        value: format(getLoanableAmount, token),
       },
       {
         title: "Borrowed",
-        value: format(totalBorrows, useToken),
+        value: format(totalBorrows, token),
       },
       {
         title: "Reserves",
-        value: format(totalReserves, useToken),
+        value: format(totalReserves, token),
       },
     ],
     [
       {
         title: "Staked",
-        value: format(totalStaked, useToken),
+        value: format(totalStaked, token),
       },
       {
         title: "Effective stake",
-        value: format(totalStaked.sub(totalFrozen, useToken)),
+        value: format(totalStaked.sub(totalFrozen, token)),
       },
       {
         title: "Locked",
-        value: format(ZERO, useToken),
+        value: format(ZERO, token),
       },
     ],
     [
       {
         title: "Frozen",
-        value: format(totalFrozen, useToken),
+        value: format(totalFrozen, token),
       },
     ],
   ];
@@ -58,12 +60,7 @@ export function ProtocolBalances({ protocol, useToken }) {
           <Grid.Row key={index} style={{ marginTop: "16px" }}>
             {row.map((item) => (
               <Grid.Col key={item.title}>
-                <NumericalBlock
-                  size="small"
-                  token={useToken.toLowerCase()}
-                  align="left"
-                  {...item}
-                />
+                <NumericalBlock size="small" token={token.toLowerCase()} align="left" {...item} />
               </Grid.Col>
             ))}
           </Grid.Row>

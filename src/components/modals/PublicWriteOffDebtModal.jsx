@@ -1,7 +1,5 @@
 import {
   Button,
-  Dai,
-  Usdc,
   Input,
   Text,
   Modal,
@@ -21,20 +19,18 @@ import { AddressSummary } from "components/shared";
 import { useMember, useMemberData } from "../../providers/MemberData";
 import React from "react";
 import { useAccount } from "wagmi";
-import { useSettings } from "providers/Settings";
 import Token from "components/Token";
+import { useToken } from "hooks/useToken";
 
 export const PUBLIC_WRITE_OFF_DEBT_MODAL = "public-write-off-debt-modal";
 
 export default function PublicWriteOffDebtModal({ address }) {
   const { close } = useModals();
   const { address: connectedAddress } = useAccount();
+  const { token } = useToken();
 
   const { data: contact } = useMemberData(address);
   const { data: member } = useMember();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const { owed = ZERO, isOverdue } = contact;
   const { tokenBalance = ZERO } = member;
@@ -45,13 +41,7 @@ export default function PublicWriteOffDebtModal({ address }) {
     }
   };
 
-  const {
-    register,
-    setRawValue,
-    errors = {},
-    values = {},
-    empty,
-  } = useForm({ validate, useToken });
+  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -75,9 +65,9 @@ export default function PublicWriteOffDebtModal({ address }) {
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               title="Amount in default"
-              value={format(owed, useToken)}
+              value={format(owed, token)}
             />
 
             <Input
@@ -90,8 +80,8 @@ export default function PublicWriteOffDebtModal({ address }) {
               onChange={register("amount")}
               rightLabel={`Max. ${format(
                 tokenBalance.gte(owed) ? owed : tokenBalance,
-                useToken
-              )} ${useToken}`}
+                token
+              )} ${token}`}
               rightLabelAction={() =>
                 setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
               }
@@ -102,12 +92,12 @@ export default function PublicWriteOffDebtModal({ address }) {
               m="16px 0"
               items={[
                 {
-                  label: `Your ${useToken} balance`,
-                  value: `${format(tokenBalance, useToken)} ${useToken}`,
+                  label: `Your ${token} balance`,
+                  value: `${format(tokenBalance, token)} ${token}`,
                 },
                 {
                   label: "New amount in default",
-                  value: `${format(owed.sub(amount.raw), useToken)} ${useToken}`,
+                  value: `${format(owed.sub(amount.raw), token)} ${token}`,
                 },
               ]}
             />
@@ -115,11 +105,11 @@ export default function PublicWriteOffDebtModal({ address }) {
             <ExpandingInfo
               mb="16px"
               icon={WarningIcon}
-              title={`Write-off consumes your ${useToken} balance`}
+              title={`Write-off consumes your ${token} balance`}
             >
               <Text m={0}>
-                When you publicly write-off the debt of a member, the {useToken} used is consumed
-                and cannot be redeemed.
+                When you publicly write-off the debt of a member, the {token} used is consumed and
+                cannot be redeemed.
               </Text>
             </ExpandingInfo>
 

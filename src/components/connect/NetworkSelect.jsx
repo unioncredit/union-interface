@@ -10,13 +10,11 @@ import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { NetworkSelectOption } from "./NetworkSelectOption";
 import useMemberSummary from "hooks/useMemberSummary";
 import { useAppNetwork } from "providers/Network";
-import { useSettings } from "providers/Settings";
 import { supportedNetworks } from "config/networks";
 import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
-  const { settings } = useSettings();
   const { address, isConnected } = useAccount();
   const { setForceAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
@@ -66,7 +64,7 @@ export default function NetworkSelect() {
             key={network.id}
             address={address}
             network={network}
-            useToken={network.token}
+            token={network.token}
             disabled={!isConnected}
             onClick={() => handleChangeNetwork(network)}
             active={isConnected && selected?.chainId === network.chainId}

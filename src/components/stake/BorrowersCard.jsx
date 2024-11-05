@@ -20,15 +20,14 @@ import { useVouchees } from "providers/VoucheesData";
 import { truncateAddress } from "utils/truncateAddress";
 import { ZERO } from "constants";
 import useResponsive from "hooks/useResponsive";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function BorrowersCard() {
   const navigate = useNavigate();
   const { isMicro } = useResponsive();
+  const { token } = useToken();
+
   const { data: vouchees = [] } = useVouchees();
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const borrowers = vouchees
     .filter((vouchee) => vouchee.locking.gt(ZERO))
@@ -62,7 +61,7 @@ export default function BorrowersCard() {
             <TableHead>Account</TableHead>
             <TableHead align="center">Status</TableHead>
             <TableHead align="right">
-              {isMicro ? `Owed (${useToken})` : `Balance owed (${useToken})`}
+              {isMicro ? `Owed (${token})` : `Balance owed (${token})`}
             </TableHead>
           </TableRow>
           {borrowersPage.map(({ address, locking }) => (
@@ -86,7 +85,7 @@ export default function BorrowersCard() {
               <TableCell align="center">
                 <StatusBadge address={address} />
               </TableCell>
-              <TableCell align="right">{format(locking, useToken)}</TableCell>
+              <TableCell align="right">{format(locking, token)}</TableCell>
             </TableRow>
           ))}
         </Table>

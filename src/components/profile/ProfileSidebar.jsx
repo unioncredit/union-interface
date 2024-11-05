@@ -11,9 +11,10 @@ import React, { useEffect } from "react";
 import format, { formattedNumber } from "../../utils/format";
 import { ZERO } from "constants";
 import { reduceBnSum } from "../../utils/reduce";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export function ProfileSidebar({ address, member, chainId }) {
+  const { token } = useToken(chainId);
   const { data: vouchees = [], refetch: refetchVouchees } = useVoucheesData(
     address,
     chainId,
@@ -24,9 +25,6 @@ export function ProfileSidebar({ address, member, chainId }) {
     chainId,
     getVersion(chainId)
   );
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const { creditLimit = ZERO, owed = ZERO } = member;
 
@@ -71,7 +69,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Borrowed"
               dotColor="blue900"
-              value={format(owed, useToken)}
+              value={format(owed, token)}
               titleTooltip={{
                 content: "The amount of DAI you are currently borrowing",
               }}
@@ -84,7 +82,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Available"
               dotColor="blue100"
-              value={format(creditLimit, useToken, 2, false)}
+              value={format(creditLimit, token, 2, false)}
               titleTooltip={{
                 content: "The amount of token currently available to borrow",
               }}
@@ -97,7 +95,7 @@ export function ProfileSidebar({ address, member, chainId }) {
               size="regular"
               title="Unavailable"
               dotColor="amber500"
-              value={format(unavailableBalance, useToken)}
+              value={format(unavailableBalance, token)}
               titleTooltip={{
                 content:
                   "Credit normally available to you which is tied up elsewhere and unavailable to borrow at this time",

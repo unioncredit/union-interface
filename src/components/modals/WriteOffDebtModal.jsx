@@ -1,7 +1,5 @@
 import {
   Button,
-  Dai,
-  Usdc,
   Input,
   Text,
   Modal,
@@ -20,8 +18,8 @@ import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
 import { useAccount } from "wagmi";
-import { useSettings } from "providers/Settings";
 import Token from "components/Token";
+import { useToken } from "hooks/useToken";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
@@ -36,9 +34,7 @@ export default function WriteOffDebtModal({
   const { address: connectedAddress } = useAccount();
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
-  const {
-    settings: { useToken },
-  } = useSettings();
+  const { token } = useToken();
   const vouchee = useVouchee(address);
 
   const { locking = ZERO, isOverdue } = vouchee;
@@ -64,13 +60,7 @@ export default function WriteOffDebtModal({
     close();
   };
 
-  const {
-    register,
-    setRawValue,
-    errors = {},
-    values = {},
-    empty,
-  } = useForm({ validate, useToken });
+  const { register, setRawValue, errors = {}, values = {}, empty } = useForm({ validate });
 
   const amount = values.amount || empty;
 
@@ -95,9 +85,9 @@ export default function WriteOffDebtModal({
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token={useToken.toLowerCase()}
+              token={token.toLowerCase()}
               title="Balance owed"
-              value={format(locking, useToken)}
+              value={format(locking, token)}
             />
 
             <Input
@@ -108,7 +98,7 @@ export default function WriteOffDebtModal({
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(locking, useToken)} ${useToken}`}
+              rightLabel={`Max. ${format(locking, token)} ${token}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
               suffix={<Token />}
             />
@@ -118,7 +108,7 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw), useToken)} ${useToken}`,
+                  value: `${format(locking.sub(amount.raw), token)} ${token}`,
                 },
               ]}
             />
