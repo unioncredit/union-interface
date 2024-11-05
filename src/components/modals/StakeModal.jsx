@@ -1,18 +1,16 @@
-import { Input, Modal, ModalOverlay, Box, SegmentedControl, NumericalRows } from "@unioncredit/ui";
+import { Box, Input, Modal, ModalOverlay, NumericalRows, SegmentedControl } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import format from "utils/format";
-import { Errors } from "constants";
+import { Errors, StakeType, ZERO } from "constants";
 import useForm from "hooks/useForm";
 import { min } from "utils/numbers";
-import { StakeType } from "constants";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { Approval } from "components/shared";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
-import { ZERO } from "constants";
 import Token from "components/Token";
 import { useToken } from "hooks/useToken";
 
@@ -51,7 +49,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
 
   const validateStake = (inputs) => {
     if (inputs.amount.display !== "" && inputs.amount.raw.lt(wad)) {
-      return Errors.MIN_STAKE_LIMIT_REQUIRED;
+      return Errors.MIN_STAKE_LIMIT_REQUIRED(token);
     }
     if (inputs.amount.raw.gt(userStakeLimit)) {
       return Errors.MAX_STAKE_LIMIT_EXCEEDED;
