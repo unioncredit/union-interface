@@ -1,14 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
 import { useContractWrite, usePrepareContractWrite, useNetwork, useSigner } from "wagmi";
 
-import { Status } from "constants";
-import praseAppLog from "utils/praseAppLog";
 import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
+import parseAppLog from "utils/parseAppLog";
+import { Status } from "constants";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
-import { useSettings } from "providers/Settings";
+import { useToken } from "hooks/useToken";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -19,16 +19,15 @@ export default function useWrite({
   onComplete,
   overrides = undefined,
 }) {
+  const [loading, setLoading] = useState(false);
+
   const { data: signer } = useSigner();
   const { version } = useVersion();
   const { chain } = useNetwork();
   const { addLog } = useAppLogs();
   const { addToast, closeToast } = useToasts();
+  const { token } = useToken();
   const contractConfig = useContract(contract);
-  const [loading, setLoading] = useState(false);
-  const {
-    settings: { useToken },
-  } = useSettings();
 
   const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
 
@@ -53,14 +52,7 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(
-      method,
-      memoisedArgs,
-      useToken,
-      chain.id,
-      version,
-      useToken
-    );
+    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version, useToken);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
@@ -78,7 +70,7 @@ export default function useWrite({
 
       onComplete && (await onComplete());
 
-      addLog(praseAppLog(Status.SUCCESS, method, memoisedArgs, tx, useToken));
+      addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx, useToken));
       addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
 
       return true;
