@@ -81,7 +81,10 @@ export const calculateExpectedMinimumPayment = (
   unit,
   wad
 ) => {
+  console.log({ borrowAmount, borrowRatePerBlock, overdueBlocks, unit, wad });
+
   const floor = parseUnits("0.01", unit);
   const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(wad);
+  console.log({ minimumPayment });
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
