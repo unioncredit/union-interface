@@ -8,6 +8,7 @@ import {
   LinkIcon,
   Modal,
   ModalOverlay,
+  ShareIcon,
   TelegramIcon,
   TwitterIcon,
 } from "@unioncredit/ui";
@@ -43,7 +44,7 @@ export default function ShareLinkModal({ url, title, text }) {
               <Button
                 fluid
                 size="large"
-                icon={LinkIcon}
+                icon={navigator.share ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
                   navigator.share

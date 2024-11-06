@@ -9,6 +9,7 @@ import {
   Select,
   Input,
   LinkIcon,
+  ShareIcon,
   TwitterIcon,
   TelegramIcon,
 } from "@unioncredit/ui";
@@ -65,7 +66,7 @@ export default function VouchLinkModal() {
               <Button
                 fluid
                 size="large"
-                icon={LinkIcon}
+                icon={navigator.share ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
                   navigator.share

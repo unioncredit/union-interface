@@ -10,7 +10,7 @@ import {
   SwitchIcon,
   VouchIcon,
   WalletIcon,
-  WithdrawIcon,
+  ShareIcon,
 } from "@unioncredit/ui";
 import cn from "classnames";
 import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../modals/PublicWriteOffDebtModal";
@@ -143,7 +143,7 @@ export const ProfileCtaButtons = ({ address, chainId, className }) => {
       )}
 
       <Button
-        icon={WithdrawIcon}
+        icon={ShareIcon}
         mt="6px"
         variant="light"
         color="secondary"
