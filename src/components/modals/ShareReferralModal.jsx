@@ -10,6 +10,7 @@ import {
   Modal,
   ModalOverlay,
   Select,
+  ShareIcon,
   TelegramIcon,
   Text,
   TwitterIcon,
@@ -71,7 +72,7 @@ export default function ShareReferralModal({ address, chainId }) {
               <Button
                 fluid
                 size="large"
-                icon={LinkIcon}
+                icon={navigator.share ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
                   navigator.share

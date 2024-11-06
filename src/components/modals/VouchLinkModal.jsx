@@ -6,6 +6,8 @@ import {
   ButtonRow,
   Input,
   LinkIcon,
+  ShareIcon,
+  TwitterIcon,
   Modal,
   ModalOverlay,
   Select,
@@ -65,7 +67,7 @@ export default function VouchLinkModal() {
               <Button
                 fluid
                 size="large"
-                icon={LinkIcon}
+                icon={navigator.share ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
                   navigator.share
