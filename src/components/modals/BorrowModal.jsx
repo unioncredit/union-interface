@@ -76,12 +76,14 @@ export default function BorrowModal() {
   const newOwed = borrow.add(owed);
 
   const minPayment = calculateExpectedMinimumPayment(
-    borrow,
-    borrowRatePerBlock,
+    borrow.add(owed),
+    borrowRatePerUnit,
     overdueTime,
     unit,
     wad
   );
+
+  console.log({ minPayment });
 
   const buttonProps = useWrite({
     contract: "uToken",
