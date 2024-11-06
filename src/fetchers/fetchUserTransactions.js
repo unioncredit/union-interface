@@ -32,12 +32,7 @@ const query = gql`
   }
 `;
 
-export default async function fetchUserTransactions(
-  version,
-  chainId,
-  staker,
-  borrower
-) {
+export default async function fetchUserTransactions(version, chainId, staker, borrower) {
   const borrowerVariable = borrower ? { borrower } : {};
 
   const variables = {
@@ -56,6 +51,7 @@ export default async function fetchUserTransactions(
     },
   };
 
+  if (!TheGraphUrls[version][chainId]) return [];
   const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   const flattened = Object.keys(resp).reduce((acc, key) => {

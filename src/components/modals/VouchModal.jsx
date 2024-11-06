@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   Input,
   Dai,
+  Usdc,
   Button,
   Box,
   WarningIcon,
@@ -25,9 +26,10 @@ import useForm from "hooks/useForm";
 import useLabels from "hooks/useLabels";
 import { useVouchers } from "providers/VouchersData";
 import { useVouchees } from "providers/VoucheesData";
-import { BlockSpeed, SECONDS_PER_DAY, ZERO } from "constants";
+import { SECONDS_PER_DAY, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
-import { useNetwork } from "wagmi";
+import Token from "components/Token";
+import { useSettings } from "providers/Settings";
 
 export const VOUCH_MODAL = "vouch-modal";
 
@@ -40,13 +42,11 @@ export default function VouchModal({
   address: initialAddress = null,
 }) {
   const { close } = useModals();
-  const { chain } = useNetwork();
 
   const { data: protocol } = useProtocol();
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
-
   const { values, errors = {}, register } = useForm();
   const { setLabel } = useLabels();
 
@@ -103,7 +103,7 @@ export default function VouchModal({
           <Input
             mt="16px"
             type="number"
-            suffix={<Dai />}
+            suffix={<Token />}
             error={errors.trust}
             label="Trust amount"
             placeholder="0.0"

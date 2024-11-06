@@ -16,21 +16,17 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import usePagination from "hooks/usePagination";
 import { useVouchers } from "providers/VouchersData";
 import { truncateAddress } from "utils/truncateAddress";
+import { useToken } from "hooks/useToken";
 
 export default function VouchersCard() {
   const navigate = useNavigate();
+  const { token } = useToken();
+
   const { data: vouchers = [] } = useVouchers();
 
-  const vouchersOrdered = vouchers.sort((a, b) =>
-    a.vouch.gt(b.vouch) ? -1 : 1
-  );
+  const vouchersOrdered = vouchers.sort((a, b) => (a.vouch.gt(b.vouch) ? -1 : 1));
 
-  const {
-    data: vouchersPage,
-    maxPages,
-    activePage,
-    onChange,
-  } = usePagination(vouchersOrdered);
+  const { data: vouchersPage, maxPages, activePage, onChange } = usePagination(vouchersOrdered);
 
   const voucherCount = vouchers.length;
 
@@ -51,14 +47,12 @@ export default function VouchersCard() {
             <TableRow>
               <TableHead></TableHead>
               <TableHead>Account</TableHead>
-              <TableHead align="right">Vouch (DAI)</TableHead>
+              <TableHead align="right">Vouch ({token})</TableHead>
             </TableRow>
             {vouchersPage.map(({ address, vouch }) => (
               <TableRow
                 key={address}
-                onClick={() =>
-                  navigate(`/contacts/trusts-you?address=${address}`)
-                }
+                onClick={() => navigate(`/contacts/trusts-you?address=${address}`)}
               >
                 <TableCell fixedSize>
                   <Avatar size={24} address={address} />
@@ -73,7 +67,7 @@ export default function VouchersCard() {
                     </Text>
                   </Box>
                 </TableCell>
-                <TableCell align="right">{format(vouch)}</TableCell>
+                <TableCell align="right">{format(vouch, token)}</TableCell>
               </TableRow>
             ))}
           </Table>

@@ -52,7 +52,7 @@ export default function MyGovernanceStats() {
   const governanceStats = [
     {
       title: "Your voting power",
-      value: format(mainnetVotes),
+      value: format(mainnetVotes, "UNION"),
       subtitle: isVotingConfigured
         ? isDelegatingToSelf
           ? "Wallet + Delegation"
@@ -63,12 +63,12 @@ export default function MyGovernanceStats() {
     {
       token: "union",
       title: "Wallet balance",
-      value: format(mainnetBalance),
-      subtitle: `${format(mainnetUnclaimed)} unclaimed`,
+      value: format(mainnetBalance, "UNION"),
+      subtitle: `${format(mainnetUnclaimed, "UNION")} unclaimed`,
     },
     {
       title: "Delegated to you",
-      value: format(votesDelegated),
+      value: format(votesDelegated, "UNION"),
       subtitle: "From other addresses",
       className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
     },
@@ -166,7 +166,7 @@ export default function MyGovernanceStats() {
             </Box>
 
             <Text m={0} grey={700} size="medium" weight="medium">
-              {`${format(balance)} ${token}`}
+              {`${format(balance, "UNION")} ${token}`}
             </Text>
           </Box>
         ))}

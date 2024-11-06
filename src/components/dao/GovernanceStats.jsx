@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  Card,
-  Dai,
-  ExternalIcon,
-  NumericalBlock,
-} from "@unioncredit/ui";
+import { Button, Grid, Card, Dai, Usdc, ExternalIcon, NumericalBlock } from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
 import { useNetwork } from "wagmi";
 import { mainnet, arbitrum } from "wagmi/chains";
@@ -13,6 +6,8 @@ import { mainnet, arbitrum } from "wagmi/chains";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { calculateInterestRate } from "utils/numbers";
+import Token from "components/Token";
+import { useToken } from "hooks/useToken";
 
 const getAnalyticsUrl = (chainId) => {
   switch (chainId) {
@@ -27,6 +22,7 @@ const getAnalyticsUrl = (chainId) => {
 
 export default function GovernaceStats() {
   const { chain } = useNetwork();
+  const { token, unit } = useToken();
   const { data: protocol = {} } = useProtocol();
   const analyticsUrl = getAnalyticsUrl(chain?.id);
 
@@ -50,21 +46,21 @@ export default function GovernaceStats() {
               <NumericalBlock
                 mt="8px"
                 title="Total Staked"
-                value={<Dai value={format(totalStaked)} />}
+                value={<Token value={format(totalStaked, token)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="8px"
                 title="Lending pool"
-                value={<Dai value={format(getLoanableAmount)} />}
+                value={<Token value={format(getLoanableAmount, token)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
               <NumericalBlock
                 mt="32px"
                 title="Outstanding loans"
-                value={<Dai value={format(totalBorrows)} />}
+                value={<Token value={format(totalBorrows, token)} />}
               />
             </Grid.Col>
             <Grid.Col xs={6}>
@@ -73,7 +69,8 @@ export default function GovernaceStats() {
                   mt="32px"
                   title="Interest rate"
                   value={`${format(
-                    calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
+                    calculateInterestRate(borrowRatePerUnit, chain.id, unit).mul(100),
+                    token
                   )}%`}
                 />
               )}
