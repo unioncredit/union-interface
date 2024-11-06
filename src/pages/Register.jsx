@@ -12,11 +12,9 @@ import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { EthRegisterButton } from "../components/register/EthRegisterButton";
 import { NetworkSelect } from "components/shared";
 import { TextSeparator } from "components/shared/TextSeparator";
-import { useToken } from "hooks/useToken";
 
 export default function RegisterPage() {
   const { open } = useModals();
-  const { token } = useToken();
   const { data: protocol = {} } = useProtocol();
   const { data: member = {}, refetch: refetchMember } = useMember();
 
@@ -36,8 +34,8 @@ export default function RegisterPage() {
           </Heading>
           <Text grey={500} size="medium" align="center">
             Register your address in order to access{" "}
-            {creditLimit.gt(ZERO) && `your $${format(creditLimit, token)} in credit and`} all the
-            benefits of being a member of the union credit network.
+            {creditLimit.gt(ZERO) && `your $${format(creditLimit)} in credit and`} all the benefits
+            of being a member of the union credit network.
           </Text>
 
           <Box mt="16px" align="center" direction="vertical">
@@ -45,7 +43,7 @@ export default function RegisterPage() {
               <Box className="Register__container" align="center">
                 <Box className="Register__fee" align="center">
                   <Text size="large" weight="bold">
-                    Fee: {format(ethRegisterFee, "ETH", 10, false, true, false)}
+                    Fee: {format(ethRegisterFee, 10, false, true, false)}
                   </Text>
 
                   <Box className="Register__icon">

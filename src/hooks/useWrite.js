@@ -1,14 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, usePrepareContractWrite, useNetwork, useSigner } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite, useSigner } from "wagmi";
 
+import { Status } from "constants";
+import parseAppLog from "utils/parseAppLog";
 import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
-import parseAppLog from "utils/parseAppLog";
-import { Status } from "constants";
 import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
-import { useToken } from "hooks/useToken";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -19,19 +18,17 @@ export default function useWrite({
   onComplete,
   overrides = undefined,
 }) {
-  const [loading, setLoading] = useState(false);
-
   const { data: signer } = useSigner();
   const { version } = useVersion();
   const { chain } = useNetwork();
   const { addLog } = useAppLogs();
   const { addToast, closeToast } = useToasts();
-  const { token } = useToken();
   const contractConfig = useContract(contract);
+  const [loading, setLoading] = useState(false);
 
   const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
 
-  let { config } = usePrepareContractWrite({
+  const { config } = usePrepareContractWrite({
     ...contractConfig,
     functionName: method,
     args: memoisedArgs,
@@ -52,7 +49,7 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version);
+    const parseToast = createParseToast(method, memoisedArgs, chain.id, version, contract);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
@@ -89,6 +86,7 @@ export default function useWrite({
           id: `${Status.FAILED}__${method}__${Date.now()}`,
         });
       } else {
+        addLog(parseAppLog(Status.FAILED, method, memoisedArgs, null));
         addToast(parseToast(Status.FAILED, null));
       }
 

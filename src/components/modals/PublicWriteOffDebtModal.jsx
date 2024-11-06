@@ -1,5 +1,6 @@
 import {
   Button,
+  Dai,
   Input,
   Text,
   Modal,
@@ -19,21 +20,18 @@ import { AddressSummary } from "components/shared";
 import { useMember, useMemberData } from "../../providers/MemberData";
 import React from "react";
 import { useAccount } from "wagmi";
-import Token from "components/Token";
-import { useToken } from "hooks/useToken";
 
 export const PUBLIC_WRITE_OFF_DEBT_MODAL = "public-write-off-debt-modal";
 
 export default function PublicWriteOffDebtModal({ address }) {
   const { close } = useModals();
   const { address: connectedAddress } = useAccount();
-  const { token } = useToken();
 
   const { data: contact } = useMemberData(address);
   const { data: member } = useMember();
 
   const { owed = ZERO, isOverdue } = contact;
-  const { tokenBalance = ZERO } = member;
+  const { daiBalance = ZERO } = member;
 
   const validate = (inputs) => {
     if (inputs.amount?.raw.gt(owed)) {
@@ -65,9 +63,9 @@ export default function PublicWriteOffDebtModal({ address }) {
           <Modal.Container direction="vertical">
             <NumericalBlock
               align="left"
-              token={token.toLowerCase()}
+              token="dai"
               title="Amount in default"
-              value={format(owed, token)}
+              value={format(owed)}
             />
 
             <Input
@@ -78,37 +76,30 @@ export default function PublicWriteOffDebtModal({ address }) {
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(
-                tokenBalance.gte(owed) ? owed : tokenBalance,
-                token
-              )} ${token}`}
+              rightLabel={`Max. ${format(daiBalance.gte(owed) ? owed : daiBalance)} DAI`}
               rightLabelAction={() =>
-                setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
+                setRawValue("amount", daiBalance.gte(owed) ? owed : daiBalance, false)
               }
-              suffix={<Token />}
+              suffix={<Dai />}
             />
 
             <NumericalRows
               m="16px 0"
               items={[
                 {
-                  label: `Your ${token} balance`,
-                  value: `${format(tokenBalance, token)} ${token}`,
+                  label: "Your DAI balance",
+                  value: `${format(daiBalance)} DAI`,
                 },
                 {
                   label: "New amount in default",
-                  value: `${format(owed.sub(amount.raw), token)} ${token}`,
+                  value: `${format(owed.sub(amount.raw))} DAI`,
                 },
               ]}
             />
 
-            <ExpandingInfo
-              mb="16px"
-              icon={WarningIcon}
-              title={`Write-off consumes your ${token} balance`}
-            >
+            <ExpandingInfo mb="16px" icon={WarningIcon} title="Write-off consumes your DAI balance">
               <Text m={0}>
-                When you publicly write-off the debt of a member, the {token} used is consumed and
+                When you publicly write-off the debt of a member, the DAI used is consumed and
                 cannot be redeemed.
               </Text>
             </ExpandingInfo>

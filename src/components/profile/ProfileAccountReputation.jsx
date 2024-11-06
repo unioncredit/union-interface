@@ -3,12 +3,10 @@ import { Box, Divider, Heading, NumericalRows, Text } from "@unioncredit/ui";
 import { ProfileReputationHistory } from "./ProfileReputationHistory";
 import { useCreditData } from "../../hooks/useCreditData";
 import format from "../../utils/format";
-import { useToken } from "hooks/useToken";
 
 export function ProfileAccountReputation({ address, chainId }) {
   const [year, setYear] = useState(new Date().getFullYear());
 
-  const { token } = useToken();
   const {
     history,
     daysInDefault,
@@ -57,15 +55,15 @@ export function ProfileAccountReputation({ address, chainId }) {
         items={[
           {
             label: "Borrowed Volume",
-            value: `$${format(borrowedVolume, token)}`,
+            value: `$${format(borrowedVolume)}`,
           },
           {
             label: "Repaid Volume",
-            value: `$${format(repaidVolume, token)}`,
+            value: `$${format(repaidVolume)}`,
           },
           {
             label: "Defaulted Volume",
-            value: `$${format(defaultedVolume, token)}`,
+            value: `$${format(defaultedVolume)}`,
           },
         ]}
       />

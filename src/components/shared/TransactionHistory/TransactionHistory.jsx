@@ -6,7 +6,6 @@ import { ZERO_ADDRESS } from "constants";
 import useTxHistory from "hooks/useTxHistory";
 import usePagination from "hooks/usePagination";
 import { TransactionHistoryRow } from "./TransactionHistoryRow";
-import { useToken } from "hooks/useToken";
 
 export function TransactionHistory({
   pageSize = 8,
@@ -14,9 +13,8 @@ export function TransactionHistory({
   borrower = ZERO_ADDRESS,
   showEmptyRows = false,
 }) {
-  const { token } = useToken();
-
   const { data = [], loading = true } = useTxHistory({ staker, borrower });
+
   const { data: transactionPage, maxPages, activePage, onChange } = usePagination(data, pageSize);
 
   return (
@@ -25,7 +23,7 @@ export function TransactionHistory({
         <TableRow>
           <TableHead></TableHead>
           <TableHead>Transaction</TableHead>
-          <TableHead align="right">Value ({token})</TableHead>
+          <TableHead align="right">Value (DAI)</TableHead>
         </TableRow>
 
         {transactionPage.map((tx, i) => (

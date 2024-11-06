@@ -106,7 +106,7 @@ export default function Profile() {
   // Profile pages support EIP3770 addresses so we need to check if
   // it starts with eth: or goe: or arb1: then parse out the address
   const addressOrEnsParts = addressOrEnsParam.split(":");
-  const [tag, addressOrEns] = addressOrEnsParam.match(/^(optgoe|opt|base):/)
+  const [tag, addressOrEns] = addressOrEnsParam.match(/^(optgoe|opt):/)
     ? addressOrEnsParts
     : [
         EIP3770[optimism.id],

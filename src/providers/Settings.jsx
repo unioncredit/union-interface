@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNetwork } from "wagmi";
+import { goerli, optimismGoerli } from "wagmi/chains";
 
 const SETTINGS_STORAGE_KEY = "union:settings";
 
@@ -39,7 +40,7 @@ export default function Settings({ children }) {
   useEffect(() => {
     // If the user is already connected to a testnet then
     // just automatically toggle showTestnets on
-    if ([84532].includes(chain?.id)) {
+    if ([goerli.id, optimismGoerli.id].includes(chain?.id)) {
       setSetting("showTestnets", true);
     }
   }, [chain?.id]);

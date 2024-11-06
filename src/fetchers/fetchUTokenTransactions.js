@@ -2,7 +2,11 @@ import { request, gql } from "graphql-request";
 
 import { TransactionTypes, TheGraphUrls } from "constants";
 
-export default async function fetchUTokenTransactions(version, chainId, address) {
+export default async function fetchUTokenTransactions(
+  version,
+  chainId,
+  address
+) {
   const query = gql`
     query ($first: Int, $account: Bytes) {
       ${TransactionTypes.BORROW}: borrows(first: $first, where: { account: $account }) {
@@ -26,7 +30,6 @@ export default async function fetchUTokenTransactions(version, chainId, address)
     account: address,
   };
 
-  if (!TheGraphUrls[version][chainId]) return [];
   const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   const flattened = Object.keys(resp).reduce((acc, key) => {

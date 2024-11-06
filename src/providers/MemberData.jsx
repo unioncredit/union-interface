@@ -7,9 +7,8 @@ import useContract from "hooks/useContract";
 import { calculateMinPayment } from "utils/numbers";
 import usePollMemberData from "hooks/usePollMember";
 import useRelatedAddresses from "hooks/useRelatedAddresses";
-import { useToken } from "hooks/useToken";
 
-const selectMemberData = (data, unit) => {
+const selectMemberData = (data) => {
   const [
     isMember = false,
     creditLimit = ZERO,
@@ -17,7 +16,7 @@ const selectMemberData = (data, unit) => {
     totalLockedStake = ZERO,
     memberFrozen = ZERO,
     unionBalance = ZERO,
-    tokenBalance = ZERO,
+    daiBalance = ZERO,
     unclaimedRewards = ZERO,
     owed = ZERO,
     interest = ZERO,
@@ -43,7 +42,7 @@ const selectMemberData = (data, unit) => {
     borrowerAddresses,
     stakerAddresses,
     unionBalance,
-    tokenBalance,
+    daiBalance,
     unclaimedRewards,
     owed,
     interest,
@@ -57,7 +56,7 @@ const selectMemberData = (data, unit) => {
   };
 
   if (owed.gt(ZERO)) {
-    result.minPayment = calculateMinPayment(interest, unit);
+    result.minPayment = calculateMinPayment(interest);
   }
 
   return result;
@@ -69,10 +68,8 @@ export const useMember = () => useContext(MemberContext);
 
 export function useMemberData(address, chainId, forceVersion) {
   const { version } = useVersion();
-  const { token, unit } = useToken(chainId);
 
-  const tokenContract = useContract(token.toLowerCase(), chainId, forceVersion);
-
+  const daiContract = useContract("dai", chainId, forceVersion);
   const unionContract = useContract("union", chainId, forceVersion);
   const uTokenContract = useContract("uToken", chainId, forceVersion);
   const userManagerContract = useContract("userManager", chainId, forceVersion);
@@ -112,7 +109,7 @@ export function useMemberData(address, chainId, forceVersion) {
           args: [address],
         },
         {
-          ...tokenContract,
+          ...daiContract,
           functionName: "balanceOf",
           args: [address],
         },
@@ -124,8 +121,8 @@ export function useMemberData(address, chainId, forceVersion) {
               : "calculateRewards",
           args:
             (forceVersion || version) === Versions.V1
-              ? [address, tokenContract.address, ZERO]
-              : [address, tokenContract.address],
+              ? [address, daiContract.address, ZERO]
+              : [address, daiContract.address],
         },
         {
           ...uTokenContract,
@@ -150,7 +147,7 @@ export function useMemberData(address, chainId, forceVersion) {
         {
           ...comptrollerContract,
           functionName: "getRewardsMultiplier",
-          args: [address, tokenContract.address],
+          args: [address, daiContract.address],
         },
         {
           ...referralContract,
@@ -193,12 +190,12 @@ export function useMemberData(address, chainId, forceVersion) {
   const { data, ...resp } = useContractReads({
     enabled:
       !!address &&
-      !!tokenContract?.address &&
+      !!daiContract?.address &&
       !!userManagerContract?.address &&
       !!unionContract?.address &&
       !!uTokenContract?.address &&
       !!comptrollerContract?.address,
-    select: (data) => selectMemberData(data, unit),
+    select: (data) => selectMemberData(data),
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
