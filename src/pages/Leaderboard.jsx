@@ -1,7 +1,7 @@
 import "./Leaderboard.scss";
 
 import { Helmet } from "react-helmet";
-import { Button, Card, CheckIcon, SegmentedControl, WithdrawIcon } from "@unioncredit/ui";
+import { Button, Card, CheckIcon, SegmentedControl, ShareIcon } from "@unioncredit/ui";
 import { Link } from "react-router-dom";
 import { DelegatesBoard } from "components/dao/boards/DelegatesBoard";
 import { useCallback } from "react";
@@ -127,7 +127,7 @@ export default function LeaderboardPage({ board }) {
               size="pill"
               variant="light"
               color="secondary"
-              icon={copied ? CheckIcon : WithdrawIcon}
+              icon={copied ? CheckIcon : ShareIcon}
               label={copied ? <>Link copied!</> : <>Share Board</>}
               onClick={() =>
                 open(SHARE_LINK_MODAL, {
