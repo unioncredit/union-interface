@@ -11,7 +11,6 @@ export function useGovernanceStats({ address }) {
 
   const arbitrumUnion = useContract("union", arbitrum.id, Versions.V1);
   const optimismUnion = useContract("union", optimism.id, Versions.V2);
-  const baseUnion = useContract("union", 8453, Versions.V2);
 
   return useContractReads({
     select: (data) => {
@@ -21,7 +20,6 @@ export function useGovernanceStats({ address }) {
         mainnetUnclaimed = ZERO,
         arbitrumBalance = ZERO,
         optimismBalance = ZERO,
-        baseBalance = ZERO,
       ] = data || [];
 
       return {
@@ -30,7 +28,6 @@ export function useGovernanceStats({ address }) {
         mainnetUnclaimed,
         arbitrumBalance,
         optimismBalance,
-        baseBalance,
       };
     },
     contracts: address
@@ -63,12 +60,6 @@ export function useGovernanceStats({ address }) {
             ...optimismUnion,
             functionName: "balanceOf",
             chainId: optimism.id,
-            args: [address],
-          },
-          {
-            ...baseUnion,
-            functionName: "balanceOf",
-            chainId: 8453,
             args: [address],
           },
         ]

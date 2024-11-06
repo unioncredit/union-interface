@@ -1,17 +1,17 @@
 import "./VouchLinkModal.scss";
 
 import {
+  Modal,
+  ModalOverlay,
   Box,
   Button,
   ButtonRow,
+  Select,
   Input,
   LinkIcon,
-  Modal,
-  ModalOverlay,
-  Select,
   ShareIcon,
-  TelegramIcon,
   TwitterIcon,
+  TelegramIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
@@ -40,7 +40,7 @@ export default function VouchLinkModal() {
 
   return (
     <ModalOverlay onClick={close}>
-      <Modal className="VouchLinkModal">
+      <Modal>
         <Modal.Header onClose={close} title="Your vouch link" />
         <Modal.Body>
           <AddressSummary address={address} />

@@ -1,18 +1,26 @@
-import { Box, Input, Modal, ModalOverlay, NumericalRows, SegmentedControl } from "@unioncredit/ui";
+import {
+  Dai,
+  Input,
+  Modal,
+  ModalOverlay,
+  Box,
+  SegmentedControl,
+  NumericalRows,
+} from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import format from "utils/format";
-import { Errors, StakeType, ZERO } from "constants";
+import { Errors, WAD } from "constants";
 import useForm from "hooks/useForm";
 import { min } from "utils/numbers";
+import { StakeType } from "constants";
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
 import { Approval } from "components/shared";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
-import Token from "components/Token";
-import { useToken } from "hooks/useToken";
+import { ZERO } from "constants";
 
 export const STAKE_MODAL = "stake-modal";
 
@@ -22,13 +30,11 @@ const toggleMenuOptions = [
 ];
 
 export default function StakeModal({ type: initialType = StakeType.STAKE }) {
-  const [type, setType] = useState(initialType);
-
   const { close } = useModals();
-  const { token, wad } = useToken();
   const { address } = useAccount();
   const { data: member } = useMember();
   const { data: protocol } = useProtocol();
+  const [type, setType] = useState(initialType);
 
   const userManagerContract = useContract("userManager");
 
@@ -37,19 +43,19 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
   const {
     stakedBalance = ZERO,
     totalLockedStake = ZERO,
-    tokenBalance = ZERO,
+    daiBalance = ZERO,
     maxStakeAmount = ZERO,
   } = { ...member, ...protocol };
 
   let userStakeLimit = maxStakeAmount.sub(stakedBalance);
   userStakeLimit = userStakeLimit.lte(0) ? ZERO : userStakeLimit;
 
-  const maxUserStake = min(userStakeLimit, tokenBalance);
+  const maxUserStake = min(userStakeLimit, daiBalance);
   const maxUserUnstake = stakedBalance.sub(totalLockedStake);
 
   const validateStake = (inputs) => {
-    if (inputs.amount.display !== "" && inputs.amount.raw.lt(wad)) {
-      return Errors.MIN_STAKE_LIMIT_REQUIRED(token);
+    if (inputs.amount.display !== "" && inputs.amount.raw.lt(WAD)) {
+      return Errors.MIN_STAKE_LIMIT_REQUIRED;
     }
     if (inputs.amount.raw.gt(userStakeLimit)) {
       return Errors.MAX_STAKE_LIMIT_EXCEEDED;
@@ -83,19 +89,19 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     type === StakeType.STAKE
       ? {
           label: "Amount to stake",
-          rightLabel: `Max. ${format(maxUserStake, token)} ${token}`,
+          rightLabel: `Max. ${format(maxUserStake)} DAI`,
           rightLabelAction: () => setRawValue("amount", maxUserStake, false),
         }
       : {
           label: "Amount to unstake",
-          rightLabel: `Max. ${format(maxUserUnstake, token)} ${token}`,
+          rightLabel: `Max. ${format(maxUserUnstake)} DAI`,
           rightLabelAction: () => setRawValue("amount", maxUserUnstake, false),
         };
 
   return (
     <ModalOverlay onClick={close}>
       <Modal className="StakeModal">
-        <Modal.Header onClose={close} title={`Stake or unstake ${token}`} />
+        <Modal.Header onClose={close} title="Stake or unstake DAI" />
         <Modal.Body>
           <SegmentedControl
             items={toggleMenuOptions}
@@ -110,7 +116,7 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             <Input
               type="number"
               placeholder="0"
-              suffix={<Token />}
+              suffix={<Dai />}
               error={errors.amount}
               value={amount.formatted}
               onChange={register("amount")}
@@ -123,32 +129,33 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             items={[
               {
                 label: "Currently staked",
-                value: `${format(stakedBalance, token)} ${token}`,
+                value: `${format(stakedBalance)} DAI`,
                 tooltip: {
-                  content: `Amount of ${token} you have staked in the protocol`,
+                  content: "Amount of DAI you have staked in the protocol",
                 },
               },
               {
                 label: "Your locked stake",
-                value: `${format(totalLockedStake, token)} ${token}`,
+                value: `${format(totalLockedStake)} DAI`,
                 tooltip: {
-                  content: `This is ${token} you cant withdraw because it is currently underwriting a Borrow you vouched for`,
+                  content:
+                    "This is DAI you cant withdraw because it is currently underwriting a Borrow you vouched for",
                 },
               },
               type === StakeType.STAKE
                 ? {
                     label: "Available to stake",
-                    value: `${format(maxUserStake, token)} ${token}`,
+                    value: `${format(maxUserStake)} DAI`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
                   }
                 : {
                     label: "Available to unstake",
-                    value: `${format(maxUserUnstake, token)} ${token}`,
+                    value: `${format(maxUserUnstake)} DAI`,
                     error: errors.amount === Errors.MAX_USER_BALANCE_EXCEEDED,
                   },
               type === StakeType.STAKE && {
                 label: "Staking limit",
-                value: `${format(maxStakeAmount, token)} ${token}`,
+                value: `${format(maxStakeAmount)} DAI`,
                 error: errors.amount === Errors.MAX_STAKE_LIMIT_EXCEEDED,
                 tooltip: {
                   content: "A contract defined maximum any one account can stake in the protocol",
@@ -162,14 +169,14 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
             amount={amount.raw}
             spender={userManagerContract.address}
             requireApproval={type === StakeType.STAKE}
-            tokenContract={token.toLowerCase()}
+            tokenContract="dai"
             actionProps={{
               args: [amount.raw],
               permitArgs: [amount.raw],
               enabled: !isErrored,
               contract: "userManager",
               method: type === StakeType.STAKE ? "stake" : "unstake",
-              label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${amount.display} ${token}`,
+              label: `${type === StakeType.STAKE ? "Stake" : "Unstake"} ${amount.display} DAI`,
             }}
           />
         </Modal.Body>

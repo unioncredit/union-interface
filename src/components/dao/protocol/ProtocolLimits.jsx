@@ -2,10 +2,8 @@ import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
 import { ZERO } from "constants";
 import format from "utils/format";
-import { useToken } from "hooks/useToken";
 
-export function ProtocolLimits({ protocol, chainId, ...props }) {
-  const { token } = useToken(chainId);
+export function ProtocolLimits({ protocol, ...props }) {
   const {
     minBorrow = ZERO,
     maxBorrow = ZERO,
@@ -16,19 +14,19 @@ export function ProtocolLimits({ protocol, chainId, ...props }) {
   const limits = [
     {
       title: "Min. Borrow",
-      value: format(minBorrow, token),
+      value: format(minBorrow),
     },
     {
       title: "Max. Borrow",
-      value: format(maxBorrow, token),
+      value: format(maxBorrow),
     },
     {
       title: "Max. Stake",
-      value: format(maxStakeAmount, token),
+      value: format(maxStakeAmount),
     },
     {
       title: "Global Max.",
-      value: format(debtCeiling, token),
+      value: format(debtCeiling),
     },
   ];
 
@@ -43,7 +41,7 @@ export function ProtocolLimits({ protocol, chainId, ...props }) {
         <Grid.Row style={{ marginTop: "16px" }}>
           {limits.map((item) => (
             <Grid.Col key={item.title}>
-              <NumericalBlock size="small" token={token.toLowerCase()} align="left" {...item} />
+              <NumericalBlock size="small" token="dai" align="left" {...item} />
             </Grid.Col>
           ))}
         </Grid.Row>

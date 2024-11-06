@@ -18,10 +18,8 @@ import { reduceBnSum } from "utils/reduce";
 import { useMemberData } from "providers/MemberData";
 import { ProfileStatusBadge } from "components/profile/ProfileStatusBadge";
 import { useCreditData } from "hooks/useCreditData";
-import { useToken } from "hooks/useToken";
 
 export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers }) => {
-  const { token } = useToken(chainId);
   const { data: member = {} } = useMemberData(address, chainId, getVersion(chainId));
   const { joinDate, borrowedVolume, repaidVolume, defaultedVolume } = useCreditData(
     address,
@@ -30,7 +28,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
 
   const { creditLimit = ZERO, owed = ZERO } = member;
 
-  const vouch = vouchers.map(({ vouch = ZERO }) => vouch).reduce(reduceBnSum, ZERO);
+  const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   const unavailableBalance = vouch.sub(creditLimit).sub(owed);
 
@@ -56,7 +54,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
         <Box mt="16px" justify="space-between">
           <Box direction="vertical">
             <Heading mb="2px" size="large" level={3}>
-              ${format(vouch, token, 0)}
+              ${format(vouch, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
               Credit limit
@@ -64,7 +62,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
           </Box>
           <Box direction="vertical" align="flex-end">
             <Heading mb="2px" size="large" level={3}>
-              ${format(owed, token, 0)}
+              ${format(owed, 0)}
             </Heading>
             <Text m={0} grey={500} size="medium">
               <Dot color="blue900" mr="4px" mb="1px" />

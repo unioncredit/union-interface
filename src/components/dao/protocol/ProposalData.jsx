@@ -9,25 +9,33 @@ export function ProposalData({ protocol, ...props }) {
   const data = [
     {
       title: "Quorum",
-      value: format(quorumVotes, "UNION", 0),
+      value: format(quorumVotes, 0),
       subtitle: "4% of supply",
     },
     {
       title: "Proposal Threshold",
-      value: format(proposalThreshold, "UNION", 0),
+      value: format(proposalThreshold, 0),
       subtitle: "1% of supply",
     },
   ];
 
   return (
     <Box direction="vertical" {...props}>
-      <ProtocolDataHeader title="Periods" subTitle="Time periods related to repayment of debts" />
+      <ProtocolDataHeader
+        title="Periods"
+        subTitle="Time periods related to repayment of debts"
+      />
 
       <Grid>
         <Grid.Row style={{ marginTop: "16px" }}>
           {data.map((item) => (
             <Grid.Col key={item.title}>
-              <NumericalBlock size="small" align="left" token="union" {...item} />
+              <NumericalBlock
+                size="small"
+                align="left"
+                token="union"
+                {...item}
+              />
             </Grid.Col>
           ))}
         </Grid.Row>

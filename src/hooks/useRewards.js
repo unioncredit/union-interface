@@ -1,13 +1,10 @@
-import { useNetwork } from "wagmi";
-
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
-import { BlocksPerYear, TOKENS, WAD, ZERO } from "constants";
-import { useToken } from "hooks/useToken";
+import { BlocksPerYear, WAD, ZERO } from "constants";
+import { useNetwork } from "wagmi";
 
 export default function useRewards() {
   const { chain } = useNetwork();
-  const { wad } = useToken();
 
   const { data: member } = useMember();
   const { data: protocol } = useProtocol();
@@ -25,23 +22,23 @@ export default function useRewards() {
 
   const estimatedDailyTotal = effectiveTotalStake.gt(ZERO)
     ? inflationPerSecond
-        .mul(wad)
+        .mul(WAD)
         .div(effectiveTotalStake)
         .mul(stakedBalance)
-        .div(wad)
+        .div(WAD)
         .mul(BlocksPerYear[chain.id])
         .div(365)
     : ZERO;
 
   const estimatedDailyBase = rewardsMultiplier.gt(ZERO)
-    ? estimatedDailyTotal.mul(WAD[TOKENS.UNION]).div(rewardsMultiplier)
+    ? estimatedDailyTotal.mul(WAD).div(rewardsMultiplier)
     : ZERO;
   const dailyDifference = estimatedDailyTotal.sub(estimatedDailyBase);
 
   return {
     unclaimed,
     estimatedDailyBase: rewardsMultiplier.gt(ZERO)
-      ? estimatedDailyTotal.mul(WAD[TOKENS.UNION]).div(rewardsMultiplier)
+      ? estimatedDailyTotal.mul(WAD).div(rewardsMultiplier)
       : ZERO,
     estimatedDailyTotal,
     estimatedDailyBonus: dailyDifference.gt(ZERO) ? dailyDifference : ZERO,

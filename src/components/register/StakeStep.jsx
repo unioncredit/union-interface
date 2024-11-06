@@ -30,13 +30,10 @@ import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { BlocksPerYear } from "constants";
 import useWrite from "hooks/useWrite";
-import { useToken } from "hooks/useToken";
 
 export default function StakeStep() {
   const { open } = useModals();
   const { chain } = useNetwork();
-  const { token, wad } = useToken();
-
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
 
@@ -54,19 +51,19 @@ export default function StakeStep() {
   const inflationPerUnit = inflationPerSecond || inflationPerBlock;
 
   const virtualBalance = unionBalance.add(unclaimedRewards);
-  const percentage = virtualBalance.gte(WAD["UNION"])
+  const percentage = virtualBalance.gte(WAD)
     ? 100
-    : Number(virtualBalance.mul(10000).div(WAD["UNION"])) / 100;
+    : Number(virtualBalance.mul(10000).div(WAD)) / 100;
 
   const unionEarned = unionBalance.add(unclaimedRewards);
   const effectiveTotalStake = totalStaked.sub(totalFrozen);
 
   const dailyEarnings = effectiveTotalStake.gt(ZERO)
     ? inflationPerUnit
-        .mul(wad)
+        .mul(WAD)
         .div(effectiveTotalStake)
         .mul(stakedBalance)
-        .div(wad)
+        .div(WAD)
         .mul(BlocksPerYear[chain.id])
         .div(365)
     : ZERO;
@@ -78,7 +75,7 @@ export default function StakeStep() {
   });
 
   const progressBarProps = useCallback(() => {
-    if (unionEarned.gte(WAD["UNION"])) {
+    if (unionEarned.gte(WAD)) {
       return {
         icon: CheckIcon,
         label: "Membership fee earned",
@@ -103,7 +100,7 @@ export default function StakeStep() {
 
     return {
       icon: WarningIcon,
-      label: `Deposit ${token} to start earning`,
+      label: "Deposit DAI to start earning",
     };
   }, [unionEarned, stakedBalance, percentage]);
 
@@ -111,10 +108,10 @@ export default function StakeStep() {
     <Card size="fluid" mb="24px">
       <Card.Body>
         <Heading level={2} size="large" grey={700}>
-          Stake {token} to provide credit to those you Trust
+          Stake DAI to provide credit to those you Trust
         </Heading>
         <Text grey={500} size="medium">
-          After registration, you can use this staked {token} to extend credit trusted contacts, and
+          After registration, you can use this staked DAI to extend credit trusted contacts, and
           continue to earn Union Tokens (UNION){" "}
           <a
             href="https://docs.union.finance/user-guides/becoming-a-member"
@@ -130,10 +127,10 @@ export default function StakeStep() {
             <NumericalBlock
               fluid
               align="left"
-              token={token.toLowerCase()}
+              token="dai"
               size="regular"
               title="Total Staked"
-              value={format(stakedBalance, token)}
+              value={format(stakedBalance)}
             />
             <NumericalBlock
               fluid
@@ -141,7 +138,7 @@ export default function StakeStep() {
               token="union"
               size="regular"
               title="Est. daily earnings"
-              value={format(dailyEarnings, "UNION")}
+              value={format(dailyEarnings)}
             />
             <NumericalBlock
               fluid
@@ -149,7 +146,7 @@ export default function StakeStep() {
               token="union"
               size="regular"
               title="UNION Earned"
-              value={format(unionEarned, "UNION", 4)}
+              value={format(unionEarned, 4)}
             />
           </Box>
 

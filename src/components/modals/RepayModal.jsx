@@ -5,6 +5,7 @@ import { BigNumber } from "ethers";
 import {
   Box,
   Text,
+  Dai,
   Grid,
   Input,
   Modal,
@@ -23,13 +24,11 @@ import { Approval } from "components/shared";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useContract from "hooks/useContract";
-import { ZERO, UNIT } from "constants";
+import { ZERO } from "constants";
 import format from "utils/format";
 import { useEffect, useState } from "react";
 import { Errors } from "constants";
 import { useVersion, Versions } from "providers/Version";
-import Token from "components/Token";
-import { useToken } from "hooks/useToken";
 
 export const REPAY_MODAL = "repay-modal";
 
@@ -40,20 +39,18 @@ const PaymentType = {
 };
 
 export default function RepayModal() {
-  const [paymentType, setPaymentType] = useState(null);
-
   const { close } = useModals();
   const { address } = useAccount();
   const { version } = useVersion();
   const { data: member } = useMember();
-  const { token, unit } = useToken();
+  const [paymentType, setPaymentType] = useState(null);
 
   const uTokenContract = useContract("uToken");
 
-  const { owed = ZERO, tokenBalance = ZERO, minPayment = ZERO } = member;
+  const { owed = ZERO, daiBalance = ZERO, minPayment = ZERO } = member;
 
   const validate = (inputs) => {
-    if (inputs.amount.raw.gt(tokenBalance)) {
+    if (inputs.amount.raw.gt(daiBalance)) {
       return Errors.INSUFFICIENT_BALANCE;
     }
   };
@@ -79,23 +76,25 @@ export default function RepayModal() {
   // Factor in a 0.005% margin for the max repay as we can no longer use MaxUint256.
   // If 0.005% of the balance owed is less than 0.01 we default to 0.01
   const margin = owed.div(50000);
-  const minMargin = BigNumber.from((10 ** unit / 100).toString());
+  const minMargin = BigNumber.from("10000000000000000");
   const owedBalanceWithMargin = owed.add(margin.lt(minMargin) ? minMargin : margin);
-  // The maximum amount the user can repay, either their total token balance
+
+  // The maximum amount the user can repay, either their total DAI balance
   // or their balance owed + 0.005% margin
-  const maxRepay = tokenBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : tokenBalance;
+  const maxRepay = daiBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : daiBalance;
+
   const options = [
     {
-      token: token.toLowerCase(),
-      value: format(maxRepay, token),
+      token: "dai",
+      value: format(maxRepay),
       amount: maxRepay,
       paymentType: PaymentType.MAX,
-      title: maxRepay.gte(owed) ? "Pay-off entire loan" : `Pay maximum ${token} available`,
+      title: maxRepay.gte(owed) ? "Pay-off entire loan" : "Pay maximum DAI available",
       content: maxRepay.gte(owed)
         ? "Make a payment equal to the outstanding balance"
         : "Make a payment with the maximum amount available in your wallet",
       tooltip: maxRepay.gte(owed) &&
-        format(maxRepay, token) !== format(owed, token) && {
+        format(maxRepay) !== format(owed) && {
           title: "Why is this more than my balance owed?",
           content:
             "As interest increases per block, when paying off the entire loan we factor in a small margin to ensure the transaction succeeds.",
@@ -103,9 +102,9 @@ export default function RepayModal() {
         },
     },
     {
-      value: format(minPayment, token),
+      value: format(minPayment),
       amount: minPayment,
-      token: token.toLowerCase(),
+      token: "dai",
       paymentType: PaymentType.MIN,
       title: "Pay minimum due",
       content: "Make the payment required to cover the interest due on your loan",
@@ -133,19 +132,19 @@ export default function RepayModal() {
               <Grid.Col xs={6}>
                 <NumericalBlock
                   mb="16px"
-                  token={token.toLowerCase()}
+                  token="dai"
                   size="regular"
                   title="Balance owed"
-                  value={format(owed, token)}
+                  value={format(owed)}
                 />
               </Grid.Col>
               <Grid.Col xs={6}>
                 <NumericalBlock
                   mb="16px"
-                  token={token.toLowerCase()}
+                  token="dai"
                   size="regular"
                   title="Due today"
-                  value={format(minPayment, token)}
+                  value={format(minPayment)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -167,9 +166,9 @@ export default function RepayModal() {
                 type="number"
                 name="amount"
                 label="Amount to repay"
-                rightLabel={`Max. ${format(maxRepay, token)}`}
+                rightLabel={`Max. ${format(maxRepay)}`}
                 rightLabelAction={() => setRawValue("amount", maxRepay, false)}
-                suffix={<Token />}
+                suffix={<Dai />}
                 placeholder="0.0"
                 value={amount.raw !== ZERO ? amount.formatted : ""}
                 error={isCustomSelected ? errors.amount : null}
@@ -210,19 +209,19 @@ export default function RepayModal() {
             items={[
               {
                 label: "Wallet balance",
-                value: `${format(tokenBalance, token)} ${token}`,
+                value: `${format(daiBalance)} DAI`,
                 error: errors.amount === Errors.INSUFFICIENT_BALANCE,
                 tooltip: {
-                  content: `How much ${token} you have in your connected wallet`,
+                  content: "How much DAI you have in your connected wallet",
                 },
               },
               {
                 label: "Next payment due",
-                value: `${format(minPayment, token)} ${token}`,
+                value: `${format(minPayment)} DAI`,
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed, token)} ${token}`,
+                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed)} DAI`,
                 tooltip: {
                   content:
                     "The total amount you will owe if this payment transaction is successful",
@@ -238,16 +237,16 @@ export default function RepayModal() {
             amount={amount.raw}
             spender={uTokenContract.address}
             requireApproval
-            tokenContract={token.toLowerCase()}
+            tokenContract="dai"
             actionProps={{
               args: version === Versions.V1 ? [amount.raw] : [address, amount.raw],
               permitArgs: [address, amount.raw],
               enabled: !isErrored,
               contract: "uToken",
               method: "repayBorrow",
-              label: `Repay ${amount.display} ${token}`,
+              label: `Repay ${amount.display} DAI`,
             }}
-            approvalLabel={`Approve Union to spend your ${token}`}
+            approvalLabel="Approve Union to spend your DAI"
             approvalCompleteLabel="You can now repay"
           />
         </Modal.Body>

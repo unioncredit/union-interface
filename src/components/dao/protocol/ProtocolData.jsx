@@ -12,7 +12,6 @@ import { useProtocolData } from "providers/ProtocolData";
 
 export default function ProtocolData() {
   const { chain: connectedChain } = useNetwork();
-
   const [network, setNetwork] = useState(
     allNetworks.find((network) => network.chainId === connectedChain?.id) || allNetworks[0]
   );
@@ -32,8 +31,8 @@ export default function ProtocolData() {
       />
 
       <Card.Body>
-        <ProtocolBalances protocol={protocol} chainId={network.chainId} />
-        <ProtocolLimits mt="16px" protocol={protocol} chainId={network.chainId} />
+        <ProtocolBalances protocol={protocol} />
+        <ProtocolLimits mt="16px" protocol={protocol} />
         <ProtocolFees mt="16px" protocol={protocol} chainId={network.chainId} />
         <ProtocolPeriods mt="16px" protocol={protocol} chainId={network.chainId} />
       </Card.Body>

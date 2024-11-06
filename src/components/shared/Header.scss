@@ -26,7 +26,7 @@
   .wallet.button,
   .Header__context-menu .PopoverMenu__button,
   .Header__hamburger {
-    margin-left: 4px;
+    margin-left: 4px
   }
 
   .grid-row {
@@ -83,22 +83,4 @@
       background-color: $grey100;
     }
   }
-}
-
-.toggle-label {
-  font-weight: 500;
-  font-size: 16px !important;
-  font-weight: 500;
-  margin-bottom: 0;
-  margin-right: 25px;
-
-  &--color {
-    &-secondary {
-      color: $grey600;
-    }
-  }
-}
-
-.PopoverMenu__after {
-  border-top: 1px solid $grey100;
 }

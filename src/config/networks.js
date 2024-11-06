@@ -27,7 +27,6 @@ export const supportedNetworks = [
     description: "Use Union on optimism mainnet",
     avatar: "/networks/optimism-avatar.png",
     chainId: 10,
-    token: "DAI",
     networkData: {
       chainId: "0xa",
     },
@@ -42,24 +41,8 @@ export const supportedNetworks = [
     description: "Use Union on Mainnet",
     avatar: "/networks/ethereum-avatar.png",
     chainId: 1,
-    token: "DAI",
     networkData: {
       chainId: "0x1",
-    },
-  },
-  {
-    type: "base",
-    id: "base",
-    imageSrc: "/networks/base-avatar.png",
-    value: "base",
-    label: "Base",
-    labelWithVersion: "Base (v2)",
-    description: "Use Union on base mainnet",
-    avatar: "/networks/base-avatar.png",
-    chainId: 8453,
-    token: "USDC",
-    networkData: {
-      chainId: "0x2105",
     },
   },
 ];
@@ -82,21 +65,6 @@ export const allNetworks = [
       chainId: "0xA4B1",
       rpcUrls: ["https://arb1.arbitrum.io/rpc"],
       chainName: "Arbitrum One",
-    },
-  },
-  {
-    type: "base-sepolia",
-    id: "base-sepolia",
-    imageSrc: "/networks/base-avatar.png",
-    value: "base-sepolia",
-    label: "Base Sepolia",
-    labelWithVersion: "Base Sepolia (v2)",
-    description: "Use Union on a testnet",
-    avatar: "/networks/base-avatar.png",
-    chainId: 84532,
-    token: "USDC",
-    networkData: {
-      chainId: "0x14A34",
     },
   },
 ];

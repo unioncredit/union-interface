@@ -15,7 +15,6 @@ export default async function fetchVoteCasts(version, chainId) {
     first: 200,
   };
 
-  if (!TheGraphUrls[version][chainId]) return [];
   const resp = await request(TheGraphUrls[version][chainId], query, variables);
 
   return resp.voteCasts.map((item) => item.voter);
