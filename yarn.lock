@@ -3401,10 +3401,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@unioncredit/data@^1.0.21":
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.21.tgz#ccfef95a5468e36d331f1e1d17152c1bb9b1561d"
-  integrity sha512-A6yj8dz7ilYXNsJ6UiL1Ev0RXiXtnROLwTLa5rF2USbUpJfgzve/h5EJov/AUiD5HN5cs7DLhmNB6AWglGlJGA==
+"@unioncredit/data@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@unioncredit/data/-/data-1.0.22.tgz#eeefd21a2ab57f5d8a5abbee2112665457e60647"
+  integrity sha512-kpiPpKjLWYC+eU7G34qI5NWSwW7VC1DEbNy75abB23w0K4j9MmjlA56UeSS0tX5wNSpOzUOYhGitzhprwyU+7g==
   dependencies:
     graphql "^16.5.0"
     graphql-request "^4.2.0"
