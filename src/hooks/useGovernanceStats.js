@@ -3,6 +3,7 @@ import useContract from "hooks/useContract";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 import { Versions } from "providers/Version";
+import { base } from "providers/Network";
 
 export function useGovernanceStats({ address }) {
   const mainnetDai = useContract("dai", mainnet.id, Versions.V1);
@@ -11,7 +12,7 @@ export function useGovernanceStats({ address }) {
 
   const arbitrumUnion = useContract("union", arbitrum.id, Versions.V1);
   const optimismUnion = useContract("union", optimism.id, Versions.V2);
-  const baseUnion = useContract("union", 8453, Versions.V2);
+  const baseUnion = useContract("union", base.id, Versions.V2);
 
   return useContractReads({
     select: (data) => {
@@ -68,7 +69,7 @@ export function useGovernanceStats({ address }) {
           {
             ...baseUnion,
             functionName: "balanceOf",
-            chainId: 8453,
+            chainId: base.id,
             args: [address],
           },
         ]

@@ -9,7 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@unioncredit/data": "^1.0.22",
-    "@unioncredit/ui": "2.0.42",
+    "@unioncredit/ui": "2.0.43",
     "@vercel/analytics": "^1.1.1",
     "@walletconnect/modal": "^2.5.8",
     "add-event-to-calendar": "^1.0.7",
