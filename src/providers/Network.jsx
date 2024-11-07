@@ -14,7 +14,7 @@ const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
-const base = {
+export const base = {
   id: 8453,
   name: "Base",
   network: "base",

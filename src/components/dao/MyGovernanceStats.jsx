@@ -1,18 +1,19 @@
 import "./MyGovernanceStats.scss";
 
 import {
-  Box,
-  Card,
-  Button,
-  Text,
-  NumericalBlock,
-  WarningIcon,
-  SwitchIcon,
   ArbitrumIcon,
+  BaseIcon,
+  Box,
+  Button,
+  Card,
   IconBadge,
-  SetupIcon,
   InfoBanner,
+  NumericalBlock,
   OptimismIcon,
+  SetupIcon,
+  SwitchIcon,
+  Text,
+  WarningIcon,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -41,6 +42,7 @@ export default function MyGovernanceStats() {
     mainnetUnclaimed = ZERO,
     arbitrumBalance = ZERO,
     optimismBalance = ZERO,
+    baseBalance,
   } = governance;
 
   const votesDelegated = mainnetVotes.sub(mainnetBalance);
@@ -96,17 +98,27 @@ export default function MyGovernanceStats() {
 
   const balances = [
     {
-      icon: ArbitrumIcon,
-      label: "Arbitrum Balance",
-      balance: arbitrumBalance,
-      token: "arbUNION",
-    },
-    {
       icon: OptimismIcon,
       label: "Optimism Balance",
       balance: optimismBalance,
       token: "opUNION",
     },
+    {
+      icon: BaseIcon,
+      label: "Base Balance",
+      balance: baseBalance,
+      token: "baseUNION",
+    },
+    ...(arbitrumBalance.gt(ZERO)
+      ? [
+          {
+            icon: ArbitrumIcon,
+            label: "Arbitrum Balance",
+            balance: arbitrumBalance,
+            token: "arbUNION",
+          },
+        ]
+      : []),
   ];
 
   return (

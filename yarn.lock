@@ -3411,10 +3411,10 @@
     jsdoc-to-markdown "^7.1.1"
     typescript "^4.6.4"
 
-"@unioncredit/ui@2.0.42":
-  version "2.0.42"
-  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.42.tgz#75b668245299eb78ecc4e14047cdd5902faef6d6"
-  integrity sha512-lH14P4nBTyYPDhWORGoUo9Hd+AABbeU1nchkKR02CA0ufaS/GGKof2Bws11vOV50AqT6+DrjcDXzVzpLQgkgKg==
+"@unioncredit/ui@2.0.43":
+  version "2.0.43"
+  resolved "https://registry.yarnpkg.com/@unioncredit/ui/-/ui-2.0.43.tgz#f62d2644f4f89213f69cc3d74307aa2ce6c935fd"
+  integrity sha512-v6vhK1Aims6MaXAZ2k5pgdg0uf6D4bNvrIZ0ZD5609Y9iU0arDtbFaAKQBu53q7csDkzHVUl9Gm/a4fgP3AZTg==
   dependencies:
     classnames "^2.3.1"
     react-animate-height "^3.0.4"
