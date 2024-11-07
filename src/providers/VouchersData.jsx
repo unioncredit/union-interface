@@ -8,6 +8,7 @@ import usePopulateEns from "hooks/usePopulateEns";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { compareAddresses } from "utils/compare";
 import { useVersion, Versions } from "./Version";
+import { useToken } from "hooks/useToken";
 
 const VouchersContext = createContext({});
 
@@ -39,8 +40,9 @@ const selectVoucher = (version) => (data) => {
 export const useVouchersData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();
   const { data: member = {} } = useMemberData(address, chainId, forcedVersion);
+  const { token } = useToken(chainId);
 
-  const daiContract = useContract("dai", chainId, forcedVersion);
+  const tokenContract = useContract(token.toLowerCase(), chainId, forcedVersion);
   const unionLensContract = useContract("unionLens", chainId, forcedVersion);
   const userManagerContract = useContract("userManager", chainId, forcedVersion);
 
@@ -62,7 +64,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
       : {
           ...unionLensContract,
           functionName: "getRelatedInfo",
-          args: [daiContract.address, staker, borrower],
+          args: [tokenContract.address, staker, borrower],
         },
   ];
 
@@ -92,7 +94,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
 
   useEffect(() => {
     if (
-      daiContract?.address &&
+      tokenContract?.address &&
       userManagerContract.address &&
       address &&
       stakerAddresses?.length > 0
@@ -100,7 +102,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
       resp.refetch();
     }
   }, [
-    daiContract?.address,
+    tokenContract?.address,
     userManagerContract.address,
     address,
     stakerAddresses?.length,

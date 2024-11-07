@@ -59,7 +59,7 @@ export default function WalletModal() {
               align="center"
               size="large"
               title={`Total ${chain.name} Balance`}
-              value={format(totalBalance)}
+              value={format(totalBalance, "UNION")}
               token="union"
             />
           </Box>

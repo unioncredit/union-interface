@@ -1,18 +1,19 @@
 import "./MyGovernanceStats.scss";
 
 import {
-  Box,
-  Card,
-  Button,
-  Text,
-  NumericalBlock,
-  WarningIcon,
-  SwitchIcon,
   ArbitrumIcon,
+  BaseIcon,
+  Box,
+  Button,
+  Card,
   IconBadge,
-  SetupIcon,
   InfoBanner,
+  NumericalBlock,
   OptimismIcon,
+  SetupIcon,
+  SwitchIcon,
+  Text,
+  WarningIcon,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { mainnet } from "wagmi/chains";
@@ -41,6 +42,7 @@ export default function MyGovernanceStats() {
     mainnetUnclaimed = ZERO,
     arbitrumBalance = ZERO,
     optimismBalance = ZERO,
+    baseBalance,
   } = governance;
 
   const votesDelegated = mainnetVotes.sub(mainnetBalance);
@@ -52,7 +54,7 @@ export default function MyGovernanceStats() {
   const governanceStats = [
     {
       title: "Your voting power",
-      value: format(mainnetVotes),
+      value: format(mainnetVotes, "UNION"),
       subtitle: isVotingConfigured
         ? isDelegatingToSelf
           ? "Wallet + Delegation"
@@ -63,12 +65,12 @@ export default function MyGovernanceStats() {
     {
       token: "union",
       title: "Wallet balance",
-      value: format(mainnetBalance),
-      subtitle: `${format(mainnetUnclaimed)} unclaimed`,
+      value: format(mainnetBalance, "UNION"),
+      subtitle: `${format(mainnetUnclaimed, "UNION")} unclaimed`,
     },
     {
       title: "Delegated to you",
-      value: format(votesDelegated),
+      value: format(votesDelegated, "UNION"),
       subtitle: "From other addresses",
       className: !isVotingConfigured && "MyGovernanceStats__block--dimmed",
     },
@@ -96,17 +98,27 @@ export default function MyGovernanceStats() {
 
   const balances = [
     {
-      icon: ArbitrumIcon,
-      label: "Arbitrum Balance",
-      balance: arbitrumBalance,
-      token: "arbUNION",
-    },
-    {
       icon: OptimismIcon,
       label: "Optimism Balance",
       balance: optimismBalance,
       token: "opUNION",
     },
+    {
+      icon: BaseIcon,
+      label: "Base Balance",
+      balance: baseBalance,
+      token: "baseUNION",
+    },
+    ...(arbitrumBalance.gt(ZERO)
+      ? [
+          {
+            icon: ArbitrumIcon,
+            label: "Arbitrum Balance",
+            balance: arbitrumBalance,
+            token: "arbUNION",
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -166,7 +178,7 @@ export default function MyGovernanceStats() {
             </Box>
 
             <Text m={0} grey={700} size="medium" weight="medium">
-              {`${format(balance)} ${token}`}
+              {`${format(balance, "UNION")} ${token}`}
             </Text>
           </Box>
         ))}

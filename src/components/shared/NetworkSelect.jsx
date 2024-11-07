@@ -12,7 +12,6 @@ export function NetworkSelect() {
   const { setVersion } = useVersion();
   const { switchNetworkAsync } = useSwitchNetwork();
   const { connected: isSupportedNetwork } = useSupportedNetwork();
-
   const isMainnet = chain?.id === mainnet.id;
 
   const availableNetworks = supportedNetworks.filter((x) =>

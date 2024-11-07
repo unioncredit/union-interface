@@ -8,8 +8,8 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@unioncredit/data": "^1.0.21",
-    "@unioncredit/ui": "2.0.42",
+    "@unioncredit/data": "^1.0.22",
+    "@unioncredit/ui": "2.0.43",
     "@vercel/analytics": "^1.1.1",
     "@walletconnect/modal": "^2.5.8",
     "add-event-to-calendar": "^1.0.7",
@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "^8.40.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0"

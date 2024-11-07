@@ -1,6 +1,5 @@
 import {
   Button,
-  Dai,
   Input,
   Text,
   Modal,
@@ -19,6 +18,8 @@ import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
 import { useAccount } from "wagmi";
+import Token from "components/Token";
+import { useToken } from "hooks/useToken";
 
 export const WRITE_OFF_DEBT_MODAL = "write-off-debt-modal";
 
@@ -33,7 +34,7 @@ export default function WriteOffDebtModal({
   const { address: connectedAddress } = useAccount();
   const { close, open } = useModals();
   const { refetch: refetchVouchees } = useVouchees();
-
+  const { token } = useToken();
   const vouchee = useVouchee(address);
 
   const { locking = ZERO, isOverdue } = vouchee;
@@ -82,7 +83,12 @@ export default function WriteOffDebtModal({
         </Modal.Header>
         <Modal.Body>
           <Modal.Container direction="vertical">
-            <NumericalBlock align="left" token="dai" title="Balance owed" value={format(locking)} />
+            <NumericalBlock
+              align="left"
+              token={token.toLowerCase()}
+              title="Balance owed"
+              value={format(locking, token)}
+            />
 
             <Input
               mt="16px"
@@ -92,9 +98,9 @@ export default function WriteOffDebtModal({
               error={errors.amount}
               value={amount.display}
               onChange={register("amount")}
-              rightLabel={`Max. ${format(locking)} DAI`}
+              rightLabel={`Max. ${format(locking, token)} ${token}`}
               rightLabelAction={() => setRawValue("amount", locking, false)}
-              suffix={<Dai />}
+              suffix={<Token />}
             />
 
             <NumericalRows
@@ -102,7 +108,7 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw))} DAI`,
+                  value: `${format(locking.sub(amount.raw), token)} ${token}`,
                 },
               ]}
             />
