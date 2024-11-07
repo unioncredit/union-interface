@@ -1,5 +1,5 @@
 import { formatUnits } from "ethers/lib/utils";
-import { UNIT, DUST_THRESHOLD, ZERO } from "constants";
+import { DUST_THRESHOLD, UNIT, ZERO } from "constants";
 import { BigNumber } from "ethers";
 
 export default function format(
@@ -60,7 +60,7 @@ export function commify(num, digits, rounded = true, stripTrailingZeros = false)
   return rhs ? `${lhs}.${rhs}` : lhs;
 }
 
-export const formatScientific = (value, digits = 2) => {
+export const formatScientific = (value, unit, digits = 2) => {
   if (!value) {
     value = 0;
   }
@@ -68,7 +68,7 @@ export const formatScientific = (value, digits = 2) => {
   // Parsed JSON response formats the bigints in scientific notation, we need to
   // expand into its full form.
   const expanded = expandToString(value);
-  const formatted = commify(formatUnits(expanded), digits);
+  const formatted = commify(formatUnits(expanded, unit), digits);
   if (value > 0 && formatted === "0.0000") {
     return "<0.0001";
   }

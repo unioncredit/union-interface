@@ -47,7 +47,7 @@ export const DataApiNetworks = {
   [mainnet.id]: "mainnet",
   [optimism.id]: "optimism-mainnet",
   [arbitrum.id]: "arbitrum-mainnet",
-  [8453]: "base",
+  [8453]: "base-mainnet",
 };
 
 export const StakeType = {

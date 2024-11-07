@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useAccount, useBalance, useBlockNumber } from "wagmi";
+import { useAccount, useBalance, useBlockNumber, useNetwork } from "wagmi";
 import { optimism } from "wagmi/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
@@ -10,6 +10,7 @@ import { useProtocolData } from "providers/ProtocolData";
 import { DataApiStatusBadge } from "components/shared/DataApiStatusBadge";
 import { GiftMembershipButton } from "components/shared/GiftMembershipButton";
 import { ConnectButton } from "components/shared";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   CREDIT_LIMIT: {
@@ -35,7 +36,9 @@ export const NovicesBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { isConnected, chain: connectedChain, address: connectedAddress } = useAccount();
+  const { unit } = useToken();
+  const { chain: connectedChain } = useNetwork();
+  const { isConnected, address: connectedAddress } = useAccount();
   const chainId = connectedChain?.id || optimism.id;
 
   const { data: blockNumber } = useBlockNumber({
@@ -83,7 +86,7 @@ export const NovicesBoard = () => {
 
       return [
         address,
-        formatScientific(contracts.credit_limit),
+        formatScientific(contracts.credit_limit, unit),
         contracts.vouches.number_received,
         <DataApiStatusBadge
           key={address}
