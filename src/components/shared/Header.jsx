@@ -11,15 +11,16 @@ import {
   UnionIcon,
   UnionNavIcon,
   HamburgerIcon,
+  Toggle,
 } from "@unioncredit/ui";
 import { useState } from "react";
 import { useAccount, useNetwork, mainnet } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
-
 import { ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
+import { useSettings } from "providers/Settings";
 import { items, contextMenuItems } from "config/navigation";
 import { ConnectButton, HeaderMobileMenu, NetworkSelect } from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
@@ -35,6 +36,7 @@ export function Header({ loading, showNav = true }) {
   const { data: member = {} } = useMember();
   const { width } = useWindowDimensions();
   const setScrollLock = useScrollLock();
+  const { settings, setSetting } = useSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -57,6 +59,10 @@ export function Header({ loading, showNav = true }) {
       ))}
     </Box>
   );
+
+  const showTestNets = () => {
+    setSetting("showTestnets", !settings.showTestnets);
+  };
 
   return (
     <Box className="Header">
@@ -104,7 +110,6 @@ export function Header({ loading, showNav = true }) {
                       variant="light"
                       className="UnionWallet"
                       onClick={() => open(WALLET_MODAL)}
-                      label={format(unclaimedRewards.add(unionBalance))}
                     />
                   )}
                   <ConnectButton />
@@ -113,6 +118,17 @@ export function Header({ loading, showNav = true }) {
                       className="Header__context-menu"
                       position="left"
                       items={contextMenuItems}
+                      after={
+                        <Toggle
+                          active={settings.showTestnets}
+                          color="secondary"
+                          label="Show TestNets"
+                          labelPosition="start"
+                          onChange={() => {
+                            showTestNets();
+                          }}
+                        />
+                      }
                     />
                   ) : (
                     <Button

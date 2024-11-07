@@ -4,13 +4,7 @@ import cn from "classnames";
 import format from "utils/format";
 import useMemberSummary from "hooks/useMemberSummary";
 
-export const NetworkSelectOption = ({
-  address,
-  network,
-  active,
-  disabled,
-  onClick,
-}) => {
+export const NetworkSelectOption = ({ address, network, token, active, disabled, onClick }) => {
   const { label, value, avatar, description, chainId } = network;
   const { data } = useMemberSummary(address, chainId);
 
@@ -26,12 +20,7 @@ export const NetworkSelectOption = ({
       })}
     >
       <Box align="center" h="64px">
-        <Box
-          fluid
-          p="12px"
-          className="NetworkSelectOption__contentBox"
-          align="center"
-        >
+        <Box fluid p="12px" className="NetworkSelectOption__contentBox" align="center">
           <Box justify="center" mr="16px">
             <Avatar size={40} src={avatar} />
           </Box>
@@ -41,14 +30,12 @@ export const NetworkSelectOption = ({
             </Text>
 
             <Box align="center">
-              {data.isMember && (
-                <CheckIcon className="NetworkSelectOption__check" />
-              )}
+              {data.isMember && <CheckIcon className="NetworkSelectOption__check" />}
 
               <Text grey={600} m={0} pr="8px" size="small">
                 {address
                   ? data.isMember
-                    ? `Member · ${format(data.creditLimit)} DAI available`
+                    ? `Member · ${format(data.creditLimit, token)} ${token} available`
                     : "Not a member"
                   : description}
               </Text>

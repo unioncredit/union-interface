@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Dai,
   Grid,
   Input,
   Modal,
@@ -11,20 +10,22 @@ import {
   NumericalRows,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
-
+import { BigNumber } from "ethers";
 import format from "utils/format";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import useFirstPaymentDueDate from "hooks/useFirstPaymentDueDate";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { ZERO, Errors, WAD } from "constants";
+import { ZERO, Errors } from "constants";
 import { useProtocol } from "providers/ProtocolData";
+import { useToken } from "hooks/useToken";
 import {
   calculateExpectedMinimumPayment,
   calculateInterestRate,
   calculateMaxBorrow,
 } from "utils/numbers";
+import Token from "components/Token";
 
 export const BORROW_MODAL = "borrow-modal";
 
@@ -34,6 +35,7 @@ export default function BorrowModal() {
   const { address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
+  const { token, unit, wad } = useToken();
   const firstPaymentDueDate = useFirstPaymentDueDate();
 
   const {
@@ -55,7 +57,7 @@ export default function BorrowModal() {
     } else if (inputs.amount.raw.gt(creditLimit)) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
     } else if (inputs.amount.raw.lt(minBorrow)) {
-      return Errors.MIN_BORROW(minBorrow);
+      return Errors.MIN_BORROW(minBorrow, token);
     } else if (inputs.amount.raw.gt(getLoanableAmount)) {
       return Errors.INSUFFICIENT_FUNDS;
     }
@@ -67,13 +69,21 @@ export default function BorrowModal() {
 
   const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
-  const fee = amount.raw.mul(originationFee).div(WAD);
+  const fee = amount.raw.mul(originationFee).div(BigNumber.from("1000000000000000000"));
 
   const borrow = amount.raw.add(fee);
 
   const newOwed = borrow.add(owed);
 
-  const minPayment = calculateExpectedMinimumPayment(borrow, borrowRatePerBlock, overdueTime);
+  const minPayment = calculateExpectedMinimumPayment(
+    borrow.add(owed),
+    borrowRatePerUnit,
+    overdueTime,
+    unit,
+    wad
+  );
+
+  console.log({ minPayment });
 
   const buttonProps = useWrite({
     contract: "uToken",
@@ -85,7 +95,6 @@ export default function BorrowModal() {
       close();
     },
   });
-
   /*--------------------------------------------------------------
     Render Component 
    --------------------------------------------------------------*/
@@ -93,7 +102,7 @@ export default function BorrowModal() {
   return (
     <ModalOverlay onClick={close}>
       <Modal className="BorrowModal">
-        <Modal.Header title="Borrow DAI" onClose={close} />
+        <Modal.Header title={`Borrow ${token}`} onClose={close} />
         <Modal.Body>
           {/*--------------------------------------------------------------
             Stats Before 
@@ -102,18 +111,18 @@ export default function BorrowModal() {
             <Grid.Row>
               <Grid.Col>
                 <NumericalBlock
-                  token="dai"
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Available to borrow"
-                  value={format(creditLimit, 2, false)}
+                  value={format(creditLimit, token, 2, false)}
                 />
               </Grid.Col>
               <Grid.Col>
                 <NumericalBlock
-                  token="dai"
+                  token={token.toLowerCase()}
                   size="regular"
                   title="Balance owed"
-                  value={format(owed)}
+                  value={format(owed, token)}
                 />
               </Grid.Col>
             </Grid.Row>
@@ -126,9 +135,9 @@ export default function BorrowModal() {
               type="number"
               name="amount"
               label="Amount to borrow"
-              rightLabel={`Max. ${format(maxBorrow)} DAI`}
+              rightLabel={`Max. ${format(maxBorrow, token)} ${token}`}
               rightLabelAction={() => setRawValue("amount", maxBorrow, false)}
-              suffix={<Dai />}
+              suffix={<Token />}
               placeholder="0.0"
               error={errors.amount}
               value={amount.formatted}
@@ -144,7 +153,8 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id).mul(100)
+                  calculateInterestRate(borrowRatePerUnit, chain.id, unit).mul(100),
+                  token
                 )}% APR`,
                 tooltip: {
                   content: "The interest rate accrued over a 12 month borrow period",
@@ -152,14 +162,14 @@ export default function BorrowModal() {
               },
               {
                 label: "Total incl. origination fee",
-                value: `${format(borrow)} DAI`,
+                value: `${format(borrow, token)} ${token}`,
                 tooltip: {
                   content: "Total amount borrowed including fee",
                 },
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed)} DAI`,
+                value: `${format(newOwed, token)} ${token}`,
                 tooltip: {
                   content: "The total amount you will owe if this borrow transaction is successful",
                 },
@@ -169,7 +179,7 @@ export default function BorrowModal() {
                 value:
                   amount.raw.lte(0) && owed.lte(0)
                     ? "N/A"
-                    : `${format(minPayment)} DAI · ${firstPaymentDueDate}`,
+                    : `${format(minPayment, token)} ${token} · ${firstPaymentDueDate}`,
                 tooltip: {
                   content:
                     "The amount and date of your next minimum payment in order to not enter a default state",
@@ -185,7 +195,7 @@ export default function BorrowModal() {
             mt="16px"
             size="large"
             icon={BorrowIcon}
-            label={`Borrow ${amount.display} DAI`}
+            label={`Borrow ${amount.display} ${token}`}
             disabled={amount.raw.lte(ZERO)}
             {...buttonProps}
           />
