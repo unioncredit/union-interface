@@ -1,4 +1,5 @@
 import {
+  BorrowIcon,
   Box,
   Button,
   Grid,
@@ -6,7 +7,6 @@ import {
   Modal,
   ModalOverlay,
   NumericalBlock,
-  BorrowIcon,
   NumericalRows,
 } from "@unioncredit/ui";
 import { useAccount, useNetwork } from "wagmi";
@@ -17,7 +17,7 @@ import useWrite from "hooks/useWrite";
 import useFirstPaymentDueDate from "hooks/useFirstPaymentDueDate";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { ZERO, Errors } from "constants";
+import { Errors, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 import { useToken } from "hooks/useToken";
 import {
@@ -82,8 +82,6 @@ export default function BorrowModal() {
     unit,
     wad
   );
-
-  console.log({ minPayment });
 
   const buttonProps = useWrite({
     contract: "uToken",

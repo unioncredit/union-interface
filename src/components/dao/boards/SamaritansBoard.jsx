@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { useAccount } from "wagmi";
+import { useNetwork } from "wagmi";
 import { optimism } from "wagmi/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
 import { useUnionDataApi } from "hooks/useUnionDataApi";
 import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   TOTAL_STAKE: {
@@ -29,7 +30,8 @@ export const SamaritansBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { chain } = useAccount();
+  const { unit } = useToken();
+  const { chain } = useNetwork();
 
   const sortQuery = useMemo(
     () => ({
@@ -55,8 +57,8 @@ export const SamaritansBoard = () => {
 
       return [
         address,
-        formatScientific(contracts.stake.total),
-        formatScientific(contracts.stake.locked),
+        formatScientific(contracts.stake.total, unit),
+        formatScientific(contracts.stake.locked, unit),
         contracts.vouches.number_given,
       ];
     }) || [];

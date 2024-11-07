@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useAccount } from "wagmi";
+import { useNetwork } from "wagmi";
 import { optimism } from "wagmi/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
@@ -29,7 +29,7 @@ export const MostTrustedBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { chain } = useAccount();
+  const { chain } = useNetwork();
 
   const sortQuery = useMemo(
     () => ({
@@ -39,12 +39,16 @@ export const MostTrustedBoard = () => {
     [sort]
   );
 
+  console.log({ chain });
+
   const { data: response = [] } = useUnionDataApi({
     network: DataApiNetworks[chain?.id] || DataApiNetworks[optimism.id],
     page,
     size: LEADERBOARD_PAGE_SIZE,
     sort: sortQuery,
   });
+
+  console.log({ response });
 
   const { pagination, items } = response;
 
