@@ -1,4 +1,4 @@
-import { BlocksPerYear, WAD, UNIT, ZERO } from "constants";
+import { BlocksPerYear, TOKENS, WAD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 
@@ -78,13 +78,13 @@ export const calculateExpectedMinimumPayment = (
   borrowAmount,
   borrowRatePerBlock,
   overdueBlocks,
-  unit,
-  wad
+  unit
 ) => {
-  console.log({ borrowAmount, borrowRatePerBlock, overdueBlocks, unit, wad });
-
   const floor = parseUnits("0.01", unit);
-  const minimumPayment = borrowAmount.mul(borrowRatePerBlock).mul(overdueBlocks).div(wad);
-  console.log({ minimumPayment });
+  const minimumPayment = borrowAmount
+    .mul(borrowRatePerBlock)
+    .mul(overdueBlocks)
+    .div(WAD[TOKENS.DAI]);
+
   return minimumPayment.lt(floor) ? floor : minimumPayment;
 };
