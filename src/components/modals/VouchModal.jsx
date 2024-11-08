@@ -2,20 +2,18 @@ import "./VouchModal.scss";
 
 import React, { useState } from "react";
 import {
+  AddIcon,
+  Box,
+  Button,
   ExpandingInfo,
+  HiddenInput,
+  Input,
   Modal,
   ModalOverlay,
-  Input,
-  Dai,
-  Usdc,
-  Button,
-  Box,
-  WarningIcon,
-  Text,
-  HiddenInput,
-  AddIcon,
   NumericalRows,
+  Text,
   VouchIcon,
+  WarningIcon,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -29,7 +27,6 @@ import { useVouchees } from "providers/VoucheesData";
 import { SECONDS_PER_DAY, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 import Token from "components/Token";
-import { useSettings } from "providers/Settings";
 
 export const VOUCH_MODAL = "vouch-modal";
 

@@ -14,7 +14,8 @@ const empty = {
 
 const formatValue = (value, token, rounded) => format(value, token, 2, rounded).replace(/,/g, "");
 
-export default function useForm({ validate }) {
+export default function useForm(props = {}) {
+  const { validate } = props;
   const { token, unit } = useToken();
 
   const [values, setValues] = useState({});
