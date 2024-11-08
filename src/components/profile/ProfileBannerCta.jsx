@@ -118,6 +118,19 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
             ...registerButtonProps,
           },
         }
+    : connectedAddress === address
+    ? {
+        title: `Not a member`,
+        content: `Your account ${
+          connectedCreditLimit.gt(ZERO) ? `has $${format(connectedCreditLimit)} in credit and ` : ""
+        } is ready to enjoy all the benefits of being a union credit network member.`,
+        buttonProps: {
+          label: "Get started",
+          onClick: () => {
+            navigate("/");
+          },
+        },
+      }
     : {
         title: `Become a member to back ${name}`,
         content: `Register your address to access ${
