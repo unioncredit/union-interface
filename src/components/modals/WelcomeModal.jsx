@@ -1,13 +1,13 @@
 import "./WelcomeModal.scss";
 import {
-  Text,
-  Modal,
   Box,
   Button,
-  ModalOverlay,
-  Heading,
-  TwitterIcon,
   ConfettiIcon,
+  Heading,
+  Modal,
+  ModalOverlay,
+  Text,
+  TwitterIcon,
 } from "@unioncredit/ui";
 import React, { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
@@ -91,7 +91,7 @@ export default function WelcomeModal({ onClose }) {
               {format(creditLimit, token)} {token}
             </Text>
 
-            <Box fluid mt="24px">
+            <Box className="ShareButtons" fluid mt="24px">
               <Button
                 fluid
                 as="a"
