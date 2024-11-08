@@ -35,7 +35,7 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
   const chainId = chainIdProp || chain?.id;
   const label = getLabel(address);
   const primaryLabel =
-    AddressEnsMappings[address.toLowerCase()] || label || ensName || truncateAddress(address);
+    label || AddressEnsMappings[address.toLowerCase()] || ensName || truncateAddress(address);
 
   const [copied, copy] = useCopyToClipboard();
   const [labelText, setLabelText] = useState(primaryLabel);
@@ -135,7 +135,6 @@ export function AddressSummary({ address, chainId: chainIdProp, allowEdit = fals
                 onClick={
                   editMode
                     ? () => {
-                        alert(0);
                         handleSave();
                       }
                     : () => {
