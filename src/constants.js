@@ -1,7 +1,8 @@
 import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
-import format from "./utils/format";
+import format from "utils/format";
+import { base } from "providers/Network";
 
 export const ZERO = BigNumber.from(0);
 
@@ -120,7 +121,7 @@ export const TheGraphUrls = {
   },
   [Versions.V2]: {
     [optimism.id]: "https://api.studio.thegraph.com/query/78581/union-finance/version/latest",
-    [8453]: "",
+    [base.id]: "https://api.studio.thegraph.com/query/78581/union-v2-base/version/latest",
   },
 };
 

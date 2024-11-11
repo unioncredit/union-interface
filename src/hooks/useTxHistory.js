@@ -1,4 +1,4 @@
-import { mainnet, useNetwork, useContractEvent } from "wagmi";
+import { mainnet, useContractEvent, useNetwork } from "wagmi";
 import { ZERO_ADDRESS } from "constants";
 import { useEffect, useState } from "react";
 import useContract from "hooks/useContract";
@@ -9,11 +9,12 @@ import fetchUTokenTransactions from "fetchers/fetchUTokenTransactions";
 import fetchRegisterTransactions from "fetchers/fetchRegisterTransactions";
 
 export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_ADDRESS }) {
-  const cacheKey = `useTxHistory__${staker}___${borrower}`;
-
   const { chain } = useNetwork();
   const { version } = useVersion();
   const { cache, cached } = useCache();
+
+  const cacheKey = `useTxHistory__${staker}___${borrower}__${chain?.network}`;
+
   const [data, setData] = useState(cached(cacheKey) || []);
   const [loading, setLoading] = useState(true);
   const uTokenManager = useContract("uToken", chain?.id ?? mainnet.id);
