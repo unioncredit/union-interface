@@ -1,6 +1,7 @@
-import { BlocksPerYear, WAD, UNIT, ZERO } from "constants";
+import { BlocksPerYear, SECONDS_PER_YEAR, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
+import { getVersion, Versions } from "providers/Version";
 
 export const min = (a, b) => {
   return a.gt(b) ? b : a;
@@ -71,7 +72,11 @@ export const calculateMinPayment = (interest, unit) => {
 };
 
 export const calculateInterestRate = (borrowRatePerUnit, chainId, unit) => {
-  return borrowRatePerUnit.mul(BlocksPerYear[chainId]).div(10 ** (18 - unit));
+  const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
+
+  return borrowRatePerUnit
+    .mul(versioned(BlocksPerYear[chainId], SECONDS_PER_YEAR))
+    .div(10 ** (18 - unit));
 };
 
 export const calculateExpectedMinimumPayment = (
