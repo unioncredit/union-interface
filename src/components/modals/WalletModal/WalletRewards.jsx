@@ -1,4 +1,4 @@
-import { Badge, Box, EthereumIcon, NewMemberIcon, Text } from "@unioncredit/ui";
+import { Badge, Box, EthereumIcon, NewMemberIcon, Skeleton, Text } from "@unioncredit/ui";
 import { useAccount } from "wagmi";
 import { useFunionPoints } from "../../../hooks/useFunionPoints";
 import { useEthEarned } from "../../../hooks/useEthEarned";
@@ -34,7 +34,11 @@ export const WalletRewards = () => {
           </Text>
         </Box>
 
-        <Badge label={`${points} points`} color="grey" />
+        {pointsLoading ? (
+          <Skeleton width={80} height={28} shimmer />
+        ) : (
+          <Badge label={`${points} points`} color="grey" />
+        )}
       </Box>
 
       <Box mt="12px" justify="space-between" align="center" fluid>
@@ -45,7 +49,11 @@ export const WalletRewards = () => {
           </Text>
         </Box>
 
-        <Badge label={`${format(ethEarned, "DAI", 4, false, false, false)} ETH`} color="grey" />
+        {ethEarnedLoading ? (
+          <Skeleton width={80} height={28} shimmer />
+        ) : (
+          <Badge label={`${format(ethEarned, "DAI", 4, false, false, false)} ETH`} color="grey" />
+        )}
       </Box>
     </Box>
   );
