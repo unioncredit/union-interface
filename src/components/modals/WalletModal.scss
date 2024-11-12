@@ -1,0 +1,16 @@
+@import "@unioncredit/ui/src/variables";
+
+.WalletModal {
+  .PointsLeaderboardButton {
+    color: white;
+    background: $purple600;
+
+    &:hover {
+      background: $purple500;
+    }
+
+    path {
+      fill: white;
+    }
+  }
+}

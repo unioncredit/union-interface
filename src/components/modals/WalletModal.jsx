@@ -1,14 +1,16 @@
+import "./WalletModal.scss";
+
 import {
   Box,
   Button,
+  ChartIcon,
   ClaimIcon,
-  GovernanceIcon,
+  LockIcon,
   Modal,
   ModalOverlay,
   NumericalBlock,
   NumericalRows,
   Tooltip,
-  LockIcon,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
@@ -16,14 +18,22 @@ import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
-import { Link } from "react-router-dom";
-import { useNetwork } from "wagmi";
+import { useWatchAsset } from "hooks/useWatchAsset";
+import useContract from "../../hooks/useContract";
+import { mainnet } from "wagmi/chains";
+import { getVersion } from "../../providers/Version";
+import { useAccount, useNetwork } from "wagmi";
+import { WalletReferralCta } from "./WalletModal/WalletReferralCta";
+import { WalletRewards } from "./WalletModal/WalletRewards";
 
 export const WALLET_MODAL = "wallet-modal";
 
 export default function WalletModal() {
-  const { close } = useModals();
+  const { open: openModal, close } = useModals();
+  const { watchAsset } = useWatchAsset();
   const { chain } = useNetwork();
+  const { address } = useAccount();
+  const union = useContract("union", mainnet.id, getVersion(mainnet.id));
 
   const { data: member = {}, refetch } = useMember();
 
@@ -54,13 +64,22 @@ export default function WalletModal() {
       <Modal className="WalletModal">
         <Modal.Header title="UNION Balance" onClose={close} />
         <Modal.Body>
-          <Box justify="center">
+          <Box justify="space-between">
             <NumericalBlock
-              align="center"
+              align="left"
               size="large"
-              title={`Total ${chain.name} Balance`}
+              title={`Current Balance`}
               value={format(totalBalance, "UNION")}
               token="union"
+            />
+
+            <Button
+              mt="2px"
+              size="pill"
+              variant="light"
+              color="secondary"
+              label="+ Add token to wallet"
+              onClick={() => watchAsset({ address: union.address })}
             />
           </Box>
 
@@ -95,16 +114,18 @@ export default function WalletModal() {
 
           <Button
             fluid
-            as={Link}
             mt="8px"
             size="large"
             color="secondary"
             variant="light"
-            label="Union Governance"
-            to="/governance"
-            icon={GovernanceIcon}
-            onClick={close}
+            label="Points Leaderboard"
+            className="PointsLeaderboardButton"
+            icon={ChartIcon}
+            onClick={() => open("https://www.stack.so/leaderboard/union-points-program")}
           />
+
+          <WalletRewards />
+          <WalletReferralCta />
         </Modal.Body>
       </Modal>
     </ModalOverlay>
