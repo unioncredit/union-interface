@@ -26,7 +26,7 @@ import { useSupportedNetwork } from "hooks/useSupportedNetwork";
 
 export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 
-export default function ShareReferralModal({ address, chainId }) {
+export default function ShareReferralModal({ address, chainId, onBack }) {
   const { close } = useModals();
   const { supportedNetworks } = useSupportedNetwork();
   const { address: connectedAddress } = useAccount();
@@ -47,7 +47,7 @@ export default function ShareReferralModal({ address, chainId }) {
   return (
     <ModalOverlay onClick={close}>
       <Modal>
-        <Modal.Header onClose={close} title="Share" />
+        <Modal.Header onClose={close} title="Share" onBack={onBack} />
         <Modal.Body>
           <AddressSummary address={address} chainId={chainId} />
 
