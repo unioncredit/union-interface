@@ -1,6 +1,15 @@
 import "./TransactionHistory.scss";
 
-import { Table, TableCell, TableRow, Skeleton, Pagination, TableHead, Box } from "@unioncredit/ui";
+import {
+  Box,
+  EmptyState,
+  Pagination,
+  Skeleton,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@unioncredit/ui";
 
 import { ZERO_ADDRESS } from "constants";
 import useTxHistory from "hooks/useTxHistory";
@@ -21,52 +30,58 @@ export function TransactionHistory({
 
   return (
     <div className="TransactionHistory">
-      <Table>
-        <TableRow>
-          <TableHead></TableHead>
-          <TableHead>Transaction</TableHead>
-          <TableHead align="right">Value ({token})</TableHead>
-        </TableRow>
+      {data.length > 0 ? (
+        <>
+          <Table>
+            <TableRow>
+              <TableHead></TableHead>
+              <TableHead>Transaction</TableHead>
+              <TableHead align="right">Value ({token})</TableHead>
+            </TableRow>
 
-        {transactionPage.map((tx, i) => (
-          <TransactionHistoryRow key={i} {...tx} />
-        ))}
-
-        {loading &&
-          Array(pageSize)
-            .fill(null)
-            .map((_, i) => (
-              <TableRow key={i}>
-                <TableCell fixedSize>
-                  <Skeleton shimmer variant="circle" size={28} grey={200} />
-                </TableCell>
-                <TableCell>
-                  <Skeleton shimmer width={120} height={22} grey={200} />
-                  <Skeleton shimmer width={60} height={12} grey={200} mt="6px" />
-                </TableCell>
-                <TableCell align="right">
-                  <Skeleton shimmer width={60} height={24} grey={200} />
-                </TableCell>
-              </TableRow>
+            {transactionPage.map((tx, i) => (
+              <TransactionHistoryRow key={i} {...tx} />
             ))}
 
-        {showEmptyRows &&
-          !loading &&
-          data.length > 0 &&
-          data.length < pageSize &&
-          Array(pageSize - data.length)
-            .fill(null)
-            .map((_, i) => (
-              <TableRow key={i}>
-                <Box style={{ height: "61px" }}></Box>
-              </TableRow>
-            ))}
-      </Table>
+            {loading &&
+              Array(pageSize)
+                .fill(null)
+                .map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell fixedSize>
+                      <Skeleton shimmer variant="circle" size={28} grey={200} />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton shimmer width={120} height={22} grey={200} />
+                      <Skeleton shimmer width={60} height={12} grey={200} mt="6px" />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Skeleton shimmer width={60} height={24} grey={200} />
+                    </TableCell>
+                  </TableRow>
+                ))}
 
-      {loading ? (
-        <Box style={{ height: "60px", borderTop: "1px solid #ddd" }} />
+            {showEmptyRows &&
+              !loading &&
+              data.length > 0 &&
+              data.length < pageSize &&
+              Array(pageSize - data.length)
+                .fill(null)
+                .map((_, i) => (
+                  <TableRow key={i}>
+                    <Box style={{ height: "61px" }}></Box>
+                  </TableRow>
+                ))}
+          </Table>
+
+          {loading ? (
+            <Box style={{ height: "60px", borderTop: "1px solid #ddd" }} />
+          ) : (
+            <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
+          )}
+        </>
       ) : (
-        <Pagination pages={maxPages} activePage={activePage} onClick={onChange} />
+        <EmptyState label="No transaction history" />
       )}
     </div>
   );
