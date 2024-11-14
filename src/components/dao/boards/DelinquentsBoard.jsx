@@ -59,6 +59,9 @@ export const DelinquentsBoard = () => {
     page,
     size: LEADERBOARD_PAGE_SIZE,
     sort: sortQuery,
+    query: {
+      "contracts.is_overdue": true,
+    },
   });
 
   const { pagination, items } = response;
