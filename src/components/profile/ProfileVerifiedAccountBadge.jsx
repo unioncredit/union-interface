@@ -4,9 +4,12 @@ import { Box, ProfileIcon, Text } from "@unioncredit/ui";
 import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
 import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
 import { ReactComponent as LensIcon } from "images/verification/lens.svg";
+import { ReactComponent as BaseNameIcon } from "images/verification/base.svg";
+import { ReactComponent as GitHubIcon } from "images/verification/github.svg";
+import { ReactComponent as LinkedInIcon } from "images/verification/linkedin.svg";
 import { blockExplorerAddress } from "utils/blockExplorer";
 
-export const ProfileVerifiedAccountBadge = ({ type, label, chainId, address }) => {
+export const ProfileVerifiedAccountBadge = ({ type, url, label, chainId, address }) => {
   const Icon = () => {
     switch (type) {
       case "account":
@@ -17,6 +20,12 @@ export const ProfileVerifiedAccountBadge = ({ type, label, chainId, address }) =
         return <TwitterIcon />;
       case "lens":
         return <LensIcon />;
+      case "basename":
+        return <BaseNameIcon style={{ width: "16px", height: "16px" }} />;
+      case "github":
+        return <GitHubIcon style={{ width: "16px", height: "16px" }} />;
+      case "linkedin":
+        return <LinkedInIcon style={{ width: "16px", height: "16px" }} />;
       default:
         return null;
     }
@@ -42,7 +51,7 @@ export const ProfileVerifiedAccountBadge = ({ type, label, chainId, address }) =
   };
 
   return (
-    <a href={getLink()} target="_blank" rel="noreferrer">
+    <a href={url || getLink()} target="_blank" rel="noreferrer">
       <Box className={cn("ProfileVerifiedAccounts__item", type)} justify="center" align="center">
         <Icon />
         <Text>{clean(label)}</Text>

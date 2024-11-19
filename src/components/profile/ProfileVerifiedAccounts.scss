@@ -33,12 +33,29 @@
         fill: #845FC9;
       }
     }
+    &.basename {
+      color: #0052FF;
+      background: #ddecff;
+      path {
+        fill: #0052FF;
+      }
+    }
+    &.github {
+      color: #24292f;
+      path {
+        fill: #24292f;
+      }
+    }
     &.twitter {
       color: #60a5fa;
       background: #ddecff;
       path {
         fill: #60a5fa;
       }
+    }
+    &.linkedin {
+      color: #007EBB;
+      background: #ddecff;
     }
 
     p {
