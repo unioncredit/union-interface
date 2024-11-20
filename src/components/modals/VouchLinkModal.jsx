@@ -14,7 +14,7 @@ import {
   TwitterIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { useAccount, useNetwork } from "wagmi";
+import { mainnet, useAccount, useNetwork } from "wagmi";
 
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
@@ -47,7 +47,7 @@ export default function VouchLinkModal() {
 
           <Box align="center" justify="center" direction="vertical">
             <Select
-              options={supportedNetworks}
+              options={supportedNetworks.filter((n) => n.chainId !== mainnet.id)}
               defaultValue={network}
               onChange={(option) => setNetwork(option)}
             />
