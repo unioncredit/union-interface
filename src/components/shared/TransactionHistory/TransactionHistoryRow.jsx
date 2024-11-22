@@ -1,5 +1,5 @@
 import { useNetwork } from "wagmi";
-import { Box, TableCell, TableRow, Text, LinkOutIcon } from "@unioncredit/ui";
+import { Box, LinkOutIcon, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { format as dateFormat } from "date-fns";
 
 import format from "utils/format";
@@ -8,6 +8,7 @@ import { Address } from "./Address";
 import { TransactionIcon } from "./TransactionIcon";
 import { blockExplorerTx } from "utils/blockExplorer";
 import { useToken } from "hooks/useToken";
+import { base } from "providers/Network";
 
 // prettier-ignore
 const texts = {
@@ -36,6 +37,8 @@ export function TransactionHistoryRow({
 
   if (!text) return null;
 
+  console.log({ amount, token });
+
   return (
     <TableRow>
       <TableCell fixedSize>
@@ -60,7 +63,11 @@ export function TransactionHistoryRow({
       <TableCell align="right">
         {amount && (
           <Text grey={800} size="medium">
-            {format(amount, token)}
+            {/* fixme: temp fix for subgraph issue */}
+            {format(
+              amount,
+              type === TransactionTypes.BORROW && chain?.id === base.id ? "DAI" : token
+            )}
           </Text>
         )}
       </TableCell>
