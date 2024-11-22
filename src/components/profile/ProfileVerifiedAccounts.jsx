@@ -40,13 +40,14 @@ export const ProfileVerifiedAccounts = ({ address, chainId }) => {
             label={data?.account?.is_contract_address ? "Contract" : "EOA"}
           />
 
-          {data?.socials?.map((item, idx) => (
+          {data?.passport?.passport_socials?.map((item, idx) => (
             <ProfileVerifiedAccountBadge
               key={idx}
               chainId={chainId}
               address={address}
-              type={item.dappname}
-              label={item.profileName}
+              type={item.source}
+              url={item.profile_url}
+              label={item.profile_name}
             />
           ))}
         </Box>
