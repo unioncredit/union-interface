@@ -1,7 +1,7 @@
 import "./ContactList.scss";
 
 import { useEffect, useMemo, useState } from "react";
-import { Box, Card, EmptyState, Pagination } from "@unioncredit/ui";
+import { Box, Card, Pagination } from "@unioncredit/ui";
 
 import { ContactsType, SortOrder, ZERO } from "constants";
 import { providingFilterFns, receivingFilterFns } from "components/contacts/FiltersPopover";
@@ -27,6 +27,7 @@ import {
   useSettings,
 } from "../../providers/Settings";
 import { useSearchParams } from "react-router-dom";
+import { TableEmptyStates } from "./TableEmptyStates";
 
 const score = (bools) => {
   return bools.reduce((acc, item) => acc + (item ? 1 : -1), 0);
@@ -254,7 +255,7 @@ export default function ContactList({ initialType }) {
       *--------------------------------------------------------------*/}
       {filteredAndSorted.length <= 0 ? (
         <Card.Body>
-          <EmptyState label="No contacts" />
+          <TableEmptyStates type={type} filters={filters} />
         </Card.Body>
       ) : (
         <div className="TableContainer">
