@@ -56,7 +56,10 @@ export default function VouchLinkModal() {
               <Input
                 value={profileUrl}
                 inputProps={{
-                  onFocus: (e) => e.target.select(),
+                  onFocus: (e) => {
+                    copy(profileUrl);
+                    e.target.select();
+                  },
                 }}
                 readonly
               />
