@@ -12,7 +12,7 @@ import { useCallback } from "react";
 const TableEmptyState = ({ title, content, buttonProps }) => {
   return (
     <Box direction="vertical" align="center" className="empty-state">
-      <Heading size="large" level={1}>
+      <Heading size="large" level={1} align="center">
         {title}
       </Heading>
       <Text size="medium" grey={500} maxw="400px">
