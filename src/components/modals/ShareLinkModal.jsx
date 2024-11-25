@@ -34,7 +34,10 @@ export default function ShareLinkModal({ url, title, text }) {
               <Input
                 value={url}
                 inputProps={{
-                  onFocus: (e) => e.target.select(),
+                  onFocus: (e) => {
+                    copy(url);
+                    e.target.select();
+                  },
                 }}
                 readonly
               />
