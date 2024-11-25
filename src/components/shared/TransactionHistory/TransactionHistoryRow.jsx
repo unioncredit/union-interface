@@ -37,8 +37,6 @@ export function TransactionHistoryRow({
 
   if (!text) return null;
 
-  console.log({ amount, token });
-
   return (
     <TableRow>
       <TableCell fixedSize>
