@@ -90,7 +90,10 @@ export default function ShareReferralModal({ address, chainId, onBack }) {
                 color="secondary"
                 variant="light"
                 icon={TwitterIcon}
-                href={generateTwitterLink(profileUrl, "")}
+                href={generateTwitterLink(
+                  profileUrl,
+                  address === connectedAddress ? undefined : ""
+                )}
                 as="a"
                 target="_blank"
                 rel="noopener"
@@ -101,7 +104,10 @@ export default function ShareReferralModal({ address, chainId, onBack }) {
                 color="secondary"
                 variant="light"
                 icon={TelegramIcon}
-                href={generateTelegramLink(profileUrl, "")}
+                href={generateTelegramLink(
+                  profileUrl,
+                  address === connectedAddress ? undefined : ""
+                )}
                 as="a"
                 target="_blank"
                 rel="noopener"
