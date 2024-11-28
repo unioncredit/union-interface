@@ -1,4 +1,6 @@
-import { mainnet, arbitrum, optimism } from "wagmi/chains";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
+
+import { base } from "providers/Network";
 
 export const PermitType = {
   DAI: "dai",
@@ -74,7 +76,7 @@ export const getPermitMethod = (chainId, method) => {
         type: PermitType.ERC20,
       },
     },
-    [8453]: {
+    [base.id]: {
       // tested && working
       stake: {
         functionName: "stakeWithERC20Permit",

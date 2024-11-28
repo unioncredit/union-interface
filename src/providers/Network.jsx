@@ -8,8 +8,6 @@ import { arbitrum, mainnet, optimism } from "wagmi/chains";
 // eslint-disable-next-line no-undef
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
 
-console.log({ projectId });
-
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
@@ -97,7 +95,7 @@ export default function Network({ children }) {
           chains={chains}
           autoConnect={true}
           modalSize="compact"
-          initialChain={optimism.id}
+          initialChain={base.id}
         >
           {children}
         </RainbowKitProvider>

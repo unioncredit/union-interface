@@ -1,11 +1,12 @@
 import "./ProfileVerifiedAccounts.scss";
 
+import { useNetwork } from "wagmi";
 import { Box, Text } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
+
 import { ZERO_ADDRESS } from "constants";
 import { ProfileVerifiedAccountBadge } from "./ProfileVerifiedAccountBadge";
-import { useNetwork } from "wagmi";
-import { optimism } from "wagmi/chains";
+import { base } from "providers/Network";
 
 export const ProfileVerifiedAccounts = ({ address, chainId }) => {
   const [data, setData] = useState(null);
@@ -14,9 +15,7 @@ export const ProfileVerifiedAccounts = ({ address, chainId }) => {
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {
-      fetch(
-        `https://identity.union.finance/${connectedChain?.id || optimism.id}/address/${address}`
-      )
+      fetch(`https://identity.union.finance/${connectedChain?.id || base.id}/address/${address}`)
         .then((res) => res.json())
         .then(setData)
         .catch((err) => {

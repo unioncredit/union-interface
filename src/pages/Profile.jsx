@@ -11,7 +11,7 @@ import {
   WarningIcon,
 } from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
-import { mainnet, optimism } from "wagmi/chains";
+import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 import { isAddress } from "ethers/lib/utils";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -22,9 +22,10 @@ import ProfileHeader from "components/profile/ProfileHeader";
 import NotFoundPage from "./NotFoundPage";
 import ProfileHeaderLoading from "components/profile/ProfileHeaderLoading";
 import { ProfileBannerCta } from "components/profile/ProfileBannerCta";
-import { ProfileColumns } from "../components/profile/ProfileColumns";
-import { useVoucheesData } from "../providers/VoucheesData";
-import { useVouchersData } from "../providers/VouchersData";
+import { ProfileColumns } from "components/profile/ProfileColumns";
+import { useVoucheesData } from "providers/VoucheesData";
+import { useVouchersData } from "providers/VouchersData";
+import { base } from "providers/Network";
 
 function ProfileInner({ address, chainId, legacyTag }) {
   const navigate = useNavigate();
@@ -108,10 +109,7 @@ export default function Profile() {
   const addressOrEnsParts = addressOrEnsParam.split(":");
   const [tag, addressOrEns] = addressOrEnsParam.match(/^(optgoe|opt|base):/)
     ? addressOrEnsParts
-    : [
-        EIP3770[optimism.id],
-        addressOrEnsParts.length > 1 ? addressOrEnsParts[1] : addressOrEnsParam,
-      ];
+    : [EIP3770[base.id], addressOrEnsParts.length > 1 ? addressOrEnsParts[1] : addressOrEnsParam];
 
   const { data: addressFromEns, isLoading } = useEnsAddress({
     name: addressOrEns,

@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useBlockNumber, useNetwork } from "wagmi";
-import { optimism } from "wagmi/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
@@ -10,6 +9,7 @@ import { useProtocolData } from "providers/ProtocolData";
 import { LastRepayFormatted } from "components/shared/LastRepayFormatted";
 import { DataApiStatusBadge } from "components/shared/DataApiStatusBadge";
 import { useToken } from "hooks/useToken";
+import { base } from "providers/Network";
 
 const columns = {
   CREDIT_LIMIT: {
@@ -38,7 +38,7 @@ export const DelinquentsBoard = () => {
 
   const { unit } = useToken();
   const { chain: connectedChain } = useNetwork();
-  const chainId = connectedChain?.id || optimism.id;
+  const chainId = connectedChain?.id || base.id;
 
   const { data: blockNumber } = useBlockNumber({
     chainId,
