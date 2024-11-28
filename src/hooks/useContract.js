@@ -38,11 +38,11 @@ import {
 import {
   assetManagerContract as BASE_V2_assetManagerContract,
   comptrollerContract as BASE_V2_comptrollerContract,
-  usdcContract as BASE_V2_usdcContract,
   referralContract as BASE_V2_referralContract,
   registerHelperContract as BASE_V2_registerHelperContract,
   unionContract as BASE_V2_unionContract,
   unionLensContract as BASE_V2_unionLensContract,
+  usdcContract as BASE_V2_usdcContract,
   userManagerContract as BASE_V2_userManagerContract,
   uTokenContract as BASE_V2_uTokenContract,
   vouchFaucetContract as BASE_V2_vouchFaucet,
@@ -51,17 +51,18 @@ import {
 import {
   assetManagerContract as BASE_SEPOLIA_V2_assetManagerContract,
   comptrollerContract as BASE_SEPOLIA_V2_comptrollerContract,
-  usdcContract as BASE_SEPOLIA_V2_usdcContract,
   referralContract as BASE_SEPOLIA_V2_referralContract,
   registerHelperContract as BASE_SEPOLIA_V2_registerHelperContract,
   unionContract as BASE_SEPOLIA_V2_unionContract,
   unionLensContract as BASE_SEPOLIA_V2_unionLensContract,
+  usdcContract as BASE_SEPOLIA_V2_usdcContract,
   userManagerContract as BASE_SEPOLIA_V2_userManagerContract,
   uTokenContract as BASE_SEPOLIA_V2_uTokenContract,
   vouchFaucetContract as BASE_SEPOLIA_V2_vouchFaucet,
 } from "config/contracts/v2/base-sepolia";
 
 import { useVersion, Versions } from "providers/Version";
+import { base } from "providers/Network";
 
 export default function useContract(name, chainId, forceVersion) {
   const { chain: connectedChain } = useNetwork();
@@ -102,7 +103,7 @@ export default function useContract(name, chainId, forceVersion) {
       registerHelper: OPTIMISM_V2_registerHelperContract,
       referral: OPTIMISM_V2_referralContract,
     },
-    [8453]: {
+    [base.id]: {
       userManager: BASE_V2_userManagerContract,
       uToken: BASE_V2_uTokenContract,
       union: BASE_V2_unionContract,

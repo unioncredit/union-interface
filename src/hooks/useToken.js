@@ -2,6 +2,7 @@ import { useNetwork } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
 
 import { TOKENS, UNIT, WAD } from "constants";
+import { base } from "providers/Network";
 
 export const useToken = (chainId) => {
   const { chain: connectedChain } = useNetwork();
@@ -9,10 +10,10 @@ export const useToken = (chainId) => {
   const tokens = {
     [mainnet.id]: TOKENS.DAI,
     [optimism.id]: TOKENS.DAI,
-    [8453]: TOKENS.USDC, // base
+    [base.id]: TOKENS.USDC, // base
   };
 
-  const id = chainId || connectedChain?.id || optimism.id;
+  const id = chainId || connectedChain?.id || base.id;
   const token = tokens[id] || null;
 
   return {

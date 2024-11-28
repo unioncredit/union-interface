@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNetwork } from "wagmi";
-import { optimism } from "wagmi/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
 import { useUnionDataApi } from "hooks/useUnionDataApi";
 import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
+import { base } from "providers/Network";
 
 const columns = {
   VOUCHERS: {
@@ -39,10 +39,8 @@ export const MostTrustedBoard = () => {
     [sort]
   );
 
-  console.log({ chain });
-
   const { data: response = [] } = useUnionDataApi({
-    network: DataApiNetworks[chain?.id] || DataApiNetworks[optimism.id],
+    network: DataApiNetworks[chain?.id] || DataApiNetworks[base.id],
     page,
     size: LEADERBOARD_PAGE_SIZE,
     sort: sortQuery,
