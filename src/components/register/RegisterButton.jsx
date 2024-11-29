@@ -28,9 +28,15 @@ export default function RegisterButton({ onComplete }) {
   const { data: vouchersData = [] } = useVouchers();
   const { data: protocol } = useProtocol();
 
-  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance?.gt(ZERO));
+  const vouchers = vouchersData.filter((voucher) =>
+    voucher.stakedBalance?.gt(ZERO)
+  );
 
-  const { unionBalance = ZERO, isMember = false, newMemberFee = ZERO } = { ...member, ...protocol };
+  const {
+    unionBalance = ZERO,
+    isMember = false,
+    newMemberFee = ZERO,
+  } = { ...member, ...protocol };
 
   const permit = getPermitMethod(chain.id, "registerMember");
   const readyToBurn = vouchers.length > 0 && unionBalance.gte(newMemberFee);
@@ -42,11 +48,13 @@ export default function RegisterButton({ onComplete }) {
     Contract Functions
    --------------------------------------------------------------*/
 
-  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead({
-    ...unionConfig,
-    functionName: "allowance",
-    args: [address, userManagerConfig.address],
-  });
+  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead(
+    {
+      ...unionConfig,
+      functionName: "allowance",
+      args: [address, userManagerConfig.address],
+    }
+  );
 
   const permitApproveProps = usePermit({
     type: permit.type,
@@ -69,7 +77,9 @@ export default function RegisterButton({ onComplete }) {
     contract: "userManager",
     method: permitArgs ? permit.functionName : "registerMember",
     args: permitArgs ? permitArgs : [address],
-    enabled: (allowance.gte(newMemberFee) || permitArgs) && unionBalance.gte(newMemberFee),
+    enabled:
+      (allowance.gte(newMemberFee) || permitArgs) &&
+      unionBalance.gte(newMemberFee),
     onComplete: () => onComplete(),
   });
 
@@ -80,8 +90,7 @@ export default function RegisterButton({ onComplete }) {
         color="primary"
         label="Gasless approval"
         labelPosition="end"
-        // disabled={!readyToBurn}
-        disabled={true}
+        disabled={!readyToBurn}
         onChange={() => {
           setGasless(!gasless);
           setPermitArgs(null);
@@ -104,20 +113,25 @@ export default function RegisterButton({ onComplete }) {
           size: "large",
           label: "Complete the previous steps",
           disabled: true,
-        });
+        })
       } else if (gasless) {
         setAction({
           ...permitApproveProps,
           size: "large",
-          label: permitApproveProps.loading ? "Approving..." : "Approve UNION",
+          label: permitApproveProps.loading
+              ? "Approving..."
+              : "Approve UNION",
           disabled: permitApproveProps.loading,
         });
       } else {
         setAction({
           ...transactionApproveProps,
-          label: transactionApproveProps.loading ? "Approving..." : "Approve UNION",
+          label: transactionApproveProps.loading
+            ? "Approving..."
+            : "Approve UNION",
           size: "large",
-          disabled: unionBalance.lt(newMemberFee) || transactionApproveProps.loading,
+          disabled:
+            unionBalance.lt(newMemberFee) || transactionApproveProps.loading,
         });
       }
     } else {
