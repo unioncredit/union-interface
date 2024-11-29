@@ -1,5 +1,6 @@
 import "./Register.scss";
 
+import { useNetwork } from "wagmi";
 import { Helmet } from "react-helmet";
 import { Box, Card, CheckIcon, EthereumIcon, Heading, Text } from "@unioncredit/ui";
 
@@ -13,10 +14,12 @@ import { EthRegisterButton } from "../components/register/EthRegisterButton";
 import { NetworkSelect } from "components/shared";
 import { TextSeparator } from "components/shared/TextSeparator";
 import { useToken } from "hooks/useToken";
+import { MOGO_NFT_URLS } from "../constants";
 
 export default function RegisterPage() {
   const { open } = useModals();
   const { token } = useToken();
+  const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
   const { data: member = {}, refetch: refetchMember } = useMember();
 
@@ -70,7 +73,7 @@ export default function RegisterPage() {
               rel="noreferrer"
               target="_blank"
               className="Register__mogo"
-              href="https://zora.co/collect/oeth:0xa73be24fb5df82f45c5848f099451b5bea427474/2?referrer=0x729dF3924822C9a2CA1995c05Eb801A395329F35"
+              href={MOGO_NFT_URLS[chain.id]}
             >
               Mint One, Gift One -&gt;
             </a>
