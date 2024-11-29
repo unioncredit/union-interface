@@ -84,7 +84,6 @@ export function Approval({
         active={gasless}
         color="primary"
         label="Gasless approval"
-        disabled={true}
         labelPosition="end"
         onChange={() => {
           setGasless(!gasless);
