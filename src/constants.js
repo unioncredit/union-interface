@@ -180,3 +180,10 @@ export const AddressAvatarMappings = {
   "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "https://euc.li/creditcub.eth",
   "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "https://beta.creditclub.cc/glasses.png",
 };
+
+export const MOGO_NFT_URLS = {
+  [optimism.id]:
+    "https://zora.co/collect/oeth:0xa73be24fb5df82f45c5848f099451b5bea427474/2?referrer=0x729dF3924822C9a2CA1995c05Eb801A395329F35",
+  [base.id]:
+    "https://zora.co/collect/base:0x29037e1db01e9ac6607ae2af4e830090276c0b64/3?referrer=0x729df3924822c9a2ca1995c05eb801a395329f35",
+};
