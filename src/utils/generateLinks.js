@@ -9,7 +9,7 @@ import { EIP3770 } from "constants";
 export const getProfileUrl = (address, chainId) => {
   if (!address) return null;
 
-  return `/profile/${EIP3770[chainId]}:${address}`;
+  return `https://app.union.finance/profile/${EIP3770[chainId]}:${address}`;
 };
 
 const SHARE_MESSAGE = "I'm on Union! Here's the link to vouch for me:";
