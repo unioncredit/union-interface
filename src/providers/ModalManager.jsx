@@ -18,6 +18,7 @@ import PublicWriteOffDebtModal, {
 } from "../components/modals/PublicWriteOffDebtModal";
 import ShareReferralModal, { SHARE_REFERRAL_MODAL } from "../components/modals/ShareReferralModal";
 import ShareLinkModal, { SHARE_LINK_MODAL } from "../components/modals/ShareLinkModal";
+import { INSTALL_APP_MODAL, InstallAppModal } from "../components/modals/InstallAppModal";
 
 const ModalContext = createContext({});
 
@@ -28,6 +29,7 @@ const modals = {
   [BORROW_MODAL]: BorrowModal,
   [DELEGATE_MODAL]: DelegateModal,
   [EDIT_VOUCH_MODAL]: EditVouchModal,
+  [INSTALL_APP_MODAL]: InstallAppModal,
   [MANAGE_CONTACT_MODAL]: ManageContactModal,
   [REPAY_MODAL]: RepayModal,
   [STAKE_MODAL]: StakeModal,

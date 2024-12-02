@@ -53,16 +53,18 @@ export default function App() {
       <Layout>
         <ScrollToTop />
         <Layout.Main>
-          <Header />
-          <Grid style={{ display: "flex", flexGrow: 1 }}>
-            <Grid.Row style={{ width: "100%", margin: 0 }}>
-              <Grid.Col>
-                <ErrorBoundary FallbackComponent={ErrorPage}>
-                  {is404(location) ? <NotFoundPage /> : <ConnectPage />}
-                </ErrorBoundary>
-              </Grid.Col>
-            </Grid.Row>
-          </Grid>
+          <ModalManager>
+            <Header />
+            <Grid style={{ display: "flex", flexGrow: 1 }}>
+              <Grid.Row style={{ width: "100%", margin: 0 }}>
+                <Grid.Col>
+                  <ErrorBoundary FallbackComponent={ErrorPage}>
+                    {is404(location) ? <NotFoundPage /> : <ConnectPage />}
+                  </ErrorBoundary>
+                </Grid.Col>
+              </Grid.Row>
+            </Grid>
+          </ModalManager>
         </Layout.Main>
         <Analytics />
       </Layout>
@@ -118,19 +120,21 @@ function AppReadyShim() {
     <Grid style={{ display: "flex", flexGrow: 1 }}>
       <Grid.Row style={{ width: "100%", margin: 0 }}>
         <Grid.Col>
-          {is404(location) ? (
-            <NotFoundPage />
-          ) : appReady ? (
-            <>
-              <ErrorBoundary FallbackComponent={ErrorPage}>
-                <Layout.Columned>
-                  <Routes />
-                </Layout.Columned>
-              </ErrorBoundary>
-            </>
-          ) : (
-            <ConnectPage />
-          )}
+          <ModalManager>
+            {is404(location) ? (
+              <NotFoundPage />
+            ) : appReady ? (
+              <>
+                <ErrorBoundary FallbackComponent={ErrorPage}>
+                  <Layout.Columned>
+                    <Routes />
+                  </Layout.Columned>
+                </ErrorBoundary>
+              </>
+            ) : (
+              <ConnectPage />
+            )}
+          </ModalManager>
         </Grid.Col>
       </Grid.Row>
     </Grid>
