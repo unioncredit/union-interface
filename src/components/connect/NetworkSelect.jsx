@@ -12,6 +12,7 @@ import useMemberSummary from "hooks/useMemberSummary";
 import { useAppNetwork } from "providers/Network";
 import { supportedNetworks } from "config/networks";
 import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
+import { InstallAppDrawer } from "../shared/InstallAppDrawer";
 
 export default function NetworkSelect() {
   const { chain } = useNetwork();
@@ -71,7 +72,12 @@ export default function NetworkSelect() {
           />
         ))}
       </Box>
+
+      <InstallAppDrawer />
+
       <Button
+        color="secondary"
+        variant="light"
         w="100%"
         disabled={isConnected && (chain?.unsupported || isMainnet || !isSupportedNetwork)}
         size="large"

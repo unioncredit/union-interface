@@ -2,6 +2,9 @@
 @import "@unioncredit/ui/src/variables";
 @import "@unioncredit/ui/lib";
 @import "./variables.scss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Roboto:wght@100;400;500&display=swap");
 

@@ -1,0 +1,11 @@
+.InstallAppDrawer {
+  &__trigger {
+    @media all and (min-width: 500px) {
+      display: none;
+    }
+
+    path {
+      fill: white;
+    }
+  }
+}

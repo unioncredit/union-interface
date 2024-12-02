@@ -1,0 +1,14 @@
+.InstallAppButton {
+  padding: 3px;
+  border-radius: 16px;
+  background: linear-gradient(to left, #FBC224, #E879F9, #4338CA, #60A5FA);
+
+  @media all and (max-width: 500px) {
+    display: none;
+  }
+
+  button {
+    padding: 12px;
+    height: 42px;
+  }
+}
