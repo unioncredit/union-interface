@@ -1,14 +1,17 @@
+@import "@unioncredit/ui/src/variables";
+
 .InstallAppButton {
   padding: 3px;
-  border-radius: 16px;
+  border-radius: 8px;
   background: linear-gradient(to left, #FBC224, #E879F9, #4338CA, #60A5FA);
 
-  @media all and (max-width: 500px) {
+  @media all and (max-width: $breakpoint-mobile) {
     display: none;
   }
 
   button {
     padding: 12px;
     height: 42px;
+    border-radius: 6px;
   }
 }

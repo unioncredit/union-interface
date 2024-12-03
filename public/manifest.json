@@ -1,6 +1,9 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "id":"https://app.union.finance/",
+  "short_name": "Union",
+  "name": "Union",
+  "start_url":"https://app.union.finance/",
+  "description":"Union is an open-source protocol enabling onchain access to peer-to-peer credit.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +21,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "orientation":"portrait",
+  "dir":"auto",
+  "lang":"en-GB"
 }

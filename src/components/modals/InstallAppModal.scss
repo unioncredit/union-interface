@@ -1,0 +1,11 @@
+.InstallAppModal {
+  .modalHeader {
+    height: 0 !important;
+    padding: 0;
+  }
+  .closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+}

@@ -1,7 +1,13 @@
+@import "@unioncredit/ui/src/variables";
+
 .InstallAppDrawer {
   &__trigger {
-    @media all and (min-width: 500px) {
+    @media all and (min-width: $breakpoint-mobile) {
       display: none;
+    }
+
+    button {
+      background: #2A2736;
     }
 
     path {
