@@ -14,7 +14,7 @@ import {
   UnionNavIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
 import { ZERO } from "constants";
 import { useMember } from "providers/MemberData";
@@ -31,6 +31,7 @@ import { InstallAppButton } from "./InstallAppButton";
 export function Header({ loading, showNav = true }) {
   const mobileNavBreakpoint = 900;
   const { open } = useModals();
+  const { chain } = useNetwork();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
@@ -76,7 +77,8 @@ export function Header({ loading, showNav = true }) {
                     <UnionNavIcon width="40px" style={{ marginRight: "8px" }} />
                   </Link>
 
-                  {isConnected ? <NetworkSelect /> : <InstallAppButton />}
+                  {isConnected && <NetworkSelect />}
+                  {!isConnected || (!isMember && <InstallAppButton />)}
                 </Box>
               </Grid.Col>
               {showNav && (
