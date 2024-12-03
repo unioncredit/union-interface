@@ -78,7 +78,7 @@ export function Header({ loading, showNav = true }) {
                   </Link>
 
                   {isConnected && <NetworkSelect />}
-                  {!isConnected || (!isMember && <InstallAppButton />)}
+                  {(!isConnected || !isMember) && <InstallAppButton />}
                 </Box>
               </Grid.Col>
               {showNav && (
