@@ -110,15 +110,8 @@ export default function StakeStep({ complete, onSkipStep }) {
           Stake {token} to provide credit to those you Trust
         </Heading>
         <Text grey={500} size="medium">
-          After registration, you can use this staked {token} to extend credit trusted contacts, and
-          continue to earn Union Tokens (UNION){" "}
-          <a
-            href="https://docs.union.finance/user-guides/becoming-a-member"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            (Learn More)
-          </a>
+          Staked funds are used to power the credit you give to others. Skip if you are just
+          Borrowing.
         </Text>
 
         <Box fluid mt="16px" direction="vertical" className="StakeStep__container">
