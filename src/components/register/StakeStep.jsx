@@ -107,11 +107,11 @@ export default function StakeStep({ complete, onSkipStep }) {
     <Card size="fluid" mb="24px">
       <Card.Body>
         <Heading level={2} size="large" grey={700}>
-          Stake {token} to provide credit to those you Trust
+          Deposit {token} to begin
         </Heading>
         <Text grey={500} size="medium">
-          Staked funds are used to power the credit you give to others. Skip if you are just
-          Borrowing.
+          Staked funds are used to back credit you give to others. Skip if just
+          borrowing.
         </Text>
 
         <Box fluid mt="16px" direction="vertical" className="StakeStep__container">
