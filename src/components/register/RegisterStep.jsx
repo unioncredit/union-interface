@@ -59,21 +59,6 @@ export const RegisterStep = () => {
               }
             />
           </Box>
-          <TextSeparator m="12px 0" w="90%" maxw="350px">
-            or
-          </TextSeparator>
-          <a
-            rel="noreferrer"
-            target="_blank"
-            className="Register__mogo"
-            href={MOGO_NFT_URLS[chain.id]}
-          >
-            Mint One, Gift One -&gt;
-          </a>
-          <Text mt="16px" color="grey400" align="center" maxw="300px">
-            For a limited time, you can mint an NFT that will automatically register you, that you
-            can then send to a friend to Gift them a membership.
-          </Text>
         </Box>
       </Card.Body>
       <Card.Footer align="center" direction="vertical">
@@ -83,7 +68,7 @@ export const RegisterStep = () => {
         <ul className="Register__benefits">
           <li>
             <CheckIcon />
-            Give credit to your trusted friends
+            Give credit to trusted friends
           </li>
           <li>
             <CheckIcon />
@@ -91,7 +76,7 @@ export const RegisterStep = () => {
           </li>
           <li>
             <CheckIcon />
-            Build a credit system free from bankers
+            Build credit free from middlemen
           </li>
           <li>
             <CheckIcon />
