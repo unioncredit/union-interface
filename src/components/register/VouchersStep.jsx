@@ -31,13 +31,13 @@ export default function VouchersStep({ complete, onSkipStep }) {
       <Card.Body>
         <Box>
           <Heading level={2} size="large" grey={700}>
-            Share your profile link with backers
+            Share your profile link with friends
           </Heading>
         </Box>
 
         <Text grey={500} size="medium">
-          In order to have credit and borrow on Union, you’ll need to find existing Union members to
-          vouch for you. This step you can do before or after you register.
+          To get credit and borrow on Union, find existing Union members to
+          vouch for you. This step can be done before or after you register.
         </Text>
 
         {vouchers.length <= 0 ? (
