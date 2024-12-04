@@ -15,6 +15,22 @@
   &__card {
     border-radius: 12px;
   }
+
+  .VouchersOverview {
+    border: none;
+
+    .Card__body {
+      padding: 0;
+    }
+
+    .button-row {
+      display: none;
+    }
+
+    &__breakdown {
+      margin-bottom: 0 !important;
+    }
+  }
 }
 
 .VouchersStep__table {
