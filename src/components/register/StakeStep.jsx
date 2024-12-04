@@ -1,38 +1,35 @@
 import "./StakeStep.scss";
 
 import {
-  Card,
+  ArrowIcon,
   Box,
-  Text,
-  ButtonRow,
   Button,
-  ProgressBar,
-  NumericalBlock,
-  Heading,
-  WarningIcon,
-  DepositIcon,
-  WithdrawIcon,
+  ButtonRow,
+  Card,
   CheckIcon,
-  PlayIcon,
-  PauseIcon,
   ClaimIcon,
+  DepositIcon,
+  Heading,
+  NumericalBlock,
+  PauseIcon,
+  PlayIcon,
+  ProgressBar,
+  Text,
+  WarningIcon,
 } from "@unioncredit/ui";
 import { useNetwork } from "wagmi";
 import { useCallback } from "react";
 
-import { WAD } from "constants";
+import { BlocksPerYear, StakeType, WAD, ZERO } from "constants";
 import format from "utils/format";
-import { StakeType } from "constants";
 import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
-import { ZERO } from "constants";
-import { BlocksPerYear } from "constants";
 import useWrite from "hooks/useWrite";
 import { useToken } from "hooks/useToken";
 
-export default function StakeStep() {
+export default function StakeStep({ complete, onSkipStep }) {
   const { open } = useModals();
   const { chain } = useNetwork();
   const { token, wad } = useToken();
@@ -178,10 +175,11 @@ export default function StakeStep() {
               fluid
               color="secondary"
               variant="light"
-              label="Withdraw"
+              label="Skip"
               size="large"
-              icon={WithdrawIcon}
-              onClick={() => open(STAKE_MODAL, { type: StakeType.UNSTAKE })}
+              icon={ArrowIcon}
+              onClick={onSkipStep}
+              disabled={complete}
             />
           </ButtonRow>
         </Box>

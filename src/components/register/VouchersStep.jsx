@@ -1,123 +1,73 @@
 import "./VouchersStep.scss";
 
-import { useAccount, useNetwork } from "wagmi";
 import {
-  Table,
-  TableRow,
-  TableHead,
-  Card,
+  ArrowIcon,
   Box,
-  ButtonRow,
   Button,
-  Text,
-  TableCell,
+  ButtonRow,
+  Card,
   EmptyState,
   Heading,
-  TwitterIcon,
-  TelegramIcon,
   LinkIcon,
+  Text,
 } from "@unioncredit/ui";
 
-import format from "utils/format";
 import { useModals } from "providers/ModalManager";
 import { useVouchers } from "providers/VouchersData";
-import { truncateAddress } from "utils/truncateAddress";
-import { Avatar, PrimaryLabel } from "components/shared";
 import { VOUCH_LINK_MODAL } from "components/modals/VouchLinkModal";
 
-import { getProfileUrl, generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
 import { ZERO } from "constants";
 import VouchFaucetButton from "components/VouchFaucetButton";
-import { useToken } from "hooks/useToken";
+import VouchersOverview from "../credit/VouchersOverview";
 
-export default function VouchersStep() {
+export default function VouchersStep({ complete, onSkipStep }) {
   const { data: vouchersData = [] } = useVouchers();
   const { open } = useModals();
-  const { chain } = useNetwork();
-  const { address } = useAccount();
-  const { token } = useToken();
-
-  const profileUrl = `https://app.union.finance${getProfileUrl(address, chain.id)}`;
 
   const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance.gt(ZERO));
 
   return (
-    <Card size="fluid" mb="24px">
+    <Card size="fluid" mb="24px" className="VouchersStep">
       <Card.Body>
         <Box>
           <Heading level={2} size="large" grey={700}>
-            Invite friends to vouch for you
+            Share your profile link with backers
           </Heading>
         </Box>
 
         <Text grey={500} size="medium">
-          In order to get credit and borrow on Union, you’ll need to find existing Union members to
-          vouch for you. This step can be done before or after you register.
+          In order to have credit and borrow on Union, you’ll need to find existing Union members to
+          vouch for you. This step you can do before or after you register.
         </Text>
 
-        <Box className="VouchersStep__container" fluid mt="24px" mb="14px" direction="vertical">
-          <Card className="VouchersStep__card" size="fluid">
-            {vouchers.length <= 0 ? (
-              <EmptyState label={<VouchFaucetButton />} />
-            ) : (
-              <Table className="VouchersStep__table">
-                <TableRow>
-                  <TableHead></TableHead>
-                  <TableHead>Account</TableHead>
-                  <TableHead align="right">Trust limit</TableHead>
-                </TableRow>
-                {vouchers.slice(0, 3).map(({ address, trust }) => (
-                  <TableRow key={address}>
-                    <TableCell fixedSize>
-                      <Avatar address={address} />
-                    </TableCell>
-                    <TableCell>
-                      <Text grey={800} size="medium" weight="medium" m={0}>
-                        <PrimaryLabel address={address} />
-                      </Text>
-                      <Text grey={500} size="small" weight="medium" m={0}>
-                        {truncateAddress(address)}
-                      </Text>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Text grey={800} size="medium" weight="medium" m={0}>
-                        {format(trust, token)} {token}
-                      </Text>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </Table>
-            )}
+        {vouchers.length <= 0 ? (
+          <Card className="VouchersStep__card" m="24px 0" size="fluid">
+            <EmptyState label={<VouchFaucetButton />} />
           </Card>
-          <ButtonRow fluid mt="16px" className="VouchesStep__buttons">
-            <Button
-              fluid
-              size="large"
-              color="primary"
-              icon={LinkIcon}
-              label="Get vouch link"
-              onClick={() => open(VOUCH_LINK_MODAL)}
-            />
-            <Button
-              size="large"
-              color="secondary"
-              variant="light"
-              icon={TwitterIcon}
-              as="a"
-              href={generateTwitterLink(profileUrl)}
-              target="_blank"
-            />
-            <Button
-              size="large"
-              color="secondary"
-              variant="light"
-              icon={TelegramIcon}
-              as="a"
-              href={generateTelegramLink(profileUrl)}
-              target="_blank"
-            />
-          </ButtonRow>
-        </Box>
+        ) : (
+          <VouchersOverview vouchers={vouchers} displayCount={6} />
+        )}
+
+        <ButtonRow fluid mt="16px" className="VouchesStep__buttons">
+          <Button
+            fluid
+            size="large"
+            color="primary"
+            icon={LinkIcon}
+            label="Get link"
+            onClick={() => open(VOUCH_LINK_MODAL)}
+          />
+          <Button
+            fluid
+            color="secondary"
+            variant="light"
+            label="Skip"
+            size="large"
+            icon={ArrowIcon}
+            onClick={onSkipStep}
+            disabled={complete}
+          />
+        </ButtonRow>
       </Card.Body>
     </Card>
   );
