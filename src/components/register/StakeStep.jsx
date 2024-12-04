@@ -7,7 +7,6 @@ import {
   ButtonRow,
   Card,
   CheckIcon,
-  ClaimIcon,
   DepositIcon,
   Heading,
   NumericalBlock,
@@ -152,15 +151,6 @@ export default function StakeStep({ complete, onSkipStep }) {
 
           <Box fluid m="16px 0" className="StakeStep__progress-container">
             <ProgressBar fluid percentage={percentage} {...progressBarProps()} />
-            {unionEarned.gte(newMemberFee) && (
-              <Button
-                ml="8px"
-                icon={ClaimIcon}
-                size="large"
-                label="Claim Tokens"
-                {...claimTokensButtonProps}
-              />
-            )}
           </Box>
 
           <ButtonRow w="100%">
