@@ -2,7 +2,7 @@ import { useNetwork } from "wagmi";
 
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
-import { BlocksPerYear, TOKENS, WAD, ZERO } from "constants";
+import { PaymentUnitsPerYear, TOKENS, WAD, ZERO } from "constants";
 import { useToken } from "hooks/useToken";
 
 export default function useRewards() {
@@ -29,7 +29,7 @@ export default function useRewards() {
         .div(effectiveTotalStake)
         .mul(stakedBalance)
         .div(wad)
-        .mul(BlocksPerYear[chain.id])
+        .mul(PaymentUnitsPerYear[chain.id])
         .div(365)
     : ZERO;
 

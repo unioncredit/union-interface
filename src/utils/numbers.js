@@ -1,4 +1,4 @@
-import { BlocksPerYear, TOKENS, WAD, ZERO } from "constants";
+import { PaymentUnitsPerYear, TOKENS, WAD, ZERO } from "constants";
 import { BigNumber } from "ethers";
 import { parseUnits } from "ethers/lib/utils";
 
@@ -71,7 +71,7 @@ export const calculateMinPayment = (interest, unit) => {
 };
 
 export const calculateInterestRate = (borrowRatePerUnit, chainId, unit) => {
-  return borrowRatePerUnit.mul(BlocksPerYear[chainId]).div(10 ** (18 - unit));
+  return borrowRatePerUnit.mul(PaymentUnitsPerYear[chainId]).div(10 ** (18 - unit));
 };
 
 export const calculateExpectedMinimumPayment = (
