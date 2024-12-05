@@ -1,37 +1,21 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, NumericalRows } from "@unioncredit/ui";
-import { BlockSpeed, ZERO } from "constants";
+import { PaymentUnitSpeed, ZERO } from "constants";
 import { commify } from "utils/format";
 import { mainnet } from "wagmi/chains";
 
 export function ProposalStages({ protocol, ...props }) {
-  const {
-    getMinDelay = ZERO,
-    votingDelay = ZERO,
-    votingPeriod = ZERO,
-  } = protocol;
+  const { getMinDelay = ZERO, votingDelay = ZERO, votingPeriod = ZERO } = protocol;
 
-  const votingDelayHours = votingDelay
-    .mul(BlockSpeed[mainnet.id])
-    .div(3600000)
-    .toNumber();
+  const votingDelayHours = votingDelay.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
 
-  const votingPeriodHours = votingPeriod
-    .mul(BlockSpeed[mainnet.id])
-    .div(3600000)
-    .toNumber();
+  const votingPeriodHours = votingPeriod.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
 
-  const timelockHours = getMinDelay
-    .mul(BlockSpeed[mainnet.id])
-    .div(3600000)
-    .toNumber();
+  const timelockHours = getMinDelay.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
 
   return (
     <Box direction="vertical" {...props}>
-      <ProtocolDataHeader
-        title="Stages"
-        subTitle="Stages in the governance and voting process"
-      />
+      <ProtocolDataHeader title="Stages" subTitle="Stages in the governance and voting process" />
 
       <NumericalRows
         mt="24px"
@@ -41,19 +25,18 @@ export function ProposalStages({ protocol, ...props }) {
             value: `~${votingDelayHours}h · ${commify(votingDelay, 0)} blocks`,
             tooltip: {
               shrink: true,
-              content: "The review period between when a proposal has been proposed and when you can vote",
+              content:
+                "The review period between when a proposal has been proposed and when you can vote",
               position: "right",
             },
           },
           {
             label: "Voting Period",
-            value: `~${votingPeriodHours}h · ${commify(
-              votingPeriod,
-              0
-            )} blocks`,
+            value: `~${votingPeriodHours}h · ${commify(votingPeriod, 0)} blocks`,
             tooltip: {
               shrink: true,
-              content: "The period in which UNION dao members cast their votes. If you transfer your tokens in this period they wont count as votes",
+              content:
+                "The period in which UNION dao members cast their votes. If you transfer your tokens in this period they wont count as votes",
               position: "right",
             },
           },

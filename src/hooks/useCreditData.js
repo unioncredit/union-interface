@@ -9,7 +9,7 @@ import {
 import { useProtocolData } from "providers/ProtocolData";
 import { getVersion, Versions } from "providers/Version";
 import { useMemberData } from "providers/MemberData";
-import { BlockSpeed, ZERO } from "constants";
+import { PaymentUnitSpeed, ZERO } from "constants";
 import { SECONDS_PER_DAY } from "../constants";
 import { format } from "date-fns";
 
@@ -33,7 +33,7 @@ export function useCreditData(address, chainId) {
 
   const overduePeriodSeconds = useMemo(() => {
     return (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks)
-      .mul(BlockSpeed[chainId])
+      .mul(PaymentUnitSpeed[chainId])
       .div(1000);
   }, [chainId, overdueTime, overdueBlocks]);
 

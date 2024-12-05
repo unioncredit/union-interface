@@ -19,7 +19,7 @@ import {
 import { useNetwork } from "wagmi";
 import { useCallback } from "react";
 
-import { BlocksPerYear, StakeType, WAD, ZERO } from "constants";
+import { PaymentUnitsPerYear, StakeType, WAD, ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
@@ -63,7 +63,7 @@ export default function StakeStep({ complete, onSkipStep }) {
         .div(effectiveTotalStake)
         .mul(stakedBalance)
         .div(wad)
-        .mul(BlocksPerYear[chain.id])
+        .mul(PaymentUnitsPerYear[chain.id])
         .div(365)
     : ZERO;
 
@@ -110,8 +110,7 @@ export default function StakeStep({ complete, onSkipStep }) {
           Deposit {token} to begin
         </Heading>
         <Text grey={500} size="medium">
-          Staked funds are used to back credit you give to others. Skip if just
-          borrowing.
+          Staked funds are used to back credit you give to others. Skip if just borrowing.
         </Text>
 
         <Box fluid mt="16px" direction="vertical" className="StakeStep__container">

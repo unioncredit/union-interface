@@ -1,4 +1,4 @@
-import { BlockSpeed, ZERO } from "constants";
+import { PaymentUnitSpeed, ZERO } from "constants";
 import { parseMilliseconds } from "utils/date";
 import { format } from "date-fns";
 import { BigNumber } from "ethers";
@@ -20,7 +20,7 @@ function dueDateToMilliseconds(lastRepay, overdueTime, blockNumber, chainId) {
   const milliseconds = BigNumber.from(lastRepay)
     .add(overdueTime)
     .sub(blockNumber)
-    .mul(BlockSpeed[chainId]);
+    .mul(PaymentUnitSpeed[chainId]);
 
   return Number(milliseconds.toString());
 }

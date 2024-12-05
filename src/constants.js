@@ -82,19 +82,19 @@ export const ContactsType = {
   VOUCHEES: "vouchees",
 };
 
-export const BlockSpeed = {
-  [mainnet.id]: 12e3,
-  [arbitrum.id]: 12e3,
-  [optimism.id]: 1e3,
-  [base.id]: 2e3,
-  [84532]: 1e3,
+export const PaymentUnitSpeed = {
+  [mainnet.id]: 12e3, // block
+  [arbitrum.id]: 12e3, // block
+  [optimism.id]: 1e3, // second
+  [base.id]: 1e3, // second
+  [84532]: 1e3, // second
 };
 
-export const BlocksPerYear = {
+export const PaymentUnitsPerYear = {
   [mainnet.id]: 2628333,
   [arbitrum.id]: 2628333,
   [optimism.id]: 31540000,
-  [base.id]: 15770000,
+  [base.id]: 31540000,
   [84532]: 31540000,
 };
 
@@ -110,7 +110,7 @@ export const EIP3770Map = {
   eth: mainnet.id,
   arb1: arbitrum.id,
   opt: optimism.id,
-  base: 8453,
+  base: base.id,
   basesep: 84532,
 };
 
