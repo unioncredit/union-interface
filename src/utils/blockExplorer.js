@@ -6,7 +6,7 @@ const urls = {
   [mainnet.id]: "https://etherscan.io",
   [arbitrum.id]: "https://arbiscan.io",
   [optimism.id]: "https://optimistic.etherscan.io",
-  [base.id]: "https://basescan.org",
+  [base.id]: "https://base.blockscout.com",
 };
 
 export function blockExplorerTx(chainId, hash) {
