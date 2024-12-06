@@ -52,6 +52,7 @@ export default function BorrowModal() {
   const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
 
   const validate = (inputs) => {
+    return "Borrowing is temporarily disabled";
     if (member.isOverdue) {
       return Errors.IS_OVERDUE;
     } else if (inputs.amount.raw.gt(creditLimit)) {
@@ -188,8 +189,9 @@ export default function BorrowModal() {
             size="large"
             icon={BorrowIcon}
             label={`Borrow ${amount.display} ${token}`}
-            disabled={amount.raw.lte(ZERO)}
+            // disabled={amount.raw.lte(ZERO)}
             {...buttonProps}
+            disabled={true}
           />
         </Modal.Body>
       </Modal>
