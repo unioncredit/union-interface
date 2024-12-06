@@ -76,8 +76,6 @@ export default function NetworkSelect() {
       <InstallAppDrawer />
 
       <Button
-        color="secondary"
-        variant="light"
         w="100%"
         disabled={isConnected && (chain?.unsupported || isMainnet || !isSupportedNetwork)}
         size="large"
