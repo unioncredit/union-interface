@@ -23,6 +23,7 @@ import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { AddressSummary } from "components/shared";
 import { generateTelegramLink, generateTwitterLink, getProfileUrl } from "utils/generateLinks";
 import { useSupportedNetwork } from "hooks/useSupportedNetwork";
+import { useNativeShare } from "hooks/useNativeShare";
 
 export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 
@@ -31,6 +32,7 @@ export default function ShareReferralModal({ address, chainId, onBack }) {
   const { supportedNetworks } = useSupportedNetwork();
   const { address: connectedAddress } = useAccount();
   const { chain: connectedChain } = useNetwork();
+  const { share, enabled: nativeShareEnabled } = useNativeShare();
 
   const [copied, copy] = useCopyToClipboard();
 
@@ -72,18 +74,18 @@ export default function ShareReferralModal({ address, chainId, onBack }) {
               <Button
                 fluid
                 size="large"
-                icon={navigator.share ? ShareIcon : LinkIcon}
+                icon={nativeShareEnabled ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
-                  navigator.share
-                    ? navigator.share({
+                  nativeShareEnabled
+                    ? share({
                         url: profileUrl,
                         title: "Union Finance",
                         text: "Give me a vouch on Union",
                       })
                     : copy(profileUrl)
                 }
-                label={navigator.share ? "Share link" : copied ? "Copied" : "Copy link"}
+                label={nativeShareEnabled ? "Share link" : copied ? "Copied" : "Copy link"}
               />
               <Button
                 size="large"
