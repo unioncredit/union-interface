@@ -16,6 +16,7 @@ import {
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
 import { generateTelegramLink, generateTwitterLink } from "utils/generateLinks";
+import { useNativeShare } from "hooks/useNativeShare";
 
 export const SHARE_LINK_MODAL = "share-link-modal";
 
@@ -23,6 +24,7 @@ export default function ShareLinkModal({ url, title, text }) {
   const [copied, copy] = useCopyToClipboard();
 
   const { close } = useModals();
+  const { share, enabled: nativeShareEnabled } = useNativeShare();
 
   return (
     <ModalOverlay onClick={close}>
@@ -47,18 +49,18 @@ export default function ShareLinkModal({ url, title, text }) {
               <Button
                 fluid
                 size="large"
-                icon={navigator.share ? ShareIcon : LinkIcon}
+                icon={nativeShareEnabled ? ShareIcon : LinkIcon}
                 variant="pill"
                 onClick={() =>
-                  navigator.share
-                    ? navigator.share({
+                  nativeShareEnabled
+                    ? share({
                         url,
                         title,
                         text,
                       })
                     : copy(url)
                 }
-                label={navigator.share ? "Share link" : copied ? "Copied" : "Copy link"}
+                label={nativeShareEnabled ? "Share link" : copied ? "Copied" : "Copy link"}
               />
               <Button
                 size="large"
