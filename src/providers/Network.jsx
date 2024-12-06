@@ -8,6 +8,9 @@ import { arbitrum, mainnet, optimism } from "wagmi/chains";
 // eslint-disable-next-line no-undef
 const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
 
+// eslint-disable-next-line no-undef
+const alchemyKey = process.env.REACT_APP_ALCHEMY_ID;
+
 const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
@@ -22,8 +25,8 @@ export const base = {
     symbol: "ETH",
   },
   rpcUrls: {
-    public: { http: ["https://mainnet.base.org"] },
-    default: { http: ["https://mainnet.base.org"] },
+    public: { http: [`https://base-mainnet.g.alchemy.com/v2/${alchemyKey}`] },
+    default: { http: [`https://base-mainnet.g.alchemy.com/v2/${alchemyKey}`] },
   },
   blockExplorers: {
     etherscan: { name: "Block Scount", url: "https://base.blockscout.com" },
