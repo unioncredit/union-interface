@@ -36,7 +36,7 @@ export default function VouchLinkModal() {
   const network =
     _network || supportedNetworks.find((network) => network.chainId === connectedChain.id);
 
-  const profileUrl = `https://app.union.finance${getProfileUrl(address, network.chainId)}`;
+  const profileUrl = `${getProfileUrl(address, network.chainId)}`;
 
   return (
     <ModalOverlay onClick={close}>
