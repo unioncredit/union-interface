@@ -40,7 +40,7 @@ export default function ShareReferralModal({ address, chainId, onBack }) {
     _network ||
     supportedNetworks.find((network) => network.chainId === (chainId || connectedChain?.id));
 
-  const profileUrl = `https://app.union.finance${getProfileUrl(address, network.chainId)}${
+  const profileUrl = `${getProfileUrl(address, network.chainId)}${
     connectedAddress ? `?refAddress=${connectedAddress}` : ""
   }`;
 
