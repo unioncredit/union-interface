@@ -82,7 +82,7 @@ export const getPermitMethod = (chainId, method) => {
         functionName: "stakeWithERC20Permit",
         type: PermitType.ERC20,
         domain: {
-          name: "USDC",
+          name: "USD Coin",
           version: "2",
           chainId: 8453,
         },
@@ -92,7 +92,7 @@ export const getPermitMethod = (chainId, method) => {
         functionName: "repayBorrowWithERC20Permit",
         type: PermitType.ERC20,
         domain: {
-          name: "USDC",
+          name: "USD Coin",
           version: "2",
           chainId: 8453,
         },
@@ -109,7 +109,7 @@ export const getPermitMethod = (chainId, method) => {
         functionName: "stakeWithERC20Permit",
         type: PermitType.ERC20,
         domain: {
-          name: "USDC",
+          name: "USD Coin",
           version: "2",
           chainId: 84532,
         },
@@ -119,7 +119,7 @@ export const getPermitMethod = (chainId, method) => {
         functionName: "repayBorrowWithERC20Permit",
         type: PermitType.ERC20,
         domain: {
-          name: "USDC",
+          name: "USD Coin",
           version: "2",
           chainId: 84532,
         },
