@@ -13,7 +13,6 @@ export function ProtocolBalances({ protocol, chainId }) {
     totalStaked = ZERO,
     totalFrozen = ZERO,
   } = protocol;
-
   const balances = [
     [
       {
@@ -36,7 +35,7 @@ export function ProtocolBalances({ protocol, chainId }) {
       },
       {
         title: "Effective stake",
-        value: format(totalStaked.sub(totalFrozen, token)),
+        value: format(totalStaked.sub(totalFrozen), token),
       },
       {
         title: "Locked",
