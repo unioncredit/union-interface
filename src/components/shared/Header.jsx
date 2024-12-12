@@ -14,9 +14,10 @@ import {
   UnionNavIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { Link, useLocation } from "react-router-dom";
 import { ZERO } from "constants";
+import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import { useSettings } from "providers/Settings";
@@ -31,7 +32,6 @@ import { InstallAppButton } from "./InstallAppButton";
 export function Header({ loading, showNav = true }) {
   const mobileNavBreakpoint = 900;
   const { open } = useModals();
-  const { chain } = useNetwork();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
   const { data: member = {} } = useMember();
@@ -112,6 +112,7 @@ export function Header({ loading, showNav = true }) {
                       variant="light"
                       className="UnionWallet"
                       onClick={() => open(WALLET_MODAL)}
+                      label={format(unclaimedRewards.add(unionBalance))}
                     />
                   )}
                   <ConnectButton />
