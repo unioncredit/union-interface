@@ -69,13 +69,12 @@ export default function VouchModal({
     disabled: !address || values?.trust?.raw.lte(0),
     onComplete: async () => {
       await refetchMember();
-      await refetchVouchees();
-      await refetchVouchers();
+      refetchVouchees();
+      refetchVouchers();
       if (values.name) {
         setLabel(address, values.name);
       }
 
-      await refetchMember();
       close();
     },
   });

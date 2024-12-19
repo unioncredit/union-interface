@@ -222,8 +222,8 @@ export function useMemberData(address, chainId, forceVersion) {
     },
     ...resp,
     refetch: async () => {
-      await resp.refetch();
       await refetchRelated();
+      await resp.refetch();
     },
   };
 }
