@@ -1,14 +1,14 @@
 import "./VouchersOverview.scss";
 
 import {
-  Text,
   Box,
-  Card,
-  NumericalBlock,
-  Dot,
-  ButtonRow,
   Button,
+  ButtonRow,
+  Card,
+  Dot,
   IncreaseVouchIcon,
+  NumericalBlock,
+  Text,
 } from "@unioncredit/ui";
 import { Link, useNavigate } from "react-router-dom";
 import { PieChart } from "react-minimal-pie-chart";
@@ -27,7 +27,7 @@ export default function VouchersOverview({ vouchers, displayCount }) {
   const navigate = useNavigate();
   const { token } = useToken();
 
-  const colors = ["#f59e0b", "#6366f1", "#14b8a6", "#f97316", "#0ea5e9", "#3730a3"];
+  const colors = ["#1e40af", "#6366f1", "#14b8a6", "#f97316", "#0ea5e9", "#3730a3"];
 
   const hasVouchers = vouchers.length > 0;
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
