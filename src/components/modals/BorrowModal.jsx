@@ -133,7 +133,7 @@ export default function BorrowModal() {
               placeholder="0.0"
               error={errors.amount}
               value={amount.formatted}
-              onChange={register("amount")}
+              onChange={register("amount", (value) => !isNaN(value) && value > 0)}
             />
           </Box>
           {/*--------------------------------------------------------------

@@ -73,9 +73,15 @@ export default function useForm(props = {}) {
     setNumber(name, raw, "raw", rounded);
   };
 
-  const register = (name) => (event) => {
-    setValue(name, event.target.value, event.target.type);
-  };
+  const register =
+    (name, validation = undefined) =>
+    (event) => {
+      if (validation && event.target.value && !validation(event.target.value)) {
+        return;
+      }
+
+      setValue(name, event.target.value, event.target.type);
+    };
 
   const reset = () => {
     setValues({});
