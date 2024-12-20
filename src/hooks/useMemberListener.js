@@ -18,9 +18,9 @@ export default function useMemberListener() {
   const userManager = useContract("userManager", connectedChain?.id ?? mainnet.id);
   const tokenContract = useContract(token.toLowerCase(), connectedChain?.id ?? mainnet.id);
 
-  const refreshMember = () => {
+  const refreshMember = async () => {
     console.log("Listener: refreshing member");
-    refetchMember();
+    await refetchMember();
     refetchVouchers();
     refetchVouchees();
   };
