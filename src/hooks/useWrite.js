@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, usePrepareContractWrite, useNetwork, useSigner } from "wagmi";
+import { useContractWrite, useNetwork, usePrepareContractWrite, useSigner } from "wagmi";
 
 import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
@@ -52,7 +52,7 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version);
+    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version, contract);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
