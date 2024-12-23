@@ -20,7 +20,7 @@ export const uTokenContract = {
 };
 
 export const unionContract = {
-  address: "0x946A2C918F3D928B918C01D813644f27Bcd29D96",
+  address: "0x2c613Ecf0966b84562d3A083227C753B4d5ABF12",
   abi: unionAbi,
 };
 
