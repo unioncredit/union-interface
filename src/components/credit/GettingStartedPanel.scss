@@ -1,0 +1,15 @@
+.GettingStartedPanel {
+  .Card__header {
+    align-items: center;
+
+    &__action {
+      button {
+        width: 32px !important;
+        height: 32px !important;
+      }
+    }
+  }
+  .Card__body {
+    padding-top: 16px;
+  }
+}

@@ -27,13 +27,12 @@ export const RegisterStep = () => {
     <Card size="fluid" className="RegisterStep">
       <span id="step-3" />
       <Card.Body>
-        <Heading m="6px 0 16px" level={2} size="large" grey={700}>
+        <Heading m="6px 0 12px" level={2} size="large" align="center" grey={700}>
           Become a Member
         </Heading>
         <Text grey={500} size="medium">
-          Register your address in order to access{" "}
-          {creditLimit.gt(ZERO) && `your $${format(creditLimit, token)} in credit and`} all the
-          benefits of being a member of the union credit network.
+          Register your address and get access to{" "}
+          {creditLimit.gt(ZERO) && `$${format(creditLimit, token)} in `} on-chain credit.
         </Text>
 
         <Box mt="48px" align="center" direction="vertical">

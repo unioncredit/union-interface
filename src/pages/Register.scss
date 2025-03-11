@@ -1,11 +1,13 @@
 @import "@unioncredit/ui/src/variables";
 
 .Register {
-  margin-top: 80px;
+  margin-top: 40px;
   max-width: 960px;
+  text-align: center;
 
-  @media all and (max-width: 767px) {
-    margin-top: 40px;
+  .union-gif {
+    width: 86px;
+    margin: 0 auto 20px;
   }
 
   &__container {
