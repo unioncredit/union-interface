@@ -11,10 +11,7 @@ const MAX_POLL_INTERVAL = 30000; // 30 seconds
 const BACKOFF_FACTOR = 1.5;
 
 export default function usePollMemberData(address, inputChainId) {
-  const refs = useRef({
-    timer: null,
-    isMounted: true
-  });
+  const timer = useRef(null);
   const [pollInterval, setPollInterval] = useState(INITIAL_POLL_INTERVAL);
   const [isWindowActive, setIsWindowActive] = useState(true);
   const { chain: connectedChain } = useNetwork();
@@ -95,26 +92,16 @@ export default function usePollMemberData(address, inputChainId) {
       }
     };
 
+    // Initial poll
     poll();
-    refs.current.timer = setInterval(poll, pollInterval);
+    
+    // Set up interval
+    timer.current = setInterval(poll, pollInterval);
 
     return () => {
-      clearInterval(refs.current.timer);
+      clearInterval(timer.current);
     };
-  }, [address, isWindowActive, refetch, pollInterval, tokenContract?.address, uTokenContract?.address, comptrollerContract?.address]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      refs.current.isMounted = false;
-      if (refs.current.timer) {
-        clearInterval(refs.current.timer);
-        refs.current.timer = null;
-      }
-    };
-  }, []);
-
-  if (!refs.current.isMounted) return;
+  }, [address, isWindowActive, refetch, pollInterval]);
 
   return resp;
 }
