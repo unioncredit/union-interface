@@ -1,13 +1,19 @@
 import { useContractReads, useNetwork } from "wagmi";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { CACHE_TIME, ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
 import { useToken } from "hooks/useToken";
 
+const INITIAL_POLL_INTERVAL = 5000; // 5 seconds
+const MAX_POLL_INTERVAL = 30000; // 30 seconds
+const BACKOFF_FACTOR = 1.5;
+
 export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
+  const [pollInterval, setPollInterval] = useState(INITIAL_POLL_INTERVAL);
+  const [isWindowActive, setIsWindowActive] = useState(true);
   const { chain: connectedChain } = useNetwork();
   const { version } = useVersion();
   const { token } = useToken(inputChainId);
@@ -60,15 +66,42 @@ export default function usePollMemberData(address, inputChainId) {
 
   const { refetch } = resp;
 
+  // Set up window visibility listener
   useEffect(() => {
-    if (!address) return;
+    const handleVisibilityChange = () => {
+      setIsWindowActive(document.visibilityState === 'visible');
+    };
 
-    timer.current = setInterval(refetch, 5000);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
+  // Set up polling with backoff
+  useEffect(() => {
+    if (!address || !isWindowActive) return;
+
+    const poll = async () => {
+      try {
+        const result = await refetch();
+        // If data hasn't changed significantly, increase the interval
+        setPollInterval(prev => Math.min(prev * BACKOFF_FACTOR, MAX_POLL_INTERVAL));
+      } catch (error) {
+        console.error('Error polling member data:', error);
+        // Reset interval on error
+        setPollInterval(INITIAL_POLL_INTERVAL);
+      }
+    };
+
+    // Initial poll
+    poll();
+    
+    // Set up interval
+    timer.current = setInterval(poll, pollInterval);
 
     return () => {
       clearInterval(timer.current);
     };
-  }, [address]);
+  }, [address, isWindowActive, refetch, pollInterval]);
 
   return resp;
 }
