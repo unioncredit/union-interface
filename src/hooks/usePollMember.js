@@ -6,8 +6,8 @@ import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
 import { useToken } from "hooks/useToken";
 
-const INITIAL_POLL_INTERVAL = 5000; // 5 seconds
-const MAX_POLL_INTERVAL = 30000; // 30 seconds
+const INITIAL_POLL_INTERVAL = 10000; // 10 seconds
+const MAX_POLL_INTERVAL = 60000; // 30 seconds
 const BACKOFF_FACTOR = 1.5;
 
 export default function usePollMemberData(address, inputChainId) {
