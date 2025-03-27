@@ -25,16 +25,16 @@ export default function useMemberListener() {
     refetchVouchees();
   };
 
-  useContractEvent({
-    ...userManager,
-    eventName: "LogDebtWriteOff",
-    listener: (staker, borrower) => {
-      console.debug("Listener: LogDebtWriteOff received", { staker, borrower, address });
-      if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
-        refreshMember();
-      }
-    },
-  });
+  // useContractEvent({
+  //   ...userManager,
+  //   eventName: "LogDebtWriteOff",
+  //   listener: (staker, borrower) => {
+  //     console.debug("Listener: LogDebtWriteOff received", { staker, borrower, address });
+  //     if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
+  //       refreshMember();
+  //     }
+  //   },
+  // });
 
   useContractEvent({
     ...userManager,
@@ -47,16 +47,16 @@ export default function useMemberListener() {
     },
   });
 
-  useContractEvent({
-    ...userManager,
-    eventName: "LogCancelVouch",
-    listener: (_, borrower) => {
-      console.debug("Listener: LogCancelVouch received", { borrower, address });
-      if (compareAddresses(borrower, address)) {
-        refreshMember();
-      }
-    },
-  });
+  // useContractEvent({
+  //   ...userManager,
+  //   eventName: "LogCancelVouch",
+  //   listener: (_, borrower) => {
+  //     console.debug("Listener: LogCancelVouch received", { borrower, address });
+  //     if (compareAddresses(borrower, address)) {
+  //       refreshMember();
+  //     }
+  //   },
+  // });
 
   useContractEvent({
     ...userManager,
