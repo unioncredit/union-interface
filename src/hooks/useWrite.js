@@ -68,7 +68,7 @@ export default function useWrite({
 
       const response = await tx.wait();
 
-      onComplete && (await onComplete());
+      onComplete && onComplete();
 
       addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
       addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
