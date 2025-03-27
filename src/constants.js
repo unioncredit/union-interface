@@ -26,9 +26,9 @@ export const UNIT = {
   USDC: 6,
 };
 
-export const CACHE_TIME = 60_000 * 5; // 5 minutes
+export const CACHE_TIME = 60_000 * 30; // 30 minutes
 
-export const STALE_TIME = 30_000; // 30 seconds
+export const STALE_TIME = 60_000 * 2; // 2 minutes
 
 export const DUST_THRESHOLD = {
   DAI: "10000000000000000",
