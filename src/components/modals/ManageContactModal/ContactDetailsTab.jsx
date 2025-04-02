@@ -27,7 +27,6 @@ import { useVouchee } from "providers/VoucheesData";
 import { useLastRepayData } from "hooks/useLastRepayData";
 import { useVoucher } from "providers/VouchersData";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
-import { useSettings } from "providers/Settings";
 import { useToken } from "hooks/useToken";
 
 export function ContactDetailsTab({
@@ -125,7 +124,7 @@ const VoucherDetails = ({ voucher }) => {
     contract: "userManager",
     method: "cancelVouch",
     args: [stakerAddress, borrowerAddress], // staker, borrower
-    enabled: locking.lte(ZERO),
+    enabled: locking <= ZERO,
     onComplete: async () => {
       navigate(0); // reload page
     },
@@ -151,7 +150,7 @@ const VoucherDetails = ({ voucher }) => {
           },
           {
             label: "Available to you",
-            value: `${format(vouch.sub(locking), token)} ${token}`,
+            value: `${format(vouch - locking, token)} ${token}`,
             tooltip: {
               content: "The amount currently available to borrow via this contacts unlocked stake",
             },
@@ -161,7 +160,7 @@ const VoucherDetails = ({ voucher }) => {
 
       <Tooltip
         w="100%"
-        enabled={locking.gt(ZERO)}
+        enabled={locking > ZERO}
         title="Cannot be cancelled"
         content="A received vouch cannot be cancelled if there is outstanding debt"
       >
@@ -172,7 +171,7 @@ const VoucherDetails = ({ voucher }) => {
           icon={CancelIcon}
           label="Cancel received vouch"
           {...cancelVouchButtonProps}
-          disabled={cancelVouchButtonProps.disabled || locking.gt(ZERO)}
+          disabled={cancelVouchButtonProps.disabled || locking > ZERO}
         />
       </Tooltip>
     </>
@@ -227,7 +226,7 @@ const VoucheeDetails = ({
       value: format(locking, token),
       buttonProps: {
         label: "Write-off",
-        disabled: locking.lte(ZERO),
+        disabled: locking <= ZERO,
         onClick: () => {
           clearContact();
           open(WRITE_OFF_DEBT_MODAL, {
@@ -280,7 +279,7 @@ const VoucheeDetails = ({
           },
           {
             label: "Available to borrow",
-            value: `${format(vouch.sub(locking), token)} ${token}`,
+            value: `${format(vouch - locking, token)} ${token}`,
             tooltip: {
               content:
                 "The amount this contact can borrow accounting for outstanding borrows from them and other contacts",
@@ -296,7 +295,7 @@ const VoucheeDetails = ({
           {
             label: "Payment due",
             value:
-              paymentDue.formatted === "N/A" || locking.lte(ZERO)
+              paymentDue.formatted === "N/A" || locking <= ZERO
                 ? "N/A"
                 : isOverdue
                 ? `${format(minPayment, token)} ${token} - ${paymentDue.formatted} ago`

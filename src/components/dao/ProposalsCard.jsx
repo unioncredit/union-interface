@@ -1,13 +1,13 @@
 import {
-  Card,
-  Box,
-  Table,
   Badge,
+  Box,
+  Card,
   EmptyState,
+  Table,
   TableCell,
+  TableHead,
   TableRow,
   Text,
-  TableHead,
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
 
@@ -25,8 +25,8 @@ export default function ProposalsCard({
 }) {
   const { proposals: allProposals } = useGovernance();
 
-  const proposals = (filter ? allProposals.filter(filter) : allProposals).sort(
-    (a, b) => b.startBlock?.toNumber() - a.startBlock?.toNumber()
+  const proposals = (filter ? allProposals.filter(filter) : allProposals).sort((a, b) =>
+    Number(b.startBlock - a.startBlock)
   );
 
   return (

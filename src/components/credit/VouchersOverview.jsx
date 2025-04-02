@@ -33,18 +33,18 @@ export default function VouchersOverview({ vouchers, displayCount }) {
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
   let sortedVouchers = vouchers
-    .sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1))
+    .sort((a, b) => (a.vouch < b.vouch ? 1 : -1))
     .map((voucher) => ({
       address: voucher.address,
       vouch: voucher.vouch,
       label: voucher.ens ? voucher.ens : truncateAddress(voucher.address),
-      percentage: vouch.gt(ZERO) ? Number(voucher.vouch.mul(10000).div(vouch).toString()) / 100 : 0,
+      percentage: vouch > ZERO ? Number((voucher.vouch * 10000n) / vouch) / 100 : 0,
     }));
 
   // If we have more than displayCount vouchers, collapse into "others" item
   if (sortedVouchers.length > displayCount) {
     const others = sortedVouchers.slice(displayCount - 1);
-    const othersVouch = others.reduce((acc, curr) => acc.add(curr.vouch), ZERO);
+    const othersVouch = others.reduce((acc, curr) => acc + curr.vouch, ZERO);
 
     sortedVouchers = sortedVouchers.slice(0, displayCount - 1);
     sortedVouchers.push({

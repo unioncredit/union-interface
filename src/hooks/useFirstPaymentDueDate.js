@@ -6,7 +6,7 @@ export default function useFirstPaymentDueDate() {
   const { data: protocol } = useProtocol();
   const { overdueTime = ZERO } = protocol;
 
-  const milliseconds = overdueTime.mul(1_000);
+  const milliseconds = overdueTime * 1000n;
 
   let date = new Date();
   date.setMilliseconds(date.getMilliseconds() + Number(milliseconds));

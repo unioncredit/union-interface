@@ -41,26 +41,26 @@ export default function StakeModal({ type: initialType = StakeType.STAKE }) {
     maxStakeAmount = ZERO,
   } = { ...member, ...protocol };
 
-  let userStakeLimit = maxStakeAmount.sub(stakedBalance);
-  userStakeLimit = userStakeLimit.lte(0) ? ZERO : userStakeLimit;
+  let userStakeLimit = maxStakeAmount - stakedBalance;
+  userStakeLimit = userStakeLimit <= ZERO ? ZERO : userStakeLimit;
 
   const maxUserStake = min(userStakeLimit, tokenBalance);
-  const maxUserUnstake = stakedBalance.sub(totalLockedStake);
+  const maxUserUnstake = stakedBalance - totalLockedStake;
 
   const validateStake = (inputs) => {
-    if (inputs.amount.display !== "" && inputs.amount.raw.lt(wad)) {
+    if (inputs.amount.display !== "" && inputs.amount.raw < wad) {
       return Errors.MIN_STAKE_LIMIT_REQUIRED(token);
     }
-    if (inputs.amount.raw.gt(userStakeLimit)) {
+    if (inputs.amount.raw > userStakeLimit) {
       return Errors.MAX_STAKE_LIMIT_EXCEEDED;
     }
-    if (inputs.amount.raw.gt(maxUserStake)) {
+    if (inputs.amount.raw > maxUserStake) {
       return Errors.MAX_USER_BALANCE_EXCEEDED;
     }
   };
 
   const validateUnstake = (inputs) => {
-    if (inputs.amount.raw.gt(maxUserUnstake)) {
+    if (inputs.amount.raw > maxUserUnstake) {
       return Errors.MAX_USER_BALANCE_EXCEEDED;
     }
   };

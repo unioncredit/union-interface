@@ -1,12 +1,12 @@
 import { useMemo, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
 import { useUnionDataApi } from "hooks/useUnionDataApi";
 import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
 import { useToken } from "hooks/useToken";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 const columns = {
   TOTAL_STAKE: {
@@ -31,7 +31,7 @@ export const SamaritansBoard = () => {
   });
 
   const { unit } = useToken();
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
 
   const sortQuery = useMemo(
     () => ({

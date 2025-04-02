@@ -1,5 +1,5 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads, useNetwork } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import { useMemberData } from "providers/MemberData";
@@ -73,23 +73,28 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
     []
   );
 
-  const resp = useContractReads({
-    enabled: false,
-    select: (data) => {
-      const tmp = buildVoucherQueries(address, address);
-      const chunkSize = tmp.length;
-      const chunked = chunk(data, chunkSize);
-      return chunked.map((x, i) => ({
-        ...selectVoucher(forcedVersion || version)(x),
-        address: stakerAddresses[i],
-      }));
-    },
+  const resp = useReadContracts({
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+    query: {
+      enabled: false,
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
+      select: (data) => {
+        const tmp = buildVoucherQueries(address, address);
+        const chunkSize = tmp.length;
+        const chunked = chunk(
+          data.map((d) => d.result),
+          chunkSize
+        );
+        return chunked.map((x, i) => ({
+          ...selectVoucher(forcedVersion || version)(x),
+          address: stakerAddresses[i],
+        }));
+      },
+    },
   });
 
   useEffect(() => {
@@ -113,8 +118,7 @@ export const useVouchersData = (address, chainId, forcedVersion) => {
 };
 
 export default function VouchersData({ children }) {
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { chain, address } = useAccount();
   const data = useVouchersData(address, chain?.id);
 
   return <VouchersContext.Provider value={{ ...data }}>{children}</VouchersContext.Provider>;

@@ -31,8 +31,8 @@ export default function StakeStats() {
 
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
-  const withdrawableStake = stakedBalance.sub(totalLockedStake);
-  const borrowingVouchees = vouchees.filter((v) => v.locking.gt(ZERO));
+  const withdrawableStake = stakedBalance - totalLockedStake;
+  const borrowingVouchees = vouchees.filter((v) => v.locking > ZERO);
   const defaultedVouchees = vouchees.filter((v) => v.isOverdue);
   const defaulted = defaultedVouchees.map((v) => v.locking).reduce(reduceBnSum, ZERO);
 

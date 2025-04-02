@@ -16,7 +16,7 @@ import {
   Text,
   WarningIcon,
 } from "@unioncredit/ui";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { useCallback } from "react";
 
 import { PaymentUnitsPerYear, StakeType, WAD, ZERO } from "constants";
@@ -25,12 +25,11 @@ import { useMember } from "providers/MemberData";
 import { STAKE_MODAL } from "components/modals/StakeModal";
 import { useModals } from "providers/ModalManager";
 import { useProtocol } from "providers/ProtocolData";
-import useWrite from "hooks/useWrite";
 import { useToken } from "hooks/useToken";
 
 export default function StakeStep({ complete, onSkipStep }) {
   const { open } = useModals();
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { token, wad } = useToken();
 
   const { data: member, refetch: refetchMember } = useMember();
@@ -49,40 +48,30 @@ export default function StakeStep({ complete, onSkipStep }) {
 
   const inflationPerUnit = inflationPerSecond || inflationPerBlock;
 
-  const virtualBalance = unionBalance.add(unclaimedRewards);
-  const percentage = virtualBalance.gte(WAD["UNION"])
-    ? 100
-    : Number(virtualBalance.mul(10000).div(WAD["UNION"])) / 100;
+  const virtualBalance = unionBalance + unclaimedRewards;
+  const percentage =
+    virtualBalance >= WAD["UNION"] ? 100 : Number((virtualBalance * 10000n) / WAD["UNION"]) / 100;
 
-  const unionEarned = unionBalance.add(unclaimedRewards);
-  const effectiveTotalStake = totalStaked.sub(totalFrozen);
+  const unionEarned = unionBalance + unclaimedRewards;
+  const effectiveTotalStake = totalStaked - totalFrozen;
 
-  const dailyEarnings = effectiveTotalStake.gt(ZERO)
-    ? inflationPerUnit
-        .mul(wad)
-        .div(effectiveTotalStake)
-        .mul(stakedBalance)
-        .div(wad)
-        .mul(PaymentUnitsPerYear[chain.id])
-        .div(365)
-    : ZERO;
-
-  const claimTokensButtonProps = useWrite({
-    contract: "userManager",
-    method: "withdrawRewards",
-    onComplete: () => refetchMember(),
-  });
+  const dailyEarnings =
+    effectiveTotalStake > ZERO
+      ? (((((inflationPerUnit * wad) / effectiveTotalStake) * stakedBalance) / wad) *
+          PaymentUnitsPerYear[chain.id]) /
+        365n
+      : ZERO;
 
   const progressBarProps = useCallback(() => {
-    if (unionEarned.gte(WAD["UNION"])) {
+    if (unionEarned >= WAD["UNION"]) {
       return {
         icon: CheckIcon,
         label: "Membership fee earned",
       };
     }
 
-    if (unionEarned.gt(ZERO)) {
-      if (stakedBalance.gt(ZERO)) {
+    if (unionEarned > ZERO) {
+      if (stakedBalance > ZERO) {
         return {
           icon: PlayIcon,
           forceActive: true,

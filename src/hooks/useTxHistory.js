@@ -1,6 +1,8 @@
-import { mainnet, useContractEvent, useNetwork } from "wagmi";
-import { ZERO_ADDRESS } from "constants";
+import { useAccount, useWatchContractEvent } from "wagmi";
 import { useEffect, useState } from "react";
+import { mainnet } from "viem/chains";
+
+import { ZERO_ADDRESS } from "constants";
 import useContract from "hooks/useContract";
 import { useCache } from "providers/Cache";
 import { useVersion } from "providers/Version";
@@ -9,7 +11,7 @@ import fetchUTokenTransactions from "fetchers/fetchUTokenTransactions";
 import fetchRegisterTransactions from "fetchers/fetchRegisterTransactions";
 
 export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_ADDRESS }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { version } = useVersion();
   const { cache, cached } = useCache();
 
@@ -40,7 +42,8 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
     setLoading(false);
   }
 
-  useContractEvent({
+  // todo: implement onLogs handler
+  useWatchContractEvent({
     ...uTokenManager,
     eventName: "LogBorrow",
     listener: (account, to, amount, fee) => {
@@ -49,7 +52,7 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
     },
   });
 
-  useContractEvent({
+  useWatchContractEvent({
     ...uTokenManager,
     eventName: "LogRepay",
     listener: (payer, borrower, sendAmount) => {

@@ -28,11 +28,9 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
     chainId
   );
 
-  const { creditLimit = ZERO, owed = ZERO } = member;
+  const { owed = ZERO } = member;
 
   const vouch = vouchers.map(({ vouch = ZERO }) => vouch).reduce(reduceBnSum, ZERO);
-
-  const unavailableBalance = vouch.sub(creditLimit).sub(owed);
 
   const voucheesAddresses = vouchees.map((obj) => obj.address);
   const vouchersAddresses = vouchers.map((obj) => obj.address);
@@ -81,7 +79,7 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
               color: "blue900",
             },
             {
-              value: formattedNumber(vouch.sub(owed), 2, false),
+              value: formattedNumber(vouch - owed, 2, false),
               color: "blue50",
             },
           ]}

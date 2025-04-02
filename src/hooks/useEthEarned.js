@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { optimism } from "wagmi/chains";
-import { isAddress } from "ethers/lib/utils";
-import { BigNumber } from "ethers";
+import { base, optimism } from "viem/chains";
+import { isAddress } from "viem";
 
 import fetchReferrals from "fetchers/fetchReferrals";
 import { getVersion } from "providers/Version";
-import { ZERO } from "constants";
 import { useCache } from "providers/Cache";
-import { base } from "providers/Network";
+import { ZERO } from "constants";
 
 export const useEthEarned = (address) => {
   const [data, setData] = useState(ZERO);
@@ -33,7 +31,7 @@ export const useEthEarned = (address) => {
     const baseReferrals = await fetchReferrals(getVersion(base.id), base.id, address);
 
     const referrals = [...optimismReferrals, ...baseReferrals];
-    const ethEarned = referrals.reduce((acc, curr) => acc.add(BigNumber.from(curr.rebate)), ZERO);
+    const ethEarned = referrals.reduce((acc, curr) => acc + BigInt(curr.rebate), ZERO);
 
     cache(cacheKey, ethEarned);
     setData(ethEarned);

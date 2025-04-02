@@ -12,9 +12,7 @@ export const GiftMembershipButton = ({ address, referrer, canRegister, ethRegist
     args: [address, referrer || ZERO_ADDRESS],
     enabled: canRegister,
     disabled: !canRegister,
-    overrides: {
-      value: ethRegisterFee,
-    },
+    value: ethRegisterFee,
   });
 
   return (

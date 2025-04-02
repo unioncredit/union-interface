@@ -7,15 +7,15 @@ import { getVersion, Versions } from "providers/Version";
 export function ProtocolPeriods({ protocol, chainId, ...props }) {
   const { overdueBlocks = ZERO, overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
   const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
-  const overdueHours = versioned(overdueBlocks, overdueTime.mul(1000))
-    .mul(versioned(PaymentUnitSpeed[chainId], 1))
-    .div(SECONDS_PER_HOUR * 1000)
-    .toNumber();
+  const overdueHours = Number(
+    (versioned(overdueBlocks, overdueTime * 1000n) * versioned(PaymentUnitSpeed[chainId], 1n)) /
+      BigInt(SECONDS_PER_HOUR * 1000)
+  );
 
-  const overdueDays = versioned(overdueBlocks, overdueTime.mul(1000))
-    .mul(versioned(PaymentUnitSpeed[chainId], 1))
-    .div(SECONDS_PER_DAY * 1000)
-    .toNumber();
+  const overdueDays = Number(
+    (versioned(overdueBlocks, overdueTime * 1000n) * versioned(PaymentUnitSpeed[chainId], 1n)) /
+      BigInt(SECONDS_PER_DAY * 1000)
+  );
 
   const overdueFormatted = overdueHours < 48 ? overdueHours + " hours" : overdueDays + " days";
   const periods = [

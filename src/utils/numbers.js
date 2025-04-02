@@ -1,9 +1,9 @@
+import { parseUnits } from "viem";
+
 import { PaymentUnitsPerYear, TOKENS, WAD, ZERO } from "constants";
-import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
 
 export const min = (a, b) => {
-  return a.gt(b) ? b : a;
+  return a > b ? b : a;
 };
 
 export const percent = (n) => {
@@ -11,8 +11,8 @@ export const percent = (n) => {
 };
 
 export const bnPercent = (n, d) => {
-  if (d.lte(ZERO)) return ZERO;
-  const bps = n.mul(10000).div(d);
+  if (d <= ZERO) return ZERO;
+  const bps = (n * 10000n) / d;
   return Number(bps.toString()) / 10000;
 };
 
@@ -54,24 +54,19 @@ export function toFixed(x) {
 }
 
 export const calculateMaxBorrow = (creditLimit, originationFee) => {
-  const cl = Number(
-    creditLimit
-      .mul(BigNumber.from("999999999999999"))
-      .div(BigNumber.from("1000000000000000"))
-      .toString()
-  );
+  const cl = Number((creditLimit * BigInt("999999999999999")) / BigInt("1000000000000000"));
   const ofe = Number(originationFee.toString()) / 1e18;
-  return BigNumber.from(toFixed(Math.floor(cl / (ofe + 1)).toString()));
+  return BigInt(toFixed(Math.floor(cl / (ofe + 1)).toString()));
 };
 
 export const calculateMinPayment = (interest, unit) => {
   const floor = parseUnits("0.01", unit);
-  const interestWithMargin = interest.mul(10010).div(10000);
-  return interestWithMargin.lt(floor) ? floor : interestWithMargin;
+  const interestWithMargin = (interest * 10010n) / 10000n;
+  return interestWithMargin < floor ? floor : interestWithMargin;
 };
 
 export const calculateInterestRate = (borrowRatePerUnit, chainId, unit) => {
-  return borrowRatePerUnit.mul(PaymentUnitsPerYear[chainId]).div(10 ** (18 - unit));
+  return (borrowRatePerUnit * PaymentUnitsPerYear[chainId]) / BigInt(10 ** (18 - unit));
 };
 
 export const calculateExpectedMinimumPayment = (
@@ -81,10 +76,7 @@ export const calculateExpectedMinimumPayment = (
   unit
 ) => {
   const floor = parseUnits("0.01", unit);
-  const minimumPayment = borrowAmount
-    .mul(borrowRatePerBlock)
-    .mul(overdueBlocks)
-    .div(WAD[TOKENS.DAI]);
+  const minimumPayment = (borrowAmount * borrowRatePerBlock * overdueBlocks) / WAD[TOKENS.DAI];
 
-  return minimumPayment.lt(floor) ? floor : minimumPayment;
+  return minimumPayment < floor ? floor : minimumPayment;
 };

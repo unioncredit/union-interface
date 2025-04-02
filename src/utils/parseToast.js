@@ -1,11 +1,12 @@
-import { mainnet } from "wagmi/chains";
+import { mainnet } from "viem/chains";
 
 import format from "./format";
 import { Status } from "constants";
 import { blockExplorerTx } from "./blockExplorer";
 import { truncateAddress } from "./truncateAddress";
-import { ethers } from "ethers";
 import { Versions } from "providers/Version";
+import { maxUint256 } from "viem";
+
 export default function createParseToast(
   method,
   args,
@@ -14,9 +15,9 @@ export default function createParseToast(
   version,
   contract
 ) {
-  return function (status, tx) {
+  return function (status, hash) {
     const sharedProps = {
-      link: tx ? blockExplorerTx(chainId, tx.hash) : null,
+      link: hash ? blockExplorerTx(chainId, hash) : null,
       variant: status,
       id: `${status}__${method}__${Date.now()}`,
     };
@@ -51,7 +52,7 @@ export default function createParseToast(
           return {
             ...sharedProps,
             content: `Approved ${
-              ethers.constants.MaxUint256.eq(args[1]) ? "max" : format(args[1], token)
+              maxUint256 === args[1] ? "max" : format(args[1], token)
             } successfully`,
             title: `Approve ${token}`,
           };
@@ -64,9 +65,7 @@ export default function createParseToast(
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
-          const amount = ethers.constants.MaxUint256.eq(repayAmount)
-            ? "maximum"
-            : format(repayAmount, token);
+          const amount = maxUint256 === repayAmount ? "maximum" : format(repayAmount, token);
           return {
             ...sharedProps,
             content: `Repaid ${amount} ${token} successfully`,
@@ -126,9 +125,7 @@ export default function createParseToast(
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
-          const amount = ethers.constants.MaxUint256.eq(repayAmount)
-            ? "maximum"
-            : format(repayAmount, token);
+          const amount = maxUint256 === repayAmount ? "maximum" : format(repayAmount, token);
           return {
             ...sharedProps,
             content: `Repaying ${amount} ${token} failed`,
@@ -186,9 +183,7 @@ export default function createParseToast(
           };
         case "repayBorrow":
           const repayAmount = version === Versions.V2 ? args[1] : args[0];
-          const amount = ethers.constants.MaxUint256.eq(repayAmount)
-            ? "maximum"
-            : format(repayAmount, token);
+          const amount = maxUint256 === repayAmount ? "maximum" : format(repayAmount, token);
           return {
             ...sharedProps,
             content: `Repaying ${amount} ${token}`,

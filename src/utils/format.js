@@ -1,6 +1,6 @@
-import { formatUnits } from "ethers/lib/utils";
+import { formatUnits } from "viem";
+
 import { DUST_THRESHOLD, UNIT, ZERO } from "constants";
-import { BigNumber } from "ethers";
 
 export default function format(
   n,
@@ -11,8 +11,7 @@ export default function format(
   formatDust = true
 ) {
   if (!n) n = "0";
-  if (formatDust && n instanceof BigNumber && n.lt(DUST_THRESHOLD[token]) && n.gt(ZERO))
-    return "<0.01";
+  if (formatDust && typeof n === "bigint" && n < DUST_THRESHOLD[token] && n > ZERO) return "<0.01";
   return commify(Number(formatUnits(n, UNIT[token])), digits, rounded, stripTrailingZeros);
 }
 

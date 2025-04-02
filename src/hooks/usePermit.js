@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { signDaiPermit, signERC2612Permit } from "eth-permit";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount } from "wagmi";
 import { PermitType } from "utils/permits";
+import { BnStringify } from "utils/json";
 
 export default function usePermit({
   type,
@@ -12,13 +13,14 @@ export default function usePermit({
   onComplete,
   domain = null,
 }) {
-  const { address } = useAccount();
-  const { data: signer } = useSigner();
+  const { connector, address } = useAccount();
   const [loading, setLoading] = useState(false);
+
+  const provider = connector.getProvider();
 
   const createDaiPermit = useCallback(async () => {
     const permit = await signDaiPermit(
-      signer.provider,
+      provider,
       domain
         ? {
             ...domain,
@@ -32,17 +34,17 @@ export default function usePermit({
     return [...args, permit.nonce, permit.expiry, permit.v, permit.r, permit.s];
   }, [
     signDaiPermit,
-    signer?.provider,
+    provider,
     tokenAddress,
     address,
     spender,
-    JSON.stringify(domain),
-    JSON.stringify(args),
+    BnStringify(domain),
+    BnStringify(args),
   ]);
 
   const createERC2612Permit = useCallback(async () => {
     const permit = await signERC2612Permit(
-      signer.provider,
+      provider,
       domain
         ? {
             ...domain,
@@ -57,13 +59,13 @@ export default function usePermit({
     return [...args, permit.deadline, permit.v, permit.r, permit.s];
   }, [
     signERC2612Permit,
-    signer?.provider,
+    provider,
     tokenAddress,
     address,
     spender,
     value,
-    JSON.stringify(domain),
-    JSON.stringify(args),
+    BnStringify(domain),
+    BnStringify(args),
   ]);
 
   const onClick = useCallback(async () => {

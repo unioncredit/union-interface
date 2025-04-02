@@ -1,12 +1,10 @@
-import { useNetwork } from "wagmi";
 import { Box, Card, CheckIcon, EthereumIcon, Heading, Text } from "@unioncredit/ui";
 
-import { MOGO_NFT_URLS, ZERO } from "constants";
+import { ZERO } from "constants";
 import format from "utils/format";
-import { NetworkSelect } from "../shared";
+import { NetworkSelect } from "components/shared";
 import { EthRegisterButton } from "./EthRegisterButton";
-import { WELCOME_MODAL } from "../modals/WelcomeModal";
-import { TextSeparator } from "../shared/TextSeparator";
+import { WELCOME_MODAL } from "components/modals/WelcomeModal";
 import { useModals } from "providers/ModalManager";
 import { useToken } from "hooks/useToken";
 import { useProtocol } from "providers/ProtocolData";
@@ -15,13 +13,12 @@ import { useMember } from "providers/MemberData";
 export const RegisterStep = () => {
   const { open } = useModals();
   const { token } = useToken();
-  const { chain } = useNetwork();
   const { data: protocol = {} } = useProtocol();
   const { data: member = {}, refetch: refetchMember } = useMember();
 
   const { creditLimit = ZERO } = member;
   const { regFee = ZERO, rebate = ZERO } = protocol;
-  const ethRegisterFee = regFee.add(rebate);
+  const ethRegisterFee = regFee + rebate;
 
   return (
     <Card size="fluid" className="RegisterStep">
@@ -32,7 +29,7 @@ export const RegisterStep = () => {
         </Heading>
         <Text grey={500} size="medium">
           Register your address and get access to{" "}
-          {creditLimit.gt(ZERO) && `$${format(creditLimit, token)} in `} on-chain credit.
+          {creditLimit > ZERO && `$${format(creditLimit, token)} in `} on-chain credit.
         </Text>
 
         <Box mt="48px" align="center" direction="vertical">

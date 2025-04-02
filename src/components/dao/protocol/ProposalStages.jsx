@@ -7,11 +7,11 @@ import { mainnet } from "wagmi/chains";
 export function ProposalStages({ protocol, ...props }) {
   const { getMinDelay = ZERO, votingDelay = ZERO, votingPeriod = ZERO } = protocol;
 
-  const votingDelayHours = votingDelay.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
+  const votingDelayHours = Number((votingDelay * PaymentUnitSpeed[mainnet.id]) / 3600000n);
 
-  const votingPeriodHours = votingPeriod.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
+  const votingPeriodHours = Number((votingPeriod * PaymentUnitSpeed[mainnet.id]) / 3600000n);
 
-  const timelockHours = getMinDelay.mul(PaymentUnitSpeed[mainnet.id]).div(3600000).toNumber();
+  const timelockHours = Number((getMinDelay * PaymentUnitSpeed[mainnet.id]) / 3600000n);
 
   return (
     <Box direction="vertical" {...props}>

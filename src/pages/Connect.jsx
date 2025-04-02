@@ -1,8 +1,8 @@
 import "./Connect.scss";
 import { useEffect } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { Helmet } from "react-helmet";
-import { Heading, Text, Box, InfoBanner, WarningIcon } from "@unioncredit/ui";
+import { Box, Heading, InfoBanner, Text, WarningIcon } from "@unioncredit/ui";
 
 import LoadingPage from "pages/Loading";
 import Banner from "components/connect/Banner";
@@ -11,7 +11,7 @@ import { useMember } from "providers/MemberData";
 import { useVersion } from "providers/Version";
 
 export default function ConnectPage() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { isLoading } = useMember();
   const { isV2 } = useVersion();
 

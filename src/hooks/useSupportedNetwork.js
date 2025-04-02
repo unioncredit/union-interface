@@ -1,10 +1,10 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { supportedNetworks, testNetworkIds } from "../config/networks";
 import { mainnet } from "wagmi/chains";
 import { useSettings } from "../providers/Settings";
 
 export function useSupportedNetwork() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { settings } = useSettings();
 
   // Ethereum mainnet is marked as supported network because we need to access it for governance

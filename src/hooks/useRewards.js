@@ -1,4 +1,4 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 import { useMember } from "providers/MemberData";
 import { useProtocol } from "providers/ProtocolData";
@@ -6,7 +6,7 @@ import { PaymentUnitsPerYear, TOKENS, WAD, ZERO } from "constants";
 import { useToken } from "hooks/useToken";
 
 export default function useRewards() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { wad } = useToken();
 
   const { data: member } = useMember();
@@ -21,30 +21,27 @@ export default function useRewards() {
     inflationPerSecond = ZERO,
   } = { ...protocol, ...member };
 
-  const effectiveTotalStake = totalStaked.sub(totalFrozen);
+  const effectiveTotalStake = totalStaked - totalFrozen;
 
-  const estimatedDailyTotal = effectiveTotalStake.gt(ZERO)
-    ? inflationPerSecond
-        .mul(wad)
-        .div(effectiveTotalStake)
-        .mul(stakedBalance)
-        .div(wad)
-        .mul(PaymentUnitsPerYear[chain.id])
-        .div(365)
-    : ZERO;
+  const estimatedDailyTotal =
+    effectiveTotalStake > ZERO
+      ? (((((inflationPerSecond * wad) / effectiveTotalStake) * stakedBalance) / wad) *
+          PaymentUnitsPerYear[chain.id]) /
+        365n
+      : ZERO;
 
-  const estimatedDailyBase = rewardsMultiplier.gt(ZERO)
-    ? estimatedDailyTotal.mul(WAD[TOKENS.UNION]).div(rewardsMultiplier)
-    : ZERO;
-  const dailyDifference = estimatedDailyTotal.sub(estimatedDailyBase);
+  const estimatedDailyBase =
+    rewardsMultiplier > ZERO ? (estimatedDailyTotal * WAD[TOKENS.UNION]) / rewardsMultiplier : ZERO;
+  const dailyDifference = estimatedDailyTotal - estimatedDailyBase;
 
   return {
     unclaimed,
-    estimatedDailyBase: rewardsMultiplier.gt(ZERO)
-      ? estimatedDailyTotal.mul(WAD[TOKENS.UNION]).div(rewardsMultiplier)
-      : ZERO,
+    estimatedDailyBase:
+      rewardsMultiplier > ZERO
+        ? (estimatedDailyTotal * WAD[TOKENS.UNION]) / rewardsMultiplier
+        : ZERO,
     estimatedDailyTotal,
-    estimatedDailyBonus: dailyDifference.gt(ZERO) ? dailyDifference : ZERO,
-    estimatedDailyPenalty: dailyDifference.lt(ZERO) ? dailyDifference : ZERO,
+    estimatedDailyBonus: dailyDifference > ZERO ? dailyDifference : ZERO,
+    estimatedDailyPenalty: dailyDifference < ZERO ? dailyDifference : ZERO,
   };
 }

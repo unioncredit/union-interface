@@ -1,17 +1,17 @@
 import "./ProfileVerifiedAccounts.scss";
 
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { Box, Text } from "@unioncredit/ui";
 import { useEffect, useState } from "react";
+import { base } from "viem/chains";
 
 import { ZERO_ADDRESS } from "constants";
 import { ProfileVerifiedAccountBadge } from "./ProfileVerifiedAccountBadge";
-import { base } from "providers/Network";
 
 export const ProfileVerifiedAccounts = ({ address, chainId }) => {
   const [data, setData] = useState(null);
 
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
 
   useEffect(() => {
     if (address !== ZERO_ADDRESS) {

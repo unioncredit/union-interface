@@ -35,42 +35,42 @@ const score = (bools) => {
 
 const sortFns = {
   [PROVIDING_COLUMNS.TRUST_SET.id]: {
-    [SortOrder.ASC]: (a, b) => a.trust.sub(b.trust),
-    [SortOrder.DESC]: (a, b) => b.trust.sub(a.trust),
+    [SortOrder.ASC]: (a, b) => a.trust - b.trust,
+    [SortOrder.DESC]: (a, b) => b.trust - a.trust,
   },
   [PROVIDING_COLUMNS.TOTAL_VOUCH.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
-    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
+    [SortOrder.ASC]: (a, b) => a.vouch - b.vouch,
+    [SortOrder.DESC]: (a, b) => b.vouch - a.vouch,
   },
   [PROVIDING_COLUMNS.STAKE_LOCKED.id]: {
-    [SortOrder.ASC]: (a, b) => a.locking.sub(b.locking),
-    [SortOrder.DESC]: (a, b) => b.locking.sub(a.locking),
+    [SortOrder.ASC]: (a, b) => a.locking - b.locking,
+    [SortOrder.DESC]: (a, b) => b.locking - a.locking,
   },
   [PROVIDING_COLUMNS.LAST_PAYMENT.id]: {
-    [SortOrder.ASC]: (a, b) => a.lastRepay.sub(b.lastRepay),
-    [SortOrder.DESC]: (a, b) => b.lastRepay.sub(a.lastRepay),
+    [SortOrder.ASC]: (a, b) => a.lastRepay - b.lastRepay,
+    [SortOrder.DESC]: (a, b) => b.lastRepay - a.lastRepay,
   },
   [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
     [SortOrder.ASC]: (a, b) =>
-      score([a.locking?.gt(ZERO) && a.isOverdue, a.isMember, a.locking?.gt(ZERO)]) -
-      score([b.locking?.gt(ZERO) && b.isOverdue, b.isMember, b.locking?.gt(ZERO)]),
+      score([a.locking > ZERO && a.isOverdue, a.isMember, a.locking > ZERO]) -
+      score([b.locking > ZERO && b.isOverdue, b.isMember, b.locking > ZERO]),
     [SortOrder.DESC]: (a, b) =>
-      score([b.isOverdue && b.locking?.gt(ZERO), b.isMember, b.locking?.gt(ZERO)]) -
-      score([a.isOverdue && a.locking?.gt(ZERO), a.isMember, a.locking?.gt(ZERO)]),
+      score([b.isOverdue && b.locking > ZERO, b.isMember, b.locking > ZERO]) -
+      score([a.isOverdue && a.locking > ZERO, a.isMember, a.locking > ZERO]),
   },
   [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch.sub(b.vouch),
-    [SortOrder.DESC]: (a, b) => b.vouch.sub(a.vouch),
+    [SortOrder.ASC]: (a, b) => a.vouch - b.vouch,
+    [SortOrder.DESC]: (a, b) => b.vouch - a.vouch,
   },
   [RECEIVING_COLUMNS.LOCKING.id]: {
-    [SortOrder.ASC]: (a, b) => (a.locking ?? a.locked).sub(b.locking ?? b.locked),
-    [SortOrder.DESC]: (a, b) => (b.locking ?? b.locked).sub(a.locking ?? a.locked),
+    [SortOrder.ASC]: (a, b) => (a.locking ?? a.locked) - (b.locking ?? b.locked),
+    [SortOrder.DESC]: (a, b) => (b.locking ?? b.locked) - (a.locking ?? a.locked),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
     [SortOrder.ASC]: (a, b) =>
-      a.vouch.sub(a.locking ?? a.locked).sub(b.vouch.sub(b.locking ?? b.locked)),
+      a.vouch - (a.locking ?? a.locked) - (b.vouch - b.locking ?? b.locked),
     [SortOrder.DESC]: (a, b) =>
-      b.vouch.sub(b.locking ?? b.locked).sub(a.vouch.sub(a.locking ?? a.locked)),
+      b.vouch - (b.locking ?? b.locked) - (a.vouch - a.locking ?? a.locked),
   },
 };
 

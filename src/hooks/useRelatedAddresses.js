@@ -8,11 +8,6 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
 
   const { data: { voucherCount = 0, voucheeCount = 0 } = {}, refetch: refetchCounts } =
     useContractReads({
-      enabled: !!address && !!userManagerContract,
-      select: (data) => ({
-        voucherCount: Number(data[0]?.toString() || "0"),
-        voucheeCount: Number(data[1]?.toString() || "0"),
-      }),
       contracts: [
         {
           ...userManagerContract,
@@ -29,11 +24,16 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
       ],
       cacheTime: CACHE_TIME,
       staleTime: STALE_TIME,
+      query: {
+        enabled: !!address && !!userManagerContract,
+        select: (data) => ({
+          voucherCount: Number(data[0]?.result.toString() || "0"),
+          voucheeCount: Number(data[1]?.result.toString() || "0"),
+        }),
+      },
     });
 
   const { data: stakerAddresses, refetch: refetchVouchers } = useContractReads({
-    enabled: voucherCount > 0,
-    select: (data) => data.map((row) => row.staker),
     contracts: Array(voucherCount)
       .fill(null)
       .map((_, i) => ({
@@ -44,11 +44,13 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
       })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
+    query: {
+      enabled: voucherCount > 0,
+      select: (data) => data.map((row) => row.result[0]),
+    },
   });
 
   const { data: borrowerAddresses, refetch: refetchVouchees } = useContractReads({
-    enabled: voucheeCount > 0,
-    select: (data) => data.map((row) => row.borrower),
     contracts: Array(voucheeCount)
       .fill(null)
       .map((_, i) => ({
@@ -59,6 +61,10 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
       })),
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
+    query: {
+      enabled: voucheeCount > 0,
+      select: (data) => data.map((row) => row.result[0]),
+    },
   });
 
   return {

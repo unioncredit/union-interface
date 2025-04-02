@@ -2,12 +2,11 @@ import { Button, ConfettiIcon, Modal, Text } from "@unioncredit/ui";
 import { SHARE_REFERRAL_MODAL } from "../ShareReferralModal";
 import { WALLET_MODAL } from "../WalletModal";
 import { useModals } from "providers/ModalManager";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 export const WalletReferralCta = () => {
   const { open } = useModals();
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { chain, address } = useAccount();
 
   return (
     <Modal.Container mt="16px" p="8px" align="center">

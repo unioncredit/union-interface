@@ -1,19 +1,18 @@
 import {
   Button,
   Input,
-  Text,
   Modal,
   ModalOverlay,
   NumericalBlock,
   NumericalRows,
+  Text,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
 import { MANAGE_CONTACT_MODAL } from "./ManageContactModal";
 import { useVouchee, useVouchees } from "providers/VoucheesData";
-import { ZERO } from "constants";
+import { Errors, ZERO } from "constants";
 import format from "utils/format";
-import { Errors } from "constants";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
 import { AddressSummary } from "components/shared";
@@ -50,7 +49,7 @@ export default function WriteOffDebtModal({
     });
 
   const validate = (inputs) => {
-    if (inputs.amount?.raw.gt(locking)) {
+    if (inputs.amount?.raw > locking) {
       return Errors.EXCEEDED_LOCK;
     }
   };
@@ -68,7 +67,7 @@ export default function WriteOffDebtModal({
     contract: "userManager",
     method: "debtWriteOff",
     args: [connectedAddress, vouchee.address, amount.raw],
-    enabled: isOverdue && vouchee?.address && amount.raw.gt(ZERO),
+    enabled: isOverdue && vouchee?.address && amount.raw > ZERO,
     onComplete: async () => {
       await refetchVouchees();
       back();
@@ -108,7 +107,7 @@ export default function WriteOffDebtModal({
               items={[
                 {
                   label: "New balance owed",
-                  value: `${format(locking.sub(amount.raw), token)} ${token}`,
+                  value: `${format(locking - amount.raw, token)} ${token}`,
                 },
               ]}
             />

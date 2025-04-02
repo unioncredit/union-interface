@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { useContractWrite, useNetwork, usePrepareContractWrite, useSigner } from "wagmi";
+import { useAccount, useConfig } from "wagmi";
+import { waitForTransactionReceipt, writeContract } from "@wagmi/core";
 
 import createParseToast from "utils/parseToast";
 import useContract from "hooks/useContract";
@@ -9,6 +10,7 @@ import { useToasts } from "providers/Toasts";
 import { useAppLogs } from "providers/AppLogs";
 import { useVersion } from "providers/Version";
 import { useToken } from "hooks/useToken";
+import { BnStringify } from "../utils/json";
 
 export default function useWrite({
   disabled: isDisabled,
@@ -17,32 +19,21 @@ export default function useWrite({
   enabled,
   contract,
   onComplete,
-  overrides = undefined,
+  value,
+  ...props
 }) {
   const [loading, setLoading] = useState(false);
 
-  const { data: signer } = useSigner();
   const { version } = useVersion();
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
+  const config = useConfig();
   const { addLog } = useAppLogs();
   const { addToast, closeToast } = useToasts();
   const { token } = useToken();
   const contractConfig = useContract(contract);
 
-  const memoisedArgs = useMemo(() => args, [JSON.stringify(args)]);
-
-  let { config } = usePrepareContractWrite({
-    ...contractConfig,
-    functionName: method,
-    args: memoisedArgs,
-    enabled,
-    overrides,
-  });
-
-  const { writeAsync } = useContractWrite({
-    ...config,
-    mode: "recklesslyUnprepared",
-  });
+  const memoizedArgs = useMemo(() => args, [BnStringify(args)]);
+  const memoizedProps = useMemo(() => props, [BnStringify(props)]);
 
   /**
    * onClick is just the name of the action function for this
@@ -52,26 +43,33 @@ export default function useWrite({
   const onClick = useCallback(async () => {
     setLoading(true);
 
-    const parseToast = createParseToast(method, memoisedArgs, token, chain.id, version, contract);
+    const parseToast = createParseToast(method, memoizedArgs, token, chain.id, version, contract);
 
     let toastId = addToast(parseToast(Status.PENDING, null), false);
 
     try {
-      const tx = await writeAsync({
-        recklesslySetUnpreparedOverrides: overrides,
+      const hash = await writeContract(config, {
+        ...contractConfig,
+        ...memoizedProps,
+        functionName: method,
+        args: memoizedArgs,
+        // @ts-ignore
+        value,
       });
 
       // Replace current pending toast with a new pending toast
       // that links out to etherscan
       closeToast(toastId);
-      toastId = addToast(parseToast(Status.PENDING, tx), false);
+      toastId = addToast(parseToast(Status.PENDING, hash), false);
 
-      const response = await tx.wait();
+      const { status } = await waitForTransactionReceipt(config, {
+        hash,
+      });
 
       onComplete && onComplete();
 
-      addLog(parseAppLog(Status.SUCCESS, method, memoisedArgs, tx));
-      addToast(parseToast(response.status ? Status.SUCCESS : Status.FAILED, tx));
+      addLog(parseAppLog(Status.SUCCESS, method, memoizedArgs, hash));
+      addToast(parseToast(status === "success" ? Status.SUCCESS : Status.FAILED, hash));
 
       return true;
     } catch (error) {
@@ -97,18 +95,18 @@ export default function useWrite({
       setLoading(false);
       closeToast(toastId);
     }
-  }, [writeAsync, method, memoisedArgs, chain?.id, signer, JSON.stringify(contractConfig)]);
+  }, [method, memoizedArgs, chain?.id, BnStringify(contractConfig)]);
 
   /*--------------------------------------------------------------
-    Return  
+    Return
    --------------------------------------------------------------*/
 
   return useMemo(
     () => ({
-      disabled: isDisabled || !writeAsync,
+      disabled: isDisabled || !enabled,
       loading,
       onClick,
     }),
-    [writeAsync, onClick, loading, isDisabled]
+    [onClick, loading, isDisabled, enabled]
   );
 }

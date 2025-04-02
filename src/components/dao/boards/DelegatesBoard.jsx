@@ -1,4 +1,4 @@
-import { SortOrder, ZERO } from "constants";
+import { SortOrder, TOKENS, ZERO } from "constants";
 import useVoters from "hooks/useVoters";
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { useState } from "react";
@@ -16,22 +16,22 @@ const columns = {
   WALLET_BALANCE: {
     label: "Wallet balance",
     sort: {
-      [SortOrder.ASC]: (a, b) => a.unionBalance.sub(b.unionBalance),
-      [SortOrder.DESC]: (a, b) => b.unionBalance.sub(a.unionBalance),
+      [SortOrder.ASC]: (a, b) => Number(a.unionBalance - b.unionBalance),
+      [SortOrder.DESC]: (a, b) => Number(b.unionBalance - a.unionBalance),
     },
   },
   DELEGATED_VP: {
     label: "Delegated VP",
     sort: {
-      [SortOrder.ASC]: (a, b) => a.delegatedVotes.sub(b.delegatedVotes),
-      [SortOrder.DESC]: (a, b) => b.delegatedVotes.sub(a.delegatedVotes),
+      [SortOrder.ASC]: (a, b) => Number(a.delegatedVotes - b.delegatedVotes),
+      [SortOrder.DESC]: (a, b) => Number(b.delegatedVotes - a.delegatedVotes),
     },
   },
   TOTAL_VP: {
     label: "Total VP",
     sort: {
-      [SortOrder.ASC]: (a, b) => a.votes.sub(b.votes),
-      [SortOrder.DESC]: (a, b) => b.votes.sub(a.votes),
+      [SortOrder.ASC]: (a, b) => Number(a.votes - b.votes),
+      [SortOrder.DESC]: (a, b) => Number(b.votes - a.votes),
     },
   },
 };
@@ -56,9 +56,9 @@ export const DelegatesBoard = () => {
     return [
       address,
       voteCount,
-      compactFormattedNumber(unionBalance),
-      compactFormattedNumber(delegatedVotes.lt(ZERO) ? ZERO : delegatedVotes),
-      compactFormattedNumber(votes),
+      compactFormattedNumber(unionBalance, TOKENS.UNION),
+      compactFormattedNumber(delegatedVotes < ZERO ? ZERO : delegatedVotes, TOKENS.UNION),
+      compactFormattedNumber(votes, TOKENS.UNION),
     ];
   });
 

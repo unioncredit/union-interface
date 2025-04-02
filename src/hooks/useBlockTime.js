@@ -1,34 +1,33 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useProvider } from "wagmi";
 import { useEffect, useState } from "react";
+import { useBlock } from "wagmi";
 import { format } from "date-fns";
 import { ZERO } from "constants";
+
 import { getVersion, Versions } from "providers/Version";
 
 dayjs.extend(relativeTime);
 
 export function useBlockTime(blockNumber, chainId, dateFormat = "dd LLL yyyy") {
   const [timestamp, setTimestamp] = useState(null);
-  const provider = useProvider({
+  const { data: block } = useBlock({
     chainId: chainId,
   });
 
   useEffect(() => {
     const load = async () => {
-      if (blockNumber && !blockNumber.eq(ZERO)) {
-        const blockNum = Number(blockNumber.toString());
-
+      if (blockNumber && blockNumber !== ZERO) {
+        const blockNum = Number(blockNumber);
         if (getVersion(chainId) === Versions.V2) {
           setTimestamp(blockNum * 1000);
         } else {
-          const block = await provider.getBlock(blockNum);
-          setTimestamp(block.timestamp * 1000);
+          setTimestamp(Number(block.timestamp) * 1000);
         }
       }
     };
-    provider && load();
-  }, [provider, blockNumber, chainId]);
+    block && load();
+  }, [block, blockNumber, chainId]);
 
   return {
     timestamp: timestamp,

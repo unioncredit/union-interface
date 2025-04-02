@@ -1,4 +1,4 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { Helmet } from "react-helmet";
 
@@ -6,7 +6,7 @@ import ProtocolData from "components/dao/protocol/ProtocolData";
 import GovernanceOverview from "components/dao/protocol/GovernanceOverview";
 
 export default function ProtocolPage() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
 
   return (
     <>

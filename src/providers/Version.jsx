@@ -1,4 +1,4 @@
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -28,7 +28,7 @@ export function getVersion(chainId) {
 
 export default function Version({ children }) {
   const { isDisconnected } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
   const [version, setVersionState] = useState(null);
 
   const versioned = (v1, v2) => (version === Versions.V1 ? v1 : v2);

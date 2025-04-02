@@ -8,7 +8,7 @@ import { Avatar, PrimaryLabel } from "components/shared";
 import { useGovernance } from "providers/GovernanceData";
 import ProposalHistoryCard from "components/dao/ProposalHistoryCard";
 import ProposalVotes from "components/dao/ProposalVotes";
-import { defaultAbiCoder } from "ethers/lib/utils";
+import { decodeAbiParameters } from "viem";
 
 export default function ProposalPage() {
   const { hash } = useParams();
@@ -106,7 +106,7 @@ export default function ProposalPage() {
                     .replace(")", "")
                     .split(",");
 
-                  const decoded = args && calldata && defaultAbiCoder.decode(args, calldata);
+                  const decoded = args && calldata && decodeAbiParameters(args, calldata);
                   const argumentString =
                     decoded && decoded.map((item) => item.toString()).join(",");
 

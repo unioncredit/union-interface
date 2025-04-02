@@ -2,11 +2,11 @@ import "./InvitedByInput.scss";
 
 import React, { useState } from "react";
 import { AddressInput } from "../../shared";
-import { useMember } from "../../../providers/MemberData";
+import { useMember } from "providers/MemberData";
 import { ZERO_ADDRESS } from "constants";
 import { Box, Button } from "@unioncredit/ui";
-import useWrite from "../../../hooks/useWrite";
-import { isAddress } from "ethers/lib/utils";
+import useWrite from "hooks/useWrite";
+import { isAddress } from "viem";
 
 export function InvitedByInput() {
   const { data: member, refetch: refetchMember } = useMember();

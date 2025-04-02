@@ -11,10 +11,10 @@ import {
   WarningIcon,
 } from "@unioncredit/ui";
 import { useEnsAddress } from "wagmi";
-import { mainnet } from "wagmi/chains";
+import { base, mainnet } from "viem/chains";
 import { Helmet } from "react-helmet";
-import { isAddress } from "ethers/lib/utils";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+
 import { useMemberData } from "providers/MemberData";
 import { EIP3770, ZERO_ADDRESS } from "constants";
 import { getVersion } from "providers/Version";
@@ -25,7 +25,7 @@ import { ProfileBannerCta } from "components/profile/ProfileBannerCta";
 import { ProfileColumns } from "components/profile/ProfileColumns";
 import { useVoucheesData } from "providers/VoucheesData";
 import { useVouchersData } from "providers/VouchersData";
-import { base } from "providers/Network";
+import { isAddress } from "viem";
 
 function ProfileInner({ address, chainId, legacyTag }) {
   const navigate = useNavigate();

@@ -35,7 +35,7 @@ export function ProtocolBalances({ protocol, chainId }) {
       },
       {
         title: "Effective stake",
-        value: format(totalStaked.sub(totalFrozen), token),
+        value: format(totalStaked - totalFrozen, token),
       },
       {
         title: "Locked",

@@ -49,7 +49,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
-          dimmed={trust.eq(ZERO)}
+          dimmed={trust === ZERO}
           value={`${format(trust, token)} ${token}`}
         />
       ),
@@ -59,7 +59,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
-          dimmed={vouch.eq(ZERO)}
+          dimmed={vouch === ZERO}
           value={`${format(vouch, token)} ${token}`}
         />
       ),
@@ -69,10 +69,10 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.STAKE_LOCKED.id}
-          dimmed={locking.eq(ZERO)}
+          dimmed={locking === ZERO}
           value={`${format(locking, token)} ${token}`}
           className={cn({
-            "table-cell--overdue": isOverdue && locking.gt(ZERO),
+            "table-cell--overdue": isOverdue && locking > ZERO,
           })}
         />
       ),
@@ -87,7 +87,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
             </Text>
 
             <Text size="small" grey={400} m={0}>
-              {locking.gt(ZERO)
+              {locking > ZERO
                 ? paymentDue.overdue
                   ? `${paymentDue.formatted} overdue`
                   : `Next due in ${paymentDue.formatted}`

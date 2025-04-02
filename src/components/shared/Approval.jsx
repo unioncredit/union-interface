@@ -1,7 +1,7 @@
-import { ethers } from "ethers";
-import { useContractRead, useNetwork } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { useCallback, useEffect, useState } from "react";
 import { MultiStepButton, Toggle } from "@unioncredit/ui";
+import { maxUint256 } from "viem";
 
 import { MultiStep, ZERO } from "constants";
 import useWrite from "hooks/useWrite";
@@ -25,7 +25,7 @@ export function Approval({
 }) {
   const { close } = useModals();
   const { refetch: refetchMember } = useMember();
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { settings, setSetting } = useSettings();
   const [items, setItems] = useState(initialItems);
   const [action, setAction] = useState(initialButtonProps);
@@ -40,7 +40,7 @@ export function Approval({
     Contract Functions
    --------------------------------------------------------------*/
 
-  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead({
+  const { data: allowance = ZERO, refetch: refetchAllowance } = useReadContract({
     ...tokenConfig,
     functionName: "allowance",
     args: [owner, spender],
@@ -59,8 +59,8 @@ export function Approval({
   const transactionApproveProps = useWrite({
     contract: tokenContract,
     method: "approve",
-    args: [spender, ethers.constants.MaxUint256],
-    enabled: amount.gt(0) && allowance.lt(amount),
+    args: [spender, maxUint256],
+    enabled: amount > 0n && allowance < amount,
     onComplete: async () => {
       await refetchAllowance();
     },
@@ -70,7 +70,7 @@ export function Approval({
     contract: actionProps.contract,
     method: requireApproval && permitArgs ? permit.functionName : actionProps.method,
     args: requireApproval && permitArgs ? permitArgs : actionProps.args,
-    enabled: !requireApproval || allowance.gte(amount) || permitArgs,
+    enabled: !requireApproval || allowance >= amount || permitArgs,
     onComplete: async () => {
       await refetchMember();
       close();
@@ -86,7 +86,7 @@ export function Approval({
         label="Gasless approval"
         labelPosition="end"
         onChange={() => {
-          setGasless(!gasless);
+          setGasless((g) => !g);
           setPermitArgs(null);
           setSetting(GASLESS_APPROVALS, !gasless);
         }}
@@ -99,8 +99,8 @@ export function Approval({
    * and the allowance
    */
   useEffect(() => {
-    if (amount.gt(0)) {
-      if (requireApproval && amount.gt(allowance) && !permitArgs) {
+    if (amount > 0n) {
+      if (requireApproval && amount > allowance && !permitArgs) {
         const buttonProps = gasless ? permitApproveProps : transactionApproveProps;
 
         // The amount is more than the allowance so we
@@ -138,7 +138,7 @@ export function Approval({
         { number: 1, status: MultiStep.COMPLETE },
         { number: 2, status: MultiStep.PENDING },
       ]);
-    } else if (allowance.gte(amount)) {
+    } else if (allowance >= amount) {
       // Allowance has been complete
       setItems([
         { number: 1, status: MultiStep.COMPLETE },

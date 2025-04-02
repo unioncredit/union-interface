@@ -1,18 +1,17 @@
 import { BadgeIndicator } from "@unioncredit/ui";
-import { ContactsType, ZERO } from "constants";
-import { useMemberData } from "providers/MemberData";
+import { useAccount } from "wagmi";
 
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
 import { useVouchees } from "providers/VoucheesData";
 import { useVouchers } from "providers/VouchersData";
+import { useProtocol } from "providers/ProtocolData";
+import { useMemberData } from "providers/MemberData";
+import { getVersion } from "providers/Version";
 import { compareAddresses } from "utils/compare";
-import { useProtocol } from "../../providers/ProtocolData";
-import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
-import { useNetwork } from "wagmi";
-import { BigNumber } from "ethers";
-import { getVersion } from "../../providers/Version";
+import { ContactsType, ZERO } from "constants";
 
 export function StatusBadge({ address, type, chainId: chainIdProp }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const chainId = chainIdProp || chain?.id;
 
   const { data: protocol } = useProtocol();
@@ -39,9 +38,8 @@ export function StatusBadge({ address, type, chainId: chainIdProp }) {
   const isOverdue = contact?.isOverdue;
   const borrowed = contact?.locking || ZERO;
 
-  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
-  const isMaxOverdue =
-    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+  const maxOverdueTotal = overdueTime + maxOverdueTime;
+  const isMaxOverdue = isOverdue && lastRepay && BigInt(blockNumber) >= lastRepay + maxOverdueTotal;
 
   return (
     <>
@@ -51,7 +49,7 @@ export function StatusBadge({ address, type, chainId: chainIdProp }) {
           label={isMaxOverdue ? "Write-Off" : "Overdue"}
           textColor={isMaxOverdue && "red500"}
         />
-      ) : borrowed.gt(ZERO) ? (
+      ) : borrowed > ZERO ? (
         <BadgeIndicator color="green500" label="Borrowing" />
       ) : isMember ? (
         <BadgeIndicator color="blue500" label="Member" />

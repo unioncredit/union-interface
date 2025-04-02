@@ -20,7 +20,7 @@ export default function RewardStats() {
   const buttonProps = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
-    enabled: unclaimed.gt(0),
+    enabled: unclaimed > 0n,
   });
 
   return (

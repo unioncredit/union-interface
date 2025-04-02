@@ -1,7 +1,7 @@
-import { useContractReads, useNetwork } from "wagmi";
+import { useAccount, useContractReads } from "wagmi";
 import { useEffect, useRef, useState } from "react";
 
-import { CACHE_TIME, ZERO } from "constants";
+import { ZERO } from "constants";
 import useContract from "hooks/useContract";
 import { useVersion, Versions } from "providers/Version";
 import { useToken } from "hooks/useToken";
@@ -14,7 +14,7 @@ export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
   const [pollInterval, setPollInterval] = useState(INITIAL_POLL_INTERVAL);
   const [isWindowActive, setIsWindowActive] = useState(true);
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
   const { version } = useVersion();
   const { token } = useToken(inputChainId);
 
@@ -49,19 +49,20 @@ export default function usePollMemberData(address, inputChainId) {
     : [];
 
   const resp = useContractReads({
-    enabled: false,
-    select: (data) => {
-      return {
-        unclaimedRewards: data[0] || ZERO,
-        owed: data[1] || ZERO,
-        interest: data[2] || ZERO,
-      };
-    },
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
+    query: {
+      enabled: false,
+      select: (data) => {
+        return {
+          unclaimedRewards: data[0].result || ZERO,
+          owed: data[1].result || ZERO,
+          interest: data[2].result || ZERO,
+        };
+      },
+    },
   });
 
   const { refetch } = resp;
@@ -69,11 +70,11 @@ export default function usePollMemberData(address, inputChainId) {
   // Set up window visibility listener
   useEffect(() => {
     const handleVisibilityChange = () => {
-      setIsWindowActive(document.visibilityState === 'visible');
+      setIsWindowActive(document.visibilityState === "visible");
     };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
   // Set up polling with backoff
@@ -84,9 +85,9 @@ export default function usePollMemberData(address, inputChainId) {
       try {
         const result = await refetch();
         // If data hasn't changed significantly, increase the interval
-        setPollInterval(prev => Math.min(prev * BACKOFF_FACTOR, MAX_POLL_INTERVAL));
+        setPollInterval((prev) => Math.min(prev * BACKOFF_FACTOR, MAX_POLL_INTERVAL));
       } catch (error) {
-        console.error('Error polling member data:', error);
+        console.error("Error polling member data:", error);
         // Reset interval on error
         setPollInterval(INITIAL_POLL_INTERVAL);
       }
@@ -94,7 +95,7 @@ export default function usePollMemberData(address, inputChainId) {
 
     // Initial poll
     poll();
-    
+
     // Set up interval
     timer.current = setInterval(poll, pollInterval);
 

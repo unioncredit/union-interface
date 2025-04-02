@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
 import { generateTwitterLink, getProfileUrl } from "utils/generateLinks";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { useModals } from "providers/ModalManager";
 import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
@@ -38,8 +38,7 @@ const ConfettiCanvas = React.memo(() => (
 ));
 
 export default function WelcomeModal({ onClose }) {
-  const { chain } = useNetwork();
-  const { address } = useAccount();
+  const { chain, address } = useAccount();
   const { open, close } = useModals();
   const { data: member = {}, refetch: refetchMember } = useMember();
   const { token } = useToken();

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatUnits, parseUnits } from "ethers/lib/utils";
+import { formatUnits, parseUnits } from "viem";
 
 import { ZERO } from "constants";
 import format from "utils/format";

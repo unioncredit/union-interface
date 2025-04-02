@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
+import { BnStringify } from "utils/json";
 
 const AppLogsContext = createContext({});
 
@@ -10,7 +11,7 @@ const APP_LOG_STORAGE_KEY = "APP_LOG_STORAGE";
 const getKey = (chainId) => `${APP_LOG_STORAGE_KEY}:${chainId}`;
 
 export default function AppLogs({ children }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const [logs, setLogs] = useState(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function AppLogs({ children }) {
     const { status, label, value, txHash } = props;
     const newLogs = [...logs, { status, label, value, txHash }];
     setLogs(newLogs);
-    window.localStorage.setItem(getKey(chain.id), JSON.stringify(newLogs));
+    window.localStorage.setItem(getKey(chain.id), BnStringify(newLogs));
   };
 
   const clearLogs = () => {

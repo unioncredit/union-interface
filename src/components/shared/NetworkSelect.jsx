@@ -1,16 +1,18 @@
-import { useNetwork, useSwitchNetwork, mainnet } from "wagmi";
-import { NetworkSwitcher, NetworkButton } from "@unioncredit/ui";
+import { useAccount, useSwitchChain } from "wagmi";
+import { NetworkButton, NetworkSwitcher } from "@unioncredit/ui";
+import { mainnet } from "viem/chains";
 
-import { testNetworkIds, supportedNetworks, unsupportedNetwork } from "config/networks";
+import { supportedNetworks, testNetworkIds, unsupportedNetwork } from "config/networks";
 import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "providers/Version";
-import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
+import { useSupportedNetwork } from "hooks/useSupportedNetwork";
+import { rpcChains } from "constants";
 
 export function NetworkSelect() {
   const { settings } = useSettings();
-  const { chain, chains } = useNetwork();
+  const { chain } = useAccount();
   const { setVersion } = useVersion();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { switchChainAsync } = useSwitchChain();
   const { connected: isSupportedNetwork } = useSupportedNetwork();
   const isMainnet = chain?.id === mainnet.id;
 
@@ -23,13 +25,15 @@ export function NetworkSelect() {
   );
 
   const handleChangeNetwork = async (value) => {
-    await switchNetworkAsync(value.chainId);
+    await switchChainAsync({
+      chainId: value.chainId,
+    });
     setVersion(value.version === Versions.V1 ? 1 : 2);
   };
 
   const networkOptions = networks
     .map((network) => ({ ...network, as: NetworkButton }))
-    .filter((network) => chains.find((c) => c.id === network.chainId));
+    .filter((network) => rpcChains.find((c) => c.id === network.chainId));
 
   const defaultValue = networkOptions.find((option) => option.chainId === chain?.id);
 

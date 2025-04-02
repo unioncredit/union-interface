@@ -51,22 +51,16 @@ export default function VouchModal({
 
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const overdueDays = overdueTime
-    .mul(1000)
-    .div(SECONDS_PER_DAY * 1000)
-    .toNumber();
+  const overdueDays = Number((overdueTime * 1000n) / BigInt(SECONDS_PER_DAY * 1000));
 
-  const maxOverdueDays = maxOverdueTime
-    .mul(1000)
-    .div(SECONDS_PER_DAY * 1000)
-    .toNumber();
+  const maxOverdueDays = Number((maxOverdueTime * 1000n) / BigInt(SECONDS_PER_DAY * 1000));
 
   const buttonProps = useWrite({
     contract: "userManager",
     method: "updateTrust",
     args: [address, values?.trust?.raw],
-    enabled: values?.trust?.raw.gt(0) && address,
-    disabled: !address || values?.trust?.raw.lte(0),
+    enabled: values?.trust?.raw > 0n && address,
+    disabled: !address || values?.trust?.raw <= 0n,
     onComplete: async () => {
       await refetchMember();
       refetchVouchees();

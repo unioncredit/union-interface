@@ -1,12 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { request, gql } from "graphql-request";
-import { useContractReads } from "wagmi";
+import { gql, request } from "graphql-request";
+import { useReadContracts } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
-import { TheGraphUrls } from "constants";
+import { ProposalState, TheGraphUrls } from "constants";
 import useContract from "hooks/useContract";
 import { chunk, flatten } from "lodash";
-import { ProposalState } from "constants";
 import { Versions } from "./Version";
 
 const GovernanceContext = createContext({});
@@ -63,7 +62,10 @@ const proposalsQuery = gql`
 `;
 
 const selectProposals = (data) => {
-  return chunk(data, 2).map(([proposal, state]) => {
+  return chunk(
+    data.map((d) => d.result),
+    2
+  ).map(([proposal, state]) => {
     if (!proposal) return {};
 
     return {
@@ -84,10 +86,10 @@ const selectProposals = (data) => {
       // Computed values
       percentageFor:
         Number(
-          proposal.forVotes
-            .mul("1000")
-            .div(proposal.againstVotes.add(proposal.forVotes).add(proposal.abstainVotes))
-            .toString()
+          (
+            (proposal.forVotes * 1000) /
+            (proposal.againstVotes + proposal.forVotes + proposal.abstainVotes)
+          ).toString()
         ) / 1000,
     };
   });
@@ -127,10 +129,12 @@ function useProposals() {
     ])
   );
 
-  const { data: proposalsMetadata } = useContractReads({
-    enabled: proposals?.length > 0,
-    select: selectProposals,
+  const { data: proposalsMetadata } = useReadContracts({
     contracts,
+    query: {
+      select: selectProposals,
+      enabled: proposals?.length > 0,
+    },
   });
 
   useEffect(() => {

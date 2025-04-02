@@ -1,6 +1,6 @@
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 const urls = {
   [mainnet.id]: "https://etherscan.io",
