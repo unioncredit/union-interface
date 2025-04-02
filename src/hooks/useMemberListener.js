@@ -1,4 +1,5 @@
-import { mainnet, useAccount, useContractEvent, useNetwork } from "wagmi";
+import { useAccount, useWatchContractEvent } from "wagmi";
+import { mainnet } from "viem/chains";
 
 import useContract from "hooks/useContract";
 import { useMember } from "providers/MemberData";
@@ -8,8 +9,7 @@ import { compareAddresses } from "utils/compare";
 import { useToken } from "hooks/useToken";
 
 export default function useMemberListener() {
-  const { address } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { address, chain: connectedChain } = useAccount();
   const { refetch: refetchMember } = useMember();
   const { refetch: refetchVouchers } = useVouchers();
   const { refetch: refetchVouchees } = useVouchees();
@@ -25,7 +25,7 @@ export default function useMemberListener() {
     refetchVouchees();
   };
 
-  // useContractEvent({
+  // useWatchContractEvent({
   //   ...userManager,
   //   eventName: "LogDebtWriteOff",
   //   listener: (staker, borrower) => {
@@ -36,7 +36,8 @@ export default function useMemberListener() {
   //   },
   // });
 
-  useContractEvent({
+  // todo: implement onLogs function
+  useWatchContractEvent({
     ...userManager,
     eventName: "LogUpdateTrust",
     listener: (staker, borrower) => {
@@ -47,7 +48,7 @@ export default function useMemberListener() {
     },
   });
 
-  // useContractEvent({
+  // useWatchContractEvent({
   //   ...userManager,
   //   eventName: "LogCancelVouch",
   //   listener: (_, borrower) => {
@@ -58,7 +59,7 @@ export default function useMemberListener() {
   //   },
   // });
 
-  useContractEvent({
+  useWatchContractEvent({
     ...userManager,
     eventName: "LogRegisterMember",
     listener: (_, account) => {
@@ -69,7 +70,7 @@ export default function useMemberListener() {
     },
   });
 
-  useContractEvent({
+  useWatchContractEvent({
     ...tokenContract,
     eventName: "Transfer",
     listener: (from, to) => {

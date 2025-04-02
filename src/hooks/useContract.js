@@ -1,4 +1,4 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
 import {
@@ -62,10 +62,10 @@ import {
 } from "config/contracts/v2/base-sepolia";
 
 import { useVersion, Versions } from "providers/Version";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 export default function useContract(name, chainId, forceVersion) {
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
   const { version } = useVersion();
 
   const v1Contracts = {

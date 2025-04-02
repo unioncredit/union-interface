@@ -1,8 +1,7 @@
 import "./CreditStats.scss";
 
 import cn from "classnames";
-import { BigNumber } from "ethers";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import makeUrls from "add-event-to-calendar";
 import {
   BadgeIndicator,
@@ -37,7 +36,7 @@ import { useToken } from "hooks/useToken";
 
 export default function CreditStats({ vouchers }) {
   const { open } = useModals();
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
   const { isMobile } = useResponsive();
   const { token } = useToken();
 
@@ -58,7 +57,7 @@ export default function CreditStats({ vouchers }) {
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
-  const unavailableBalance = vouch.sub(creditLimit).sub(owed);
+  const unavailableBalance = vouch - creditLimit - owed;
 
   const {
     date: dueDate,
@@ -67,9 +66,8 @@ export default function CreditStats({ vouchers }) {
     overdue: isOverdue,
   } = dueOrOverdueDate(lastRepay, overdueTime, blockNumber, connectedChain.id);
 
-  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
-  const isMaxOverdue =
-    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+  const maxOverdueTotal = overdueTime + maxOverdueTime;
+  const isMaxOverdue = isOverdue && lastRepay && BigInt(blockNumber) >= lastRepay + maxOverdueTotal;
 
   const buttonProps = relativeDueDate === NoPaymentLabel && {
     disabled: true,
@@ -219,14 +217,14 @@ export default function CreditStats({ vouchers }) {
               <BadgeIndicator mt="8px" color="red500" textColor="red500" label="Write-Off" />
             ) : (
               <Text m="4px 0 0" size="medium">
-                {owed.lte(0)
+                {owed <= 0n
                   ? "No payment due"
                   : `${format(minPayment, token)} ${token} · ${absoluteDueDate}`}
               </Text>
             )}
           </Box>
 
-          {!isOverdue && owed.gt(0) && (
+          {!isOverdue && owed > 0n && (
             <Button
               as="a"
               href={urls.ics}

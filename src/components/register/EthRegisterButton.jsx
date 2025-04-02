@@ -17,8 +17,8 @@ export function EthRegisterButton({ onComplete }) {
   });
 
   const { regFee = ZERO, rebate = ZERO, value: ethBalance = ZERO } = { ...protocol, ...balance };
-  const ethRegisterFee = regFee.add(rebate);
-  const canRegister = ethRegisterFee.lte(ethBalance);
+  const ethRegisterFee = regFee + rebate;
+  const canRegister = ethRegisterFee <= ethBalance;
 
   const registerButtonProps = useWrite({
     contract: "registerHelper",
@@ -27,9 +27,7 @@ export function EthRegisterButton({ onComplete }) {
     enabled: canRegister,
     disabled: !canRegister,
     onComplete,
-    overrides: {
-      value: ethRegisterFee,
-    },
+    value: ethRegisterFee,
   });
 
   return (

@@ -23,7 +23,7 @@ export const GettingStartedPanel = () => {
 
   const { stakedBalance = ZERO } = member;
 
-  if ((vouchers.length > 0 && stakedBalance.gt(ZERO)) || cached(CACHE_KEY)) return null;
+  if ((vouchers.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
 
   return (
     <Card mb="24px" className="GettingStartedPanel">

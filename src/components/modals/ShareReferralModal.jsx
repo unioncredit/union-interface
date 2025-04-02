@@ -16,7 +16,7 @@ import {
   TwitterIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
@@ -30,8 +30,7 @@ export const SHARE_REFERRAL_MODAL = "share-referral-modal";
 export default function ShareReferralModal({ address, chainId, onBack }) {
   const { close } = useModals();
   const { supportedNetworks } = useSupportedNetwork();
-  const { address: connectedAddress } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain, address: connectedAddress } = useAccount();
   const { share, enabled: nativeShareEnabled } = useNativeShare();
 
   const [copied, copy] = useCopyToClipboard();

@@ -1,4 +1,5 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { BnStringify } from "../utils/json";
 
 export default function usePagination(data = [], pageSize = 8) {
   const [activePage, setActivePage] = useState(1);
@@ -20,7 +21,7 @@ export default function usePagination(data = [], pageSize = 8) {
     return data.slice(start, start + pageSize);
     // react be like this data is the same so stringified it
     // because the upstream memos seems to be correct so fk
-  }, [pageSize, activePage, JSON.stringify(data)]);
+  }, [pageSize, activePage, BnStringify(data)]);
 
   useEffect(() => {
     if (data?.length > 0) {

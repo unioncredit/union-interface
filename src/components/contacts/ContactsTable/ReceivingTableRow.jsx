@@ -40,7 +40,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
 
   const { address, locking = ZERO, trust = ZERO, vouch = ZERO } = data;
 
-  const borrowable = vouch.sub(locking);
+  const borrowable = vouch - locking;
 
   const Icon = receiving ? (providing ? BothRow : ReceivingRow) : ProvidingRow;
 
@@ -50,7 +50,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.TRUST_SET.id}
-          dimmed={trust.eq(ZERO)}
+          dimmed={trust === ZERO}
           value={`${format(trust, token)} ${token}`}
         />
       ),
@@ -60,7 +60,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.TOTAL_VOUCH.id}
-          dimmed={vouch.eq(ZERO)}
+          dimmed={vouch === ZERO}
           value={`${format(vouch, token)} ${token}`}
         />
       ),
@@ -70,7 +70,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.REAL_VOUCH.id}
-          dimmed={vouch.eq(ZERO)}
+          dimmed={vouch === ZERO}
           value={`${format(vouch, token)} ${token}`}
         />
       ),
@@ -80,7 +80,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.LOCKING.id}
-          dimmed={locking.eq(ZERO)}
+          dimmed={locking === ZERO}
           value={`${format(locking, token)} ${token}`}
         />
       ),
@@ -90,7 +90,7 @@ export function ReceivingTableRow({ data, active, setContact, providing, receivi
       value: (
         <DimmableTableCell
           key={COLUMNS.BORROWABLE.id}
-          dimmed={borrowable.eq(ZERO)}
+          dimmed={borrowable === ZERO}
           value={`${format(borrowable, token)} ${token}`}
         />
       ),

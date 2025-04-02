@@ -1,7 +1,7 @@
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { Avatar, PrimaryLabel } from "components/shared";
 import { truncateAddress } from "utils/truncateAddress";
-import { isAddress } from "ethers/lib/utils";
+import { isAddress } from "viem";
 
 export function LeaderboardTableRow({ num, data }) {
   const address = data?.[0] || null;

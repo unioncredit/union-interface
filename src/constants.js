@@ -1,12 +1,23 @@
-import { BigNumber, ethers } from "ethers";
 import { Versions } from "providers/Version";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 import format from "utils/format";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
+import { zeroAddress } from "viem";
 
-export const ZERO = BigNumber.from(0);
+export const ZERO = 0n;
 
-export const ZERO_ADDRESS = ethers.constants.AddressZero;
+export const ZERO_ADDRESS = zeroAddress;
+
+export const rpcChains = [base, mainnet, optimism];
+
+const RPCS = {
+  [base.id]: "https://base-mainnet.g.alchemy.com/v2",
+  [mainnet.id]: "https://eth-mainnet.g.alchemy.com/v2",
+  [optimism.id]: "https://opt-mainnet.g.alchemy.com/v2",
+};
+
+// eslint-disable-next-line no-undef
+export const RPC_URL = (chainId) => `${RPCS[chainId]}/${process.env.REACT_APP_ALCHEMY_ID}`;
 
 export const TOKENS = {
   DAI: "DAI",
@@ -15,9 +26,9 @@ export const TOKENS = {
 };
 
 export const WAD = {
-  DAI: BigNumber.from("1000000000000000000"),
-  UNION: BigNumber.from("1000000000000000000"),
-  USDC: BigNumber.from("1000000"),
+  DAI: BigInt("1000000000000000000"),
+  UNION: BigInt("1000000000000000000"),
+  USDC: BigInt("1000000"),
 };
 
 export const UNIT = {
@@ -31,9 +42,9 @@ export const CACHE_TIME = 60_000 * 30; // 30 minutes
 export const STALE_TIME = 60_000 * 2; // 2 minutes
 
 export const DUST_THRESHOLD = {
-  DAI: "10000000000000000",
-  UNION: "10000000000000000",
-  USDC: "10000",
+  DAI: 10000000000000000n,
+  UNION: 10000000000000000,
+  USDC: 10000n,
 };
 
 export const SECONDS_PER_HOUR = 3600;
@@ -83,19 +94,19 @@ export const ContactsType = {
 };
 
 export const PaymentUnitSpeed = {
-  [mainnet.id]: 12e3, // block
-  [arbitrum.id]: 12e3, // block
-  [optimism.id]: 1e3, // second
-  [base.id]: 1e3, // second
-  [84532]: 1e3, // second
+  [mainnet.id]: 12000n, // block
+  [arbitrum.id]: 12000n, // block
+  [optimism.id]: 1000n, // second
+  [base.id]: 1000n, // second
+  [84532]: 1000n, // second
 };
 
 export const PaymentUnitsPerYear = {
-  [mainnet.id]: 2628333,
-  [arbitrum.id]: 2628333,
-  [optimism.id]: 31540000,
-  [base.id]: 31540000,
-  [84532]: 31540000,
+  [mainnet.id]: 2628333n,
+  [arbitrum.id]: 2628333n,
+  [optimism.id]: 31540000n,
+  [base.id]: 31540000n,
+  [84532]: 31540000n,
 };
 
 export const EIP3770 = {
@@ -178,7 +189,7 @@ export const AddressEnsMappings = {
 
 export const AddressAvatarMappings = {
   "0x4c7768794f38096b8977c7a9e64b85dd63031d27": "https://euc.li/creditcub.eth",
-  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "https://beta.creditclub.cc/glasses.png",
+  "0x87349040756ed552f3ba7e2fcc3d11ec66475156": "https://creditclub.cc/glasses.png",
 };
 
 export const MOGO_NFT_URLS = {

@@ -14,7 +14,8 @@ import {
   TwitterIcon,
 } from "@unioncredit/ui";
 import { useState } from "react";
-import { mainnet, useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
+import { mainnet } from "viem/chains";
 
 import { useModals } from "providers/ModalManager";
 import useCopyToClipboard from "hooks/useCopyToClipboard";
@@ -27,8 +28,7 @@ export const VOUCH_LINK_MODAL = "vouch-link-modal";
 
 export default function VouchLinkModal() {
   const { close } = useModals();
-  const { address } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain, address } = useAccount();
   const { share, enabled: nativeShareEnabled } = useNativeShare();
 
   const [copied, copy] = useCopyToClipboard();

@@ -1,5 +1,5 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads, useNetwork } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { createContext, useContext, useEffect } from "react";
 
 import useContract from "hooks/useContract";
@@ -82,24 +82,30 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
     []
   );
 
-  const resp = useContractReads({
-    enabled: false,
-    select: (data) => {
-      const tmp = buildVoucheeQueries(address, address);
-      const chunkSize = tmp.length;
-      const chunked = chunk(data, chunkSize);
-
-      return chunked.map((chunk, i) => ({
-        ...selectVouchee(forcedVersion || version)(chunk),
-        address: borrowerAddresses[i],
-      }));
-    },
+  const resp = useReadContracts({
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+
+    query: {
+      enabled: false,
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
+      select: (data) => {
+        const tmp = buildVoucheeQueries(address, address);
+        const chunkSize = tmp.length;
+        const chunked = chunk(
+          data.map((d) => d.result),
+          chunkSize
+        );
+
+        return chunked.map((chunk, i) => ({
+          ...selectVouchee(forcedVersion || version)(chunk),
+          address: borrowerAddresses[i],
+        }));
+      },
+    },
   });
 
   useEffect(() => {
@@ -110,8 +116,7 @@ export const useVoucheesData = (address, chainId, forcedVersion) => {
 };
 
 export default function VoucheesData({ children }) {
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { chain, address } = useAccount();
   const data = useVoucheesData(address, chain?.id);
 
   return <VoucheesContext.Provider value={{ ...data }}>{children}</VoucheesContext.Provider>;

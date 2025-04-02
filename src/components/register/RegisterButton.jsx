@@ -1,5 +1,5 @@
 import { CheckIcon, MultiStepButton, Toggle } from "@unioncredit/ui";
-import { useAccount, useContractRead, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { useCallback, useEffect, useState } from "react";
 
 import { MultiStep, ZERO } from "constants";
@@ -11,12 +11,12 @@ import usePermit from "hooks/usePermit";
 import { getPermitMethod } from "utils/permits";
 import { GASLESS_APPROVALS, useSettings } from "providers/Settings";
 import { useVouchers } from "providers/VouchersData";
+import { useReadContract } from "wagmi/src/hooks/useReadContract";
 
 const initialItems = [{ number: 1, status: MultiStep.SELECTED }, { number: 2 }];
 
 export default function RegisterButton({ onComplete }) {
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { address, chain } = useAccount();
   const { settings, setSetting } = useSettings();
 
   const [action, setAction] = useState(null);
@@ -28,18 +28,12 @@ export default function RegisterButton({ onComplete }) {
   const { data: vouchersData = [] } = useVouchers();
   const { data: protocol } = useProtocol();
 
-  const vouchers = vouchersData.filter((voucher) =>
-    voucher.stakedBalance?.gt(ZERO)
-  );
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance > ZERO);
 
-  const {
-    unionBalance = ZERO,
-    isMember = false,
-    newMemberFee = ZERO,
-  } = { ...member, ...protocol };
+  const { unionBalance = ZERO, isMember = false, newMemberFee = ZERO } = { ...member, ...protocol };
 
   const permit = getPermitMethod(chain.id, "registerMember");
-  const readyToBurn = vouchers.length > 0 && unionBalance.gte(newMemberFee);
+  const readyToBurn = vouchers.length > 0 && unionBalance >= newMemberFee;
 
   const unionConfig = useContract("union");
   const userManagerConfig = useContract("userManager");
@@ -48,13 +42,11 @@ export default function RegisterButton({ onComplete }) {
     Contract Functions
    --------------------------------------------------------------*/
 
-  const { data: allowance = ZERO, refetch: refetchAllowance } = useContractRead(
-    {
-      ...unionConfig,
-      functionName: "allowance",
-      args: [address, userManagerConfig.address],
-    }
-  );
+  const { data: allowance = ZERO, refetch: refetchAllowance } = useReadContract({
+    ...unionConfig,
+    functionName: "allowance",
+    args: [address, userManagerConfig.address],
+  });
 
   const permitApproveProps = usePermit({
     type: permit.type,
@@ -69,7 +61,7 @@ export default function RegisterButton({ onComplete }) {
     contract: "union",
     method: "approve",
     args: [userManagerConfig.address, newMemberFee],
-    enabled: allowance.lt(newMemberFee),
+    enabled: allowance < newMemberFee,
     onComplete: () => refetchAllowance(),
   });
 
@@ -77,9 +69,7 @@ export default function RegisterButton({ onComplete }) {
     contract: "userManager",
     method: permitArgs ? permit.functionName : "registerMember",
     args: permitArgs ? permitArgs : [address],
-    enabled:
-      (allowance.gte(newMemberFee) || permitArgs) &&
-      unionBalance.gte(newMemberFee),
+    enabled: (allowance >= newMemberFee || permitArgs) && unionBalance >= newMemberFee,
     onComplete: () => onComplete(),
   });
 
@@ -105,7 +95,7 @@ export default function RegisterButton({ onComplete }) {
    * three states "Approve" and "Register"
    */
   useEffect(() => {
-    if (allowance.lt(newMemberFee) && !permitArgs) {
+    if (allowance < newMemberFee && !permitArgs) {
       // Member has enough UNION but they need to approve the user manager
       // to spend it as their current allowance is not enough
       if (!readyToBurn) {
@@ -113,25 +103,20 @@ export default function RegisterButton({ onComplete }) {
           size: "large",
           label: "Complete the previous steps",
           disabled: true,
-        })
+        });
       } else if (gasless) {
         setAction({
           ...permitApproveProps,
           size: "large",
-          label: permitApproveProps.loading
-              ? "Approving..."
-              : "Approve UNION",
+          label: permitApproveProps.loading ? "Approving..." : "Approve UNION",
           disabled: permitApproveProps.loading,
         });
       } else {
         setAction({
           ...transactionApproveProps,
-          label: transactionApproveProps.loading
-            ? "Approving..."
-            : "Approve UNION",
+          label: transactionApproveProps.loading ? "Approving..." : "Approve UNION",
           size: "large",
-          disabled:
-            unionBalance.lt(newMemberFee) || transactionApproveProps.loading,
+          disabled: unionBalance < newMemberFee || transactionApproveProps.loading,
         });
       }
     } else {
@@ -162,7 +147,7 @@ export default function RegisterButton({ onComplete }) {
     } else if (registerButtonProps.loading) {
       // Transaction is loading
       setItems([{ number: 1 }, { number: 2, status: MultiStep.PENDING }]);
-    } else if (allowance.gte(newMemberFee) || permitArgs) {
+    } else if (allowance >= newMemberFee || permitArgs) {
       // Allowance has been complete
       setItems([
         { number: 1, status: MultiStep.COMPLETE },

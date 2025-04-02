@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isAddress } from "ethers/lib/utils";
+import { isAddress } from "viem";
 
 const REFERRER_STORAGE_KEY = "union:referrer";
 

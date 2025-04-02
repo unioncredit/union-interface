@@ -13,9 +13,7 @@ export default function ProfileGovernanceStats({ address }) {
   const { data: member = {} } = useMemberData(address, mainnet.id, Versions.V1);
   const { voteCount, proposalCount, percentage } = useVoteParticipation(address);
 
-  const { unionBalance = ZERO, votes = ZERO } = member;
-
-  const votesDelegated = votes.sub(unionBalance);
+  const { votes = ZERO } = member;
 
   return (
     <Box className="ProfileGovernanceStats" direction="vertical">

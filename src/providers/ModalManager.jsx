@@ -24,31 +24,31 @@ const ModalContext = createContext({});
 
 export const useModals = () => useContext(ModalContext);
 
-const modals = {
-  [ACCOUNT_MODAL]: AccountModal,
-  [BORROW_MODAL]: BorrowModal,
-  [DELEGATE_MODAL]: DelegateModal,
-  [EDIT_VOUCH_MODAL]: EditVouchModal,
-  [INSTALL_APP_MODAL]: InstallAppModal,
-  [MANAGE_CONTACT_MODAL]: ManageContactModal,
-  [REPAY_MODAL]: RepayModal,
-  [STAKE_MODAL]: StakeModal,
-  [VOUCH_LINK_MODAL]: VouchLinkModal,
-  [SHARE_REFERRAL_MODAL]: ShareReferralModal,
-  [SHARE_LINK_MODAL]: ShareLinkModal,
-  // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
-  ["vouch-modal"]: VouchModal,
-  [WALLET_MODAL]: WalletModal,
-  [WELCOME_MODAL]: WelcomeModal,
-  [WRITE_OFF_DEBT_MODAL]: WriteOffDebtModal,
-  [PUBLIC_WRITE_OFF_DEBT_MODAL]: PublicWriteOffDebtModal,
-};
-
 export default function ModalManager({ children }) {
   const location = useLocation();
   const [props, setProps] = useState(null);
   const [modal, setModal] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  const modals = {
+    [ACCOUNT_MODAL]: AccountModal,
+    [BORROW_MODAL]: BorrowModal,
+    [DELEGATE_MODAL]: DelegateModal,
+    [EDIT_VOUCH_MODAL]: EditVouchModal,
+    [INSTALL_APP_MODAL]: InstallAppModal,
+    [MANAGE_CONTACT_MODAL]: ManageContactModal,
+    [REPAY_MODAL]: RepayModal,
+    [STAKE_MODAL]: StakeModal,
+    [VOUCH_LINK_MODAL]: VouchLinkModal,
+    [SHARE_REFERRAL_MODAL]: ShareReferralModal,
+    [SHARE_LINK_MODAL]: ShareLinkModal,
+    // TODO: some bug that doesn't allow VOUCH_MODAL to be imported... weird.
+    ["vouch-modal"]: VouchModal,
+    [WALLET_MODAL]: WalletModal,
+    [WELCOME_MODAL]: WelcomeModal,
+    [WRITE_OFF_DEBT_MODAL]: WriteOffDebtModal,
+    [PUBLIC_WRITE_OFF_DEBT_MODAL]: PublicWriteOffDebtModal,
+  };
 
   useEffect(() => {
     close();

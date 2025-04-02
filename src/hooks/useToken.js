@@ -1,11 +1,11 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { mainnet, optimism } from "wagmi/chains";
 
 import { TOKENS, UNIT, WAD } from "constants";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 export const useToken = (chainId) => {
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
 
   const tokens = {
     [mainnet.id]: TOKENS.DAI,

@@ -1,10 +1,10 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 import { useProtocol } from "providers/ProtocolData";
 import { ZERO } from "constants";
 import { useBlockTime } from "hooks/useBlockTime";
 import { parseMilliseconds } from "utils/date";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 const formatTimestamp = (milliseconds) => {
   if (!milliseconds) {
@@ -24,13 +24,13 @@ const formatTimestamp = (milliseconds) => {
 
 export function useLastRepayData(lastRepay) {
   const { data: protocol } = useProtocol();
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
 
   const { overdueTime = ZERO } = protocol;
 
   const today = new Date();
   const lastRepayData = useBlockTime(lastRepay, chain?.id || base.id);
-  const overdueInMilliseconds = overdueTime.mul(1000).toNumber();
+  const overdueInMilliseconds = Number(overdueTime * 1000n);
 
   const paymentDueTimestamp =
     lastRepayData.timestamp && lastRepayData.timestamp + overdueInMilliseconds;

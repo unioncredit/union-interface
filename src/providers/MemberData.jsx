@@ -1,4 +1,4 @@
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { createContext, useContext } from "react";
 
 import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
@@ -31,7 +31,7 @@ const selectMemberData = (data, unit) => {
     totalFrozenAmount = ZERO,
     borrowerAddresses = [],
     stakerAddresses = [],
-  ] = data || [];
+  ] = data.map((d) => d.result) || [];
 
   const result = {
     isMember,
@@ -56,7 +56,7 @@ const selectMemberData = (data, unit) => {
     rewardsMultiplier,
   };
 
-  if (owed.gt(ZERO)) {
+  if (owed > ZERO) {
     result.minPayment = calculateMinPayment(interest, unit);
   }
 
@@ -190,21 +190,23 @@ export function useMemberData(address, chainId, forceVersion) {
       ]
     : [];
 
-  const { data, ...resp } = useContractReads({
-    enabled:
-      !!address &&
-      !!tokenContract?.address &&
-      !!userManagerContract?.address &&
-      !!unionContract?.address &&
-      !!uTokenContract?.address &&
-      !!comptrollerContract?.address,
-    select: (data) => selectMemberData(data, unit),
+  const { data, ...resp } = useReadContracts({
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+    query: {
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
+      select: (data) => selectMemberData(data, unit),
+      enabled:
+        !!address &&
+        !!tokenContract?.address &&
+        !!userManagerContract?.address &&
+        !!unionContract?.address &&
+        !!uTokenContract?.address &&
+        !!comptrollerContract?.address,
+    },
   });
 
   const {

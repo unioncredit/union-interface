@@ -15,7 +15,7 @@ import {
   Text,
   WarningIcon,
 } from "@unioncredit/ui";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
 import { AddressLabelBox } from "components/shared";
@@ -28,9 +28,8 @@ import { useGovernanceStats } from "hooks/useGovernanceStats";
 
 export default function MyGovernanceStats() {
   const { open } = useModals();
-  const { address } = useAccount();
-  const { chain: connectedChain } = useNetwork();
-  const { switchNetwork } = useSwitchNetwork();
+  const { chain: connectedChain, address } = useAccount();
+  const { switchChain } = useSwitchChain();
   const { data: member = {} } = useMember();
   const { data: governance = {} } = useGovernanceStats({ address });
 
@@ -45,7 +44,7 @@ export default function MyGovernanceStats() {
     baseBalance,
   } = governance;
 
-  const votesDelegated = mainnetVotes.sub(mainnetBalance);
+  const votesDelegated = mainnetVotes - mainnetBalance;
 
   const isMainnet = connectedChain?.id === mainnet.id;
   const isVotingConfigured = delegate && delegate !== ZERO_ADDRESS;
@@ -80,7 +79,10 @@ export default function MyGovernanceStats() {
     ? {
         icon: SwitchIcon,
         label: "Switch to Ethereum",
-        onClick: () => switchNetwork(mainnet.id),
+        onClick: () =>
+          switchChain({
+            chainId: mainnet.id,
+          }),
       }
     : isVotingConfigured
     ? {
@@ -109,7 +111,7 @@ export default function MyGovernanceStats() {
       balance: baseBalance,
       token: "baseUNION",
     },
-    ...(arbitrumBalance.gt(ZERO)
+    ...(arbitrumBalance > ZERO
       ? [
           {
             icon: ArbitrumIcon,

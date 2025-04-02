@@ -1,26 +1,23 @@
 import { ProtocolDataHeader } from "components/dao/protocol/ProtocolDataHeader";
 import { Box, Grid, NumericalBlock } from "@unioncredit/ui";
 import { PaymentUnitsPerYear, SECONDS_PER_YEAR, ZERO } from "constants";
-import { BigNumber } from "ethers";
-import { formatUnits } from "ethers/lib/utils";
 import { toPercent } from "utils/numbers";
 import { getVersion, Versions } from "providers/Version";
 import { useToken } from "hooks/useToken";
+import { formatUnits } from "viem";
 
 export function ProtocolFees({ protocol, chainId, ...props }) {
   const { unit } = useToken(chainId);
 
-  const decimals = BigNumber.from(unit);
   const versioned = (v1, v2) => (getVersion(chainId) === Versions.V1 ? v1 : v2);
 
   const { borrowRatePerSecond = ZERO, borrowRatePerBlock = ZERO, originationFee = ZERO } = protocol;
 
   const borrowRatePerUnit = versioned(borrowRatePerBlock, borrowRatePerSecond);
   const interest = formatUnits(
-    borrowRatePerUnit
-      .mul(versioned(PaymentUnitsPerYear[chainId], SECONDS_PER_YEAR))
-      .div(10 ** (18 - unit)),
-    decimals
+    (borrowRatePerUnit * versioned(PaymentUnitsPerYear[chainId], BigInt(SECONDS_PER_YEAR))) /
+      BigInt(10 ** (18 - unit)),
+    unit
   );
 
   const fee = formatUnits(originationFee, 18);

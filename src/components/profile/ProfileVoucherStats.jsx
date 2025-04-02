@@ -10,7 +10,7 @@ import { useToken } from "hooks/useToken";
 export function ProfileVoucherStats({ vouchers, vouchees, chainId }) {
   const { token } = useToken(chainId);
 
-  const topVouchers = [...vouchers].sort((a, b) => (a.vouch.lt(b.vouch) ? 1 : -1)).slice(0, 3);
+  const topVouchers = [...vouchers].sort((a, b) => (a.vouch < b.vouch ? 1 : -1)).slice(0, 3);
 
   return (
     vouchers.length > 0 && (

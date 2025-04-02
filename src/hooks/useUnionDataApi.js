@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { BnStringify } from "../utils/json";
 
 export const useUnionDataApi = ({ network, page = 1, size = 50, sort = {}, query = {} }) => {
   const [data, setData] = useState({});
@@ -23,7 +24,7 @@ export const useUnionDataApi = ({ network, page = 1, size = 50, sort = {}, query
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: BnStringify(body),
     })
       .then((response) => {
         if (!response.ok) {

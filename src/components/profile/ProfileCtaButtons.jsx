@@ -7,38 +7,37 @@ import {
   CancelIcon,
   FarcasterIcon,
   ManageIcon,
+  ShareIcon,
   SwitchIcon,
   VouchIcon,
   WalletIcon,
-  ShareIcon,
 } from "@unioncredit/ui";
 import cn from "classnames";
-import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "../modals/PublicWriteOffDebtModal";
+import { useAccount, useSwitchChain } from "wagmi";
 import { Link, useNavigate } from "react-router-dom";
-import { VOUCH_MODAL } from "../modals/VouchModal";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { useModals } from "../../providers/ModalManager";
-import { getVersion, Versions } from "../../providers/Version";
-import { BigNumber } from "ethers";
-import { ZERO } from "constants";
-import { useVersionBlockNumber } from "../../hooks/useVersionBlockNumber";
-import { useProtocol } from "../../providers/ProtocolData";
-import { useMember, useMemberData } from "../../providers/MemberData";
-import { compareAddresses } from "../../utils/compare";
-import { supportedNetworks } from "../../config/networks";
 import { useMemo } from "react";
-import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
-import { SHARE_REFERRAL_MODAL } from "../modals/ShareReferralModal";
+
+import { PUBLIC_WRITE_OFF_DEBT_MODAL } from "components/modals/PublicWriteOffDebtModal";
+import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { useModals } from "providers/ModalManager";
+import { getVersion, Versions } from "providers/Version";
+import { useVersionBlockNumber } from "hooks/useVersionBlockNumber";
+import { useProtocol } from "providers/ProtocolData";
+import { useMember, useMemberData } from "providers/MemberData";
+import { compareAddresses } from "utils/compare";
+import { supportedNetworks } from "config/networks";
+import { useSupportedNetwork } from "hooks/useSupportedNetwork";
+import { SHARE_REFERRAL_MODAL } from "components/modals/ShareReferralModal";
+import { ZERO } from "constants";
 
 export const ProfileCtaButtons = ({ address, chainId, className }) => {
   const navigate = useNavigate();
   const { open: openModal } = useModals();
   const { isConnected } = useAccount();
   const { isSupported } = useSupportedNetwork();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { switchChainAsync } = useSwitchChain();
   const { data: connectedMember = {} } = useMember();
-  const { address: connectedAddress } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain, address: connectedAddress } = useAccount();
   const { data: protocol } = useProtocol();
   const { data: member } = useMemberData(address, chainId, getVersion(chainId));
   const { data: blockNumber } = useVersionBlockNumber({
@@ -59,13 +58,13 @@ export const ProfileCtaButtons = ({ address, chainId, className }) => {
     compareAddresses(borrower, address)
   );
 
-  const maxOverdueTotal = (overdueTime || overdueBlocks).add(maxOverdueTime);
+  const maxOverdueTotal = (overdueTime || overdueBlocks) + maxOverdueTime;
   const isMaxOverdue =
     blockNumber &&
     isOverdue &&
     lastRepay &&
     getVersion(chainId) === Versions.V2 &&
-    BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+    BigInt(blockNumber) >= lastRepay + maxOverdueTotal;
 
   return (
     <Box
@@ -90,7 +89,11 @@ export const ProfileCtaButtons = ({ address, chainId, className }) => {
           variant="light"
           icon={SwitchIcon}
           label={`Switch to ${network?.label}`}
-          onClick={() => switchNetworkAsync(network?.chainId)}
+          onClick={() =>
+            switchChainAsync({
+              chainId: network?.chainId,
+            })
+          }
         />
       ) : isMaxOverdue ? (
         <Button

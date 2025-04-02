@@ -1,1 +1,1 @@
-export const reduceBnSum = (acc, next) => acc.add(next);
+export const reduceBnSum = (acc, next) => acc + next;

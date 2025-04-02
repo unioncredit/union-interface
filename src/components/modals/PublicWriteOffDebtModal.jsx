@@ -1,13 +1,13 @@
 import {
   Button,
+  ExpandingInfo,
   Input,
-  Text,
   Modal,
   ModalOverlay,
   NumericalBlock,
   NumericalRows,
+  Text,
   WarningIcon,
-  ExpandingInfo,
 } from "@unioncredit/ui";
 
 import { useModals } from "providers/ModalManager";
@@ -36,7 +36,7 @@ export default function PublicWriteOffDebtModal({ address }) {
   const { tokenBalance = ZERO } = member;
 
   const validate = (inputs) => {
-    if (inputs.amount?.raw.gt(owed)) {
+    if (inputs.amount?.raw > owed) {
       return "Amount exceeds defaulted value";
     }
   };
@@ -49,7 +49,7 @@ export default function PublicWriteOffDebtModal({ address }) {
     contract: "userManager",
     method: "debtWriteOff",
     args: [connectedAddress, address, amount.raw],
-    enabled: isOverdue && address && amount.raw.gt(ZERO),
+    enabled: isOverdue && address && amount.raw > ZERO,
     onComplete: async () => {
       window.location.reload();
     },
@@ -79,11 +79,11 @@ export default function PublicWriteOffDebtModal({ address }) {
               value={amount.display}
               onChange={register("amount")}
               rightLabel={`Max. ${format(
-                tokenBalance.gte(owed) ? owed : tokenBalance,
+                tokenBalance >= owed ? owed : tokenBalance,
                 token
               )} ${token}`}
               rightLabelAction={() =>
-                setRawValue("amount", tokenBalance.gte(owed) ? owed : tokenBalance, false)
+                setRawValue("amount", tokenBalance >= owed ? owed : tokenBalance, false)
               }
               suffix={<Token />}
             />
@@ -97,7 +97,7 @@ export default function PublicWriteOffDebtModal({ address }) {
                 },
                 {
                   label: "New amount in default",
-                  value: `${format(owed.sub(amount.raw), token)} ${token}`,
+                  value: `${format(owed - amount.raw, token)} ${token}`,
                 },
               ]}
             />

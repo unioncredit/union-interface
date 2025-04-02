@@ -24,15 +24,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <Router>
-    <Version>
-      <Network>
+    <Network>
+      <Version>
         <Toasts>
           <AppLogs>
             <App />
           </AppLogs>
         </Toasts>
-      </Network>
-    </Version>
+      </Version>
+    </Network>
   </Router>
 );
 

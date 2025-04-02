@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
+import { BnStringify } from "../utils/json";
 
 const SETTINGS_STORAGE_KEY = "union:settings";
 
@@ -23,14 +24,14 @@ export const RECEIVING_SORT = "receiving-sort";
 export const useSettings = () => useContext(SettingsContext);
 
 export default function Settings({ children }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
   const setSetting = (key, value) => {
     setSettings((x) => ({ ...x, [key]: value }));
   };
 
-  const settingsSting = JSON.stringify(settings);
+  const settingsSting = BnStringify(settings);
 
   useEffect(() => {
     window.localStorage.setItem(SETTINGS_STORAGE_KEY, settingsSting);

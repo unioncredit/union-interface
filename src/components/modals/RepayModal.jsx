@@ -1,21 +1,21 @@
 import "./Repaymodal.scss";
 
 import { useAccount } from "wagmi";
-import { BigNumber } from "ethers";
+import { useEffect, useState } from "react";
 import {
   Box,
-  Text,
+  Button,
+  Divider,
+  EditIcon,
   Grid,
   Input,
+  ListIcon,
   Modal,
   ModalOverlay,
   NumericalBlock,
-  OptionSelect,
   NumericalRows,
-  Button,
-  EditIcon,
-  Divider,
-  ListIcon,
+  OptionSelect,
+  Text,
 } from "@unioncredit/ui";
 
 import useForm from "hooks/useForm";
@@ -23,10 +23,8 @@ import { Approval } from "components/shared";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
 import useContract from "hooks/useContract";
-import { ZERO, UNIT } from "constants";
+import { Errors, ZERO } from "constants";
 import format from "utils/format";
-import { useEffect, useState } from "react";
-import { Errors } from "constants";
 import { useVersion, Versions } from "providers/Version";
 import Token from "components/Token";
 import { useToken } from "hooks/useToken";
@@ -53,7 +51,7 @@ export default function RepayModal() {
   const { owed = ZERO, tokenBalance = ZERO, minPayment = ZERO } = member;
 
   const validate = (inputs) => {
-    if (inputs.amount.raw.gt(tokenBalance)) {
+    if (inputs.amount.raw > tokenBalance) {
       return Errors.INSUFFICIENT_BALANCE;
     }
   };
@@ -73,28 +71,29 @@ export default function RepayModal() {
   };
 
   const amount = values.amount || empty;
-  const newOwed = owed.sub(amount.raw);
+  const newOwed = owed - amount.raw;
   const isCustomSelected = paymentType === PaymentType.CUSTOM;
 
   // Factor in a 0.005% margin for the max repay as we can no longer use MaxUint256.
   // If 0.005% of the balance owed is less than 0.01 we default to 0.01
-  const margin = owed.div(50000);
-  const minMargin = BigNumber.from((10 ** unit / 100).toString());
-  const owedBalanceWithMargin = owed.add(margin.lt(minMargin) ? minMargin : margin);
+  const margin = owed / 50000n;
+  const minMargin = BigInt((10 ** unit / 100).toString());
+  const owedBalanceWithMargin = owed + (margin < minMargin ? minMargin : margin);
   // The maximum amount the user can repay, either their total token balance
   // or their balance owed + 0.005% margin
-  const maxRepay = tokenBalance.gte(owedBalanceWithMargin) ? owedBalanceWithMargin : tokenBalance;
+  const maxRepay = tokenBalance >= owedBalanceWithMargin ? owedBalanceWithMargin : tokenBalance;
   const options = [
     {
       token: token.toLowerCase(),
       value: format(maxRepay, token),
       amount: maxRepay,
       paymentType: PaymentType.MAX,
-      title: maxRepay.gte(owed) ? "Pay-off entire loan" : `Pay maximum ${token} available`,
-      content: maxRepay.gte(owed)
-        ? "Make a payment equal to the outstanding balance"
-        : "Make a payment with the maximum amount available in your wallet",
-      tooltip: maxRepay.gte(owed) &&
+      title: maxRepay >= owed ? "Pay-off entire loan" : `Pay maximum ${token} available`,
+      content:
+        maxRepay >= owed
+          ? "Make a payment equal to the outstanding balance"
+          : "Make a payment with the maximum amount available in your wallet",
+      tooltip: maxRepay >= owed &&
         format(maxRepay, token) !== format(owed, token) && {
           title: "Why is this more than my balance owed?",
           content:
@@ -222,7 +221,7 @@ export default function RepayModal() {
               },
               {
                 label: "New balance owed",
-                value: `${format(newOwed.lt(ZERO) ? ZERO : newOwed, token)} ${token}`,
+                value: `${format(newOwed < ZERO ? ZERO : newOwed, token)} ${token}`,
                 tooltip: {
                   content:
                     "The total amount you will owe if this payment transaction is successful",

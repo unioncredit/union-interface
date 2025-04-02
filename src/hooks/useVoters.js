@@ -1,22 +1,21 @@
 import chunk from "lodash/chunk";
-import { useContractReads, useNetwork } from "wagmi";
+import { useAccount, useContractReads } from "wagmi";
 import { useEffect, useState } from "react";
 import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
-import { CACHE_TIME, ZERO, ZERO_ADDRESS } from "constants";
-import { STALE_TIME } from "constants";
+import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import fetchVoteCasts from "fetchers/fetchVoteCasts";
 import { getVersion, Versions } from "providers/Version";
 
 const selectVoter = (data) => ({
   unionBalance: data[0] || ZERO,
   votes: data[1] || ZERO,
-  delegatedVotes: data[1] ? data[1].sub(data[0]) : ZERO,
+  delegatedVotes: data[1] ? data[1] - data[0] : ZERO,
 });
 
 function useVotes() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
@@ -48,18 +47,23 @@ export default function useVoters() {
   );
 
   const resp = useContractReads({
-    select: (data) => {
-      const tmp = buildVoterQueries(ZERO_ADDRESS);
-      const chunkSize = tmp.length;
-      const chunked = chunk(data, chunkSize);
-      return chunked.map((x, i) => ({
-        ...selectVoter(x),
-        address: uniqueAddresses[i],
-      }));
-    },
     contracts: contracts,
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,
+    query: {
+      select: (data) => {
+        const tmp = buildVoterQueries(ZERO_ADDRESS);
+        const chunkSize = tmp.length;
+        const chunked = chunk(
+          data.map((d) => d.result),
+          chunkSize
+        );
+        return chunked.map((x, i) => ({
+          ...selectVoter(x),
+          address: uniqueAddresses[i],
+        }));
+      },
+    },
   });
 
   return {

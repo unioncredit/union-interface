@@ -23,17 +23,19 @@ export default function useMemberSummary(address, chainId) {
     : [];
 
   const { data, ...resp } = useContractReads({
-    enabled: !!address,
-    select: (data) => ({
-      isMember: data[0] || false,
-      creditLimit: data[1] || ZERO,
-    }),
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
     })),
-    cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+    query: {
+      enabled: !!address,
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
+      select: (data) => ({
+        isMember: data[0].result || false,
+        creditLimit: data[1].result || ZERO,
+      }),
+    },
   });
 
   return {

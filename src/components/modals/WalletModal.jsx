@@ -12,6 +12,7 @@ import {
   NumericalRows,
   Tooltip,
 } from "@unioncredit/ui";
+import { mainnet } from "viem/chains";
 
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
@@ -19,27 +20,23 @@ import { useModals } from "providers/ModalManager";
 import useWrite from "hooks/useWrite";
 import { ZERO } from "constants";
 import { useWatchAsset } from "hooks/useWatchAsset";
-import useContract from "../../hooks/useContract";
-import { mainnet } from "wagmi/chains";
-import { getVersion } from "../../providers/Version";
-import { useAccount, useNetwork } from "wagmi";
+import useContract from "hooks/useContract";
+import { getVersion } from "providers/Version";
 import { WalletReferralCta } from "./WalletModal/WalletReferralCta";
 import { WalletRewards } from "./WalletModal/WalletRewards";
 
 export const WALLET_MODAL = "wallet-modal";
 
 export default function WalletModal() {
-  const { open: openModal, close } = useModals();
+  const { close } = useModals();
   const { watchAsset } = useWatchAsset();
-  const { chain } = useNetwork();
-  const { address } = useAccount();
   const union = useContract("union", mainnet.id, getVersion(mainnet.id));
 
   const { data: member = {}, refetch } = useMember();
 
   const { isOverdue, unclaimedRewards = ZERO, unionBalance = ZERO } = member;
 
-  const totalBalance = unionBalance.add(unclaimedRewards);
+  const totalBalance = unionBalance + unclaimedRewards;
 
   /*--------------------------------------------------------------
     Contract Functions
@@ -48,7 +45,7 @@ export default function WalletModal() {
   const buttonProps = useWrite({
     contract: "userManager",
     method: "withdrawRewards",
-    enabled: unclaimedRewards.gt(0),
+    enabled: unclaimedRewards > 0n,
     onComplete: async () => {
       await refetch();
       close();

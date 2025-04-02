@@ -1,7 +1,7 @@
-import { Button, Grid, Card, Dai, Usdc, ExternalIcon, NumericalBlock } from "@unioncredit/ui";
+import { Button, Card, ExternalIcon, Grid, NumericalBlock } from "@unioncredit/ui";
 import { useProtocol } from "providers/ProtocolData";
-import { useNetwork } from "wagmi";
-import { mainnet, arbitrum } from "wagmi/chains";
+import { useAccount } from "wagmi";
+import { arbitrum, mainnet } from "wagmi/chains";
 
 import { ZERO } from "constants";
 import format from "utils/format";
@@ -21,7 +21,7 @@ const getAnalyticsUrl = (chainId) => {
 };
 
 export default function GovernaceStats() {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { token, unit } = useToken();
   const { data: protocol = {} } = useProtocol();
   const analyticsUrl = getAnalyticsUrl(chain?.id);
@@ -69,7 +69,7 @@ export default function GovernaceStats() {
                   mt="32px"
                   title="Interest rate"
                   value={`${format(
-                    calculateInterestRate(borrowRatePerUnit, chain.id, unit).mul(100),
+                    calculateInterestRate(borrowRatePerUnit, chain.id, unit) * 100n,
                     token
                   )}%`}
                 />

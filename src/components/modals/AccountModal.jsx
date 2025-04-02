@@ -17,7 +17,7 @@ import {
   SuccessStatusIcon,
   Text,
 } from "@unioncredit/ui";
-import { useAccount, useDisconnect, useNetwork } from "wagmi";
+import { useAccount, useDisconnect } from "wagmi";
 import { useModals } from "providers/ModalManager";
 import { Link } from "react-router-dom";
 import format from "utils/format";
@@ -36,8 +36,7 @@ export default function AccountModal() {
   const [copied, copy] = useCopyToClipboard();
 
   const { close } = useModals();
-  const { chain } = useNetwork();
-  const { address } = useAccount();
+  const { chain, address } = useAccount();
   const { logs = [], clearLogs } = useAppLogs();
   const { disconnect } = useDisconnect();
   const { token } = useToken();

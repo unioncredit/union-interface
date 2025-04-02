@@ -3,7 +3,7 @@ import "./ProtocolData.scss";
 import { Card, Select } from "@unioncredit/ui";
 import { allNetworks } from "config/networks";
 import { useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { ProtocolBalances } from "components/dao/protocol/ProtocolBalances";
 import { ProtocolLimits } from "components/dao/protocol/ProtocolLimits";
 import { ProtocolFees } from "components/dao/protocol/ProtocolFees";
@@ -11,7 +11,7 @@ import { ProtocolPeriods } from "components/dao/protocol/ProtocolPeriods";
 import { useProtocolData } from "providers/ProtocolData";
 
 export default function ProtocolData() {
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
 
   const [network, setNetwork] = useState(
     allNetworks.find((network) => network.chainId === connectedChain?.id) || allNetworks[0]

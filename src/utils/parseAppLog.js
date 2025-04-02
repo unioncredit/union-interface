@@ -1,5 +1,5 @@
-export default function parseAppLog(status, method, args, tx) {
-  const sharedProps = { status, txHash: tx?.transactionHash };
+export default function parseAppLog(status, method, args, txHash) {
+  const sharedProps = { status, txHash };
 
   switch (method) {
     case "stake":

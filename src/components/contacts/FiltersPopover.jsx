@@ -9,15 +9,15 @@ import { ContactsType, ZERO } from "constants";
 
 // prettier-ignore
 export const providingFilterFns = {
-  borrowing:  (item) => item.locking?.gt(ZERO),
+  borrowing:  (item) => item.locking > ZERO,
   notMember:  (item) => !item.isMember,
   member:     (item) => item.isMember,
-  inactive:   (item) => !item.isOverdue && item.locking?.lte(ZERO) && item.isMember,
+  inactive:   (item) => !item.isOverdue && item.locking <= ZERO && item.isMember,
   overdue:    (item) => item.isOverdue,
 };
 
 export const receivingFilterFns = {
-  borrowing_from: (item) => item.locking?.gt(ZERO),
+  borrowing_from: (item) => item.locking > ZERO,
 };
 
 export default function FiltersPopover({ type, filters, setFilters }) {

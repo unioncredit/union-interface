@@ -9,8 +9,7 @@ import {
   NumericalBlock,
   NumericalRows,
 } from "@unioncredit/ui";
-import { useAccount, useNetwork } from "wagmi";
-import { BigNumber } from "ethers";
+import { useAccount } from "wagmi";
 import format from "utils/format";
 import useForm from "hooks/useForm";
 import useWrite from "hooks/useWrite";
@@ -30,12 +29,11 @@ import Token from "components/Token";
 export const BORROW_MODAL = "borrow-modal";
 
 export default function BorrowModal() {
-  const { chain } = useNetwork();
   const { close } = useModals();
-  const { address } = useAccount();
+  const { chain, address } = useAccount();
   const { data: member, refetch: refetchMember } = useMember();
   const { data: protocol } = useProtocol();
-  const { token, unit, wad } = useToken();
+  const { token, unit } = useToken();
   const firstPaymentDueDate = useFirstPaymentDueDate();
 
   const {
@@ -49,16 +47,16 @@ export default function BorrowModal() {
     getLoanableAmount = ZERO,
   } = { ...member, ...protocol };
 
-  const borrowRatePerUnit = borrowRatePerSecond.eq(ZERO) ? borrowRatePerBlock : borrowRatePerSecond;
+  const borrowRatePerUnit = borrowRatePerSecond === ZERO ? borrowRatePerBlock : borrowRatePerSecond;
 
   const validate = (inputs) => {
     if (member.isOverdue) {
       return Errors.IS_OVERDUE;
-    } else if (inputs.amount.raw.gt(creditLimit)) {
+    } else if (inputs.amount.raw > creditLimit) {
       return Errors.INSUFFICIENT_CREDIT_LIMIT;
-    } else if (inputs.amount.raw.lt(minBorrow)) {
+    } else if (inputs.amount.raw < minBorrow) {
       return Errors.MIN_BORROW(minBorrow, token);
-    } else if (inputs.amount.raw.gt(getLoanableAmount)) {
+    } else if (inputs.amount.raw > getLoanableAmount) {
       return Errors.INSUFFICIENT_FUNDS;
     }
   };
@@ -69,11 +67,11 @@ export default function BorrowModal() {
 
   const maxBorrow = calculateMaxBorrow(creditLimit, originationFee);
 
-  const fee = amount.raw.mul(originationFee).div(BigNumber.from("1000000000000000000"));
+  const fee = (amount.raw * originationFee) / BigInt("1000000000000000000");
 
-  const borrow = amount.raw.add(fee);
+  const borrow = amount.raw + fee;
 
-  const newOwed = borrow.add(owed);
+  const newOwed = borrow + owed;
 
   const minPayment = calculateExpectedMinimumPayment(newOwed, borrowRatePerUnit, overdueTime, unit);
 
@@ -81,7 +79,7 @@ export default function BorrowModal() {
     contract: "uToken",
     method: "borrow",
     args: [address, amount.raw],
-    enabled: amount.raw.gt(ZERO) && !errors.amount,
+    enabled: amount.raw > ZERO && !errors.amount,
     onComplete: async () => {
       await refetchMember();
       close();
@@ -145,7 +143,7 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id, unit).mul(100),
+                  calculateInterestRate(borrowRatePerUnit, chain.id, unit) * 100n,
                   token
                 )}% APR`,
                 tooltip: {
@@ -169,7 +167,7 @@ export default function BorrowModal() {
               {
                 label: "Payment due",
                 value:
-                  amount.raw.lte(0) && owed.lte(0)
+                  amount.raw <= 0n && owed <= 0n
                     ? "N/A"
                     : `${format(minPayment, token)} ${token} · ${firstPaymentDueDate}`,
                 tooltip: {
@@ -188,7 +186,7 @@ export default function BorrowModal() {
             size="large"
             icon={BorrowIcon}
             label={`Borrow ${amount.display} ${token}`}
-            disabled={amount.raw.lte(ZERO)}
+            disabled={amount.raw <= ZERO}
             {...buttonProps}
           />
         </Modal.Body>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { isAddress } from "ethers/lib/utils";
+import { isAddress } from "viem";
 
 export const useFunionPoints = (address) => {
   const [data, setData] = useState(0);

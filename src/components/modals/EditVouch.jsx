@@ -1,23 +1,22 @@
 import {
-  Modal,
-  ModalOverlay,
   Button,
   Input,
+  Modal,
+  ModalOverlay,
   NumericalBlock,
   NumericalRows,
-  Tooltip,
-  Toggle,
   Text,
+  Toggle,
+  Tooltip,
 } from "@unioncredit/ui";
 
 import format from "utils/format";
 import useForm from "hooks/useForm";
 import { useModals } from "providers/ModalManager";
 import { useVouchee, useVouchees } from "providers/VoucheesData";
-import { Errors } from "constants";
+import { Errors, ZERO } from "constants";
 import { MANAGE_CONTACT_MODAL } from "./ManageContactModal";
 import useWrite from "hooks/useWrite";
-import { ZERO } from "constants";
 import { AddressSummary } from "components/shared";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -56,7 +55,7 @@ export default function EditVouchModal({
     });
 
   const validate = (inputs) => {
-    if (inputs.amount.raw.lt(locking)) {
+    if (inputs.amount.raw < locking) {
       return Errors.TRUST_LT_LOCKING;
     }
   };
@@ -74,7 +73,7 @@ export default function EditVouchModal({
     contract: "userManager",
     method: "updateTrust",
     args: [address, amount.raw],
-    enabled: amount.raw.gte(locking),
+    enabled: amount.raw >= locking,
     onComplete: async () => {
       await refetchVouchees();
       back();
@@ -85,7 +84,7 @@ export default function EditVouchModal({
     contract: "userManager",
     method: "cancelVouch",
     args: [stakerAddress, address], // staker, borrower
-    enabled: locking.lte(ZERO),
+    enabled: locking <= ZERO,
     onComplete: async () => {
       navigate(0);
     },
@@ -133,14 +132,14 @@ export default function EditVouchModal({
             />
 
             <Tooltip
-              enabled={locking.gt(ZERO)}
+              enabled={locking > ZERO}
               title="Cannot revoke vouch"
               content="Vouches can only be cancelled if a contact has no outstanding debt"
             >
               <Toggle
                 mb="8px"
                 active={revokeVouch}
-                disabled={locking.gt(ZERO)}
+                disabled={locking > ZERO}
                 label="Revoke vouch you provide"
                 labelPosition="end"
                 onChange={() => setRevokeVouch((v) => !v)}

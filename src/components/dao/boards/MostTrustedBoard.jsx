@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
 import { useUnionDataApi } from "hooks/useUnionDataApi";
-import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
-import { base } from "providers/Network";
+import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder, UNIT } from "constants";
+import { base } from "viem/chains";
+import { useToken } from "../../../hooks/useToken";
 
 const columns = {
   VOUCHERS: {
@@ -29,7 +30,8 @@ export const MostTrustedBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
+  const { token } = useToken();
 
   const sortQuery = useMemo(
     () => ({
@@ -46,8 +48,6 @@ export const MostTrustedBoard = () => {
     sort: sortQuery,
   });
 
-  console.log({ response });
-
   const { pagination, items } = response;
 
   const rows =
@@ -59,7 +59,7 @@ export const MostTrustedBoard = () => {
         address,
         contracts.vouches.number_received,
         contracts.vouches.number_given,
-        formatScientific(contracts.vouches.amount_received),
+        formatScientific(contracts.vouches.amount_received, UNIT[token]),
       ];
     }) || [];
 

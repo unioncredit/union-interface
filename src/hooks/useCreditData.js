@@ -32,9 +32,11 @@ export function useCreditData(address, chainId) {
   const { overdueTime = ZERO, overdueBlocks = ZERO } = protocol;
 
   const overduePeriodSeconds = useMemo(() => {
-    return (getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks)
-      .mul(PaymentUnitSpeed[chainId])
-      .div(1000);
+    return (
+      ((getVersion(chainId) === Versions.V2 ? overdueTime : overdueBlocks) *
+        PaymentUnitSpeed[chainId]) /
+      1000n
+    );
   }, [chainId, overdueTime, overdueBlocks]);
 
   const fetchBorrowsAndRepays = async (address) => {
@@ -124,8 +126,8 @@ export function useCreditData(address, chainId) {
       const month = date.getMonth() + 1;
       createEmptyYears(year);
 
-      newBorrowedVolume = newBorrowedVolume.add(borrow.amount);
-      newBorrowedVolume = newBorrowedVolume.add(borrow.fee);
+      newBorrowedVolume = newBorrowedVolume + BigInt(borrow.amount);
+      newBorrowedVolume = newBorrowedVolume + BigInt(borrow.fee);
       newHistory[year][month]["borrows"].push(borrow);
     });
 
@@ -136,7 +138,7 @@ export function useCreditData(address, chainId) {
       const month = date.getMonth() + 1;
       createEmptyYears(year);
 
-      newRepaidVolume = newRepaidVolume.add(repay.amount);
+      newRepaidVolume = newRepaidVolume + BigInt(repay.amount);
       newHistory[year][month]["repays"].push(repay);
     });
 
@@ -148,7 +150,7 @@ export function useCreditData(address, chainId) {
 
       // Loop each repay and check if it occurred after the due by date
       repays.forEach((repay) => {
-        expectedDueDate = parseInt(lastRepay) + overduePeriodSeconds.toNumber();
+        expectedDueDate = parseInt(lastRepay) + Number(overduePeriodSeconds);
 
         if (parseInt(repay.timestamp) > expectedDueDate) {
           let startDate = new Date(expectedDueDate * 1000);
@@ -165,9 +167,9 @@ export function useCreditData(address, chainId) {
       });
 
       // Check if the user has an owed balance and has missed the last due date
-      const overdueCutoff = parseInt(lastRepay) + overduePeriodSeconds.toNumber();
+      const overdueCutoff = parseInt(lastRepay) + Number(overduePeriodSeconds);
 
-      if (owed.gt(ZERO) && today.getTime() / 1000 > overdueCutoff) {
+      if (owed > ZERO && today.getTime() / 1000 > overdueCutoff) {
         setDefaultedVolume(owed);
         let startDate = new Date(overdueCutoff * 1000);
 
@@ -204,7 +206,7 @@ export function useCreditData(address, chainId) {
     borrowedVolume,
     repaidVolume,
     defaultedVolume,
-    totalVolume: borrowedVolume.add(repaidVolume).add(defaultedVolume),
+    totalVolume: borrowedVolume + repaidVolume + defaultedVolume,
     defaultRate: daysSinceMembership > 0 ? (daysInDefault / daysSinceMembership) * 100 : 0,
   };
 }

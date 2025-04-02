@@ -1,26 +1,16 @@
 import { PaymentUnitSpeed, ZERO } from "constants";
 import { parseMilliseconds } from "utils/date";
 import { format } from "date-fns";
-import { BigNumber } from "ethers";
 
 export const NoPaymentLabel = "No payment due";
 const OverdueLabel = "Payment overdue";
 
 function dueDateToMilliseconds(lastRepay, overdueTime, blockNumber, chainId) {
-  if (
-    !lastRepay ||
-    !overdueTime ||
-    !blockNumber ||
-    !chainId ||
-    BigNumber.from(lastRepay).lte(ZERO)
-  ) {
+  if (!lastRepay || !overdueTime || !blockNumber || !chainId || BigInt(lastRepay) <= ZERO) {
     return null;
   }
 
-  const milliseconds = BigNumber.from(lastRepay)
-    .add(overdueTime)
-    .sub(blockNumber)
-    .mul(PaymentUnitSpeed[chainId]);
+  const milliseconds = (BigInt(lastRepay) + overdueTime - blockNumber) * PaymentUnitSpeed[chainId];
 
   return Number(milliseconds.toString());
 }

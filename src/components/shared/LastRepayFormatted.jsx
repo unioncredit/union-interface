@@ -1,9 +1,8 @@
-import { useLastRepayData } from "../../hooks/useLastRepayData";
-import { BigNumber } from "ethers";
+import { useLastRepayData } from "hooks/useLastRepayData";
 import { ZERO } from "constants";
 
 export const LastRepayFormatted = ({ lastRepay, defaultValue = "-" }) => {
-  const { formatted } = useLastRepayData(lastRepay ? BigNumber.from(lastRepay) : ZERO);
+  const { formatted } = useLastRepayData(lastRepay ? BigInt(lastRepay) : ZERO);
 
   if (!lastRepay) {
     return defaultValue;

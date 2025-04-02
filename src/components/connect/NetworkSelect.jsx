@@ -5,7 +5,7 @@ import { mainnet } from "wagmi/chains";
 import { useEffect, useState } from "react";
 import { Box, Button, WalletIcon } from "@unioncredit/ui";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 
 import { NetworkSelectOption } from "./NetworkSelectOption";
 import useMemberSummary from "hooks/useMemberSummary";
@@ -13,16 +13,14 @@ import { useAppNetwork } from "providers/Network";
 import { supportedNetworks } from "config/networks";
 import { useSupportedNetwork } from "../../hooks/useSupportedNetwork";
 import { InstallAppDrawer } from "../shared/InstallAppDrawer";
+import { BnStringify } from "../../utils/json";
 
 export default function NetworkSelect() {
-  const { chain } = useNetwork();
-  const { address, isConnected } = useAccount();
+  const { chain, address, isConnected } = useAccount();
   const { setForceAppReady } = useAppNetwork();
   const { openConnectModal } = useConnectModal();
   const { connected: isSupportedNetwork } = useSupportedNetwork();
-  const { switchNetworkAsync } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true,
-  });
+  const { switchChainAsync } = useSwitchChain();
   const { data: member } = useMemberSummary(address, chain?.id);
 
   const [selected, setSelected] = useState(null);
@@ -38,7 +36,9 @@ export default function NetworkSelect() {
     setSelected(network);
 
     try {
-      await switchNetworkAsync(network.chainId);
+      await switchChainAsync({
+        chainId: network.chainId,
+      });
     } catch (e) {
       console.log("Network select error:", e.message);
       setSelected(oldSelection);
@@ -49,7 +49,7 @@ export default function NetworkSelect() {
     if (!chain?.id) return;
     const found = networks.find((net) => net.chainId === chain.id);
     setSelected(found || null);
-  }, [chain?.id, JSON.stringify(networks)]);
+  }, [chain?.id, BnStringify(networks)]);
 
   return (
     <Box

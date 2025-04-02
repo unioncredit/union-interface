@@ -1,6 +1,5 @@
-import { Badge, Card, Text, Box, NumericalBlock, PercentBar } from "@unioncredit/ui";
-import { StatusColorMap } from "constants";
-import { ZERO } from "constants";
+import { Badge, Box, Card, NumericalBlock, PercentBar, Text } from "@unioncredit/ui";
+import { StatusColorMap, ZERO } from "constants";
 import { useProtocol } from "providers/ProtocolData";
 
 import format from "utils/format";
@@ -11,7 +10,7 @@ export default function ProposalVotes({ data }) {
 
   const { status, forVotes = ZERO, againstVotes = ZERO } = { ...data, ...protocol };
 
-  const totalVotes = forVotes.add(againstVotes);
+  const totalVotes = forVotes + againstVotes;
 
   const percentageFor = bnPercent(forVotes, totalVotes);
   const percentageAgainst = bnPercent(againstVotes, totalVotes);

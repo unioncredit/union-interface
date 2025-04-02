@@ -1,6 +1,6 @@
 import "./AddressSummary.scss";
 
-import { useEnsName, useNetwork } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 import { Link } from "react-router-dom";
 import {
   Badge,
@@ -25,7 +25,7 @@ import useLabels from "hooks/useLabels";
 import { mainnet } from "wagmi/chains";
 
 export function AddressSummary({ address, chainId: chainIdProp, allowEdit = false, ...props }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { getLabel, setLabel } = useLabels();
   const { data: ensName } = useEnsName({
     address,

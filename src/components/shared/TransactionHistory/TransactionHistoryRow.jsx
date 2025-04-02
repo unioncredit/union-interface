@@ -1,4 +1,4 @@
-import { useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { Box, LinkOutIcon, TableCell, TableRow, Text } from "@unioncredit/ui";
 import { format as dateFormat } from "date-fns";
 
@@ -8,7 +8,7 @@ import { Address } from "./Address";
 import { TransactionIcon } from "./TransactionIcon";
 import { blockExplorerTx } from "utils/blockExplorer";
 import { useToken } from "hooks/useToken";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 // prettier-ignore
 const texts = {
@@ -29,7 +29,7 @@ export function TransactionHistoryRow({
   timestamp,
   applicant,
 }) {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { token } = useToken();
 
   const transactionId = id.split("-")[0];

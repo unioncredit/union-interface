@@ -1,14 +1,14 @@
 import "./BorrowersCard.scss";
 
 import {
-  Table,
+  Box,
   Card,
-  Pagination,
   EmptyState,
-  TableRow,
+  Pagination,
+  Table,
   TableCell,
   TableHead,
-  Box,
+  TableRow,
   Text,
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
@@ -30,12 +30,12 @@ export default function BorrowersCard() {
   const { data: vouchees = [] } = useVouchees();
 
   const borrowers = vouchees
-    .filter((vouchee) => vouchee.locking.gt(ZERO))
+    .filter((vouchee) => vouchee.locking > ZERO)
     .sort((a, b) => {
       if (a.isOverdue && b.isOverdue) {
-        return a.locking.gt(b.locking) ? -1 : 1;
+        return a.locking > b.locking ? -1 : 1;
       } else if (!a.isOverdue && !b.isOverdue) {
-        return a.locking.gt(b.locking) ? -1 : 1;
+        return a.locking > b.locking ? -1 : 1;
       } else {
         return a.isOverdue ? -1 : 1;
       }

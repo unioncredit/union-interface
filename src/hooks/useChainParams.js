@@ -1,16 +1,15 @@
 import { useEffect } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 
 import { supportedNetworks } from "config/networks";
 import { EIP3770Map } from "constants";
 import { locationSearch } from "utils/location";
-import { isVersionSupported, Versions, useVersion } from "providers/Version";
+import { isVersionSupported, useVersion, Versions } from "providers/Version";
 
 export default function useChainParams() {
-  const { chain } = useNetwork();
   const { version, setVersion } = useVersion();
-  const { isConnected, connector } = useAccount();
-  const { switchNetworkAsync } = useSwitchNetwork({
+  const { chain, isConnected, connector } = useAccount();
+  const { switchChainAsync } = useSwitchChain({
     throwForSwitchChainNotSupported: true,
   });
 
@@ -22,14 +21,14 @@ export default function useChainParams() {
 
   useEffect(() => {
     (async function () {
-      if (switchNetworkAsync && isConnected && targetChain && connector && !chain?.unsupported) {
+      if (switchChainAsync && isConnected && targetChain && connector && !chain?.unsupported) {
         const toSelect = supportedNetworks.find((network) => network.chainId === targetChain);
         // If the current network is not he same as the selected network
         // fire off a chain network request. This is to support the ?chain
         // URL search param
         if (toSelect?.chainId !== chain.id) {
           try {
-            await switchNetworkAsync(toSelect.chainId);
+            await switchChainAsync(toSelect.chainId);
             if (!isVersionSupported(version, toSelect.chainId)) {
               setVersion(version === Versions.V1 ? Versions.V2 : Versions.V1);
             }
@@ -39,5 +38,5 @@ export default function useChainParams() {
         }
       }
     })();
-  }, [isConnected, connector, targetChain, supportedNetworks, switchNetworkAsync]);
+  }, [isConnected, connector, targetChain, supportedNetworks, switchChainAsync]);
 }

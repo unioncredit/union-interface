@@ -1,11 +1,11 @@
-import { useContractReads, useNetwork } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { createContext, useContext } from "react";
 import { mainnet } from "wagmi/chains";
 
 import useContract from "hooks/useContract";
-import { ZERO } from "constants";
 import { getVersion, Versions } from "./Version";
 import { useToken } from "hooks/useToken";
+import { ZERO } from "constants";
 
 const ProtocolContext = createContext({});
 
@@ -135,37 +135,41 @@ export const useProtocolData = (chainId) => {
     ...(version === Versions.V2 ? v2Functions : []),
   ];
 
-  const resp = useContractReads({
-    enabled: true,
-    select: (data) =>
-      [
-        ...assetManagerCalls.map((c) => c.functionName),
-        ...userManagerFunctionNames,
-        ...uTokenFunctionNames,
-        ...comptrollerFunctionNames,
-        ...(isMainnet ? governorFunctionsNames : []),
-        ...(isMainnet ? timelockFunctionNames : []),
-        ...unionTokenFunctionNames,
-        ...(version === Versions.V2 ? v2Functions.map((f) => f.functionName) : []),
-      ].reduce((acc, functionName, i) => ({ ...acc, [functionName]: data[i] }), {}),
+  const resp = useReadContracts({
     contracts: contracts,
+    query: {
+      enabled: true,
+      select: (data) =>
+        [
+          ...assetManagerCalls.map((c) => c.functionName),
+          ...userManagerFunctionNames,
+          ...uTokenFunctionNames,
+          ...comptrollerFunctionNames,
+          ...(isMainnet ? governorFunctionsNames : []),
+          ...(isMainnet ? timelockFunctionNames : []),
+          ...unionTokenFunctionNames,
+          ...(version === Versions.V2 ? v2Functions.map((f) => f.functionName) : []),
+        ].reduce((acc, functionName, i) => ({ ...acc, [functionName]: data[i].result }), {}),
+    },
   });
 
   const { totalStaked = ZERO, totalFrozen = ZERO } = resp.data || {};
 
-  const resp0 = useContractReads({
-    enabled: totalStaked.gt(ZERO),
-    select: (data) => ({
-      inflationPerSecond: data[0],
-      inflationPerBlock: data[0],
-    }),
+  const resp0 = useReadContracts({
     contracts: [
       {
         ...comptrollerContract,
         functionName: versioned("inflationPerBlock", "inflationPerSecond"),
-        args: [totalStaked.sub(totalFrozen)],
+        args: [totalStaked - totalFrozen],
       },
     ],
+    query: {
+      enabled: totalStaked > ZERO,
+      select: (data) => ({
+        inflationPerSecond: data[0].result,
+        inflationPerBlock: data[0].result,
+      }),
+    },
   });
 
   const data = { ...resp.data, ...resp0.data };
@@ -174,7 +178,7 @@ export const useProtocolData = (chainId) => {
 };
 
 export default function ProtocolData({ children }) {
-  const { chain: connectedChain } = useNetwork();
+  const { chain: connectedChain } = useAccount();
   const chainId = connectedChain?.id || mainnet.id;
 
   const { data } = useProtocolData(chainId);

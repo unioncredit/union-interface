@@ -1,13 +1,13 @@
 import {
-  Table,
-  Card,
-  Pagination,
-  EmptyState,
-  TableRow,
-  TableHead,
-  Text,
-  TableCell,
   Box,
+  Card,
+  EmptyState,
+  Pagination,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
+  Text,
 } from "@unioncredit/ui";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ export default function VouchersCard() {
 
   const { data: vouchers = [] } = useVouchers();
 
-  const vouchersOrdered = vouchers.sort((a, b) => (a.vouch.gt(b.vouch) ? -1 : 1));
+  const vouchersOrdered = vouchers.sort((a, b) => (a.vouch > b.vouch ? -1 : 1));
 
   const { data: vouchersPage, maxPages, activePage, onChange } = usePagination(vouchersOrdered);
 

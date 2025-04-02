@@ -1,4 +1,3 @@
-import { BigNumber } from "ethers";
 import { Badge } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
@@ -14,16 +13,15 @@ export const ProfileStatusBadge = ({ member, chainId }) => {
   const { isMember = false, isOverdue = false, lastRepay = ZERO, owed = ZERO } = member;
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
 
-  const maxOverdueTotal = overdueTime.add(maxOverdueTime);
+  const maxOverdueTotal = overdueTime + maxOverdueTime;
 
-  const isMaxOverdue =
-    isOverdue && lastRepay && BigNumber.from(blockNumber).gte(lastRepay.add(maxOverdueTotal));
+  const isMaxOverdue = isOverdue && lastRepay && BigInt(blockNumber) >= lastRepay + maxOverdueTotal;
 
   return isMaxOverdue ? (
     <Badge label="Write-Off" color="red" />
   ) : isOverdue ? (
     <Badge label="Overdue" color="red" />
-  ) : owed.gt(ZERO) ? (
+  ) : owed > ZERO ? (
     <Badge label="Borrowing" color="green" />
   ) : isMember ? (
     <Badge label="Member" color="blue" />

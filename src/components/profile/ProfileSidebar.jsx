@@ -30,7 +30,7 @@ export function ProfileSidebar({ address, member, chainId }) {
 
   const vouch = vouchers.map(({ vouch }) => vouch).reduce(reduceBnSum, ZERO);
 
-  const unavailableBalance = vouch.sub(creditLimit).sub(owed);
+  const unavailableBalance = vouch - creditLimit - owed;
 
   useEffect(() => {
     refetchVouchers();

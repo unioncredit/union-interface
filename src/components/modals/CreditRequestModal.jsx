@@ -1,16 +1,7 @@
-import {
-  Modal,
-  ModalOverlay,
-  Box,
-  Card,
-  Button,
-  ButtonRow,
-  Label,
-  Select,
-} from "@unioncredit/ui";
+import { Box, Button, ButtonRow, Card, Label, Modal, ModalOverlay, Select } from "@unioncredit/ui";
 import QRCode from "qrcode.react";
 import { useState } from "react";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
 import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
 
@@ -25,17 +16,14 @@ export const CREDIT_REQUEST_MODAL = "credit-request-modal";
 
 export default function CreditRequestModal() {
   const { close } = useModals();
-  const { address } = useAccount();
-  const { chain: connectedChain } = useNetwork();
+  const { address, chain: connectedChain } = useAccount();
 
   const [copied, copy] = useCopyToClipboard();
   const [network, setNetwork] = useState(null);
 
   const networks = useNetworks();
 
-  const defaultValue = networks.find(
-    (network) => network.chainId === connectedChain.id
-  );
+  const defaultValue = networks.find((network) => network.chainId === connectedChain.id);
 
   const eip3770 = EIP3770[network] || EIP3770[defaultValue.chainId] || "eth";
 

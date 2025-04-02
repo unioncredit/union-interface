@@ -24,7 +24,7 @@ export default function VouchersStep({ complete, onSkipStep }) {
   const { data: vouchersData = [] } = useVouchers();
   const { open } = useModals();
 
-  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance.gt(ZERO));
+  const vouchers = vouchersData.filter((voucher) => voucher.stakedBalance > ZERO);
 
   return (
     <Card size="fluid" mb="24px" className="VouchersStep">
@@ -36,8 +36,8 @@ export default function VouchersStep({ complete, onSkipStep }) {
         </Box>
 
         <Text grey={500} size="medium">
-          To get credit and borrow on Union, find existing Union members to
-          vouch for you. This step can be done before or after you register.
+          To get credit and borrow on Union, find existing Union members to vouch for you. This step
+          can be done before or after you register.
         </Text>
 
         {vouchers.length <= 0 ? (

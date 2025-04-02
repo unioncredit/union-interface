@@ -1,4 +1,4 @@
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { Box, Grid, Layout } from "@unioncredit/ui";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
@@ -35,7 +35,7 @@ export default function App() {
 
   const location = useLocation();
 
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   const { version } = useVersion();
   const { isConnected } = useAccount();
   const { set: setReferrer } = useReferrer();
@@ -103,10 +103,9 @@ export default function App() {
 
 function AppReadyShim() {
   const location = useLocation();
-  const { chain } = useNetwork();
   const { version } = useVersion();
   const { isSupported } = useSupportedNetwork();
-  const { isConnected } = useAccount();
+  const { chain, isConnected } = useAccount();
   const { data: member } = useMember();
   const { forceAppReady } = useAppNetwork();
   useMemberListener();

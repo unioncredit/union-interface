@@ -3,7 +3,7 @@ import useContract from "hooks/useContract";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
 import { Versions } from "providers/Version";
-import { base } from "providers/Network";
+import { base } from "viem/chains";
 
 export function useGovernanceStats({ address }) {
   const mainnetDai = useContract("dai", mainnet.id, Versions.V1);
@@ -15,25 +15,6 @@ export function useGovernanceStats({ address }) {
   const baseUnion = useContract("union", base.id, Versions.V2);
 
   return useContractReads({
-    select: (data) => {
-      const [
-        mainnetVotes = ZERO,
-        mainnetBalance = ZERO,
-        mainnetUnclaimed = ZERO,
-        arbitrumBalance = ZERO,
-        optimismBalance = ZERO,
-        baseBalance = ZERO,
-      ] = data || [];
-
-      return {
-        mainnetVotes,
-        mainnetBalance,
-        mainnetUnclaimed,
-        arbitrumBalance,
-        optimismBalance,
-        baseBalance,
-      };
-    },
     contracts: address
       ? [
           {
@@ -74,7 +55,28 @@ export function useGovernanceStats({ address }) {
           },
         ]
       : [],
-    cacheTime: CACHE_TIME,
-    staleTime: STALE_TIME,
+    query: {
+      cacheTime: CACHE_TIME,
+      staleTime: STALE_TIME,
+      select: (data) => {
+        const [
+          mainnetVotes = ZERO,
+          mainnetBalance = ZERO,
+          mainnetUnclaimed = ZERO,
+          arbitrumBalance = ZERO,
+          optimismBalance = ZERO,
+          baseBalance = ZERO,
+        ] = data.map((d) => d.result) || [];
+
+        return {
+          mainnetVotes,
+          mainnetBalance,
+          mainnetUnclaimed,
+          arbitrumBalance,
+          optimismBalance,
+          baseBalance,
+        };
+      },
+    },
   });
 }

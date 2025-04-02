@@ -8,7 +8,7 @@ export function useVersionBlockNumber({ chainId }) {
     chainId: chainId === arbitrum.id ? mainnet.id : chainId,
   });
 
-  const unixTimestamp = Math.round(Date.now() / 1000);
+  const unixTimestamp = BigInt(Math.round(Date.now() / 1000));
 
   return {
     data: isV2 ? unixTimestamp : blockNumber,

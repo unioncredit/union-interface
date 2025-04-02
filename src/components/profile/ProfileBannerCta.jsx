@@ -46,19 +46,17 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
     value: connectedEthBalance = ZERO,
   } = { ...protocol, ...balance };
 
-  const ethRegisterFee = regFee.add(rebate);
-  const canRegisterUser = ethRegisterFee.lte(connectedEthBalance);
+  const ethRegisterFee = regFee + rebate;
+  const canRegisterUser = ethRegisterFee <= connectedEthBalance;
   const registerButtonProps = useWrite({
     contract: "registerHelper",
     method: "register",
     args: [address, connectedAddress],
     enabled: connectedIsMember && !profileIsMember && canRegisterUser,
     disabled: !canRegisterUser,
+    value: ethRegisterFee,
     onComplete: async () => {
       await refetchProfileMember();
-    },
-    overrides: {
-      value: ethRegisterFee,
     },
   });
 
@@ -107,7 +105,7 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
       : {
           title: "Gift a Membership",
           content: `${
-            profileCreditLimit.gt(ZERO)
+            profileCreditLimit > ZERO
               ? `This account has $${format(profileCreditLimit)} in credit from ${
                   vouchers.length
                 } members. `
@@ -122,7 +120,7 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
     ? {
         title: `Not a member`,
         content: `Your account ${
-          connectedCreditLimit.gt(ZERO) ? `has $${format(connectedCreditLimit)} in credit and ` : ""
+          connectedCreditLimit > ZERO ? `has $${format(connectedCreditLimit)} in credit and ` : ""
         } is ready to enjoy all the benefits of being a union credit network member.`,
         buttonProps: {
           label: "Get started",
@@ -134,9 +132,7 @@ export const ProfileBannerCta = ({ vouchers, address }) => {
     : {
         title: `Become a member to back ${name}`,
         content: `Register your address to access ${
-          connectedCreditLimit.gt(ZERO)
-            ? `your $${format(connectedCreditLimit)} in credit and `
-            : ""
+          connectedCreditLimit > ZERO ? `your $${format(connectedCreditLimit)} in credit and ` : ""
         }all the benefits of being a member of union credit network.`,
         buttonProps: {
           label: "Get started",
