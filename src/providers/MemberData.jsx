@@ -1,5 +1,5 @@
 import { useAccount, useReadContracts } from "wagmi";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
@@ -239,8 +239,34 @@ export default function MemberData({ chainId, children, address: addressProp }) 
 
   const pollResp = usePollMemberData(address, chainId);
 
+  // Track the last successful refetch timestamp
+  const [lastRefetchTime, setLastRefetchTime] = useState(0);
+
+  // Update refetch timestamp when main data is refetched
+  useEffect(() => {
+    if (resp.isFetched) {
+      setLastRefetchTime(Date.now());
+    }
+  }, [resp.isFetched]);
+
+  // Determine which data source is more recent
+  const isMainDataFresh = lastRefetchTime > (pollResp.data?.timestamp || 0);
+
   return (
-    <MemberContext.Provider value={{ ...resp, data: { ...resp.data, ...pollResp.data } }}>
+    <MemberContext.Provider 
+      value={{ 
+        ...resp, 
+        data: { 
+          ...resp.data,
+          // Use polling data only if main data is not fresh
+          ...(isMainDataFresh ? {} : pollResp.data),
+          // For critical fields, use the most recent value
+          owed: isMainDataFresh ? resp.data?.owed : (pollResp.data?.owed ?? resp.data?.owed ?? ZERO),
+          interest: isMainDataFresh ? resp.data?.interest : (pollResp.data?.interest ?? resp.data?.interest ?? ZERO),
+          unclaimedRewards: isMainDataFresh ? resp.data?.unclaimedRewards : (pollResp.data?.unclaimedRewards ?? resp.data?.unclaimedRewards ?? ZERO)
+        } 
+      }}
+    >
       {children}
     </MemberContext.Provider>
   );

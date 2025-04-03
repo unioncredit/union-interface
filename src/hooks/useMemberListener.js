@@ -25,18 +25,17 @@ export default function useMemberListener() {
     refetchVouchees();
   };
 
-  // useWatchContractEvent({
-  //   ...userManager,
-  //   eventName: "LogDebtWriteOff",
-  //   listener: (staker, borrower) => {
-  //     console.debug("Listener: LogDebtWriteOff received", { staker, borrower, address });
-  //     if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
-  //       refreshMember();
-  //     }
-  //   },
-  // });
+  useWatchContractEvent({
+    ...userManager,
+    eventName: "LogDebtWriteOff",
+    listener: (staker, borrower) => {
+      console.debug("Listener: LogDebtWriteOff received", { staker, borrower, address });
+      if (compareAddresses(borrower, address) || compareAddresses(staker, address)) {
+        refreshMember();
+      }
+    },
+  });
 
-  // todo: implement onLogs function
   useWatchContractEvent({
     ...userManager,
     eventName: "LogUpdateTrust",
@@ -48,16 +47,16 @@ export default function useMemberListener() {
     },
   });
 
-  // useWatchContractEvent({
-  //   ...userManager,
-  //   eventName: "LogCancelVouch",
-  //   listener: (_, borrower) => {
-  //     console.debug("Listener: LogCancelVouch received", { borrower, address });
-  //     if (compareAddresses(borrower, address)) {
-  //       refreshMember();
-  //     }
-  //   },
-  // });
+  useWatchContractEvent({
+    ...userManager,
+    eventName: "LogCancelVouch",
+    listener: (_, borrower) => {
+      console.debug("Listener: LogCancelVouch received", { borrower, address });
+      if (compareAddresses(borrower, address)) {
+        refreshMember();
+      }
+    },
+  });
 
   useWatchContractEvent({
     ...userManager,
