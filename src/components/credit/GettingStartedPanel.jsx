@@ -16,15 +16,13 @@ export const GettingStartedPanel = () => {
   const CACHE_KEY = "getting_started_hidden";
 
   const { cache, cached } = useCache();
-  const { data: vouchees, isLoading: voucheesLoading } = useVouchees();
-  const { data: vouchers, isLoading: vouchersLoading } = useVouchers();
-  const { data: { stakedBalance }, isLoading: memberLoading } = useMember();
+  const { data: vouchees = [], isLoading: voucheesLoading } = useVouchees();
+  const { data: vouchers = [], isLoading: vouchersLoading } = useVouchers();
+  const { data: { stakedBalance = ZERO }, isLoading: memberLoading } = useMember();
   const { open: openModal } = useModals();
 
-  // Don't render anything until we have all the data loaded and available
-  const isLoading = voucheesLoading || vouchersLoading || memberLoading;
-  const hasData = vouchees && vouchers && stakedBalance !== undefined;
-  if (isLoading || !hasData) return null;
+  // Hide panel while any data is loading
+  if (voucheesLoading || vouchersLoading || memberLoading) return null;
   if ((vouchers.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
 
   return (
