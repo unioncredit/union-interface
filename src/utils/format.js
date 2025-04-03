@@ -21,7 +21,7 @@ export const formattedNumber = (n, token, digits = 2, rounded = true) => {
 
 export const compactFormattedNumber = (n, token) => {
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
-  return formatter.format(formatUnits(n, UNIT[token]));
+  return formatter.format(Number(formatUnits(n, UNIT[token])));
 };
 
 export function commify(num, digits, rounded = true, stripTrailingZeros = false) {
