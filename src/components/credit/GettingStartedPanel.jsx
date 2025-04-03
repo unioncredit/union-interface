@@ -21,9 +21,9 @@ export const GettingStartedPanel = () => {
   const { data: { stakedBalance }, isLoading: memberLoading } = useMember();
   const { open: openModal } = useModals();
 
-  // Hide panel while any data is loading
-  if (voucheesLoading || vouchersLoading || memberLoading) return null;
-  if ((vouchers?.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
+  // Don't render anything until we have all the data
+  if (!vouchees || !vouchers || !stakedBalance) return null;
+  if ((vouchers.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
 
   return (
     <Card mb="24px" className="GettingStartedPanel">
