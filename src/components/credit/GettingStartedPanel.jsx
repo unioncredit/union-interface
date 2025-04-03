@@ -16,14 +16,14 @@ export const GettingStartedPanel = () => {
   const CACHE_KEY = "getting_started_hidden";
 
   const { cache, cached } = useCache();
-  const { data: vouchees = [] } = useVouchees();
-  const { data: vouchers = [] } = useVouchers();
-  const { data: member = {} } = useMember();
+  const { data: vouchees, isLoading: voucheesLoading } = useVouchees();
+  const { data: vouchers, isLoading: vouchersLoading } = useVouchers();
+  const { data: { stakedBalance }, isLoading: memberLoading } = useMember();
   const { open: openModal } = useModals();
 
-  const { stakedBalance = ZERO } = member;
-
-  if ((vouchers.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
+  // Hide panel while any data is loading
+  if (voucheesLoading || vouchersLoading || memberLoading) return null;
+  if ((vouchers?.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
 
   return (
     <Card mb="24px" className="GettingStartedPanel">
