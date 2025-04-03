@@ -21,8 +21,10 @@ export const GettingStartedPanel = () => {
   const { data: { stakedBalance }, isLoading: memberLoading } = useMember();
   const { open: openModal } = useModals();
 
-  // Don't render anything until we have all the data
-  if (!vouchees || !vouchers || !stakedBalance) return null;
+  // Don't render anything until we have all the data loaded and available
+  const isLoading = voucheesLoading || vouchersLoading || memberLoading;
+  const hasData = vouchees && vouchers && stakedBalance !== undefined;
+  if (isLoading || !hasData) return null;
   if ((vouchers.length > 0 && stakedBalance > ZERO) || cached(CACHE_KEY)) return null;
 
   return (
