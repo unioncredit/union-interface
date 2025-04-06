@@ -42,6 +42,11 @@ export default function AccountModal() {
   const { token } = useToken();
   const blockExplorerLink = blockExplorerAddress(chain.id, address);
 
+  const disconnectWallet = () => {
+    disconnect();
+    close();
+  };
+
   return (
     <ModalOverlay onClick={close}>
       <Modal className="AccountModal">
@@ -87,10 +92,7 @@ export default function AccountModal() {
               color="secondary"
               label="Disconnect Wallet"
               icon={DisconnectWalletIcon}
-              onClick={() => {
-                disconnect();
-                close();
-              }}
+              onClick={disconnectWallet}
             />
           </ButtonRow>
 
