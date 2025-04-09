@@ -35,20 +35,20 @@ const score = (bools) => {
 
 const sortFns = {
   [PROVIDING_COLUMNS.TRUST_SET.id]: {
-    [SortOrder.ASC]: (a, b) => a.trust - b.trust,
-    [SortOrder.DESC]: (a, b) => b.trust - a.trust,
+    [SortOrder.ASC]: (a, b) => Number(a.trust - b.trust),
+    [SortOrder.DESC]: (a, b) => Number(b.trust - a.trust),
   },
   [PROVIDING_COLUMNS.TOTAL_VOUCH.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch - b.vouch,
-    [SortOrder.DESC]: (a, b) => b.vouch - a.vouch,
+    [SortOrder.ASC]: (a, b) => Number(a.vouch - b.vouch),
+    [SortOrder.DESC]: (a, b) => Number(b.vouch - a.vouch),
   },
   [PROVIDING_COLUMNS.STAKE_LOCKED.id]: {
-    [SortOrder.ASC]: (a, b) => a.locking - b.locking,
-    [SortOrder.DESC]: (a, b) => b.locking - a.locking,
+    [SortOrder.ASC]: (a, b) => Number(a.locking - b.locking),
+    [SortOrder.DESC]: (a, b) => Number(b.locking - a.locking),
   },
   [PROVIDING_COLUMNS.LAST_PAYMENT.id]: {
-    [SortOrder.ASC]: (a, b) => a.lastRepay - b.lastRepay,
-    [SortOrder.DESC]: (a, b) => b.lastRepay - a.lastRepay,
+    [SortOrder.ASC]: (a, b) => Number(a.lastRepay - b.lastRepay),
+    [SortOrder.DESC]: (a, b) => Number(b.lastRepay - a.lastRepay),
   },
   [PROVIDING_COLUMNS.LOAN_STATUS.id]: {
     [SortOrder.ASC]: (a, b) =>
@@ -59,18 +59,18 @@ const sortFns = {
       score([a.isOverdue && a.locking > ZERO, a.isMember, a.locking > ZERO]),
   },
   [RECEIVING_COLUMNS.REAL_VOUCH.id]: {
-    [SortOrder.ASC]: (a, b) => a.vouch - b.vouch,
-    [SortOrder.DESC]: (a, b) => b.vouch - a.vouch,
+    [SortOrder.ASC]: (a, b) => Number(a.vouch - b.vouch),
+    [SortOrder.DESC]: (a, b) => Number(b.vouch - a.vouch),
   },
   [RECEIVING_COLUMNS.LOCKING.id]: {
-    [SortOrder.ASC]: (a, b) => (a.locking ?? a.locked) - (b.locking ?? b.locked),
-    [SortOrder.DESC]: (a, b) => (b.locking ?? b.locked) - (a.locking ?? a.locked),
+    [SortOrder.ASC]: (a, b) => Number((a.locking ?? a.locked) - (b.locking ?? b.locked)),
+    [SortOrder.DESC]: (a, b) => Number((b.locking ?? b.locked) - (a.locking ?? a.locked)),
   },
   [RECEIVING_COLUMNS.BORROWABLE.id]: {
     [SortOrder.ASC]: (a, b) =>
-      a.vouch - (a.locking ?? a.locked) - (b.vouch - b.locking ?? b.locked),
+      Number(a.vouch - (a.locking ?? a.locked) - (b.vouch - b.locking ?? b.locked)),
     [SortOrder.DESC]: (a, b) =>
-      b.vouch - (b.locking ?? b.locked) - (a.vouch - a.locking ?? a.locked),
+      Number(b.vouch - (b.locking ?? b.locked) - (a.vouch - a.locking ?? a.locked)),
   },
 };
 
