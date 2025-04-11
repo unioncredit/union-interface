@@ -147,7 +147,7 @@ export default function MyGovernanceStats() {
             mt="16px"
             justify="space-between"
             align="left"
-            // icon={WarningIcon}
+            icon={WarningIcon}
             iconPosition="right"
             variant="warning"
             label={
