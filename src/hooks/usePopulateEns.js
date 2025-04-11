@@ -1,5 +1,5 @@
 import { CACHE_TIME, STALE_TIME } from "constants";
-import { useContractRead } from "wagmi";
+import { useReadContract } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
 import useLabels from "./useLabels";
@@ -13,7 +13,7 @@ import { AddressEnsMappings } from "../constants";
 export default function usePopulateEns(inputData) {
   const { getLabel } = useLabels();
 
-  const { data: ensNames } = useContractRead({
+  const { data: ensNames } = useReadContract({
     chainId: mainnet.id,
     address: "0x3671ae578e63fdf66ad4f3e12cc0c0d71ac7510c",
     abi: [

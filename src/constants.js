@@ -8,12 +8,13 @@ export const ZERO = 0n;
 
 export const ZERO_ADDRESS = zeroAddress;
 
-export const rpcChains = [base, mainnet, optimism];
+export const rpcChains = [base, mainnet, optimism, arbitrum];
 
 const RPCS = {
   [base.id]: "https://base-mainnet.g.alchemy.com/v2",
   [mainnet.id]: "https://eth-mainnet.g.alchemy.com/v2",
   [optimism.id]: "https://opt-mainnet.g.alchemy.com/v2",
+  [arbitrum.id]: "https://arb-mainnet.g.alchemy.com/v2",
 };
 
 // eslint-disable-next-line no-undef

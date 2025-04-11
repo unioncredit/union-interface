@@ -1,4 +1,4 @@
-import { useContractReads } from "wagmi";
+import { useReadContracts } from "wagmi";
 
 import useContract from "./useContract";
 import { CACHE_TIME, STALE_TIME } from "constants";
@@ -7,7 +7,7 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
   const userManagerContract = useContract("userManager", chainId, forceVersion);
 
   const { data: { voucherCount = 0, voucheeCount = 0 } = {}, refetch: refetchCounts } =
-    useContractReads({
+    useReadContracts({
       contracts: [
         {
           ...userManagerContract,
@@ -33,7 +33,7 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
       },
     });
 
-  const { data: stakerAddresses, refetch: refetchVouchers } = useContractReads({
+  const { data: stakerAddresses, refetch: refetchVouchers } = useReadContracts({
     contracts: Array(voucherCount)
       .fill(null)
       .map((_, i) => ({
@@ -50,7 +50,7 @@ export default function useRelatedAddresses(address, chainId, forceVersion) {
     },
   });
 
-  const { data: borrowerAddresses, refetch: refetchVouchees } = useContractReads({
+  const { data: borrowerAddresses, refetch: refetchVouchees } = useReadContracts({
     contracts: Array(voucheeCount)
       .fill(null)
       .map((_, i) => ({

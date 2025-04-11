@@ -1,4 +1,4 @@
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { useEffect, useRef, useState } from "react";
 
 import { ZERO } from "constants";
@@ -48,7 +48,7 @@ export default function usePollMemberData(address, inputChainId) {
       ]
     : [];
 
-  const resp = useContractReads({
+  const resp = useReadContracts({
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
