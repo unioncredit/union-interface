@@ -1,5 +1,5 @@
 import chunk from "lodash/chunk";
-import { useAccount, useContractReads } from "wagmi";
+import { useAccount, useReadContracts } from "wagmi";
 import { useEffect, useState } from "react";
 import { mainnet } from "wagmi/chains";
 
@@ -46,7 +46,7 @@ export default function useVoters() {
     []
   );
 
-  const resp = useContractReads({
+  const resp = useReadContracts({
     contracts: contracts,
     cacheTime: CACHE_TIME,
     staleTime: STALE_TIME,

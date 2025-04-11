@@ -1,4 +1,4 @@
-import { useContractReads } from "wagmi";
+import { useReadContracts } from "wagmi";
 import useContract from "hooks/useContract";
 import { CACHE_TIME, STALE_TIME, ZERO } from "constants";
 import { arbitrum, mainnet, optimism } from "wagmi/chains";
@@ -14,46 +14,46 @@ export function useGovernanceStats({ address }) {
   const optimismUnion = useContract("union", optimism.id, Versions.V2);
   const baseUnion = useContract("union", base.id, Versions.V2);
 
-  return useContractReads({
+  return useReadContracts({
     contracts: address
       ? [
-          {
-            ...mainnetUnion,
-            functionName: "getCurrentVotes",
-            chainId: mainnet.id,
-            args: [address],
-          },
-          {
-            ...mainnetUnion,
-            functionName: "balanceOf",
-            chainId: mainnet.id,
-            args: [address],
-          },
-          {
-            ...mainnetComptroller,
-            functionName: "calculateRewardsByBlocks",
-            chainId: mainnet.id,
-            args: [address, mainnetDai.address, ZERO],
-          },
-          {
-            ...arbitrumUnion,
-            functionName: "balanceOf",
-            chainId: arbitrum.id,
-            args: [address],
-          },
-          {
-            ...optimismUnion,
-            functionName: "balanceOf",
-            chainId: optimism.id,
-            args: [address],
-          },
-          {
-            ...baseUnion,
-            functionName: "balanceOf",
-            chainId: base.id,
-            args: [address],
-          },
-        ]
+        {
+          ...mainnetUnion,
+          functionName: "getCurrentVotes",
+          chainId: mainnet.id,
+          args: [address],
+        },
+        {
+          ...mainnetUnion,
+          functionName: "balanceOf",
+          chainId: mainnet.id,
+          args: [address],
+        },
+        {
+          ...mainnetComptroller,
+          functionName: "calculateRewardsByBlocks",
+          chainId: mainnet.id,
+          args: [address, mainnetDai.address, ZERO],
+        },
+        {
+          ...arbitrumUnion,
+          functionName: "balanceOf",
+          chainId: arbitrum.id,
+          args: [address],
+        },
+        {
+          ...optimismUnion,
+          functionName: "balanceOf",
+          chainId: optimism.id,
+          args: [address],
+        },
+        {
+          ...baseUnion,
+          functionName: "balanceOf",
+          chainId: base.id,
+          args: [address],
+        },
+      ]
       : [],
     query: {
       cacheTime: CACHE_TIME,

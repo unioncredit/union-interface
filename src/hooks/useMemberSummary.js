@@ -1,4 +1,4 @@
-import { useContractReads } from "wagmi";
+import { useReadContracts } from "wagmi";
 
 import useContract from "hooks/useContract";
 import { getVersion } from "providers/Version";
@@ -22,7 +22,7 @@ export default function useMemberSummary(address, chainId) {
       ]
     : [];
 
-  const { data, ...resp } = useContractReads({
+  const { data, ...resp } = useReadContracts({
     contracts: contracts.map((contract) => ({
       ...contract,
       chainId,
