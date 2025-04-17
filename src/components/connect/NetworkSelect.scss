@@ -18,3 +18,22 @@
     }
   }
 }
+
+.networkSwitcher__buttonContainer {
+  @media screen and (max-width: 710px) {
+    width: auto;
+
+    span {
+      display: none;
+    }
+
+    .button.networkSwitcher {
+      padding: 0 6px;
+      width: 40px;
+
+      .avatar {
+        margin-right: 0;
+      }
+    }
+  }
+}
