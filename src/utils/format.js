@@ -1,6 +1,7 @@
 import { formatUnits } from "viem";
 
 import { DUST_THRESHOLD, UNIT, ZERO } from "constants";
+import { normalize } from "viem/ens";
 
 export default function format(
   n,
@@ -79,3 +80,11 @@ export const formatScientific = (value, unit, digits = 2) => {
 export const expandToString = (value) => {
   return value.toLocaleString("fullwide", { useGrouping: false });
 };
+
+export const tryNormalize = (ens) => {
+  try {
+    return normalize(ens);
+  } catch {
+    return ens;
+  }
+}

@@ -1,10 +1,12 @@
-@import "@rainbow-me/rainbowkit/styles.css";
-@import "@unioncredit/ui/src/variables";
-@import "@unioncredit/ui/lib";
-@import "./variables.scss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "@rainbow-me/rainbowkit/styles.css";
+@import "@unioncredit/ui/src/variables";
+@import "@unioncredit/ui/lib";
+@import "variables";
+@import "shadcn";
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Roboto:wght@100;400;500&display=swap");
 
@@ -14,6 +16,11 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   background-color: $grey50;
+
+  * {
+    border-style: solid;
+    border-color: #e4e4e7;
+  }
 
   &.white-background {
     background-color: white;
@@ -82,4 +89,28 @@ a {
   overflow: hidden !important;
   position: fixed;
   width: 100%;
+}
+
+.networkSwitcher__buttonContainer {
+  width: auto;
+}
+
+.ProfileSearchInput__input {
+  @media all and (max-width: 710px) {
+    width: calc(100vw - 211px);
+  }
+  @media all and (max-width: 410px) {
+    font-size: 13px !important;
+  }
+  @media all and (max-width: 392px) {
+    font-size: 12px !important;
+  }
+  @media all and (max-width: 379px) {
+    font-size: 11px !important;
+  }
+}
+.ProfileSearchInput__popover {
+  @media all and (max-width: 710px) {
+    width: calc(100vw - 170px) !important;
+  }
 }

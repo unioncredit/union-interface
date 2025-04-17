@@ -28,9 +28,10 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
 import cn from "classnames";
 import { InstallAppButton } from "./InstallAppButton";
+import { ProfileSearchInput } from "./ProfileSearchInput";
 
 export function Header({ loading, showNav = true }) {
-  const mobileNavBreakpoint = 900;
+  const mobileNavBreakpoint = 950;
   const { open } = useModals();
   const { pathname } = useLocation();
   const { isConnected } = useAccount();
@@ -77,12 +78,17 @@ export function Header({ loading, showNav = true }) {
                     <UnionNavIcon width="40px" style={{ marginRight: "8px" }} />
                   </Link>
 
-                  {isConnected && <NetworkSelect />}
+                  {isConnected && (
+                    <>
+                      <NetworkSelect />
+                      <ProfileSearchInput />
+                    </>
+                  )}
                   {(!isConnected || !isMember) && <InstallAppButton />}
                 </Box>
               </Grid.Col>
               {showNav && (
-                <Grid.Col align="center" className="hide-lt-900">
+                <Grid.Col align="center" className="hide-lt-950 !p-0">
                   {/*--------------------------------------------------------------
                 Desktop Navigation
               *--------------------------------------------------------------*/}
