@@ -1,33 +1,54 @@
 import { useMemo, useState } from "react";
 import { useAccount, useBlockNumber } from "wagmi";
+import { base } from "viem/chains";
+import { gql, useQuery } from "@apollo/client";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { useUnionDataApi } from "hooks/useUnionDataApi";
-import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder, ZERO } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT, ZERO } from "constants";
 import { useProtocolData } from "providers/ProtocolData";
 import { LastRepayFormatted } from "components/shared/LastRepayFormatted";
-import { DataApiStatusBadge } from "components/shared/DataApiStatusBadge";
-import { useToken } from "hooks/useToken";
-import { base } from "viem/chains";
+import { GraphqlStatusBadge } from "components/shared/GraphqlStatusBadge";
 
 const columns = {
   CREDIT_LIMIT: {
     label: "Credit Limit",
-    sort: "contracts.vouches.amount_received",
+    sort: "vouchReceived",
   },
   BALANCE_OWED: {
     label: "Balance Owed",
-    sort: "contracts.total_owed.total",
+    sort: "owed",
   },
   LAST_PAYMENT: {
     label: "Last Payment",
-    sort: "credit.repays.blocks.last",
+    sort: "lastRepay",
   },
   STATUS: {
     label: "Status",
   },
 };
+
+const DELINQUENTS_QUERY = gql`
+  query DelinquentsQuery ($orderBy: String!, $orderDirection: String!) {
+    accounts (
+      limit: 100,
+      orderBy: $orderBy,
+      orderDirection: $orderDirection
+      where: {
+        isOverdue: true,
+      }
+    ) {
+      items {
+        address
+        vouchReceived
+        owed
+        lastRepay
+        isOverdue
+        isMember
+      }
+    }
+  }
+`;
 
 export const DelinquentsBoard = () => {
   const [page, setPage] = useState(1);
@@ -36,8 +57,9 @@ export const DelinquentsBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { unit } = useToken();
   const { chain: connectedChain } = useAccount();
+
+  const unit = UNIT[TOKENS.USDC];
   const chainId = connectedChain?.id || base.id;
 
   const { data: blockNumber } = useBlockNumber({
@@ -54,31 +76,28 @@ export const DelinquentsBoard = () => {
     [sort]
   );
 
-  const { data: response = [] } = useUnionDataApi({
-    network: DataApiNetworks[chainId],
-    page,
-    size: LEADERBOARD_PAGE_SIZE,
-    sort: sortQuery,
-    query: {
-      "contracts.is_overdue": true,
-    },
+  const { data } = useQuery(DELINQUENTS_QUERY, {
+    variables: {
+      orderBy: sortQuery.field,
+      orderDirection: sortQuery.order,
+    }
   });
 
-  const { pagination, items } = response;
+  const items = data?.accounts.items || [];
 
   const rows =
-    items?.map((user) => {
-      const { address, data } = user;
-      const { credit, contracts } = data;
+    items?.map((item) => {
+      const address = item.address;
+
 
       return [
         address,
-        formatScientific(contracts.vouches.amount_received, unit),
-        formatScientific(contracts.total_owed.total, unit),
-        <LastRepayFormatted key={address} lastRepay={credit.repays.blocks.last} />,
-        <DataApiStatusBadge
+        formatScientific(item.vouchReceived, unit),
+        formatScientific(item.owed, unit),
+        <LastRepayFormatted key={address} lastRepay={item.lastRepay} />,
+        <GraphqlStatusBadge
           key={address}
-          data={data}
+          data={item}
           protocol={protocol}
           blockNumber={blockNumber || ZERO}
         />,
@@ -95,7 +114,7 @@ export const DelinquentsBoard = () => {
 
     setSort({
       ...sort,
-      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
     });
   };
 
@@ -105,7 +124,7 @@ export const DelinquentsBoard = () => {
       columns={columns}
       sort={sort}
       handleSort={handleSort}
-      maxPages={Math.ceil(pagination?.total.value / LEADERBOARD_PAGE_SIZE) || 1}
+      maxPages={Math.ceil(items.length / LEADERBOARD_PAGE_SIZE) || 1}
       activePage={page}
       paginationOnChange={setPage}
     />

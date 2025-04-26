@@ -1,25 +1,24 @@
 import { useMemo, useState } from "react";
 import { useAccount, useBalance, useBlockNumber } from "wagmi";
+import { base } from "viem/chains";
+import { gql, useQuery } from "@apollo/client";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { useUnionDataApi } from "hooks/useUnionDataApi";
-import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder, ZERO } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT, ZERO } from "constants";
 import { useProtocolData } from "providers/ProtocolData";
-import { DataApiStatusBadge } from "components/shared/DataApiStatusBadge";
+import { GraphqlStatusBadge } from "components/shared/GraphqlStatusBadge";
 import { GiftMembershipButton } from "components/shared/GiftMembershipButton";
 import { ConnectButton } from "components/shared";
-import { useToken } from "hooks/useToken";
-import { base } from "viem/chains";
 
 const columns = {
   CREDIT_LIMIT: {
     label: "Credit Limit",
-    sort: "contracts.credit_limit",
+    sort: "creditLimit",
   },
   VOUCHERS: {
     label: "Vouchers",
-    sort: "contracts.vouches.number_received",
+    sort: "voucherCount",
   },
   STATUS: {
     label: "Status",
@@ -29,6 +28,26 @@ const columns = {
   },
 };
 
+const NOVICES_QUERY = gql`
+  query NovicesQuery ($orderBy: String!, $orderDirection: String!) {
+    accounts (
+      limit: 100,
+      orderBy: $orderBy,
+      orderDirection: $orderDirection
+      where: {
+        isMember: false,
+        creditLimit_gt: "0",
+      }
+    ) {
+      items {
+        address
+        creditLimit
+        voucherCount
+      }
+    }
+  }
+`;
+
 export const NovicesBoard = () => {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState({
@@ -36,8 +55,9 @@ export const NovicesBoard = () => {
     order: SortOrder.DESC,
   });
 
-  const { unit } = useToken();
   const { chain: connectedChain, isConnected, address: connectedAddress } = useAccount();
+
+  const unit = UNIT[TOKENS.USDC];
   const chainId = connectedChain?.id || base.id;
 
   const { data: blockNumber } = useBlockNumber({
@@ -63,31 +83,24 @@ export const NovicesBoard = () => {
     [sort]
   );
 
-  const { data: response = [] } = useUnionDataApi({
-    network: DataApiNetworks[chainId],
-    page,
-    size: LEADERBOARD_PAGE_SIZE,
-    sort: sortQuery,
-    query: {
-      "contracts.is_member": false,
-      "contracts.credit_limit": {
-        gt: 0,
-      },
-    },
+  const { data } = useQuery(NOVICES_QUERY, {
+    variables: {
+      orderBy: sortQuery.field,
+      orderDirection: sortQuery.order,
+    }
   });
 
-  const { pagination, items } = response;
+  const items = data?.accounts.items || [];
 
   const rows =
-    items?.map((user) => {
-      const { address, data } = user;
-      const { contracts } = data;
+    items?.map((item) => {
+      const address = item.address;
 
       return [
         address,
-        formatScientific(contracts.credit_limit, unit),
-        contracts.vouches.number_received,
-        <DataApiStatusBadge
+        formatScientific(item.creditLimit, unit),
+        item.voucherCount,
+        <GraphqlStatusBadge
           key={address}
           data={data}
           protocol={protocol}
@@ -119,7 +132,7 @@ export const NovicesBoard = () => {
 
     setSort({
       ...sort,
-      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
     });
   };
 
@@ -129,7 +142,7 @@ export const NovicesBoard = () => {
       columns={columns}
       sort={sort}
       handleSort={handleSort}
-      maxPages={Math.ceil(pagination?.total.value / LEADERBOARD_PAGE_SIZE) || 1}
+      maxPages={Math.ceil(items.length / LEADERBOARD_PAGE_SIZE) || 1}
       activePage={page}
       paginationOnChange={setPage}
     />

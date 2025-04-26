@@ -1,27 +1,37 @@
 import { useMemo, useState } from "react";
-import { useAccount } from "wagmi";
+import { useQuery, gql } from "@apollo/client";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { useUnionDataApi } from "hooks/useUnionDataApi";
-import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder, UNIT } from "constants";
-import { base } from "viem/chains";
-import { useToken } from "../../../hooks/useToken";
+import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT } from "constants";
 
 const columns = {
   VOUCHERS: {
     label: "Vouchers",
-    sort: "contracts.vouches.number_received",
+    sort: "voucherCount",
   },
   VOUCHEES: {
     label: "Vouchees",
-    sort: "contracts.vouches.number_given",
+    sort: "voucheeCount",
   },
   CREDIT_LIMIT: {
     label: "Credit Limit",
-    sort: "contracts.vouches.amount_received",
+    sort: "vouchReceived",
   },
 };
+
+const MOST_TRUSTED_QUERY = gql`
+  query MostTrustedQuery ($orderBy: String!, $orderDirection: String!) {
+    accounts (limit: 100, orderBy: $orderBy, orderDirection: $orderDirection) {
+      items {
+        address
+        voucherCount
+        voucheeCount
+        vouchReceived
+      }
+    }
+  }
+`;
 
 export const MostTrustedBoard = () => {
   const [page, setPage] = useState(1);
@@ -29,9 +39,6 @@ export const MostTrustedBoard = () => {
     type: "VOUCHERS",
     order: SortOrder.DESC,
   });
-
-  const { chain } = useAccount();
-  const { token } = useToken();
 
   const sortQuery = useMemo(
     () => ({
@@ -41,27 +48,25 @@ export const MostTrustedBoard = () => {
     [sort]
   );
 
-  const { data: response = [] } = useUnionDataApi({
-    network: DataApiNetworks[chain?.id] || DataApiNetworks[base.id],
-    page,
-    size: LEADERBOARD_PAGE_SIZE,
-    sort: sortQuery,
+  const { data } = useQuery(MOST_TRUSTED_QUERY, {
+    variables: {
+      orderBy: sortQuery.field,
+      orderDirection: sortQuery.order,
+    }
   });
 
-  const { pagination, items } = response;
+  const items = data?.accounts.items || [];
 
-  const rows =
-    items?.map((user) => {
-      const { address, data } = user;
-      const { contracts } = data;
-
+  const rows = (
+    items?.map((item) => {
       return [
-        address,
-        contracts.vouches.number_received,
-        contracts.vouches.number_given,
-        formatScientific(contracts.vouches.amount_received, UNIT[token]),
+        item.address,
+        item.voucherCount,
+        item.voucheeCount,
+        formatScientific(item.vouchReceived, UNIT[TOKENS.USDC]),
       ];
-    }) || [];
+    }) || []
+  );
 
   const handleSort = (sortType) => {
     if (sort.type !== sortType) {
@@ -73,17 +78,17 @@ export const MostTrustedBoard = () => {
 
     setSort({
       ...sort,
-      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
     });
   };
 
   return (
     <LeaderboardTable
-      rows={rows}
+      rows={rows.slice((page - 1) * LEADERBOARD_PAGE_SIZE, page * LEADERBOARD_PAGE_SIZE)}
       columns={columns}
       sort={sort}
       handleSort={handleSort}
-      maxPages={Math.ceil(pagination?.total.value / LEADERBOARD_PAGE_SIZE) || 1}
+      maxPages={Math.ceil(items.length / LEADERBOARD_PAGE_SIZE) || 1}
       activePage={page}
       paginationOnChange={setPage}
     />

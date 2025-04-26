@@ -56,13 +56,6 @@ export const SECONDS_PER_YEAR = 31540000;
 
 export const LEADERBOARD_PAGE_SIZE = 15;
 
-export const DataApiNetworks = {
-  [mainnet.id]: "mainnet",
-  [optimism.id]: "optimism-mainnet",
-  [arbitrum.id]: "arbitrum-mainnet",
-  [base.id]: "base-mainnet",
-};
-
 export const StakeType = {
   STAKE: "stake",
   UNSTAKE: "unstake",
