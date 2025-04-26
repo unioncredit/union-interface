@@ -29,6 +29,7 @@ import { useSupportedNetwork } from "./hooks/useSupportedNetwork";
 import { is404, isGeneralRoute } from "./utils/routes";
 import { useAppNetwork } from "./providers/Network";
 import useReferrer from "./hooks/useReferrer";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 export default function App() {
   useChainParams();
@@ -39,6 +40,12 @@ export default function App() {
   const { version } = useVersion();
   const { isConnected } = useAccount();
   const { set: setReferrer } = useReferrer();
+
+  const apolloClient = new ApolloClient({
+    // eslint-disable-next-line no-undef
+    uri: process.env.REACT_APP_PONDER_URL,
+    cache: new InMemoryCache(),
+  });
 
   // Parses referrer address from "refAddress" query parameter and
   // stores it in local storage
@@ -77,20 +84,22 @@ export default function App() {
       <Layout.Main>
         <Settings>
           <Cache>
-            <ProtocolData>
-              <GovernanceData>
-                <MemberData>
-                  <VouchersData>
-                    <VoucheesData>
-                      <ModalManager>
-                        <Header />
-                        <AppReadyShim />
-                      </ModalManager>
-                    </VoucheesData>
-                  </VouchersData>
-                </MemberData>
-              </GovernanceData>
-            </ProtocolData>
+            <ApolloProvider client={apolloClient}>
+              <ProtocolData>
+                <GovernanceData>
+                  <MemberData>
+                    <VouchersData>
+                      <VoucheesData>
+                        <ModalManager>
+                          <Header />
+                          <AppReadyShim />
+                        </ModalManager>
+                      </VoucheesData>
+                    </VouchersData>
+                  </MemberData>
+                </GovernanceData>
+              </ProtocolData>
+            </ApolloProvider>
           </Cache>
         </Settings>
         <Box mt="56px" mb="24px" w="100%">

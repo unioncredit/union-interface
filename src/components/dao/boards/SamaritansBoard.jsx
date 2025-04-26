@@ -1,27 +1,47 @@
 import { useMemo, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { base } from "viem/chains";
 import { useAccount } from "wagmi";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { useUnionDataApi } from "hooks/useUnionDataApi";
-import { DataApiNetworks, LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
 import { useToken } from "hooks/useToken";
-import { base } from "viem/chains";
 
 const columns = {
   TOTAL_STAKE: {
     label: "Total Stake",
-    sort: "contracts.stake.total",
+    sort: "totalStake",
   },
   UTILIZED_STAKE: {
     label: "Utilized",
-    sort: "contracts.stake.locked",
+    sort: "totalLockedStake",
   },
   VOUCHES_GIVEN: {
     label: "Vouches Given",
-    sort: "contracts.vouches.number_given",
+    sort: "voucheeCount",
   },
 };
+
+const SAMARITANS_QUERY = gql`
+  query SamaritansQuery ($orderBy: String!, $orderDirection: String!, $chainId: Int!) {
+    accounts (
+      limit: 100,
+      orderBy: $orderBy,
+      orderDirection: $orderDirection,
+      where: {
+        chainId: $chainId,
+      }
+    ) {
+      items {
+        address
+        totalStake
+        totalLockedStake
+        voucheeCount
+      }
+    }
+  }
+`;
 
 export const SamaritansBoard = () => {
   const [page, setPage] = useState(1);
@@ -29,9 +49,6 @@ export const SamaritansBoard = () => {
     type: "UTILIZED_STAKE",
     order: SortOrder.DESC,
   });
-
-  const { unit } = useToken();
-  const { chain } = useAccount();
 
   const sortQuery = useMemo(
     () => ({
@@ -41,25 +58,25 @@ export const SamaritansBoard = () => {
     [sort]
   );
 
-  const { data: response = [] } = useUnionDataApi({
-    network: DataApiNetworks[chain?.id] || DataApiNetworks[base.id],
-    page,
-    size: LEADERBOARD_PAGE_SIZE,
-    sort: sortQuery,
+  const { chain: connectedChain } = useAccount();
+  const { data } = useQuery(SAMARITANS_QUERY, {
+    variables: {
+      orderBy: sortQuery.field,
+      orderDirection: sortQuery.order,
+      chainId: connectedChain?.id || base.id,
+    }
   });
 
-  const { pagination, items } = response;
+  const { unit } = useToken();
+  const items = data?.accounts.items || [];
 
   const rows =
-    items?.map((user) => {
-      const { address, data } = user;
-      const { contracts } = data;
-
+    items?.map((item) => {
       return [
-        address,
-        formatScientific(contracts.stake.total, unit),
-        formatScientific(contracts.stake.locked, unit),
-        contracts.vouches.number_given,
+        item.address,
+        formatScientific(item.totalStake, unit),
+        formatScientific(item.totalLockedStake, unit),
+        item.voucheeCount,
       ];
     }) || [];
 
@@ -73,7 +90,7 @@ export const SamaritansBoard = () => {
 
     setSort({
       ...sort,
-      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : null,
+      order: !sort.order ? SortOrder.DESC : sort.order === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC,
     });
   };
 
@@ -83,7 +100,7 @@ export const SamaritansBoard = () => {
       columns={columns}
       sort={sort}
       handleSort={handleSort}
-      maxPages={Math.ceil(pagination?.total.value / LEADERBOARD_PAGE_SIZE) || 1}
+      maxPages={Math.ceil(items.length / LEADERBOARD_PAGE_SIZE) || 1}
       activePage={page}
       paginationOnChange={setPage}
     />

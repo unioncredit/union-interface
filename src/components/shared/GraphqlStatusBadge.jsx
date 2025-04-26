@@ -1,16 +1,14 @@
 import { BadgeIndicator } from "@unioncredit/ui";
 
 import { ZERO } from "constants";
-import { expandToString } from "utils/format";
 
-export const DataApiStatusBadge = ({ data, protocol, blockNumber }) => {
+export const GraphqlStatusBadge = ({ data, protocol, blockNumber }) => {
   const { overdueTime = ZERO, maxOverdueTime = ZERO } = protocol;
-  const { contracts, credit } = data;
-  const isOverdue = contracts.is_overdue;
-  const isMember = contracts.is_member;
 
-  const lastRepay = BigInt(credit.repays.blocks.last || "0");
-  const owed = BigInt(expandToString(contracts.total_owed.total) || "0");
+  const { isOverdue, isMember } = data;
+
+  const lastRepay = BigInt(data.lastRepay || "0");
+  const owed = BigInt(data.owed || "0");
 
   const maxOverdueTotal = overdueTime + maxOverdueTime;
 
