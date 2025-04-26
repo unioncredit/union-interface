@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
+import { base } from "viem/chains";
+import { useAccount } from "wagmi";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   TOTAL_STAKE: {
@@ -21,11 +24,14 @@ const columns = {
 };
 
 const SAMARITANS_QUERY = gql`
-  query SamaritansQuery ($orderBy: String!, $orderDirection: String!) {
+  query SamaritansQuery ($orderBy: String!, $orderDirection: String!, $chainId: Int!) {
     accounts (
       limit: 100,
       orderBy: $orderBy,
-      orderDirection: $orderDirection
+      orderDirection: $orderDirection,
+      where: {
+        chainId: $chainId,
+      }
     ) {
       items {
         address
@@ -52,14 +58,16 @@ export const SamaritansBoard = () => {
     [sort]
   );
 
+  const { chain: connectedChain } = useAccount();
   const { data } = useQuery(SAMARITANS_QUERY, {
     variables: {
       orderBy: sortQuery.field,
       orderDirection: sortQuery.order,
+      chainId: connectedChain?.id || base.id,
     }
   });
 
-  const unit = UNIT[TOKENS.USDC];
+  const { unit } = useToken();
   const items = data?.accounts.items || [];
 
   const rows =

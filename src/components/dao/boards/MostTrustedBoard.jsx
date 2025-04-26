@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { useQuery, gql } from "@apollo/client";
+import { useAccount } from "wagmi";
+import { base } from "viem/chains";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder } from "constants";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   VOUCHERS: {
@@ -21,8 +24,15 @@ const columns = {
 };
 
 const MOST_TRUSTED_QUERY = gql`
-  query MostTrustedQuery ($orderBy: String!, $orderDirection: String!) {
-    accounts (limit: 100, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query MostTrustedQuery ($orderBy: String!, $orderDirection: String!, $chainId: Int!) {
+    accounts (
+      limit: 100,
+      orderBy: $orderBy,
+      orderDirection: $orderDirection,
+      where: {
+        chainId: $chainId
+      }
+    ) {
       items {
         address
         voucherCount
@@ -48,10 +58,13 @@ export const MostTrustedBoard = () => {
     [sort]
   );
 
+  const { unit } = useToken();
+  const { chain: connectedChain } = useAccount();
   const { data } = useQuery(MOST_TRUSTED_QUERY, {
     variables: {
       orderBy: sortQuery.field,
       orderDirection: sortQuery.order,
+      chainId: connectedChain?.id || base.id,
     }
   });
 
@@ -63,7 +76,7 @@ export const MostTrustedBoard = () => {
         item.address,
         item.voucherCount,
         item.voucheeCount,
-        formatScientific(item.vouchReceived, UNIT[TOKENS.USDC]),
+        formatScientific(item.vouchReceived, unit),
       ];
     }) || []
   );

@@ -5,10 +5,11 @@ import { gql, useQuery } from "@apollo/client";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT, ZERO } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder, ZERO } from "constants";
 import { useProtocolData } from "providers/ProtocolData";
 import { LastRepayFormatted } from "components/shared/LastRepayFormatted";
 import { GraphqlStatusBadge } from "components/shared/GraphqlStatusBadge";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   CREDIT_LIMIT: {
@@ -29,8 +30,15 @@ const columns = {
 };
 
 const TOP_CREDIT_LIMITS_QUERY = gql`
-  query TopCreditLimitsQuery ($orderBy: String!, $orderDirection: String!) {
-    accounts (limit: 100, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query TopCreditLimitsQuery ($orderBy: String!, $orderDirection: String!, $chainId: Int!) {
+    accounts (
+      limit: 100,
+      orderBy: $orderBy,
+      orderDirection: $orderDirection,
+      where: {
+        chainId: $chainId,
+      }
+    ) {
       items {
         address
         vouchReceived
@@ -52,7 +60,7 @@ export const TopCreditLimitsBoard = () => {
 
   const { chain: connectedChain } = useAccount();
 
-  const unit = UNIT[TOKENS.USDC];
+  const { unit } = useToken();
   const chainId = connectedChain?.id || base.id;
 
   const { data: blockNumber } = useBlockNumber({
@@ -73,6 +81,7 @@ export const TopCreditLimitsBoard = () => {
     variables: {
       orderBy: sortQuery.field,
       orderDirection: sortQuery.order,
+      chainId: connectedChain?.id || base.id,
     }
   });
 

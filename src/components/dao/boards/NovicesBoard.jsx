@@ -5,11 +5,12 @@ import { gql, useQuery } from "@apollo/client";
 
 import { LeaderboardTable } from "components/dao/LeaderboardTable";
 import { formatScientific } from "utils/format";
-import { LEADERBOARD_PAGE_SIZE, SortOrder, TOKENS, UNIT, ZERO } from "constants";
+import { LEADERBOARD_PAGE_SIZE, SortOrder, ZERO } from "constants";
 import { useProtocolData } from "providers/ProtocolData";
 import { GraphqlStatusBadge } from "components/shared/GraphqlStatusBadge";
 import { GiftMembershipButton } from "components/shared/GiftMembershipButton";
 import { ConnectButton } from "components/shared";
+import { useToken } from "hooks/useToken";
 
 const columns = {
   CREDIT_LIMIT: {
@@ -29,7 +30,7 @@ const columns = {
 };
 
 const NOVICES_QUERY = gql`
-  query NovicesQuery ($orderBy: String!, $orderDirection: String!) {
+  query NovicesQuery ($orderBy: String!, $orderDirection: String!, $chainId: Int!) {
     accounts (
       limit: 100,
       orderBy: $orderBy,
@@ -37,6 +38,7 @@ const NOVICES_QUERY = gql`
       where: {
         isMember: false,
         creditLimit_gt: "0",
+        chainId: $chainId,
       }
     ) {
       items {
@@ -55,9 +57,9 @@ export const NovicesBoard = () => {
     order: SortOrder.DESC,
   });
 
+  const { unit } = useToken();
   const { chain: connectedChain, isConnected, address: connectedAddress } = useAccount();
 
-  const unit = UNIT[TOKENS.USDC];
   const chainId = connectedChain?.id || base.id;
 
   const { data: blockNumber } = useBlockNumber({
@@ -87,6 +89,7 @@ export const NovicesBoard = () => {
     variables: {
       orderBy: sortQuery.field,
       orderDirection: sortQuery.order,
+      chainId: connectedChain?.id || base.id,
     }
   });
 
