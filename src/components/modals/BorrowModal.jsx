@@ -152,7 +152,7 @@ export default function BorrowModal() {
               },
               {
                 label: "Total incl. origination fee",
-                value: `${format(borrow, token, 2, false)} ${token}`,
+                value: `${format(borrow, token)} ${token}`,
                 tooltip: {
                   content: "Total amount borrowed including fee",
                 },
