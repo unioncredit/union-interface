@@ -75,11 +75,11 @@ export const ProfileCurrentBalances = ({ address, chainId, vouchees, vouchers })
           m="18px 0"
           items={[
             {
-              value: formattedNumber(owed),
+              value: formattedNumber(owed, token),
               color: "blue900",
             },
             {
-              value: formattedNumber(vouch - owed, 2, false),
+              value: formattedNumber(vouch - owed, token, 2, false),
               color: "blue50",
             },
           ]}

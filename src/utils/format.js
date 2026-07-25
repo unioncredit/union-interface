@@ -17,7 +17,10 @@ export default function format(
 }
 
 export const formattedNumber = (n, token, digits = 2, rounded = true) => {
-  return parseFloat(format(n, token, digits, rounded, false, false).replace(",", ""));
+  // Strip ALL group separators: `format` returns e.g. "1,234,567.89", and
+  // replacing only the first comma left "1234,567.89", which parseFloat
+  // truncates to 1234 (~1000x low) for every value >= 1,000,000.
+  return parseFloat(format(n, token, digits, rounded, false, false).replace(/,/g, ""));
 };
 
 export const compactFormattedNumber = (n, token) => {
