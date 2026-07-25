@@ -40,7 +40,7 @@ export default function AccountModal() {
   const { logs = [], clearLogs } = useAppLogs();
   const { disconnect } = useDisconnect();
   const { token } = useToken();
-  const blockExplorerLink = blockExplorerAddress(chain.id, address);
+  const blockExplorerLink = blockExplorerAddress(chain?.id, address);
 
   const disconnectWallet = () => {
     disconnect();
@@ -53,7 +53,7 @@ export default function AccountModal() {
         <Modal.Header title="Wallet & Activity" onClose={close} />
         <Modal.Body>
           <Box align="center" justify="center" direction="vertical">
-            <Link onClick={close} to={`/profile/${EIP3770[chain.id]}:${address}`}>
+            <Link onClick={close} to={`/profile/${EIP3770[chain?.id] || "base"}:${address}`}>
               <Avatar size={56} address={address} />
             </Link>
             <Heading level={2} my="4px">
@@ -74,7 +74,7 @@ export default function AccountModal() {
             </Box>
           </Box>
           <ButtonRow mt="24px" className="AccountModal__Buttons">
-            <Link onClick={close} to={`/profile/${EIP3770[chain.id]}:${address}`}>
+            <Link onClick={close} to={`/profile/${EIP3770[chain?.id] || "base"}:${address}`}>
               <Button
                 fluid
                 size="small"
@@ -146,7 +146,7 @@ export default function AccountModal() {
                       {format(value, token)}
                     </Text>
                     {txHash && (
-                      <a href={blockExplorerTx(chain.id, txHash)} target="_blank" rel="noreferrer">
+                      <a href={blockExplorerTx(chain?.id, txHash)} target="_blank" rel="noreferrer">
                         <LinkOutIcon width="22px" />
                       </a>
                     )}

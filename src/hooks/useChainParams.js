@@ -26,7 +26,7 @@ export default function useChainParams() {
         // If the current network is not he same as the selected network
         // fire off a chain network request. This is to support the ?chain
         // URL search param
-        if (toSelect?.chainId !== chain.id) {
+        if (toSelect && toSelect.chainId !== chain?.id) {
           try {
             await switchChainAsync(toSelect.chainId);
             if (!isVersionSupported(version, toSelect.chainId)) {

@@ -3,7 +3,7 @@ import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { createContext, useContext, useState } from "react";
 import { base, mainnet, optimism } from "viem/chains";
 import { WagmiProvider } from "wagmi";
-import { http } from "viem";
+import { fallback, http } from "viem";
 
 import { RPC_URL, rpcChains } from "constants";
 import { arbitrum } from "wagmi/chains";
@@ -15,19 +15,28 @@ const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
+// Public fallback RPCs used when the primary (Alchemy) endpoint fails — notably
+// keeps mainnet ENS resolution working even if the Alchemy app lacks Ethereum Mainnet.
+const FALLBACK_RPCS = {
+  [base.id]: "https://base-rpc.publicnode.com",
+  [mainnet.id]: "https://ethereum-rpc.publicnode.com",
+};
+
 export const config = getDefaultConfig({
   projectId,
   appName: "Union",
   chains: [base, mainnet, optimism, arbitrum],
-  transports: rpcChains.reduce(
-    (acc, network) => ({
+  transports: rpcChains.reduce((acc, network) => {
+    const primary = http(RPC_URL(network.id), { batch: true });
+    const backupUrl = FALLBACK_RPCS[network.id];
+
+    return {
       ...acc,
-      [network.id]: http(RPC_URL(network.id), {
-        batch: true,
-      }),
-    }),
-    {}
-  ),
+      [network.id]: backupUrl
+        ? fallback([primary, http(backupUrl, { batch: true })])
+        : primary,
+    };
+  }, {}),
 });
 
 export default function Network({ children }) {

@@ -11,7 +11,7 @@ export const Address = ({ address }) => {
 
   return (
     <Text as="span" size="medium" weight="medium" grey={500} m={0}>
-      <Link to={`/profile/${EIP3770[chain.id]}:${address}`}>
+      <Link to={`/profile/${EIP3770[chain?.id] || "base"}:${address}`}>
         {compareAddresses(connectedAddress, address) ? "You" : <PrimaryLabel address={address} />}
       </Link>
     </Text>

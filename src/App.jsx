@@ -82,26 +82,28 @@ export default function App() {
     <Layout>
       <ScrollToTop />
       <Layout.Main>
-        <Settings>
-          <Cache>
-            <ApolloProvider client={apolloClient}>
-              <ProtocolData>
-                <GovernanceData>
-                  <MemberData>
-                    <VouchersData>
-                      <VoucheesData>
-                        <ModalManager>
-                          <Header />
-                          <AppReadyShim />
-                        </ModalManager>
-                      </VoucheesData>
-                    </VouchersData>
-                  </MemberData>
-                </GovernanceData>
-              </ProtocolData>
-            </ApolloProvider>
-          </Cache>
-        </Settings>
+        <ErrorBoundary FallbackComponent={ErrorPage}>
+          <Settings>
+            <Cache>
+              <ApolloProvider client={apolloClient}>
+                <ProtocolData>
+                  <GovernanceData>
+                    <MemberData>
+                      <VouchersData>
+                        <VoucheesData>
+                          <ModalManager>
+                            <Header />
+                            <AppReadyShim />
+                          </ModalManager>
+                        </VoucheesData>
+                      </VouchersData>
+                    </MemberData>
+                  </GovernanceData>
+                </ProtocolData>
+              </ApolloProvider>
+            </Cache>
+          </Settings>
+        </ErrorBoundary>
         <Box mt="56px" mb="24px" w="100%">
           <FooterLinks />
         </Box>

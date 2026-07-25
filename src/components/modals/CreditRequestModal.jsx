@@ -23,9 +23,9 @@ export default function CreditRequestModal() {
 
   const networks = useNetworks();
 
-  const defaultValue = networks.find((network) => network.chainId === connectedChain.id);
+  const defaultValue = networks.find((network) => network.chainId === connectedChain?.id);
 
-  const eip3770 = EIP3770[network] || EIP3770[defaultValue.chainId] || "eth";
+  const eip3770 = EIP3770[network] || EIP3770[defaultValue?.chainId] || "eth";
 
   const url = `${window.location.protocol}//${window.location.hostname}/profile/${eip3770}:${address}`;
 

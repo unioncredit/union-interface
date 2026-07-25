@@ -13,6 +13,8 @@ import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
 import Version from "providers/Version";
 import { init } from "@airstack/airstack-react";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorPage from "pages/Error";
 
 // eslint-disable-next-line no-undef
 window.Buffer = window.Buffer || require("buffer").Buffer;
@@ -24,15 +26,17 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <Router>
-    <Network>
-      <Version>
-        <Toasts>
-          <AppLogs>
-            <App />
-          </AppLogs>
-        </Toasts>
-      </Version>
-    </Network>
+    <ErrorBoundary FallbackComponent={ErrorPage}>
+      <Network>
+        <Version>
+          <Toasts>
+            <AppLogs>
+              <App />
+            </AppLogs>
+          </Toasts>
+        </Version>
+      </Network>
+    </ErrorBoundary>
   </Router>
 );
 

@@ -58,7 +58,7 @@ export default function StakeStep({ complete, onSkipStep }) {
   const dailyEarnings =
     effectiveTotalStake > ZERO
       ? (((((inflationPerUnit * wad) / effectiveTotalStake) * stakedBalance) / wad) *
-          PaymentUnitsPerYear[chain.id]) /
+          PaymentUnitsPerYear[chain?.id]) /
         365n
       : ZERO;
 
