@@ -66,7 +66,7 @@ export const ProfileSearchInput = ({ className }) => {
               <Link
                 key={index}
                 onClick={handleClose}
-                to={`/profile/${EIP3770[chain.id] || "base"}:${address}`}
+                to={`/profile/${EIP3770[chain?.id] || "base"}:${address}`}
               >
                 <li
                   className="px-3 py-1.5 flex items-center gap-2 cursor-pointer hover:bg-zinc-100 text-left w-full outline-none focus:bg-zinc-100"

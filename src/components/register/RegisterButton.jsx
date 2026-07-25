@@ -32,7 +32,7 @@ export default function RegisterButton({ onComplete }) {
 
   const { unionBalance = ZERO, isMember = false, newMemberFee = ZERO } = { ...member, ...protocol };
 
-  const permit = getPermitMethod(chain.id, "registerMember");
+  const permit = getPermitMethod(chain?.id, "registerMember");
   const readyToBurn = vouchers.length > 0 && unionBalance >= newMemberFee;
 
   const unionConfig = useContract("union");

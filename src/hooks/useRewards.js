@@ -23,10 +23,12 @@ export default function useRewards() {
 
   const effectiveTotalStake = totalStaked - totalFrozen;
 
+  const paymentUnitsPerYear = PaymentUnitsPerYear[chain?.id] ?? ZERO;
+
   const estimatedDailyTotal =
-    effectiveTotalStake > ZERO
+    effectiveTotalStake > ZERO && wad
       ? (((((inflationPerSecond * wad) / effectiveTotalStake) * stakedBalance) / wad) *
-          PaymentUnitsPerYear[chain.id]) /
+          paymentUnitsPerYear) /
         365n
       : ZERO;
 

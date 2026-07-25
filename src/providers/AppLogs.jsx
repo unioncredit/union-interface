@@ -23,14 +23,15 @@ export default function AppLogs({ children }) {
   }, [chain?.id]);
 
   const addLog = (props) => {
-    if (!props) return;
+    if (!props || !chain?.id) return;
     const { status, label, value, txHash } = props;
-    const newLogs = [...logs, { status, label, value, txHash }];
+    const newLogs = [...(logs || []), { status, label, value, txHash }];
     setLogs(newLogs);
     window.localStorage.setItem(getKey(chain.id), BnStringify(newLogs));
   };
 
   const clearLogs = () => {
+    if (!chain?.id) return;
     window.localStorage.setItem(getKey(chain.id), BnStringify([]));
     setLogs([]);
   };

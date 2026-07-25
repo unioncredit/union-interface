@@ -36,9 +36,9 @@ export default function VouchLinkModal() {
   const [_network, setNetwork] = useState();
 
   const network =
-    _network || supportedNetworks.find((network) => network.chainId === connectedChain.id);
+    _network || supportedNetworks.find((network) => network.chainId === connectedChain?.id);
 
-  const profileUrl = `${getProfileUrl(address, network.chainId)}`;
+  const profileUrl = `${getProfileUrl(address, network?.chainId)}`;
 
   return (
     <ModalOverlay onClick={close}>

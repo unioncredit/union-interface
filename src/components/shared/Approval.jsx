@@ -34,7 +34,7 @@ export function Approval({
   const [permitArgs, setPermitArgs] = useState(null);
 
   const tokenConfig = useContract(tokenContract);
-  const permit = getPermitMethod(chain.id, actionProps.method);
+  const permit = getPermitMethod(chain?.id, actionProps.method);
 
   /*--------------------------------------------------------------
     Contract Functions

@@ -51,7 +51,7 @@ export function TransactionHistoryRow({
           <Text size="small" grey={500} m={0}>
             {dateFormat(new Date(timestamp * 1000), "dd LLL yyyy HH:mm")}
 
-            <a href={blockExplorerTx(chain.id, transactionId)} target="_blank" rel="noreferrer">
+            <a href={blockExplorerTx(chain?.id, transactionId)} target="_blank" rel="noreferrer">
               <LinkOutIcon width="14px" style={{ margin: "0 0px -2px 2px" }} />
             </a>
           </Text>

@@ -48,7 +48,7 @@ export default function WelcomeModal({ onClose }) {
   const confettiRef = useRef(null);
   const popConfetti = () => confettiRef.current.addConfetti();
 
-  const profileUrl = getProfileUrl(address, chain.id);
+  const profileUrl = getProfileUrl(address, chain?.id);
   const twitterUrl = generateTwitterLink(profileUrl);
 
   const handleClose = () => {
@@ -86,7 +86,7 @@ export default function WelcomeModal({ onClose }) {
               Welcome to Union
             </Heading>
             <Text m={0} size="medium" color="blue100">
-              You just joined Union's credit network on {chain.name} with a starting credit line of{" "}
+              You just joined Union's credit network on {chain?.name} with a starting credit line of{" "}
               {format(creditLimit, token)} {token}
             </Text>
 

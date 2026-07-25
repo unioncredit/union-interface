@@ -143,7 +143,7 @@ export default function BorrowModal() {
               {
                 label: "Interest rate",
                 value: `${format(
-                  calculateInterestRate(borrowRatePerUnit, chain.id, unit) * 100n,
+                  calculateInterestRate(borrowRatePerUnit, chain?.id, unit) * 100n,
                   token
                 )}% APR`,
                 tooltip: {

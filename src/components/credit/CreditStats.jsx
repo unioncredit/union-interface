@@ -43,7 +43,7 @@ export default function CreditStats({ vouchers }) {
   const { data: member = {} } = useMember();
   const { data: protocol = {} } = useProtocol();
   const { data: blockNumber } = useVersionBlockNumber({
-    chainId: connectedChain.id,
+    chainId: connectedChain?.id,
   });
 
   const {
@@ -64,7 +64,7 @@ export default function CreditStats({ vouchers }) {
     relative: relativeDueDate,
     absolute: absoluteDueDate,
     overdue: isOverdue,
-  } = dueOrOverdueDate(lastRepay, overdueTime, blockNumber, connectedChain.id);
+  } = dueOrOverdueDate(lastRepay, overdueTime, blockNumber, connectedChain?.id);
 
   const maxOverdueTotal = overdueTime + maxOverdueTime;
   const isMaxOverdue = isOverdue && lastRepay && BigInt(blockNumber) >= lastRepay + maxOverdueTotal;
