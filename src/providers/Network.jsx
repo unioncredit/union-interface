@@ -9,7 +9,7 @@ import { RPC_URL, rpcChains } from "constants";
 import { arbitrum } from "wagmi/chains";
 
 // eslint-disable-next-line no-undef
-const projectId = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
+const projectId = import.meta.env.REACT_APP_WALLET_CONNECT_PROJECT_ID;
 
 const NetworkContext = createContext({});
 

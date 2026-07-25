@@ -7,9 +7,9 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import { DimmableTableCell } from "components/contacts/ContactsTable";
 
-import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
-import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
-import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
+import BothRow from "../../../images/BothRow.svg?react";
+import ProvidingRow from "../../../images/ProvidingRow.svg?react";
+import ReceivingRow from "../../../images/ReceivingRow.svg?react";
 import { useToken } from "hooks/useToken";
 
 export const COLUMNS = {

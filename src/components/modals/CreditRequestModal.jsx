@@ -2,8 +2,8 @@ import { Box, Button, ButtonRow, Card, Label, Modal, ModalOverlay, Select } from
 import QRCode from "qrcode.react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { ReactComponent as Twitter } from "@unioncredit/ui/lib/icons/twitter.svg";
-import { ReactComponent as Telegram } from "@unioncredit/ui/lib/icons/telegram.svg";
+import Twitter from "@unioncredit/ui/lib/icons/twitter.svg?react";
+import Telegram from "@unioncredit/ui/lib/icons/telegram.svg?react";
 
 import links from "config/links";
 import { EIP3770 } from "constants";

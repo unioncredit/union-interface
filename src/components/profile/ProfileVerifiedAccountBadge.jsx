@@ -1,12 +1,12 @@
 import cn from "classnames";
 import { Box, ProfileIcon, Text } from "@unioncredit/ui";
 
-import { ReactComponent as FarcasterIcon } from "images/verification/farcaster.svg";
-import { ReactComponent as TwitterIcon } from "images/verification/twitter.svg";
-import { ReactComponent as LensIcon } from "images/verification/lens.svg";
-import { ReactComponent as BaseNameIcon } from "images/verification/base.svg";
-import { ReactComponent as GitHubIcon } from "images/verification/github.svg";
-import { ReactComponent as LinkedInIcon } from "images/verification/linkedin.svg";
+import FarcasterIcon from "images/verification/farcaster.svg?react";
+import TwitterIcon from "images/verification/twitter.svg?react";
+import LensIcon from "images/verification/lens.svg?react";
+import BaseNameIcon from "images/verification/base.svg?react";
+import GitHubIcon from "images/verification/github.svg?react";
+import LinkedInIcon from "images/verification/linkedin.svg?react";
 import { blockExplorerAddress } from "utils/blockExplorer";
 
 export const ProfileVerifiedAccountBadge = ({ type, url, label, chainId, address }) => {

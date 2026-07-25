@@ -43,7 +43,7 @@ export default function App() {
 
   const apolloClient = new ApolloClient({
     // eslint-disable-next-line no-undef
-    uri: process.env.REACT_APP_PONDER_URL,
+    uri: import.meta.env.REACT_APP_PONDER_URL,
     cache: new InMemoryCache(),
   });
 
