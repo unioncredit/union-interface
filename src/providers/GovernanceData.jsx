@@ -61,12 +61,18 @@ const proposalsQuery = gql`
   }
 `;
 
-const selectProposals = (data) => {
+export const selectProposals = (data) => {
   return chunk(
     data.map((d) => d.result),
     2
   ).map(([proposal, state]) => {
     if (!proposal) return {};
+
+    // Vote tallies come back as uint256 -> BigInt.
+    const forVotes = proposal.forVotes ?? 0n;
+    const againstVotes = proposal.againstVotes ?? 0n;
+    const abstainVotes = proposal.abstainVotes ?? 0n;
+    const totalVotes = forVotes + againstVotes + abstainVotes;
 
     return {
       // proposal(uint256 pid)
@@ -83,14 +89,14 @@ const selectProposals = (data) => {
       // state(uint256 pid)
       state,
       status: ProposalState[state],
-      // Computed values
-      percentageFor:
-        Number(
-          (
-            (proposal.forVotes * 1000) /
-            (proposal.againstVotes + proposal.forVotes + proposal.abstainVotes)
-          ).toString()
-        ) / 1000,
+      // Computed values — kept entirely in BigInt.
+      //
+      // This was `proposal.forVotes * 1000`, mixing a BigInt with a Number
+      // literal, which throws "Cannot mix BigInt and other types". Because it ran
+      // inside react-query's `select`, the throw errored the whole proposals query
+      // and no on-chain state or vote tallies rendered whenever a proposal existed.
+      // Scaling by 10000n also guards division by zero on a proposal with no votes.
+      percentageFor: totalVotes > 0n ? Number((forVotes * 10000n) / totalVotes) / 10000 : 0,
     };
   });
 };

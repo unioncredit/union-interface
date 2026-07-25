@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { base, mainnet, optimism } from "viem/chains";
 import { WagmiProvider } from "wagmi";
 import { fallback, http } from "viem";
@@ -39,13 +39,19 @@ export const config = getDefaultConfig({
   }, {}),
 });
 
+// Created once at module scope, alongside `config`. Previously constructed in the
+// Network render body, so toggling `forceAppReady` produced a fresh QueryClient
+// and discarded the entire wagmi on-chain read cache (every balance / credit /
+// member query refetched from scratch).
+const queryClient = new QueryClient();
+
 export default function Network({ children }) {
   const [forceAppReady, setForceAppReady] = useState(false);
 
-  const queryClient = new QueryClient();
+  const contextValue = useMemo(() => ({ forceAppReady, setForceAppReady }), [forceAppReady]);
 
   return (
-    <NetworkContext.Provider value={{ forceAppReady, setForceAppReady }}>
+    <NetworkContext.Provider value={contextValue}>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider>{children}</RainbowKitProvider>

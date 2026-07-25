@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { mainnet } from "viem/chains";
 
 import { ZERO_ADDRESS } from "constants";
+import { compareAddresses } from "utils/compare";
 import useContract from "hooks/useContract";
 import { useCache } from "providers/Cache";
 import { useVersion } from "providers/Version";
@@ -21,8 +22,11 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
   const [loading, setLoading] = useState(true);
   const uTokenManager = useContract("uToken", chain?.id ?? mainnet.id);
 
-  async function loadData() {
-    if (cached(cacheKey)) {
+  // `force` bypasses the cache read. An event-driven refresh must skip it —
+  // otherwise a new borrow/repay would re-serve the cached (pre-event) history and
+  // the refresh would be a no-op.
+  async function loadData(force = false) {
+    if (!force && cached(cacheKey)) {
       setData(cached(cacheKey));
       setLoading(false);
       return;
@@ -47,22 +51,34 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
     setLoading(false);
   }
 
-  // todo: implement onLogs handler
+  // wagmi v2 takes `onLogs` and passes an array of logs with decoded named args.
+  // The previous `listener` prop (the v1 positional shape) was silently ignored,
+  // so a new borrow or repay never refreshed the history.
+  //
+  // Arg names match the uToken ABI: LogBorrow(account, to, amount, fee) and
+  // LogRepay(payer, account, amount).
+  const involvesAddresses = (logs, keys) =>
+    (logs || []).some((log) =>
+      keys.some(
+        (key) =>
+          compareAddresses(log?.args?.[key], staker) ||
+          compareAddresses(log?.args?.[key], borrower)
+      )
+    );
+
   useWatchContractEvent({
     ...uTokenManager,
     eventName: "LogBorrow",
-    listener: (account, to, amount, fee) => {
-      console.debug("Listener: LogBorrow received", { account, to, amount, fee });
-      loadData();
+    onLogs: (logs) => {
+      if (involvesAddresses(logs, ["account", "to"])) loadData(true);
     },
   });
 
   useWatchContractEvent({
     ...uTokenManager,
     eventName: "LogRepay",
-    listener: (payer, borrower, sendAmount) => {
-      console.debug("Listener: LogRepay received", { payer, borrower, sendAmount });
-      loadData();
+    onLogs: (logs) => {
+      if (involvesAddresses(logs, ["payer", "account"])) loadData(true);
     },
   });
 

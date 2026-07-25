@@ -17,23 +17,36 @@ export const useVouchees = () => useContext(VoucheesContext);
 export const useVouchee = (address) =>
   (useVouchees()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
-const selectVouchee = (version) => (data) => ({
-  isMember: data[0],
-  ...(version === Versions.V1
-    ? {
-        locking: data[1].lockedStake,
-        trust: data[1].trustAmount,
-        vouch: data[1].vouchingAmount,
-      }
-    : {
-        locking: data[1].voucher.locked,
-        trust: data[1].voucher.trust,
-        vouch: data[1].voucher.vouch,
-      }),
-  isOverdue: data[2],
-  interest: data[3] || ZERO,
-  lastRepay: data[4],
-});
+// Every field is read defensively. wagmi's `allowFailure` default yields
+// `result: undefined` for any reverted or failed sub-call, and this ran inside
+// react-query's `select` — so a single failing entry (transient RPC error, a
+// contract/chain mismatch for one staker) threw a TypeError that errored the whole
+// query and made the ENTIRE providing/receiving contact list disappear, instead of
+// degrading the one affected row.
+export const selectVouchee = (version) => (data) => {
+  const [isMember = false, info, isOverdue = false, interest, lastRepay] = data || [];
+
+  const related =
+    version === Versions.V1
+      ? {
+          locking: info?.lockedStake ?? ZERO,
+          trust: info?.trustAmount ?? ZERO,
+          vouch: info?.vouchingAmount ?? ZERO,
+        }
+      : {
+          locking: info?.voucher?.locked ?? ZERO,
+          trust: info?.voucher?.trust ?? ZERO,
+          vouch: info?.voucher?.vouch ?? ZERO,
+        };
+
+  return {
+    isMember,
+    ...related,
+    isOverdue,
+    interest: interest ?? ZERO,
+    lastRepay: lastRepay ?? ZERO,
+  };
+};
 
 export const useVoucheesData = (address, chainId, forcedVersion) => {
   const { version } = useVersion();

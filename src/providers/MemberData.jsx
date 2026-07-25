@@ -1,5 +1,5 @@
 import { useAccount, useReadContracts } from "wagmi";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext } from "react";
 
 import { CACHE_TIME, STALE_TIME, ZERO, ZERO_ADDRESS } from "constants";
 import { useVersion, Versions } from "./Version";
@@ -239,18 +239,16 @@ export default function MemberData({ chainId, children, address: addressProp }) 
 
   const pollResp = usePollMemberData(address, chainId);
 
-  // Track the last successful refetch timestamp
-  const [lastRefetchTime, setLastRefetchTime] = useState(0);
-
-  // Update refetch timestamp when main data is refetched
-  useEffect(() => {
-    if (resp.isFetched) {
-      setLastRefetchTime(Date.now());
-    }
-  }, [resp.isFetched]);
-
-  // Determine which data source is more recent
-  const isMainDataFresh = lastRefetchTime > (pollResp.data?.timestamp || 0);
+  // Determine which data source is more recent, using react-query's own
+  // per-query update timestamps.
+  //
+  // This previously compared a manually-tracked time against
+  // `pollResp.data.timestamp` — a field the poll's `select` never set, so the
+  // right-hand side was always 0 and `isMainDataFresh` was permanently true once
+  // the main query had fetched. The polled owed/interest/unclaimedRewards values
+  // were therefore fetched and then silently discarded. (The manual timestamp was
+  // also only ever set once, since it keyed off `isFetched` flipping false->true.)
+  const isMainDataFresh = (resp.dataUpdatedAt ?? 0) >= (pollResp.dataUpdatedAt ?? 0);
 
   return (
     <MemberContext.Provider 

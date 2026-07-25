@@ -17,23 +17,29 @@ export const useVouchers = () => useContext(VouchersContext);
 export const useVoucher = (address) =>
   (useVouchers()?.data ?? []).find((v) => compareAddresses(v.address, address));
 
-const selectVoucher = (version) => (data) => {
-  const [checkIsMember = false, stakedBalance = ZERO, info = []] = data || [];
+// Read defensively — see the note in VoucheesData.selectVouchee. Note the old
+// `info = []` default did NOT help the V2 path: `[].voucher` is undefined, so
+// `info.voucher.locked` still threw and wiped the whole vouchers list.
+export const selectVoucher = (version) => (data) => {
+  const [checkIsMember = false, stakedBalance = ZERO, info] = data || [];
+
+  const related =
+    version === Versions.V1
+      ? {
+          locking: info?.lockedStake ?? ZERO,
+          trust: info?.trustAmount ?? ZERO,
+          vouch: info?.vouchingAmount ?? ZERO,
+        }
+      : {
+          locking: info?.voucher?.locked ?? ZERO,
+          trust: info?.voucher?.trust ?? ZERO,
+          vouch: info?.voucher?.vouch ?? ZERO,
+        };
 
   return {
     checkIsMember,
-    stakedBalance,
-    ...(version === Versions.V1
-      ? {
-          locking: info.lockedStake,
-          trust: info.trustAmount,
-          vouch: info.vouchingAmount,
-        }
-      : {
-          locking: info.voucher.locked,
-          trust: info.voucher.trust,
-          vouch: info.voucher.vouch,
-        }),
+    stakedBalance: stakedBalance ?? ZERO,
+    ...related,
   };
 };
 
