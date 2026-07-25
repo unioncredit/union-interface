@@ -47,15 +47,15 @@ export function ProfileSidebar({ address, member, chainId }) {
             m="24px 0"
             items={[
               {
-                value: formattedNumber(owed),
+                value: formattedNumber(owed, token),
                 color: "blue900",
               },
               {
-                value: formattedNumber(creditLimit, 2, false),
+                value: formattedNumber(creditLimit, token, 2, false),
                 color: "blue100",
               },
               {
-                value: formattedNumber(unavailableBalance),
+                value: formattedNumber(unavailableBalance, token),
                 color: "amber500",
               },
             ]}
