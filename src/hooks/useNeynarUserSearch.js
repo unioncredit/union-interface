@@ -11,7 +11,7 @@ export const useNeynarUserSearch = ({ query, limit = 5 }) => {
         {
           headers: {
             // eslint-disable-next-line no-undef
-            "x-api-key": process.env.REACT_APP_NEYNAR_API_KEY,
+            "x-api-key": import.meta.env.REACT_APP_NEYNAR_API_KEY,
           },
         }
       );

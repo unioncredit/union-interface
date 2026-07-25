@@ -1,7 +1,7 @@
 import "./InstallAppDrawer.scss";
 
 import { Drawer } from "vaul";
-import { ReactComponent as AddToHomeScreenIcon } from "../../images/AddToHomeScreen.svg";
+import AddToHomeScreenIcon from "../../images/AddToHomeScreen.svg?react";
 
 // @ts-ignore
 import { Button, ShareIcon, UnionIcon } from "@unioncredit/ui";

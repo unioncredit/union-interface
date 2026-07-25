@@ -27,7 +27,7 @@ export const useNeynarUser = ({ address }) => {
         `https://api.neynar.com/v2/farcaster/user/bulk-by-address?addresses=${address}`,
         {
           headers: {
-            "x-api-key": process.env.REACT_APP_NEYNAR_API_KEY,
+            "x-api-key": import.meta.env.REACT_APP_NEYNAR_API_KEY,
           },
         }
       );

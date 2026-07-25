@@ -24,10 +24,10 @@ export function FooterLinks() {
             /* eslint-disable-next-line no-undef */
             target="_blank"
             rel="noreferrer"
-            href={`https://github.com/unioncredit/union-interface/commit/${process.env.REACT_APP_VERSION}`}
+            href={`https://github.com/unioncredit/union-interface/commit/${import.meta.env.REACT_APP_VERSION}`}
           >
             {/* eslint-disable-next-line no-undef */}
-            {process.env.REACT_APP_VERSION}
+            {import.meta.env.REACT_APP_VERSION}
           </a>
           {" · "}
         </Text>

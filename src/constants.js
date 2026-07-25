@@ -18,7 +18,7 @@ const RPCS = {
 };
 
 // eslint-disable-next-line no-undef
-export const RPC_URL = (chainId) => `${RPCS[chainId]}/${process.env.REACT_APP_ALCHEMY_ID}`;
+export const RPC_URL = (chainId) => `${RPCS[chainId]}/${import.meta.env.REACT_APP_ALCHEMY_ID}`;
 
 export const TOKENS = {
   DAI: "DAI",

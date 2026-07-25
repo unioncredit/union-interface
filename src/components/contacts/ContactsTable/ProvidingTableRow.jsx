@@ -8,9 +8,9 @@ import format from "utils/format";
 import cn from "classnames";
 import { DimmableTableCell } from "components/contacts/ContactsTable/DimmableTableCell";
 import { useLastRepayData } from "hooks/useLastRepayData";
-import { ReactComponent as BothRow } from "../../../images/BothRow.svg";
-import { ReactComponent as ProvidingRow } from "../../../images/ProvidingRow.svg";
-import { ReactComponent as ReceivingRow } from "../../../images/ReceivingRow.svg";
+import BothRow from "../../../images/BothRow.svg?react";
+import ProvidingRow from "../../../images/ProvidingRow.svg?react";
+import ReceivingRow from "../../../images/ReceivingRow.svg?react";
 import { useToken } from "hooks/useToken";
 
 export const COLUMNS = {

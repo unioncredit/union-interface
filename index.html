@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <meta name="theme-color" content="#fafafa" />
+    <script
+      id="fathom-script"
+      data-site="KEPPVZWO"
+      src="https://cdn.usefathom.com/script.js"
+      defer
+    ></script>
+    <title>Union Credit Protocol</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      // `add-event-to-calendar` ships a Parcel bundle that does a bare
+      // `parcelRequire = ...` assignment. Webpack (CRA) tolerated it in sloppy
+      // mode; Vite emits strict-mode ESM where assigning to an undeclared global
+      // throws. Predefine the global property so the assignment resolves.
+      window.parcelRequire = window.parcelRequire || undefined;
+    </script>
+    <script type="module" src="/src/index.jsx"></script>
+  </body>
+</html>
