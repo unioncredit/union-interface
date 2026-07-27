@@ -8,14 +8,14 @@
   "dependencies": {
     "@airstack/airstack-react": "^0.6.4",
     "@apollo/client": "^3.13.8",
-    "@rainbow-me/rainbowkit": "^2.2.4",
+    "@rainbow-me/rainbowkit": "^2.2.11",
     "@tanstack/react-query": "^5.71.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@unioncredit/ui": "2.0.44",
     "@vercel/analytics": "^1.1.1",
-    "@wagmi/core": "^2.16.7",
+    "@wagmi/core": "^2.22.1",
     "@walletconnect/modal": "^2.5.8",
     "add-event-to-calendar": "^1.0.7",
     "buffer": "^6.0.3",
@@ -44,8 +44,8 @@
     "tw-animate-css": "^1.2.5",
     "use-debounce": "^10.0.4",
     "vaul": "^1.1.1",
-    "viem": "^2.24.3",
-    "wagmi": "^2.14.16",
+    "viem": "^2.55.10",
+    "wagmi": "^2.19.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
