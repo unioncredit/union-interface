@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { OrderDirection } from "@unioncredit/data/lib/constants";
-import {
-  config,
-  fetchAccountBorrows,
-  fetchAccountMembershipApplication,
-  fetchAccountRepays,
-} from "@unioncredit/data";
+import fetchCreditHistory from "fetchers/fetchCreditHistory";
 import { useProtocolData } from "providers/ProtocolData";
 import { getVersion, Versions } from "providers/Version";
 import { useMemberData } from "providers/MemberData";
@@ -39,22 +33,27 @@ export function useCreditData(address, chainId) {
     );
   }, [chainId, overdueTime, overdueBlocks]);
 
+  // One request against the ponder indexer (borrows + repays ascending, plus the
+  // registration timestamp). Replaces @unioncredit/data, which read the abandoned
+  // TheGraph subgraphs and whose global `config.set("chainId", ...)` raced when
+  // two hooks fetched different chains concurrently.
   const fetchBorrowsAndRepays = async (address) => {
-    const [borrows, repays, applications] = await Promise.all([
-      fetchAccountBorrows(address, "timestamp", OrderDirection.ASC),
-      fetchAccountRepays(address, "timestamp", OrderDirection.ASC),
-      fetchAccountMembershipApplication(address, "timestamp", OrderDirection.ASC),
-    ]);
+    try {
+      const { borrows, repays, application } = await fetchCreditHistory(chainId, address);
 
-    if (applications.length > 0) {
-      setApplication(applications[0]);
-    } else {
-      setApplication(null);
-      setDaysSinceMembership(null);
+      if (application) {
+        setApplication(application);
+      } else {
+        setApplication(null);
+        setDaysSinceMembership(null);
+      }
+
+      setBorrows(borrows);
+      setRepays(repays);
+    } catch (error) {
+      // Keep whatever is rendered; a failed history fetch must not throw unhandled.
+      console.error("Failed to load credit history:", error);
     }
-
-    setBorrows(borrows);
-    setRepays(repays);
   };
 
   const getMonthsBetweenDates = (startDate, endDate, callback) => {
@@ -191,7 +190,6 @@ export function useCreditData(address, chainId) {
 
   useEffect(() => {
     if (address && chainId) {
-      config.set("chainId", chainId);
       fetchBorrowsAndRepays(address);
     }
   }, [address, chainId]);
