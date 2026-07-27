@@ -15,11 +15,19 @@ const NetworkContext = createContext({});
 
 export const useAppNetwork = () => useContext(NetworkContext);
 
-// Public fallback RPCs used when the primary (Alchemy) endpoint fails — notably
-// keeps mainnet ENS resolution working even if the Alchemy app lacks Ethereum Mainnet.
+// Public fallback RPCs used when the primary (Alchemy) endpoint fails — e.g.
+// when the Alchemy app's monthly capacity is exhausted (observed in production:
+// every network 429s with "Monthly capacity limit exceeded"), or a network is
+// missing from the Alchemy app. Every configured chain needs an entry here:
+// Optimism had none, so exhausted Alchemy quota blanked all Optimism data while
+// Base and mainnet kept working through their fallbacks. All endpoints below are
+// CORS-open (verified) and only serve tip reads in the browser, so full-history
+// capability is not required.
 const FALLBACK_RPCS = {
   [base.id]: "https://base-rpc.publicnode.com",
   [mainnet.id]: "https://ethereum-rpc.publicnode.com",
+  [optimism.id]: "https://mainnet.optimism.io",
+  [arbitrum.id]: "https://arb1.arbitrum.io/rpc",
 };
 
 export const config = getDefaultConfig({
