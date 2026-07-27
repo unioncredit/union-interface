@@ -1,8 +1,7 @@
 import "./ProvidingTableRow.scss";
 
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
-import { Avatar, PrimaryLabel, StatusBadge } from "components/shared";
-import { truncateAddress } from "utils/truncateAddress";
+import { Avatar, CopyableAddress, PrimaryLabel, StatusBadge } from "components/shared";
 import { ContactsType, ZERO } from "constants";
 import format from "utils/format";
 import cn from "classnames";
@@ -125,9 +124,7 @@ export function ProvidingTableRow({ data, active, setContact, providing, receivi
             <Icon className="ProvidingTableRow__icon" />
           </Box>
 
-          <Text size="small" grey={500} m={0} weight="medium">
-            {truncateAddress(address)}
-          </Text>
+          <CopyableAddress address={address} />
         </Box>
       </TableCell>
 
