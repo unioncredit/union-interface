@@ -3,7 +3,7 @@ import { gql, request } from "graphql-request";
 import { useReadContracts } from "wagmi";
 import { mainnet } from "wagmi/chains";
 
-import { ProposalState, TheGraphUrls } from "constants";
+import { ProposalState } from "constants";
 import useContract from "hooks/useContract";
 import { chunk, flatten } from "lodash";
 import { Versions } from "./Version";
@@ -12,35 +12,46 @@ const GovernanceContext = createContext({});
 
 export const useGovernance = () => useContext(GovernanceContext);
 
+// Governance is indexed by union-ponder (mainnet Governor events). Replaces the
+// abandoned TheGraph subgraph that made every governance query throw
+// "deployment does not exist".
+const PONDER_URL = import.meta.env.REACT_APP_PONDER_URL;
+
 /* --------------------------------------------------------
   Governance Proposals History
 -------------------------------------------------------- */
 
 const proposalHistoryQuery = gql`
-  query ProposalUpdates($where: ProposalUpdate_filter) {
-    proposalUpdates(where: $where) {
-      id
-      proposer
-      action
-      timestamp
+  query ($chainId: Int!, $limit: Int!) {
+    proposalUpdates(
+      where: { chainId: $chainId }
+      orderBy: "timestamp"
+      orderDirection: "asc"
+      limit: $limit
+    ) {
+      items {
+        id
+        pid
+        proposer
+        action
+        timestamp
+      }
     }
   }
 `;
 
-async function getProposalHistory(pid) {
-  const variables = {
-    where: {
-      pid: pid.toString(),
-    },
-  };
+// One request for every proposal's lifecycle rows, grouped by pid — replaces
+// the previous per-proposal query (an N+1 against the subgraph).
+async function getProposalHistories() {
+  const resp = await request(PONDER_URL, proposalHistoryQuery, {
+    chainId: mainnet.id,
+    limit: 1000,
+  });
 
-  const resp = await request(
-    TheGraphUrls[Versions.V1][mainnet.id],
-    proposalHistoryQuery,
-    variables
-  );
-
-  return resp.proposalUpdates;
+  return (resp?.proposalUpdates?.items || []).reduce((acc, update) => {
+    const key = String(update.pid);
+    return { ...acc, [key]: [...(acc[key] || []), update] };
+  }, {});
 }
 
 /* --------------------------------------------------------
@@ -48,15 +59,17 @@ async function getProposalHistory(pid) {
 -------------------------------------------------------- */
 
 const proposalsQuery = gql`
-  {
-    proposals(first: 999) {
-      id
-      pid
-      proposer
-      description
-      targets
-      signatures
-      calldatas
+  query ($chainId: Int!, $limit: Int!) {
+    proposals(limit: $limit, where: { chainId: $chainId }) {
+      items {
+        id
+        pid
+        proposer
+        description
+        targets
+        signatures
+        calldatas
+      }
     }
   }
 `;
@@ -107,15 +120,23 @@ function useProposals() {
   const governorContract = useContract("governor", mainnet.id, Versions.V1);
 
   const getProposals = useCallback(async () => {
-    const resp = await request(TheGraphUrls[Versions.V1][mainnet.id], proposalsQuery);
-    const proposals = resp.proposals;
+    if (!PONDER_URL) return [];
 
-    return Promise.all(
-      proposals.map(async (proposal) => {
-        const history = await getProposalHistory(proposal.pid);
-        return { ...proposal, history };
-      })
-    );
+    try {
+      const [resp, histories] = await Promise.all([
+        request(PONDER_URL, proposalsQuery, { chainId: mainnet.id, limit: 999 }),
+        getProposalHistories(),
+      ]);
+
+      return (resp?.proposals?.items || []).map((proposal) => ({
+        ...proposal,
+        history: histories[String(proposal.pid)] || [],
+      }));
+    } catch (error) {
+      // A failed governance fetch must not surface as an unhandled rejection.
+      console.error("Failed to load proposals:", error);
+      return [];
+    }
   }, []);
 
   const contracts = flatten(

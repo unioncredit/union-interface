@@ -1,21 +1,30 @@
 import { gql, request } from "graphql-request";
-
-import { TheGraphUrls } from "constants";
 import { mainnet } from "wagmi/chains";
-import { Versions } from "providers/Version";
+
+// Governance is indexed by union-ponder (mainnet Governor). Replaces the
+// abandoned TheGraph subgraph.
+const PONDER_URL = import.meta.env.REACT_APP_PONDER_URL;
 
 const query = gql`
-  query {
-    proposals {
-      id
-      pid
-      proposer
+  query ($chainId: Int!, $limit: Int!) {
+    proposals(limit: $limit, where: { chainId: $chainId }) {
+      items {
+        id
+        pid
+        proposer
+      }
     }
   }
 `;
 
 export async function fetchProposals() {
-  const resp = await request(TheGraphUrls[Versions.V1][mainnet.id], query);
+  if (!PONDER_URL) return [];
 
-  return resp.proposals || [];
+  try {
+    const resp = await request(PONDER_URL, query, { chainId: mainnet.id, limit: 999 });
+    return resp?.proposals?.items || [];
+  } catch (error) {
+    console.error("Failed to load proposals:", error);
+    return [];
+  }
 }
