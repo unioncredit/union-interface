@@ -12,7 +12,7 @@ const BACKOFF_FACTOR = 1.5;
 
 export default function usePollMemberData(address, inputChainId) {
   const timer = useRef(null);
-  const [pollInterval, setPollInterval] = useState(INITIAL_POLL_INTERVAL);
+  const intervalRef = useRef(INITIAL_POLL_INTERVAL);
   const [isWindowActive, setIsWindowActive] = useState(true);
   const { chain: connectedChain } = useAccount();
   const { version } = useVersion();
@@ -77,32 +77,47 @@ export default function usePollMemberData(address, inputChainId) {
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  // Set up polling with backoff
+  // Set up polling with backoff.
+  //
+  // The interval lives in a ref and each run self-schedules the next one. It used
+  // to live in state AND in this effect's dependency list, while every poll() call
+  // bumped it — so each poll re-ran the effect, which immediately polled again,
+  // firing ~10 back-to-back multicalls per mount (2s -> 60s) and another burst on
+  // every error reset.
   useEffect(() => {
     if (!address || !isWindowActive) return;
 
+    let cancelled = false;
+    intervalRef.current = INITIAL_POLL_INTERVAL;
+
+    const scheduleNext = () => {
+      if (cancelled) return;
+      timer.current = setTimeout(poll, intervalRef.current);
+    };
+
     const poll = async () => {
+      if (cancelled) return;
+
       try {
-        const result = await refetch();
-        // If data hasn't changed significantly, increase the interval
-        setPollInterval((prev) => Math.min(prev * BACKOFF_FACTOR, MAX_POLL_INTERVAL));
+        await refetch();
+        // Back off while the app is idle, up to MAX_POLL_INTERVAL.
+        intervalRef.current = Math.min(intervalRef.current * BACKOFF_FACTOR, MAX_POLL_INTERVAL);
       } catch (error) {
         console.error("Error polling member data:", error);
-        // Reset interval on error
-        setPollInterval(INITIAL_POLL_INTERVAL);
+        intervalRef.current = INITIAL_POLL_INTERVAL;
       }
+
+      scheduleNext();
     };
 
-    // Initial poll
+    // Poll once immediately, then let each run schedule the next.
     poll();
 
-    // Set up interval
-    timer.current = setInterval(poll, pollInterval);
-
     return () => {
-      clearInterval(timer.current);
+      cancelled = true;
+      clearTimeout(timer.current);
     };
-  }, [address, isWindowActive, refetch, pollInterval]);
+  }, [address, isWindowActive, refetch]);
 
   return resp;
 }

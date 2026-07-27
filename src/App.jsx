@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { Box, Grid, Layout } from "@unioncredit/ui";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -31,6 +32,15 @@ import { useAppNetwork } from "./providers/Network";
 import useReferrer from "./hooks/useReferrer";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
+// Created once at module scope. Previously constructed inside App(), which gave
+// every render a brand-new client and an empty InMemoryCache — App re-renders on
+// each account/chain/route change, so Ponder queries were torn down, re-subscribed
+// and refetched continuously, and cached data was thrown away.
+const apolloClient = new ApolloClient({
+  uri: import.meta.env.REACT_APP_PONDER_URL,
+  cache: new InMemoryCache(),
+});
+
 export default function App() {
   useChainParams();
 
@@ -41,19 +51,15 @@ export default function App() {
   const { isConnected } = useAccount();
   const { set: setReferrer } = useReferrer();
 
-  const apolloClient = new ApolloClient({
-    // eslint-disable-next-line no-undef
-    uri: import.meta.env.REACT_APP_PONDER_URL,
-    cache: new InMemoryCache(),
-  });
-
   // Parses referrer address from "refAddress" query parameter and
-  // stores it in local storage
+  // stores it in local storage. Runs in an effect — calling setReferrer during
+  // render is an impure render (extra render pass, unsafe under StrictMode /
+  // concurrent rendering).
   const [searchParams] = useSearchParams();
   const referrer = searchParams.get("refAddress");
-  if (referrer) {
-    setReferrer(referrer);
-  }
+  useEffect(() => {
+    if (referrer) setReferrer(referrer);
+  }, [referrer, setReferrer]);
 
   if (!version || ((chain?.unsupported || !isConnected) && !isGeneralRoute(location))) {
     return (
