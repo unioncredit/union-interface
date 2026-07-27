@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useAccount, useWatchContractEvent } from "wagmi";
 import { mainnet } from "viem/chains";
 
@@ -12,17 +12,18 @@ import { useToken } from "hooks/useToken";
 /**
  * Refresh the connected member's data when a relevant on-chain event fires.
  *
- * These subscriptions previously passed a `listener` prop with positional
- * arguments — the wagmi v1 shape. wagmi v2's `useWatchContractEvent` takes
- * `onLogs` and hands it an ARRAY of logs with DECODED NAMED args, so every
- * `listener` here was an unknown prop that wagmi ignored: no handler ever ran.
+ * wagmi v2's `useWatchContractEvent` takes `onLogs` and hands it an ARRAY of
+ * logs with DECODED NAMED args — the previous `listener` prop was the wagmi v1
+ * shape and was silently ignored, so no handler ever ran and third-party
+ * repays / vouches / write-offs never refreshed the UI.
  *
- * Net effect of the bug: if a third party repaid your loan, vouched for you,
- * cancelled a vouch, wrote off debt, or you received/sent the token, the UI kept
- * showing stale data until a manual refetch or the 2-minute staleTime refetch on
- * window focus.
+ * Handler identity matters: wagmi keeps `onLogs` in its subscription effect's
+ * dependency array, so a new identity per render tears down and re-creates the
+ * watcher. The values the handlers need (address, and the provider refetch
+ * functions — which are new inline functions every render) are kept fresh in a
+ * ref instead of being captured, and the handlers themselves are created once.
  *
- * Arg names below match the ABIs exactly (userManager: staker/borrower,
+ * Arg names match the ABIs exactly (userManager: staker/borrower,
  * account/borrower; erc20: from/to). Both address fields are checked because the
  * user may be either party to the event.
  */
@@ -37,54 +38,75 @@ export default function useMemberListener() {
   const userManager = useContract("userManager", chainId);
   const tokenContract = useContract(token.toLowerCase(), chainId);
 
-  const refreshMember = useCallback(async () => {
-    await refetchMember();
-    refetchVouchers();
-    refetchVouchees();
-  }, [refetchMember, refetchVouchers, refetchVouchees]);
+  const latest = useRef({ address: undefined, refresh: async () => {} });
+  useEffect(() => {
+    latest.current = {
+      address,
+      refresh: async () => {
+        await refetchMember();
+        refetchVouchers();
+        refetchVouchees();
+      },
+    };
+  });
 
-  // True when any log in the batch names the connected address in one of `keys`.
-  const involvesUser = useCallback(
-    (logs, keys) =>
-      Boolean(address) &&
-      (logs || []).some((log) => keys.some((key) => compareAddresses(log?.args?.[key], address))),
-    [address]
-  );
-
+  // Created once; reads the current address/refetchers from the ref at event time.
   const refreshIfInvolved = useCallback(
     (keys) => (logs) => {
-      if (involvesUser(logs, keys)) refreshMember();
+      const { address: current, refresh } = latest.current;
+      if (!current) return;
+
+      const involved = (logs || []).some((log) =>
+        keys.some((key) => compareAddresses(log?.args?.[key], current))
+      );
+
+      if (involved) refresh();
     },
-    [involvesUser, refreshMember]
+    []
   );
+
+  const onStakerBorrowerLogs = useMemo(
+    () => refreshIfInvolved(["staker", "borrower"]),
+    [refreshIfInvolved]
+  );
+  const onAccountBorrowerLogs = useMemo(
+    () => refreshIfInvolved(["account", "borrower"]),
+    [refreshIfInvolved]
+  );
+  const onTransferLogs = useMemo(() => refreshIfInvolved(["from", "to"]), [refreshIfInvolved]);
 
   useWatchContractEvent({
     ...userManager,
     eventName: "LogDebtWriteOff",
-    onLogs: refreshIfInvolved(["staker", "borrower"]),
+    enabled: !!userManager.address,
+    onLogs: onStakerBorrowerLogs,
   });
 
   useWatchContractEvent({
     ...userManager,
     eventName: "LogUpdateTrust",
-    onLogs: refreshIfInvolved(["staker", "borrower"]),
+    enabled: !!userManager.address,
+    onLogs: onStakerBorrowerLogs,
   });
 
   useWatchContractEvent({
     ...userManager,
     eventName: "LogCancelVouch",
-    onLogs: refreshIfInvolved(["account", "borrower"]),
+    enabled: !!userManager.address,
+    onLogs: onAccountBorrowerLogs,
   });
 
   useWatchContractEvent({
     ...userManager,
     eventName: "LogRegisterMember",
-    onLogs: refreshIfInvolved(["account", "borrower"]),
+    enabled: !!userManager.address,
+    onLogs: onAccountBorrowerLogs,
   });
 
   useWatchContractEvent({
     ...tokenContract,
     eventName: "Transfer",
-    onLogs: refreshIfInvolved(["from", "to"]),
+    enabled: !!tokenContract.address,
+    onLogs: onTransferLogs,
   });
 }
