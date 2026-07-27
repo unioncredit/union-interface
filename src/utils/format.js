@@ -12,8 +12,12 @@ export default function format(
   formatDust = true
 ) {
   if (!n) n = "0";
+  // An unknown token means unknown decimals — render 0 rather than a value
+  // that is wrong by orders of magnitude. (Was previously an accident of
+  // formatUnits(n, undefined); viem >=2.55 formats real digits instead.)
+  if (UNIT[token] === undefined) n = "0";
   if (formatDust && typeof n === "bigint" && n < DUST_THRESHOLD[token] && n > ZERO) return "<0.01";
-  return commify(Number(formatUnits(n, UNIT[token])), digits, rounded, stripTrailingZeros);
+  return commify(Number(formatUnits(n, UNIT[token] ?? 0)), digits, rounded, stripTrailingZeros);
 }
 
 export const formattedNumber = (n, token, digits = 2, rounded = true) => {
@@ -24,6 +28,7 @@ export const formattedNumber = (n, token, digits = 2, rounded = true) => {
 };
 
 export const compactFormattedNumber = (n, token) => {
+  if (UNIT[token] === undefined) return "0";
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return formatter.format(Number(formatUnits(n, UNIT[token])));
 };
