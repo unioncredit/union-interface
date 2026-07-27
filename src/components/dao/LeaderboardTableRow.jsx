@@ -1,6 +1,5 @@
 import { Box, TableCell, TableRow, Text } from "@unioncredit/ui";
-import { Avatar, PrimaryLabel } from "components/shared";
-import { truncateAddress } from "utils/truncateAddress";
+import { Avatar, CopyableAddress, PrimaryLabel } from "components/shared";
 import { isAddress } from "viem";
 
 export function LeaderboardTableRow({ num, data }) {
@@ -21,9 +20,7 @@ export function LeaderboardTableRow({ num, data }) {
           <Text grey={800} m={0} size="medium" weight="medium">
             <PrimaryLabel address={address} />
           </Text>
-          <Text grey={500} m={0} size="small" weight="medium">
-            {truncateAddress(address)}
-          </Text>
+          <CopyableAddress address={address} />
         </Box>
       </TableCell>
 

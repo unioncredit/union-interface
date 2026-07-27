@@ -6,6 +6,7 @@ export * from "./AddressSummary";
 export * from "./Approval";
 export * from "./Avatar";
 export * from "./ConnectButton";
+export * from "./CopyableAddress";
 export * from "./EditLabel";
 export * from "./Header";
 export * from "./HeaderMobileMenu";
