@@ -6,14 +6,10 @@ import { ZERO_ADDRESS } from "constants";
 import { compareAddresses } from "utils/compare";
 import useContract from "hooks/useContract";
 import { useCache } from "providers/Cache";
-import { useVersion } from "providers/Version";
-import fetchUserTransactions from "fetchers/fetchUserTransactions";
-import fetchUTokenTransactions from "fetchers/fetchUTokenTransactions";
-import fetchRegisterTransactions from "fetchers/fetchRegisterTransactions";
+import fetchActivityHistory from "fetchers/fetchActivityHistory";
 
 export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_ADDRESS }) {
   const { chain } = useAccount();
-  const { version } = useVersion();
   const { cache, cached } = useCache();
 
   const cacheKey = `useTxHistory__${staker}___${borrower}__${chain?.network}`;
@@ -42,13 +38,11 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
     if (!force) setData([]);
 
     try {
-      const registerTransactions = await fetchRegisterTransactions(version, chain?.id, staker);
-      const utokenTransactions = await fetchUTokenTransactions(version, chain?.id, staker);
-      const userTransactions = await fetchUserTransactions(version, chain?.id, staker);
-
-      const txHistory = [...registerTransactions, ...utokenTransactions, ...userTransactions].sort(
-        (a, b) => Number(b.timestamp) - Number(a.timestamp)
-      );
+      // Registrations, borrows, repays, trust updates and vouch cancellations
+      // all come from the ponder indexer's activityEvents feed (already sorted
+      // newest-first), replacing three separate queries against the abandoned
+      // TheGraph subgraphs.
+      const txHistory = await fetchActivityHistory(chain?.id, staker);
 
       cache(cacheKey, txHistory);
       setData(txHistory);
@@ -111,7 +105,7 @@ export default function useTxHistory({ staker = ZERO_ADDRESS, borrower = ZERO_AD
 
   useEffect(() => {
     staker !== ZERO_ADDRESS && loadData();
-  }, [version, chain?.id, borrower, staker, cached, cacheKey, cache]);
+  }, [chain?.id, borrower, staker, cached, cacheKey, cache]);
 
   return { data, loading };
 }
