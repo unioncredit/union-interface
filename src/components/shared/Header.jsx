@@ -24,10 +24,11 @@ import { useSettings } from "providers/Settings";
 import { contextMenuItems, items } from "config/navigation";
 import { ConnectButton, HeaderMobileMenu, NetworkSelect } from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
+import { INSTALL_APP_MODAL } from "components/modals/InstallAppModal";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
+import { isStandalone } from "utils/isStandalone";
 import cn from "classnames";
-import { InstallAppButton } from "./InstallAppButton";
 import { ProfileSearchInput } from "./ProfileSearchInput";
 
 export function Header({ loading, showNav = true }) {
@@ -66,6 +67,37 @@ export function Header({ loading, showNav = true }) {
     setSetting("showTestnets", !settings.showTestnets);
   };
 
+  // "Install App" lives in the overflow menus rather than as a standalone
+  // header CTA, and disappears entirely once the app already runs installed.
+  const desktopMenuItems = isStandalone()
+    ? contextMenuItems
+    : [
+        {
+          icon: UnionIcon,
+          label: "Install App",
+          onClick: (toggleOpen) => {
+            toggleOpen?.();
+            open(INSTALL_APP_MODAL);
+          },
+        },
+        ...contextMenuItems,
+      ];
+
+  const mobileMenuItems = isStandalone()
+    ? contextMenuItems
+    : [
+        {
+          icon: UnionIcon,
+          label: "Install App",
+          onClick: () => {
+            setScrollLock(false);
+            setMenuOpen(false);
+            open(INSTALL_APP_MODAL);
+          },
+        },
+        ...contextMenuItems,
+      ];
+
   return (
     <Box className="Header">
       <Layout.Header w="100%" align="center">
@@ -84,7 +116,6 @@ export function Header({ loading, showNav = true }) {
                       <ProfileSearchInput />
                     </>
                   )}
-                  {(!isConnected || !isMember) && <InstallAppButton />}
                 </Box>
               </Grid.Col>
               {showNav && (
@@ -126,7 +157,7 @@ export function Header({ loading, showNav = true }) {
                     <PopoverMenu
                       className="Header__context-menu"
                       position="left"
-                      items={contextMenuItems}
+                      items={desktopMenuItems}
                       after={
                         <Toggle
                           active={settings.showTestnets}
@@ -163,7 +194,7 @@ export function Header({ loading, showNav = true }) {
       {menuOpen && width <= mobileNavBreakpoint && (
         <HeaderMobileMenu
           navLinks={navItems}
-          footerLinks={contextMenuItems}
+          footerLinks={mobileMenuItems}
           closeMenu={() => {
             setMenuOpen(false);
             setScrollLock(false);

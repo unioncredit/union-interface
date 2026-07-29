@@ -8,6 +8,7 @@ import {
   ModalOverlay,
   Text,
   TwitterIcon,
+  UnionIcon,
 } from "@unioncredit/ui";
 import React, { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
@@ -18,7 +19,9 @@ import { useMember } from "providers/MemberData";
 import { ZERO } from "constants";
 import format from "utils/format";
 import { VOUCH_MODAL } from "components/modals/VouchModal";
+import { INSTALL_APP_MODAL } from "components/modals/InstallAppModal";
 import { useToken } from "hooks/useToken";
+import { isStandalone } from "utils/isStandalone";
 
 export const WELCOME_MODAL = "welcome-modal";
 
@@ -115,6 +118,23 @@ export default function WelcomeModal({ onClose }) {
               />
             </Box>
           </Box>
+
+          {/* The moment someone becomes a member is the one time an install
+              prompt has earned its place — hidden once already installed. */}
+          {!isStandalone() && (
+            <Button
+              fluid
+              mb="8px"
+              size="large"
+              color="primary"
+              icon={UnionIcon}
+              label="Add Union to your home screen"
+              onClick={() => {
+                onClose?.();
+                open(INSTALL_APP_MODAL);
+              }}
+            />
+          )}
 
           <Button
             fluid
