@@ -14,7 +14,12 @@ import { useNeynarUser } from "hooks/useNeynarUser";
  * one request per address). The returned shape is unchanged for callers.
  */
 export const useFarcasterData = ({ address }) => {
-  const { data: user, isLoading: loading, error } = useNeynarUser({ address });
+  // `isFetching`, not `isLoading`: useNeynarUser seeds the query with
+  // initialData, so react-query reports success immediately and isLoading is
+  // always false. Callers render a placeholder while this is true (see
+  // ProfileHeaderContent), and that branch has to stay reachable during the
+  // first fetch — otherwise the name renders as ENS and then visibly swaps.
+  const { data: user, isFetching: loading, error } = useNeynarUser({ address });
 
   const data = {
     // Airstack's `profileName` was the Farcaster username (fname), so map to

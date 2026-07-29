@@ -16,7 +16,7 @@ describe("useFarcasterData", () => {
   it("maps a Neynar user to the { name, bio } shape callers expect", () => {
     useNeynarUser.mockReturnValue({
       data: { username: "kingjacob", profile: { bio: { text: "building union" } } },
-      isLoading: false,
+      isFetching: false,
       error: null,
     });
 
@@ -26,7 +26,7 @@ describe("useFarcasterData", () => {
   it("prefers the fname over display_name, matching the old Airstack profileName", () => {
     useNeynarUser.mockReturnValue({
       data: { username: "kingjacob", display_name: "Jacob S", profile: {} },
-      isLoading: false,
+      isFetching: false,
       error: null,
     });
 
@@ -39,7 +39,7 @@ describe("useFarcasterData", () => {
   it("normalises the empty placeholder user to nulls", () => {
     useNeynarUser.mockReturnValue({
       data: { username: "", display_name: "" },
-      isLoading: true,
+      isFetching: true,
       error: null,
     });
 
@@ -51,7 +51,7 @@ describe("useFarcasterData", () => {
   it("survives a failed lookup without throwing", () => {
     useNeynarUser.mockReturnValue({
       data: undefined,
-      isLoading: false,
+      isFetching: false,
       error: new Error("network"),
     });
 
