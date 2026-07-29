@@ -9,7 +9,6 @@ import {
   Layout,
   NavItem,
   PopoverMenu,
-  Toggle,
   UnionIcon,
   UnionNavIcon,
 } from "@unioncredit/ui";
@@ -20,14 +19,14 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { useSettings } from "providers/Settings";
 import { contextMenuItems, items } from "config/navigation";
 import { ConnectButton, HeaderMobileMenu, NetworkSelect } from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
+import { INSTALL_APP_MODAL } from "components/modals/InstallAppModal";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import useScrollLock from "hooks/useScrollLock";
+import { isStandalone } from "utils/isStandalone";
 import cn from "classnames";
-import { InstallAppButton } from "./InstallAppButton";
 import { ProfileSearchInput } from "./ProfileSearchInput";
 
 export function Header({ loading, showNav = true }) {
@@ -38,7 +37,6 @@ export function Header({ loading, showNav = true }) {
   const { data: member = {} } = useMember();
   const { width } = useWindowDimensions();
   const setScrollLock = useScrollLock();
-  const { settings, setSetting } = useSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -62,9 +60,37 @@ export function Header({ loading, showNav = true }) {
     </Box>
   );
 
-  const showTestNets = () => {
-    setSetting("showTestnets", !settings.showTestnets);
-  };
+  // "Install App" lives at the bottom of the overflow menus (the slot the
+  // Show TestNets toggle used to hold) rather than as a standalone header CTA,
+  // and disappears entirely once the app already runs installed.
+  const desktopMenuItems = isStandalone()
+    ? contextMenuItems
+    : [
+        ...contextMenuItems,
+        {
+          icon: UnionIcon,
+          label: "Install App",
+          onClick: (toggleOpen) => {
+            toggleOpen?.();
+            open(INSTALL_APP_MODAL);
+          },
+        },
+      ];
+
+  const mobileMenuItems = isStandalone()
+    ? contextMenuItems
+    : [
+        ...contextMenuItems,
+        {
+          icon: UnionIcon,
+          label: "Install App",
+          onClick: () => {
+            setScrollLock(false);
+            setMenuOpen(false);
+            open(INSTALL_APP_MODAL);
+          },
+        },
+      ];
 
   return (
     <Box className="Header">
@@ -84,7 +110,6 @@ export function Header({ loading, showNav = true }) {
                       <ProfileSearchInput />
                     </>
                   )}
-                  {(!isConnected || !isMember) && <InstallAppButton />}
                 </Box>
               </Grid.Col>
               {showNav && (
@@ -126,18 +151,7 @@ export function Header({ loading, showNav = true }) {
                     <PopoverMenu
                       className="Header__context-menu"
                       position="left"
-                      items={contextMenuItems}
-                      after={
-                        <Toggle
-                          active={settings.showTestnets}
-                          color="secondary"
-                          label="Show TestNets"
-                          labelPosition="start"
-                          onChange={() => {
-                            showTestNets();
-                          }}
-                        />
-                      }
+                      items={desktopMenuItems}
                     />
                   ) : (
                     <Button
@@ -163,7 +177,7 @@ export function Header({ loading, showNav = true }) {
       {menuOpen && width <= mobileNavBreakpoint && (
         <HeaderMobileMenu
           navLinks={navItems}
-          footerLinks={contextMenuItems}
+          footerLinks={mobileMenuItems}
           closeMenu={() => {
             setMenuOpen(false);
             setScrollLock(false);

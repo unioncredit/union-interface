@@ -3,13 +3,11 @@ import { NetworkButton, NetworkSwitcher } from "@unioncredit/ui";
 import { mainnet } from "viem/chains";
 
 import { supportedNetworks, testNetworkIds, unsupportedNetwork } from "config/networks";
-import { useSettings } from "providers/Settings";
 import { useVersion, Versions } from "providers/Version";
 import { useSupportedNetwork } from "hooks/useSupportedNetwork";
 import { rpcChains } from "constants";
 
 export function NetworkSelect() {
-  const { settings } = useSettings();
   const { chain } = useAccount();
   const { setVersion } = useVersion();
   const { switchChainAsync } = useSwitchChain();
@@ -20,8 +18,10 @@ export function NetworkSelect() {
     isMainnet ? true : ![mainnet.id].includes(x.chainId)
   );
 
-  const networks = availableNetworks.filter((network) =>
-    settings.showTestnets ? true : !testNetworkIds.includes(network.chainId)
+  // Testnets are hidden unless the wallet is currently connected to one (the
+  // Show TestNets toggle is gone; this keeps the testnet-dev workflow alive).
+  const networks = availableNetworks.filter(
+    (network) => !testNetworkIds.includes(network.chainId) || network.chainId === chain?.id
   );
 
   const handleChangeNetwork = async (value) => {
