@@ -1,11 +1,11 @@
 import "./FrozenStakeAlert.scss";
 
-import { Box, Button, Card, Text, WarningIcon } from "@unioncredit/ui";
+import { Box, Button, Card, CloseIcon, Text, WarningIcon } from "@unioncredit/ui";
 import { Link } from "react-router-dom";
 
 import format from "utils/format";
 import { useToken } from "hooks/useToken";
-import { useFrozenStake } from "hooks/useFrozenStake";
+import { useFrozenStakeAlert } from "hooks/useFrozenStakeAlert";
 import useResponsive from "hooks/useResponsive";
 import { AddressesAvatarBadgeRow } from "components/shared";
 
@@ -21,9 +21,9 @@ import { AddressesAvatarBadgeRow } from "components/shared";
 export function FrozenStakeAlert() {
   const { token } = useToken();
   const { isMobile } = useResponsive();
-  const { count, frozen, overdueVouchees, hasFrozenStake } = useFrozenStake();
+  const { count, frozen, overdueVouchees, visible, dismiss } = useFrozenStakeAlert();
 
-  if (!hasFrozenStake) return null;
+  if (!visible) return null;
 
   return (
     <Card mb="24px" className="FrozenStakeAlert">
@@ -65,6 +65,19 @@ export function FrozenStakeAlert() {
               color="secondary"
               variant="light"
               label="View contacts"
+            />
+
+            <Button
+              p="0 !important"
+              ml="4px"
+              size="small"
+              color="secondary"
+              variant="light"
+              icon={CloseIcon}
+              onClick={dismiss}
+              aria-label="Dismiss"
+              className="FrozenStakeAlert__dismiss"
+              iconProps={{ style: { minWidth: "24px", minHeight: "24px" } }}
             />
           </Box>
         </Box>
