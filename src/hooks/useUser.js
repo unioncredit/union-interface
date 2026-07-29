@@ -4,7 +4,6 @@ import { useEnsAvatar, useEnsName } from "wagmi";
 import { normalize } from "viem/ens";
 
 import { useNeynarUser } from "hooks/useNeynarUser";
-import { getNeynarAddress } from "utils/neynar";
 import { mainnet } from "viem/chains";
 import { truncateAddress } from "../utils/truncateAddress";
 

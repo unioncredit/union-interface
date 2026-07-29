@@ -32,7 +32,7 @@ export default function StakeStep({ complete, onSkipStep }) {
   const { chain } = useAccount();
   const { token, wad } = useToken();
 
-  const { data: member, refetch: refetchMember } = useMember();
+  const { data: member } = useMember();
   const { data: protocol } = useProtocol();
 
   const {
@@ -43,7 +43,6 @@ export default function StakeStep({ complete, onSkipStep }) {
     inflationPerSecond = ZERO,
     inflationPerBlock = ZERO,
     unclaimedRewards = ZERO,
-    newMemberFee = ZERO,
   } = { ...protocol, ...member };
 
   const inflationPerUnit = inflationPerSecond || inflationPerBlock;
