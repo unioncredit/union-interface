@@ -6,7 +6,6 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@airstack/airstack-react": "^0.6.4",
     "@apollo/client": "^3.13.8",
     "@rainbow-me/rainbowkit": "^2.2.11",
     "@tanstack/react-query": "^5.71.3",

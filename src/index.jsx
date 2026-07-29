@@ -11,11 +11,8 @@ import Toasts from "providers/Toasts";
 import Network from "providers/Network";
 import AppLogs from "providers/AppLogs";
 import Version from "providers/Version";
-import { init } from "@airstack/airstack-react";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorPage from "pages/Error";
-
-init(import.meta.env.REACT_APP_AIRSTACK_API_KEY);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

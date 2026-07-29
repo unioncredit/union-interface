@@ -1,0 +1,83 @@
+import { renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const useNeynarUser = vi.hoisted(() => vi.fn());
+vi.mock("hooks/useNeynarUser", () => ({ useNeynarUser }));
+
+import { useFarcasterData } from "hooks/useFarcasterData";
+
+const ADDRESS = "0xb8150a1B6945e75D05769D685b127b41E6335Bbc";
+
+const render = () => renderHook(() => useFarcasterData({ address: ADDRESS })).result.current;
+
+describe("useFarcasterData", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("maps a Neynar user to the { name, bio } shape callers expect", () => {
+    useNeynarUser.mockReturnValue({
+      data: { username: "kingjacob", profile: { bio: { text: "building union" } } },
+      isFetching: false,
+      isFetched: true,
+      error: null,
+    });
+
+    expect(render().data).toEqual({ name: "kingjacob", bio: "building union" });
+  });
+
+  it("prefers the fname over display_name, matching the old Airstack profileName", () => {
+    useNeynarUser.mockReturnValue({
+      data: { username: "kingjacob", display_name: "Jacob S", profile: {} },
+      isFetching: false,
+      isFetched: true,
+      error: null,
+    });
+
+    expect(render().data.name).toBe("kingjacob");
+  });
+
+  // useNeynarUser seeds react-query with a placeholder user whose username is
+  // "" and which carries no `profile`. That must read as "no Farcaster name"
+  // so usePrimaryName falls through to ENS rather than rendering an empty label.
+  it("reports loading (and null data) during the first fetch for an address", () => {
+    useNeynarUser.mockReturnValue({
+      data: { username: "", display_name: "" },
+      isFetching: true,
+      isFetched: false,
+      error: null,
+    });
+
+    const { data, loading } = render();
+    expect(data).toEqual({ name: null, bio: null });
+    expect(loading).toBe(true);
+  });
+
+  // The app-level QueryClient keeps default refetchOnWindowFocus, so a stale
+  // query refetches in the background on refocus. That must NOT read as
+  // loading, or the profile header would flash its skeleton over a name that
+  // is already rendered.
+  it("does not report loading during background refetches", () => {
+    useNeynarUser.mockReturnValue({
+      data: { username: "kingjacob", profile: { bio: { text: "building union" } } },
+      isFetching: true,
+      isFetched: true,
+      error: null,
+    });
+
+    const { data, loading } = render();
+    expect(loading).toBe(false);
+    expect(data.name).toBe("kingjacob");
+  });
+
+  it("survives a failed lookup without throwing", () => {
+    useNeynarUser.mockReturnValue({
+      data: undefined,
+      isFetching: false,
+      isFetched: true,
+      error: new Error("network"),
+    });
+
+    const { data, error } = render();
+    expect(data).toEqual({ name: null, bio: null });
+    expect(error).toBeInstanceOf(Error);
+  });
+});

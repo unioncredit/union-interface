@@ -1,34 +1,36 @@
-import { useLazyQuery } from "@airstack/airstack-react";
-import { useEffect } from "react";
+import { useNeynarUser } from "hooks/useNeynarUser";
 
-const query = `
-query RetrieveFarcasterData ($address: Address!) {
-  Socials(
-    input: {blockchain: ethereum, filter: {userAssociatedAddresses: {_eq: $address}, dappName: {_eq: farcaster}}}
-  ) {
-    Social {
-      name: profileName
-      bio: profileBio
-    }
-  }
-}
-`;
-
+/**
+ * Farcaster name/bio for an address.
+ *
+ * Previously backed by Airstack, whose API no longer exists — api.airstack.xyz
+ * answers 404 for the GraphQL endpoint and 530 at the domain root — so every
+ * caller silently got `{ name: null, bio: null }` after a failed round trip.
+ * Since `usePrimaryName` prefers the Farcaster name over ENS, that meant no
+ * Farcaster name ever rendered anywhere in the app.
+ *
+ * Neynar serves the same data and is already used for user search, so this
+ * reads through the existing `useNeynarUser` query (shared react-query cache,
+ * one request per address). The returned shape is unchanged for callers.
+ */
 export const useFarcasterData = ({ address }) => {
-  // We have to use lazy loading and manual fetching because of a bug in the useQuery function that doesn't detect changes in our addresses variable
-  const [fetch, { data: response, loading, error }] = useLazyQuery(
-    query,
-    { address: address.toLowerCase() },
-    { cache: true }
-  );
+  // Not `isLoading`: useNeynarUser seeds the query with initialData, so
+  // react-query reports success immediately and isLoading is always false —
+  // callers' placeholder branches (see ProfileHeaderContent) would be
+  // unreachable and the name would visibly swap in after the fetch. And not
+  // bare `isFetching`: the app-level QueryClient keeps default
+  // refetchOnWindowFocus, so once the 120s staleTime lapses a refocus starts a
+  // background refetch — without the isFetched guard that would flash the
+  // skeleton over an already-rendered name. loading is therefore true only
+  // until the FIRST fetch for this address settles.
+  const { data: user, isFetching, isFetched, error } = useNeynarUser({ address });
+  const loading = isFetching && !isFetched;
 
-  useEffect(() => {
-    fetch();
-  }, [fetch, address]);
-
-  const data = response?.Socials?.Social?.[0] || {
-    name: null,
-    bio: null,
+  const data = {
+    // Airstack's `profileName` was the Farcaster username (fname), so map to
+    // the same field rather than Neynar's free-form `display_name`.
+    name: user?.username || null,
+    bio: user?.profile?.bio?.text || null,
   };
 
   return { data, error, loading };
