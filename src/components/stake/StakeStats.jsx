@@ -13,7 +13,6 @@ import {
 
 import format, { formattedNumber } from "utils/format";
 import { StakeType, ZERO } from "constants";
-import { reduceBnSum } from "utils/reduce";
 import { useVouchees } from "providers/VoucheesData";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
@@ -21,6 +20,7 @@ import { STAKE_MODAL } from "components/modals/StakeModal";
 import { AddressesAvatarBadgeRow } from "components/shared";
 import { Link } from "react-router-dom";
 import { useToken } from "hooks/useToken";
+import { useFrozenStake } from "hooks/useFrozenStake";
 
 export default function StakeStats() {
   const { open } = useModals();
@@ -28,13 +28,13 @@ export default function StakeStats() {
 
   const { data: member = {} } = useMember();
   const { data: vouchees = [] } = useVouchees();
+  // Shared with FrozenStakeAlert so the two readouts can't disagree.
+  const { overdueVouchees: defaultedVouchees, frozen: defaulted } = useFrozenStake();
 
   const { stakedBalance = ZERO, totalLockedStake = ZERO } = member;
 
   const withdrawableStake = stakedBalance - totalLockedStake;
   const borrowingVouchees = vouchees.filter((v) => v.locking > ZERO);
-  const defaultedVouchees = vouchees.filter((v) => v.isOverdue);
-  const defaulted = defaultedVouchees.map((v) => v.locking).reduce(reduceBnSum, ZERO);
 
   return (
     <Card className="StakeStats">

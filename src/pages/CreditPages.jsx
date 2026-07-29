@@ -1,6 +1,7 @@
 import { Layout } from "@unioncredit/ui";
 
 import { CreditSegmentedControl } from "components/shared/CreditSegmentedControl";
+import { FrozenStakeAlert } from "components/credit/FrozenStakeAlert";
 import BorrowPage from "pages/Borrow";
 import StakePage from "pages/Stake";
 import ContactsPage from "pages/Contacts";
@@ -43,6 +44,12 @@ export default function CreditPages({ page }) {
         maxw="653px"
         initialActive={initialActive}
       />
+
+      {/* Renders on every credit tab, so frozen stake is visible from Borrow —
+          the tab members land on — not only after opening Stake. */}
+      <Layout.Columned maxw="653px" p={0}>
+        <FrozenStakeAlert />
+      </Layout.Columned>
 
       {component}
     </Layout.Columned>
