@@ -33,12 +33,11 @@ export function FooterLinks() {
         </Text>
         <Text size="small" grey={300} align="center">
           <a
-            /* eslint-disable-next-line no-undef */
             target="_blank"
             rel="noreferrer"
             href="https://github.com/unioncredit/union-interface/issues/new"
           >
-            Report an issue ->
+            Report an issue -&gt;
           </a>
         </Text>
       </Box>

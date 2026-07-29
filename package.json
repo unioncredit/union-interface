@@ -58,10 +58,7 @@
     "test:watch": "vitest",
     "test:integration": "vitest run --config vitest.integration.config.js",
     "format": "prettier --write \"src/**/*.{js,scss,json,jsx}\"",
-    "lint": "eslint --ext .js,.jsx ./src"
-  },
-  "eslintConfig": {
-    "extends": []
+    "lint": "eslint --ext .js,.jsx ./src --max-warnings 40"
   },
   "browserslist": {
     "production": [

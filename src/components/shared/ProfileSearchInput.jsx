@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { SearchIcon } from "@unioncredit/ui";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAccount } from "wagmi";
 import cn from "classnames";
 

@@ -96,7 +96,7 @@ export const BOARDS = {
 };
 
 export default function LeaderboardPage({ board }) {
-  const [copied, copy] = useCopyToClipboard();
+  const [copied] = useCopyToClipboard();
 
   const { open } = useModals();
 

@@ -16,11 +16,9 @@ jobs:
           node-version: 20
           cache: yarn
       - run: yarn install --frozen-lockfile
+      - run: yarn lint
       - run: yarn test
       - run: yarn build
-      # NOTE: `yarn lint` intentionally omitted — the eslint config is currently
-      # broken (empty package.json eslintConfig + an unresolved .eslintrc.json).
-      # Wire it back in once eslint is set up properly (separate task).
 
   integration:
     name: On-chain integration (Base fork)

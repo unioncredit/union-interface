@@ -8,12 +8,21 @@ import { useMemberData } from "providers/MemberData";
 import { mainnet } from "wagmi/chains";
 import { Versions } from "providers/Version";
 import { useVoteParticipation } from "hooks/useVoteParticipation";
+import { useGovernanceStats } from "hooks/useGovernanceStats";
 
 export default function ProfileGovernanceStats({ address }) {
   const { data: member = {} } = useMemberData(address, mainnet.id, Versions.V1);
+  const { data: governance = {} } = useGovernanceStats({ address });
   const { voteCount, proposalCount, percentage } = useVoteParticipation(address);
 
   const { votes = ZERO } = member;
+  const { mainnetVotes = ZERO, mainnetBalance = ZERO } = governance;
+
+  // Power delegated in from other addresses, mirroring MyGovernanceStats. This
+  // read used to reference an undefined `votesDelegatedm` — a typo that would
+  // throw on first render (unreached today: ProfileSidebar, its only consumer,
+  // is not itself imported anywhere).
+  const votesDelegated = mainnetVotes - mainnetBalance;
 
   return (
     <Box className="ProfileGovernanceStats" direction="vertical">
@@ -46,7 +55,7 @@ export default function ProfileGovernanceStats({ address }) {
           },
           {
             label: "Delegated Power",
-            value: `${format(votesDelegatedm, "UNION")} Votes`,
+            value: `${format(votesDelegated, "UNION")} Votes`,
           },
           {
             label: "Vote Participation",
