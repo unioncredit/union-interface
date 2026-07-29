@@ -1,0 +1,29 @@
+@import "@unioncredit/ui/src/variables";
+
+.FrozenStakeAlert {
+  border-color: $amber500;
+  background: $amber50;
+
+  &__icon {
+    margin-right: 12px;
+    flex-shrink: 0;
+
+    path {
+      fill: $amber600;
+    }
+  }
+
+  &__summary {
+    min-width: 0;
+  }
+
+  // The row/column switch itself is a Box prop (see the component); these only
+  // adjust spacing once it has stacked.
+  @media all and (max-width: $breakpoint-mobile) {
+    &__action {
+      margin-top: 12px;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}

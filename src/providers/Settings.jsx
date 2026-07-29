@@ -14,6 +14,9 @@ const SettingsContext = createContext({
 });
 
 export const GASLESS_APPROVALS = "gasless-approvals";
+// { [chainId]: string[] } — overdue contacts whose frozen-stake alert the
+// member has dismissed. Stored per chain because vouchees are per chain.
+export const DISMISSED_OVERDUE = "dismissed-overdue";
 export const PROVIDING_FILTERS = "providing-filters";
 export const RECEIVING_FILTERS = "receiving-filters";
 export const PROVIDING_SORT = "providing-sort";
