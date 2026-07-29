@@ -9,7 +9,6 @@ import {
   Layout,
   NavItem,
   PopoverMenu,
-  Toggle,
   UnionIcon,
   UnionNavIcon,
 } from "@unioncredit/ui";
@@ -20,7 +19,6 @@ import { ZERO } from "constants";
 import format from "utils/format";
 import { useMember } from "providers/MemberData";
 import { useModals } from "providers/ModalManager";
-import { useSettings } from "providers/Settings";
 import { contextMenuItems, items } from "config/navigation";
 import { ConnectButton, HeaderMobileMenu, NetworkSelect } from "components/shared";
 import { WALLET_MODAL } from "components/modals/WalletModal";
@@ -39,7 +37,6 @@ export function Header({ loading, showNav = true }) {
   const { data: member = {} } = useMember();
   const { width } = useWindowDimensions();
   const setScrollLock = useScrollLock();
-  const { settings, setSetting } = useSettings();
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -63,15 +60,13 @@ export function Header({ loading, showNav = true }) {
     </Box>
   );
 
-  const showTestNets = () => {
-    setSetting("showTestnets", !settings.showTestnets);
-  };
-
-  // "Install App" lives in the overflow menus rather than as a standalone
-  // header CTA, and disappears entirely once the app already runs installed.
+  // "Install App" lives at the bottom of the overflow menus (the slot the
+  // Show TestNets toggle used to hold) rather than as a standalone header CTA,
+  // and disappears entirely once the app already runs installed.
   const desktopMenuItems = isStandalone()
     ? contextMenuItems
     : [
+        ...contextMenuItems,
         {
           icon: UnionIcon,
           label: "Install App",
@@ -80,12 +75,12 @@ export function Header({ loading, showNav = true }) {
             open(INSTALL_APP_MODAL);
           },
         },
-        ...contextMenuItems,
       ];
 
   const mobileMenuItems = isStandalone()
     ? contextMenuItems
     : [
+        ...contextMenuItems,
         {
           icon: UnionIcon,
           label: "Install App",
@@ -95,7 +90,6 @@ export function Header({ loading, showNav = true }) {
             open(INSTALL_APP_MODAL);
           },
         },
-        ...contextMenuItems,
       ];
 
   return (
@@ -158,17 +152,6 @@ export function Header({ loading, showNav = true }) {
                       className="Header__context-menu"
                       position="left"
                       items={desktopMenuItems}
-                      after={
-                        <Toggle
-                          active={settings.showTestnets}
-                          color="secondary"
-                          label="Show TestNets"
-                          labelPosition="start"
-                          onChange={() => {
-                            showTestNets();
-                          }}
-                        />
-                      }
                     />
                   ) : (
                     <Button
