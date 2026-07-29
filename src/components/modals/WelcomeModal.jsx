@@ -120,13 +120,17 @@ export default function WelcomeModal({ onClose }) {
           </Box>
 
           {/* The moment someone becomes a member is the one time an install
-              prompt has earned its place — hidden once already installed. */}
+              prompt has earned its place — hidden once already installed. On
+              the blue card, secondary/light renders white — the strongest
+              treatment in this modal — so the install ask carries it and
+              Continue steps back to primary (dark blue). */}
           {!isStandalone() && (
             <Button
               fluid
               mb="8px"
               size="large"
-              color="primary"
+              color="secondary"
+              variant="light"
               icon={UnionIcon}
               label="Add Union to your home screen"
               onClick={() => {
@@ -139,8 +143,7 @@ export default function WelcomeModal({ onClose }) {
           <Button
             fluid
             size="large"
-            color="secondary"
-            variant="light"
+            color="primary"
             label="Continue"
             onClick={() => {
               refetchMember();
