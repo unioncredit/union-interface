@@ -16,9 +16,14 @@ export function EthRegisterButton({ onComplete }) {
     address,
   });
 
-  const { regFee = ZERO, rebate = ZERO, value: ethBalance = ZERO } = { ...protocol, ...balance };
-  const ethRegisterFee = regFee + rebate;
-  const canRegister = ethRegisterFee <= ethBalance;
+  // regFee / rebate stay undefined until the protocol reads land (or if they fail), and
+  // the balance until useBalance resolves. Defaulting them to zero enabled the button
+  // early and sent `register` with no ETH, which reverts with NotEnoughFee (#463).
+  const { regFee, rebate } = protocol;
+  const ethBalance = balance?.value;
+  const ready = regFee !== undefined && rebate !== undefined && ethBalance !== undefined;
+  const ethRegisterFee = ready ? regFee + rebate : ZERO;
+  const canRegister = ready && ethRegisterFee <= ethBalance;
 
   const registerButtonProps = useWrite({
     contract: "registerHelper",
@@ -34,7 +39,7 @@ export function EthRegisterButton({ onComplete }) {
     <div className="EthRegisterButton__container">
       <Button fluid size="large" label="Register ->" icon={CheckIcon} {...registerButtonProps} />
 
-      {!canRegister && (
+      {ready && !canRegister && (
         <a
           rel="noreferrer"
           target="_blank"

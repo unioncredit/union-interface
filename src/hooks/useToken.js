@@ -1,5 +1,5 @@
 import { useAccount } from "wagmi";
-import { mainnet, optimism } from "wagmi/chains";
+import { arbitrum, mainnet, optimism } from "wagmi/chains";
 
 import { TOKENS, UNIT, WAD } from "constants";
 import { base } from "viem/chains";
@@ -10,6 +10,9 @@ export const useToken = (chainId) => {
   const tokens = {
     [mainnet.id]: TOKENS.DAI,
     [optimism.id]: TOKENS.DAI,
+    // Union v1. Arbitrum is a configured wagmi chain, so a wallet connected there reaches
+    // the data providers, which crash on a null token (#401).
+    [arbitrum.id]: TOKENS.DAI,
     [base.id]: TOKENS.USDC, // base
   };
 

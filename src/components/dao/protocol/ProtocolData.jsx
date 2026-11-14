@@ -1,7 +1,7 @@
 import "./ProtocolData.scss";
 
 import { Card, Select } from "@unioncredit/ui";
-import { allNetworks } from "config/networks";
+import { protocolNetworks } from "config/networks";
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { ProtocolBalances } from "components/dao/protocol/ProtocolBalances";
@@ -14,7 +14,8 @@ export default function ProtocolData() {
   const { chain: connectedChain } = useAccount();
 
   const [network, setNetwork] = useState(
-    allNetworks.find((network) => network.chainId === connectedChain?.id) || allNetworks[0]
+    protocolNetworks.find((network) => network.chainId === connectedChain?.id) ||
+      protocolNetworks[0]
   );
 
   const { data: protocol = {} } = useProtocolData(network.chainId);
@@ -24,7 +25,7 @@ export default function ProtocolData() {
         title="Protocol Data & Parameters"
         action={
           <Select
-            options={allNetworks.map((n) => ({ ...n, label: n.labelWithVersion }))}
+            options={protocolNetworks.map((n) => ({ ...n, label: n.labelWithVersion }))}
             defaultValue={network}
             onChange={(option) => setNetwork(option)}
           />
