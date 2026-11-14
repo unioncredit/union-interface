@@ -2,7 +2,6 @@ import "./ProfileHeader.scss";
 
 import { Box, Text } from "@unioncredit/ui";
 
-import { ProfileVerifiedAccounts } from "./ProfileVerifiedAccounts";
 import { ProfileCtaButtons } from "./ProfileCtaButtons";
 import { ProfileAvatar } from "./ProfileAvatar";
 import { ProfileHeaderContent } from "./ProfileHeaderContent";
@@ -38,8 +37,6 @@ export default function ProfileHeader({ address, chainId }) {
           {bio}
         </Text>
       )}
-
-      <ProfileVerifiedAccounts address={address} chainId={chainId} />
 
       <ProfileCtaButtons
         address={address}

@@ -100,3 +100,7 @@ export const allNetworks = [
     },
   },
 ];
+
+// Networks offered on the Protocol page: all of the above except testnets, which have
+// no RPC transport configured, so their protocol data can't load.
+export const protocolNetworks = allNetworks.filter((n) => !testNetworkIds.includes(n.chainId));
